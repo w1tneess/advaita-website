@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 
+import Avatar from './Avatar.jsx'
 import Container from './Container.jsx'
 import Icon from './Icon.jsx'
 import { useContent } from '../lib/content.jsx'
@@ -21,23 +22,50 @@ export default function Footer() {
   const hrefFor = (link) => (link.kind === 'email' ? `mailto:${link.url}` : link.url)
 
   return (
-    <footer className="mt-auto border-t border-line bg-surface">
-      <Container>
-        <div className="grid gap-10 py-12 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="lg:col-span-2">
-            <p className="font-display text-lg font-semibold tracking-tight">{profile.name}</p>
-            <p className="mt-2 max-w-sm text-sm text-muted">{profile.tagline}</p>
-            <p className="mt-4 text-sm text-muted">{profile.location}</p>
+    <footer className="mt-auto border-t border-line bg-surface text-ink">
+      <Container width="wide">
+        <div className="grid gap-12 py-14 sm:grid-cols-[minmax(0,1.3fr)_minmax(15rem,0.7fr)] sm:py-16 lg:grid-cols-[minmax(0,1.5fr)_10rem_10rem] lg:gap-16">
+          <div>
+            <Link to="/" className="inline-flex items-center gap-3">
+              <Avatar profile={profile} size="sm" className="border-line bg-raised text-ink" />
+              <span className="font-display text-xl font-bold tracking-tight">{profile.name}</span>
+            </Link>
+            <p className="mt-5 max-w-md text-sm leading-6 text-muted">{profile.tagline}</p>
+            <Link
+              to="/contact"
+              className="mt-4 inline-block text-sm text-muted transition-colors hover:text-ink"
+            >
+              Get in touch <span className="text-text-muted">about research, writing or collaboration</span>
+            </Link>
+
+            {configured.length > 0 && (
+              <ul className="mt-8 flex items-center gap-2" aria-label="Social links">
+                {configured.map((link) => (
+                  <li key={link.id}>
+                    <a
+                      href={hrefFor(link)}
+                      aria-label={link.label}
+                      className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-line bg-raised text-muted transition-colors hover:border-accent hover:bg-surface-hover hover:text-accent"
+                      {...(link.kind === 'email'
+                        ? {}
+                        : { target: '_blank', rel: 'me noopener noreferrer' })}
+                    >
+                      <Icon name={link.icon} className="h-4 w-4" />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
 
-          <nav aria-labelledby="footer-nav-heading">
-            <h2 id="footer-nav-heading" className="text-sm font-semibold">
-              Pages
+          <nav aria-labelledby="footer-sections-heading">
+            <h2 id="footer-sections-heading" className="text-sm font-semibold text-ink">
+              Explore
             </h2>
-            <ul className="mt-3 space-y-2">
-              {NAV_ITEMS.map((item) => (
+            <ul className="mt-4 space-y-3">
+              {NAV_ITEMS.filter((item) => item.key !== 'home' && item.key !== 'contact').map((item) => (
                 <li key={item.path}>
-                  <Link to={item.path} className="text-sm text-muted hover:text-accent">
+                  <Link to={item.path} className="text-sm text-muted transition-colors hover:text-ink">
                     {item.label}
                   </Link>
                 </li>
@@ -45,40 +73,24 @@ export default function Footer() {
             </ul>
           </nav>
 
-          <div>
-            <h2 className="text-sm font-semibold">Elsewhere</h2>
-            {configured.length > 0 ? (
-              <ul className="mt-3 space-y-2">
-                {configured.map((link) => (
-                  <li key={link.id}>
-                    <a
-                      href={hrefFor(link)}
-                      className="inline-flex items-center gap-2 text-sm text-muted hover:text-accent"
-                      {...(link.kind === 'email'
-                        ? {}
-                        : { target: '_blank', rel: 'me noopener noreferrer' })}
-                    >
-                      <Icon name={link.icon} className="h-3.5 w-3.5" />
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="mt-3 text-sm text-muted">
-                No profiles linked yet.{' '}
-                <Link to="/contact" className="text-accent hover:text-accent-strong">
-                  Contact
-                </Link>
-              </p>
-            )}
-          </div>
+          <nav aria-labelledby="footer-pages-heading">
+            <h2 id="footer-pages-heading" className="text-sm font-semibold text-ink">
+              Pages
+            </h2>
+            <ul className="mt-4 space-y-3">
+              {NAV_ITEMS.filter((item) => item.key === 'home' || item.key === 'contact').map((item) => (
+                <li key={item.path}>
+                  <Link to={item.path} className="text-sm text-muted transition-colors hover:text-ink">
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
         </div>
 
-        <div className="flex flex-col gap-3 border-t border-line py-6 text-xs text-muted sm:flex-row sm:items-center sm:justify-between">
-          <p>
-            © {year} {profile.name}
-          </p>
+        <div className="flex flex-col gap-3 border-t border-line py-6 text-xs text-text-muted sm:flex-row sm:items-center sm:justify-between">
+          <p>© {year} {profile.name}</p>
           {settings.footerNote && <p className="sm:text-right">{settings.footerNote}</p>}
         </div>
       </Container>

@@ -1,7 +1,8 @@
-import { Eye, EyeOff, Menu } from 'lucide-react'
+import { Eye, EyeOff, LogOut, Menu } from 'lucide-react'
 import { Link, useLocation } from 'react-router-dom'
 
 import { NAV_GROUPS } from './AdminSidebar.jsx'
+import { useAdminAuth } from './AdminAuth.jsx'
 import ThemeToggle from '../ThemeToggle.jsx'
 import { useContent } from '../../lib/content.jsx'
 
@@ -17,6 +18,7 @@ function sectionLabel(pathname) {
 export default function AdminHeader({ onOpenSidebar }) {
   const { pathname } = useLocation()
   const { previewDrafts, setPreviewDrafts } = useContent()
+  const { logout } = useAdminAuth()
 
   return (
     <header className="sticky top-0 z-20 border-b border-line bg-canvas/90 backdrop-blur-md">
@@ -59,6 +61,16 @@ export default function AdminHeader({ onOpenSidebar }) {
         >
           View site
         </Link>
+
+        <button
+          type="button"
+          onClick={logout}
+          aria-label="Lock admin panel"
+          title="Lock admin panel"
+          className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-line bg-surface text-muted transition-colors hover:text-accent"
+        >
+          <LogOut className="h-4 w-4" aria-hidden="true" />
+        </button>
 
         <ThemeToggle />
       </div>

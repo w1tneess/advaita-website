@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useState } from 'react'
 
 import { useContent } from './content.jsx'
 import { THEME_STORAGE_KEY } from './store.js'
@@ -51,20 +51,27 @@ export function ThemeProvider({ children }) {
   }, [])
 
   // Apply the theme to the document and remember the choice.
-  useEffect(() => {
+  useLayoutEffect(() => {
     const root = document.documentElement
+    root.classList.add('theme-transitioning')
     root.classList.toggle('dark', isDark)
     root.style.colorScheme = isDark ? 'dark' : 'light'
+
+    const transitionTimer = window.setTimeout(() => {
+      root.classList.remove('theme-transitioning')
+    }, 240)
 
     try {
       window.localStorage.setItem(THEME_STORAGE_KEY, preference)
     } catch {
       // Private browsing: the theme still applies, it just will not be remembered.
     }
+
+    return () => window.clearTimeout(transitionTimer)
   }, [isDark, preference])
 
   // Apply the accent override from settings, if one is configured.
-  useEffect(() => {
+  useLayoutEffect(() => {
     const root = document.documentElement
     const override = isDark ? settings.accent?.dark : settings.accent?.light
 
@@ -82,7 +89,14 @@ export function ThemeProvider({ children }) {
   }, [isDark, settings.accent?.dark, settings.accent?.light])
 
   const toggle = useCallback(() => {
-    setPreference(isDark ? 'light' : 'dark')
+    const nextPreference = isDark ? 'light' : 'dark'
+
+    if (typeof document.startViewTransition === 'function') {
+      document.startViewTransition(() => setPreference(nextPreference))
+      return
+    }
+
+    setPreference(nextPreference)
   }, [isDark])
 
   const value = useMemo(

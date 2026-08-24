@@ -13,7 +13,9 @@
 					const preference = localStorage.getItem('advaita-site.theme')
 					const dark = preference === 'dark' ||
 						(preference !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches)
-					document.documentElement.classList.toggle('dark', dark)
+					const root = document.documentElement
+					root.classList.toggle('dark', dark)
+					root.style.colorScheme = dark ? 'dark' : 'light'
 				} catch {}
 			})()
 		</script>

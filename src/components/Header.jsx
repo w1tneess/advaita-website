@@ -38,7 +38,7 @@ export default function Header() {
   }, [menuOpen])
 
   const linkClasses = ({ isActive }) =>
-    `rounded-md px-1 py-1 text-sm font-medium transition-colors ${
+    `rounded-md px-1 py-1 text-sm font-semibold transition-colors ${
       isActive ? 'text-accent' : 'text-muted hover:text-ink'
     }`
 
@@ -100,7 +100,7 @@ export default function Header() {
                     to={item.path}
                     end={item.path === '/'}
                     className={({ isActive }) =>
-                      `block border-b border-line py-3 text-sm font-medium last:border-0 ${
+                      `block border-b border-line py-3 text-sm font-semibold last:border-0 ${
                         isActive ? 'text-accent' : 'text-ink'
                       }`
                     }

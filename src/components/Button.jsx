@@ -11,7 +11,7 @@ import { Link } from 'react-router-dom'
 const VARIANTS = {
   primary:
     'bg-accent text-on-accent border border-transparent hover:bg-accent-strong shadow-subtle',
-  secondary: 'bg-surface text-ink border border-line hover:border-accent hover:text-accent',
+  secondary: 'bg-primary-purple text-white border border-transparent hover:bg-purple-hover',
   ghost: 'bg-transparent text-ink border border-transparent hover:bg-raised',
   danger: 'bg-transparent text-limitation border border-limitation/40 hover:bg-limitation/10',
   link: 'bg-transparent text-accent border-0 p-0 underline underline-offset-4 hover:text-accent-strong',
@@ -36,8 +36,11 @@ export default function Button({
 }) {
   const sizeClasses = variant === 'link' ? '' : SIZES[size]
   const classes = [
-    'inline-flex max-w-full items-center justify-center rounded-lg font-medium break-words text-center transition-colors',
+    'inline-flex max-w-full items-center justify-center rounded-lg font-semibold break-words text-center transition-[background-color,border-color,color,box-shadow,transform] duration-200',
     'disabled:cursor-not-allowed disabled:opacity-50',
+    variant === 'link'
+      ? ''
+      : 'hover:-translate-y-px active:translate-y-0 motion-reduce:hover:translate-y-0',
     sizeClasses,
     VARIANTS[variant],
     className,

@@ -1,10 +1,11 @@
 import { LockKeyhole } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { createContext, useContext, useState } from 'react'
 
 import Button from '../Button.jsx'
 
 const PASSWORD_HASH = (import.meta.env.VITE_ADMIN_PASSWORD_HASH ?? '').trim().toLowerCase()
 const SESSION_KEY = 'advaita-site.admin-authenticated'
+const AdminAuthContext = createContext(null)
 
 async function hashPassword(password) {
   const bytes = new TextEncoder().encode(password)
@@ -29,14 +30,16 @@ function setSession() {
   return true
 }
 
+export function useAdminAuth() {
+  const context = useContext(AdminAuthContext)
+  if (!context) throw new Error('useAdminAuth must be used inside AdminAuth')
+  return context
+}
+
 export default function AdminAuth({ children }) {
-  const [authenticated, setAuthenticated] = useState(false)
+  const [authenticated, setAuthenticated] = useState(hasSession)
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
-
-  useEffect(() => {
-    setAuthenticated(hasSession())
-  }, [])
 
   if (!PASSWORD_HASH) {
     return (
@@ -51,7 +54,22 @@ export default function AdminAuth({ children }) {
     )
   }
 
-  if (authenticated) return children
+  if (authenticated) {
+    return (
+      <AdminAuthContext.Provider
+        value={{
+          logout() {
+            try {
+              sessionStorage.removeItem(SESSION_KEY)
+            } catch {}
+            setAuthenticated(false)
+          },
+        }}
+      >
+        {children}
+      </AdminAuthContext.Provider>
+    )
+  }
 
   async function handleSubmit(event) {
     event.preventDefault()
