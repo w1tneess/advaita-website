@@ -1,0 +1,21 @@
+{
+  "heroKicker": "Student researcher · Writer · Building things on the web",
+  "heroHeading": "Learning in public, one question at a time.",
+  "heroIntro": "I'm Advaita. I research things that interest me — philosophy, Indian politics, technology, history and data — and I publish the working notes rather than only the conclusions. This site is the record of that process, including the parts that are unfinished.",
+  "primaryCta": { "label": "Explore My Work", "to": "/portfolio" },
+  "secondaryCta": { "label": "Read My Writing", "to": "/blog" },
+  "featuredHeading": "Selected work",
+  "featuredIntro": "Three projects so far. Each one lists its method, its current status, and what it does not show.",
+  "postsHeading": "Latest writing",
+  "postsIntro": "Notes and research as they develop.",
+  "interestsHeading": "What I'm researching",
+  "interestsIntro": "These are long-running interests rather than areas of expertise. The overlap between them is usually where the questions come from.",
+  "credibilityHeading": "What this site is, and what it isn't",
+  "credibilityStatement": "I'm a student, not an expert, and nothing here is peer-reviewed. What I can point to is the work itself: a matplotlib data-visualisation study of terrorism in India across 1947–2026 that had to reconcile incomplete records and conflicting sources; a documentary-style research document on Osho that records competing accounts instead of settling them; and a four-layer design for a school worksheet generator that is still at concept stage with no working code.",
+  "credibilityPoints": [
+    "Every project states its status plainly — including the one that is only a design.",
+    "Where sources disagree, the disagreement is recorded rather than resolved by preference.",
+    "Claims are labelled by type: sourced fact, my analysis, my opinion, or an open limitation.",
+    "Nothing on this site claims a result, a reader, or a publication that doesn't exist."
+  ]
+}

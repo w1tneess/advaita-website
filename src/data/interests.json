@@ -1,0 +1,79 @@
+[
+  {
+    "id": "int-philosophy",
+    "name": "Philosophy",
+    "icon": "BookOpen",
+    "note": "Mostly epistemology and ethics — how a claim earns the right to be believed, and what follows once it does.",
+    "order": 1
+  },
+  {
+    "id": "int-psychology",
+    "name": "Psychology",
+    "icon": "Brain",
+    "note": "Reasoning and bias, particularly the ways a conclusion can feel obvious before the evidence has been read.",
+    "order": 2
+  },
+  {
+    "id": "int-self-improvement",
+    "name": "Self-improvement",
+    "icon": "TrendingUp",
+    "note": "Treated as a practical question rather than a motivational one: which habits actually hold up over months.",
+    "order": 3
+  },
+  {
+    "id": "int-technology",
+    "name": "Technology",
+    "icon": "Cpu",
+    "note": "Building things well enough to understand them from the inside instead of only reading about them.",
+    "order": 4
+  },
+  {
+    "id": "int-indian-politics",
+    "name": "Indian politics",
+    "icon": "Landmark",
+    "note": "Institutions, incentives and how policy actually travels from announcement to implementation.",
+    "order": 5
+  },
+  {
+    "id": "int-history",
+    "name": "History",
+    "icon": "ScrollText",
+    "note": "Long time horizons, and how the choice of a start date quietly shapes the conclusion.",
+    "order": 6
+  },
+  {
+    "id": "int-current-affairs",
+    "name": "Current affairs",
+    "icon": "Newspaper",
+    "note": "Following events closely enough to notice how the first account differs from the fifth.",
+    "order": 7
+  },
+  {
+    "id": "int-public-policy",
+    "name": "Public policy",
+    "icon": "Scale",
+    "note": "Trade-offs rather than positions — what a policy costs, who bears it, and what it was measured against.",
+    "order": 8
+  },
+  {
+    "id": "int-data",
+    "name": "Data",
+    "icon": "BarChart3",
+    "note": "Imperfect datasets in particular: missing years, changed definitions, and sources that disagree.",
+    "order": 9
+  },
+  {
+    "id": "int-cybersecurity",
+    "name": "Cybersecurity",
+    "icon": "ShieldCheck",
+    "note": "An interest I'm currently learning, not one I can claim skill in — fundamentals and defensive thinking.",
+    "order": 10
+  },
+  {
+    "id": "int-education",
+    "name": "Education and academic learning",
+    "icon": "GraduationCap",
+    "note": "How material is structured for learning, which is where the worksheet generator design came from.",
+    "order": 11
+  }
+]

@@ -1,0 +1,147 @@
+import {
+  BarChart3,
+  FileText,
+  FolderOpen,
+  GraduationCap,
+  Link2,
+  Milestone,
+  Tags,
+} from 'lucide-react'
+import { Link } from 'react-router-dom'
+
+import AdminPage from '../../components/admin/AdminPage.jsx'
+import PublishChecklist from '../../components/admin/PublishChecklist.jsx'
+import Card from '../../components/Card.jsx'
+import { useContent } from '../../lib/content.jsx'
+import { pluralize } from '../../lib/format.js'
+
+/**
+ * Admin landing page.
+ *
+ * Counts only — no charts and no "views" or "visitors", because there is no analytics and
+ * inventing a metric here would be exactly the kind of fake functionality this project
+ * avoids. What it does show is the publish path, which is the thing people actually get
+ * wrong about a static-site admin panel.
+ */
+
+function StatCard({ icon: Icon, label, value, detail, to }) {
+  return (
+    <Card className="p-5">
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <p className="text-sm text-muted">{label}</p>
+          <p className="mt-1 font-display text-3xl leading-none tabular-nums">{value}</p>
+        </div>
+        <Icon className="h-5 w-5 shrink-0 text-accent" aria-hidden="true" />
+      </div>
+      {detail && <p className="mt-3 text-xs text-muted">{detail}</p>}
+      <Link
+        to={to}
+        className="mt-4 inline-block text-sm font-medium text-accent underline underline-offset-4 hover:text-accent-strong"
+      >
+        Manage
+      </Link>
+    </Card>
+  )
+}
+
+export default function Dashboard() {
+  const {
+    projects,
+    posts,
+    interests,
+    skills,
+    timeline,
+    socialLinks,
+    blogCategories,
+    projectCategories,
+    tags,
+  } = useContent()
+
+  const publishedProjects = projects.filter((project) => project.published !== false).length
+  const publishedPosts = posts.filter((post) => post.status === 'published').length
+  const draftPosts = posts.length - publishedPosts
+  const configuredLinks = socialLinks.filter((link) => link.url).length
+
+  const stats = [
+    {
+      icon: FolderOpen,
+      label: 'Projects',
+      value: projects.length,
+      detail: `${publishedProjects} visible on the public site, ${
+        projects.length - publishedProjects
+      } hidden.`,
+      to: '/admin/projects',
+    },
+    {
+      icon: FileText,
+      label: 'Articles',
+      value: posts.length,
+      detail:
+        posts.length === 0
+          ? 'None yet. The public blog shows its empty-state message.'
+          : `${publishedPosts} published, ${draftPosts} ${pluralize(draftPosts, 'draft')}.`,
+      to: '/admin/posts',
+    },
+    {
+      icon: Tags,
+      label: 'Categories & tags',
+      value: blogCategories.length + projectCategories.length + tags.length,
+      detail: `${blogCategories.length} article, ${projectCategories.length} project, ${tags.length} ${pluralize(
+        tags.length,
+        'tag',
+      )}.`,
+      to: '/admin/taxonomy',
+    },
+    {
+      icon: BarChart3,
+      label: 'Research interests',
+      value: interests.length,
+      detail: 'Shown on the home page and the about page.',
+      to: '/admin/profile',
+    },
+    {
+      icon: GraduationCap,
+      label: 'Abilities',
+      value: skills.length,
+      detail: 'Each one is labelled "learning" or "working knowledge".',
+      to: '/admin/skills',
+    },
+    {
+      icon: Milestone,
+      label: 'Timeline entries',
+      value: timeline.length,
+      detail: 'The learning-direction sequence on the about page.',
+      to: '/admin/timeline',
+    },
+    {
+      icon: Link2,
+      label: 'Social links',
+      value: socialLinks.length,
+      detail:
+        configuredLinks === 0
+          ? 'None have a real URL yet, so all of them render as placeholders.'
+          : `${configuredLinks} with a real URL, ${
+              socialLinks.length - configuredLinks
+            } still placeholders.`,
+      to: '/admin/social',
+    },
+  ]
+
+  return (
+    <AdminPage
+      title="Dashboard"
+      description="What is currently in the content document, and how to get a change from here onto the live site."
+    >
+      <ul className="grid gap-4 sm:grid-cols-2">
+        {stats.map((stat) => (
+          <li key={stat.label}>
+            <StatCard {...stat} />
+          </li>
+        ))}
+      </ul>
+
+      <PublishChecklist className="mt-8" />
+    </AdminPage>
+  )
+}

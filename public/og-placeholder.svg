@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  PLACEHOLDER social-share card. Replace it with a real 1200x630 PNG before
+  sharing links widely: several social platforms -- notably some Twitter/X and
+  LinkedIn crawlers -- will not render an SVG Open Graph image at all, and will
+  fall back to a bare link with no preview.
+
+  To replace it: add `og-image.png` (1200x630) to `public/`, then update
+  `DEFAULT_OG_IMAGE` in `src/lib/routes.js` to 'og-image.png'.
+
+  Web fonts are unavailable inside an SVG fetched by a scraper, so every text
+  element below deliberately uses locally installed font stacks only.
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="1200"
+  height="630"
+  viewBox="0 0 1200 630"
+  role="img"
+>
+  <title>Advaita Chandra — Learning in public, one question at a time.</title>
+
+  <!-- Base -->
+  <rect width="1200" height="630" fill="#0E1520" />
+
+  <!-- Faint monogram echo of the favicon, top right. Decorative only. -->
+  <g
+    fill="none"
+    stroke="#5FBFC9"
+    stroke-width="12"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    opacity="0.12"
+  >
+    <path d="M930 336 L1030 90 L1130 336" />
+    <path d="M958 267 H1102" />
+  </g>
+
+  <!-- Accent rule -->
+  <rect x="90" y="130" width="132" height="5" rx="2.5" fill="#5FBFC9" />
+
+  <text
+    x="90"
+    y="188"
+    font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif"
+    font-size="26"
+    letter-spacing="2.5"
+    fill="#9BA6B7"
+  >advaitachandra.in</text>
+
+  <text
+    x="90"
+    y="304"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="92"
+    fill="#EDF0F4"
+  >Advaita Chandra</text>
+
+  <text
+    x="90"
+    y="384"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="40"
+    fill="#5FBFC9"
+  >Learning in public, one question at a time.</text>
+
+  <!-- Hairline divider above the footer line -->
+  <line
+    x1="90"
+    y1="506"
+    x2="1110"
+    y2="506"
+    stroke="#9BA6B7"
+    stroke-width="1"
+    opacity="0.28"
+  />
+
+  <text
+    x="90"
+    y="554"
+    font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif"
+    font-size="26"
+    letter-spacing="0.5"
+    fill="#9BA6B7"
+  >Student researcher · Writer · West Bengal, India</text>
+</svg>

@@ -1,0 +1,84 @@
+{
+  "blog": [
+    {
+      "id": "cat-politics",
+      "slug": "politics",
+      "name": "Politics",
+      "description": "Indian politics, public policy and current affairs — argument and evidence kept separate."
+    },
+    {
+      "id": "cat-history",
+      "slug": "history",
+      "name": "History",
+      "description": "Historical context, and how the framing of a period changes what its record appears to say."
+    },
+    {
+      "id": "cat-philosophy",
+      "slug": "philosophy",
+      "name": "Philosophy",
+      "description": "Reading notes and arguments, mostly about knowledge, ethics and the self."
+    },
+    {
+      "id": "cat-technology",
+      "slug": "technology",
+      "name": "Technology",
+      "description": "What I'm building, what broke, and what I learned from fixing it."
+    },
+    {
+      "id": "cat-cybersecurity",
+      "slug": "cybersecurity",
+      "name": "Cybersecurity",
+      "description": "Notes from learning security fundamentals — defensive, conceptual, and clearly labelled as a beginner's."
+    },
+    {
+      "id": "cat-data",
+      "slug": "data",
+      "name": "Data",
+      "description": "Working with imperfect datasets: gaps, conflicting sources and honest visualisation."
+    },
+    {
+      "id": "cat-research-notes",
+      "slug": "research-notes",
+      "name": "Research Notes",
+      "description": "Unfinished thinking, published deliberately — open questions and partial findings."
+    }
+  ],
+  "project": [
+    {
+      "id": "pcat-research",
+      "slug": "research",
+      "name": "Research",
+      "description": "Source-driven investigation."
+    },
+    {
+      "id": "pcat-writing",
+      "slug": "writing",
+      "name": "Writing",
+      "description": "Long-form written work."
+    },
+    {
+      "id": "pcat-data",
+      "slug": "data",
+      "name": "Data",
+      "description": "Datasets, analysis and visualisation."
+    },
+    {
+      "id": "pcat-technology",
+      "slug": "technology",
+      "name": "Technology",
+      "description": "Software and web building."
+    },
+    {
+      "id": "pcat-education",
+      "slug": "education",
+      "name": "Education",
+      "description": "Learning, teaching and academic tooling."
+    },
+    {
+      "id": "pcat-concepts",
+      "slug": "concepts",
+      "name": "Concepts",
+      "description": "Designs and proposals not yet built."
+    }
+  ]
+}

@@ -1,0 +1,85 @@
+# Builds the Vite site and publishes it with the official GitHub Pages actions.
+#
+# One-time setup: in the repository, go to Settings -> Pages and set
+# Source = "GitHub Actions". Without that, this workflow builds fine but the
+# deploy step has nowhere to publish to.
+#
+# The custom domain is kept attached by `public/CNAME`, which Vite copies into
+# `dist/` on every build. Deleting that file would drop advaitachandra.in the
+# next time this workflow runs.
+
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Only one Pages deployment at a time. `cancel-in-progress: false` is deliberate:
+# a deployment that is cancelled midway can leave the live site half-updated,
+# serving a new index.html alongside stale hashed assets. Better to let an
+# in-flight deploy finish and queue the next one behind it.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # BASE_PATH feeds vite.config.js (`base: process.env.BASE_PATH ?? '/'`) and
+      # therefore every asset URL and %BASE_URL% reference in the built site.
+      #
+      #   - Custom domain (advaitachandra.in) or a <username>.github.io repo:
+      #     leave the repository variable unset, or set it to '/'. The site is
+      #     served from the domain root.
+      #
+      #   - Project page at https://<username>.github.io/<repo-name>/:
+      #     set the repository variable BASE_PATH to '/<repo-name>/' -- with BOTH
+      #     a leading and a trailing slash. Omitting either one produces broken
+      #     asset paths on the deployed site.
+      #
+      # The variable lives under Settings -> Secrets and variables -> Actions ->
+      # Variables (not Secrets).
+      - name: Build
+        run: npm run build
+        env:
+          BASE_PATH: ${{ vars.BASE_PATH || '/' }}
+          VITE_ADMIN_PASSWORD_HASH: ${{ vars.VITE_ADMIN_PASSWORD_HASH }}
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
