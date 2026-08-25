@@ -1,0 +1,35 @@
+{
+  "name": "Advaita Chandra",
+  "shortName": "Advaita",
+  "tagline": "Learning in public, one question at a time.",
+  "roles": [
+    "Student researcher",
+    "Developing web builder",
+    "Writer",
+    "Independent learner"
+  ],
+  "location": "West Bengal, India",
+  "photo": null,
+  "photoAlt": "Placeholder illustration standing in for a profile photograph.",
+  "bio": "I'm Advaita — a student with a long-running interest in philosophy, Indian politics, technology, and data. This site is where I share what I'm researching and building. I'm not presenting myself as an expert; I'm documenting the process of learning, questioning, and improving.",
+  "learningDirection": "Right now I'm working on two things: getting more rigorous about how I handle sources that disagree with each other, and getting better at building the tools I want to use. The data-visualisation and writing projects on this site came out of the first; the site itself came out of the second.",
+  "approach": [
+    {
+      "title": "Ask better questions",
+      "detail": "A vague question produces a vague answer. Most of the work happens before the research starts — narrowing a question until it is specific enough to be answered, and honest enough to admit what it excludes."
+    },
+    {
+      "title": "Examine evidence",
+      "detail": "Find out where a number or claim actually came from. When sources disagree, record the disagreement rather than picking whichever figure is most convenient."
+    },
+    {
+      "title": "Understand context",
+      "detail": "A fact without its context is easy to misuse. Definitions, time periods and methods of counting change what a figure means, so they belong alongside it."
+    },
+    {
+      "title": "Explain clearly",
+      "detail": "If I cannot explain something plainly, I probably do not understand it yet. Writing is the test, not the write-up."
+    }
+  ],
+  "epistemicNote": "Across this site I try to keep four things visually distinct: what a source says, what I infer from it, what I simply think, and what I do not know. Where you see a labelled block, that is what it is doing."
+}

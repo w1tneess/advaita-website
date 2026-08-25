@@ -1,0 +1,149 @@
+[
+  {
+    "id": "prj-terrorism-india-dataviz",
+    "slug": "terrorism-in-india-data-visualization",
+    "title": "Terrorism in India: Data Visualization, 1947–2026",
+    "categories": [
+      "data",
+      "research"
+    ],
+    "summary": "A matplotlib-based visualisation of terrorism in India over time, built around the problem that the underlying records are incomplete and the sources disagree.",
+    "description": "A data-visualisation project examining terrorism in India across 1947–2026. The bulk of the work was not plotting but reconciliation: available records for this subject are uneven across decades, and different organisations define and count incidents differently. Rather than flattening that into one authoritative series, the project treats the gaps and the disagreements as findings in their own right.",
+    "role": "Sole researcher — question framing, source comparison, data preparation and visualisation.",
+    "tools": [
+      "Python",
+      "matplotlib"
+    ],
+    "status": "completed",
+    "visibility": "Personal project — not publicly released.",
+    "published": true,
+    "methodology": [
+      {
+        "title": "Framed the question narrowly",
+        "detail": "Decided in advance what the visualisation would and would not attempt to show, so that gaps in the data would be visible rather than smoothed over."
+      },
+      {
+        "title": "Compared sources instead of choosing one",
+        "detail": "Where figures conflicted, both were kept and the conflict noted, rather than adopting whichever series was most complete or most convenient."
+      },
+      {
+        "title": "Documented coverage gaps explicitly",
+        "detail": "Periods with sparse or inconsistent records were marked as such, so that an absence of recorded incidents is not read as an absence of incidents."
+      },
+      {
+        "title": "Visualised with matplotlib",
+        "detail": "Built the charts in Python so that every transformation between source data and final figure stayed inspectable."
+      }
+    ],
+    "limitations": [
+      "Records of this kind are incomplete and inconsistent, particularly for the earlier decades of the period.",
+      "Organisations define and count incidents differently, so figures drawn from different sources are not directly comparable.",
+      "The project maps what the available data shows. It does not establish causes, and no causal claim should be read into it.",
+      "No conclusions are published here. The visualisations are exploratory, not an argument."
+    ],
+    "links": {
+      "repository": null,
+      "live": null,
+      "writeup": null
+    },
+    "featured": true,
+    "order": 1
+  },
+  {
+    "id": "prj-osho-research-document",
+    "slug": "osho-documentary-research-document",
+    "title": "Osho: Documentary-Style Research Document",
+    "categories": [
+      "research",
+      "writing"
+    ],
+    "summary": "A long-form, documentary-style research and writing project on Osho, structured to keep documented events separate from contested interpretation.",
+    "description": "A comprehensive research and writing project about Osho, written in a documentary register. The subject is unusually contested — accounts of his life, teaching and organisations differ sharply depending on who is telling the story. The document is organised around that problem: it records competing accounts side by side and marks where the record is disputed, rather than presenting a single settled narrative.",
+    "role": "Researcher and writer — source reading, structuring and drafting.",
+    "tools": [
+      "Source reading and note-taking",
+      "Long-form drafting"
+    ],
+    "status": "completed",
+    "visibility": "Research and writing project — not published as a public article.",
+    "published": true,
+    "methodology": [
+      {
+        "title": "Compiled from available published sources",
+        "detail": "Worked from material that is publicly available, keeping a note of where each account originates."
+      },
+      {
+        "title": "Structured it as documentary narrative",
+        "detail": "Used a chronological documentary form because it makes the sequence of events, and the points where accounts diverge, easier to follow."
+      },
+      {
+        "title": "Separated record from interpretation",
+        "detail": "Kept documented events distinct from reading and interpretation, and flagged claims that are contested between sources."
+      }
+    ],
+    "limitations": [
+      "Accounts of Osho's life and organisations are genuinely contested. This document records the competing versions; it does not adjudicate between them.",
+      "It is a research and writing exercise. It is not peer-reviewed, and it is not published scholarship.",
+      "No public version exists yet, so the document cannot currently be linked or cited.",
+      "Working from published secondary material means inheriting whatever biases those sources carry."
+    ],
+    "links": {
+      "repository": null,
+      "live": null,
+      "writeup": null
+    },
+    "featured": true,
+    "order": 2
+  },
+  {
+    "id": "prj-worksheet-generator",
+    "slug": "worksheet-generator",
+    "title": "Worksheet Generator",
+    "categories": [
+      "concepts",
+      "education",
+      "technology"
+    ],
+    "summary": "A concept-stage design for a school worksheet and document generation system, separated into four layers. No implementation exists.",
+    "description": "A product design for generating school worksheets and related documents. The central idea is a strict separation of concerns across four layers, so that what a worksheet says, how it is arranged, and how it is styled can each change without disturbing the others — and so that automated generation remains genuinely optional rather than load-bearing. This is a design document and architecture, not software.",
+    "role": "Product design and system architecture — concept only.",
+    "tools": [
+      "System design",
+      "Written specification"
+    ],
+    "status": "concept",
+    "visibility": "Concept-stage design. No prototype and no codebase.",
+    "published": true,
+    "methodology": [
+      {
+        "title": "Content layer",
+        "detail": "Holds the actual subject matter — questions, prompts, answers and metadata — as structured data, with no assumptions about how it will look on a page."
+      },
+      {
+        "title": "Layout Engine",
+        "detail": "Decides how content is arranged into a printable page: ordering, spacing, pagination and how items flow when they do not fit."
+      },
+      {
+        "title": "Template Engine",
+        "detail": "Supplies reusable presentation formats — worksheet styles, headers, question patterns — so a new document is a template choice rather than a rebuild."
+      },
+      {
+        "title": "Optional AI layer",
+        "detail": "An assistive layer that could draft or vary content. Deliberately optional: the design requires the other three layers to work completely without it."
+      }
+    ],
+    "limitations": [
+      "This is a design, not a product. There is no prototype, no application and no code.",
+      "The four-layer separation is untested. Whether the boundaries survive contact with real requirements is exactly what a prototype would reveal.",
+      "The layout problem is the hardest part and the least specified — real pagination and overflow behaviour are where designs like this usually break.",
+      "No claim is made about usefulness in a classroom, since it has never been used in one."
+    ],
+    "links": {
+      "repository": null,
+      "live": null,
+      "writeup": null
+    },
+    "featured": true,
+    "order": 3
+  }
+]

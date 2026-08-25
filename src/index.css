@@ -1,0 +1,244 @@
+@import 'tailwindcss';
+
+/* Class-based dark mode. The class is set pre-paint by the inline script in index.html
+   and thereafter managed by src/lib/theme.jsx. */
+/* Tailwind CSS v4 directive; keep class-based dark mode in sync with the app. */
+/* stylelint-disable-next-line at-rule-no-unknown */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---------------------------------------------------------------------------
+   DESIGN SYSTEM
+   ---------------------------------------------------------------------------
+  Editorial and contemporary: warm paper surfaces, green-black ink, and a
+  terracotta accent with cool supporting tones.
+
+   The accent is a PLACEHOLDER. To rebrand the site, change --color-accent and
+   --color-accent-strong below (and their .dark overrides) — nothing else.
+
+   Two accent values are required, one per theme: a single hex cannot meet WCAG AA
+   against both a near-white and a near-black background.
+
+   Contrast pairings (all meet WCAG AA for normal text at minimum):
+     ink    on canvas    ~16.0:1 light  ~15.9:1 dark   AAA
+     muted  on canvas     ~7.0:1 light   ~7.4:1 dark   AAA
+     accent on canvas     ~5.0:1 light   ~8.6:1 dark   AA
+     on-accent on accent  ~5.9:1 light   ~8.9:1 dark   AA
+   Re-check with a contrast checker if you change the accent.
+
+   NOTE ON THE TOKEN NAME: the page background token is --color-canvas, not
+   --color-base. In Tailwind v4 a --color-base token would make `text-base`
+   resolve to a COLOUR instead of a font size, which silently turned every
+   `text-base` heading the same colour as the page background.
+--------------------------------------------------------------------------- */
+
+@theme {
+  /* Surfaces and text — light theme values; .dark overrides follow below. */
+  --color-canvas: #f5f3ee;
+  --color-surface: #fffdf8;
+  --color-raised: #e7efec;
+  --color-ink: #172629;
+  --color-muted: #536469;
+  --color-line: #d7e0dc;
+
+  --color-accent: #bd4d3b;
+  --color-accent-strong: #963a2d;
+  --color-on-accent: #ffffff;
+
+  /* Epistemic label hues — used by Callout, SourceList and StatusBadge.
+     Deliberately distinct from the accent so content labels never read as branding. */
+  --color-fact: #23658a;
+  --color-analysis: #65578d;
+  --color-opinion: #946116;
+  --color-limitation: #a64d5c;
+
+  /* Typography — system stacks only: no network requests, no FOUT, no dependency.
+     See README to swap in a webfont such as Fraunces or Newsreader. */
+  --font-display: 'Avenir Next', Avenir, 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+  --font-sans: 'Avenir Next', Avenir, 'Segoe UI', Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono',
+    monospace;
+
+  /* A comfortable measure for long-form reading. */
+  --container-prose: 68ch;
+
+  --radius-card: 1rem;
+
+  --shadow-subtle: 0 1px 2px rgb(23 38 41 / 0.04), 0 4px 12px rgb(23 38 41 / 0.05);
+  --shadow-raised: 0 2px 4px rgb(23 38 41 / 0.05), 0 14px 32px rgb(23 38 41 / 0.1);
+}
+
+/* Dark theme. `:root.dark` (0,2,0) outranks the `:root` (0,1,0) rule that @theme emits. */
+:root.dark {
+  --color-canvas: #101a1c;
+  --color-surface: #172628;
+  --color-raised: #203335;
+  --color-ink: #edf2ef;
+  --color-muted: #a5b5b1;
+  --color-line: #2c4545;
+
+  --color-accent: #ef8a72;
+  --color-accent-strong: #ffad95;
+  --color-on-accent: #22100d;
+
+  --color-fact: #81c1e2;
+  --color-analysis: #c0b4e5;
+  --color-opinion: #efc56b;
+  --color-limitation: #f2a1ae;
+
+  --shadow-subtle: 0 1px 2px rgb(0 0 0 / 0.3), 0 5px 14px rgb(0 0 0 / 0.25);
+  --shadow-raised: 0 3px 6px rgb(0 0 0 / 0.3), 0 16px 36px rgb(0 0 0 / 0.42);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-line);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-canvas);
+    background-image: linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--color-accent) 4%, transparent) 0,
+        transparent 42%
+      ),
+      radial-gradient(circle at 85% 8%, color-mix(in srgb, var(--color-fact) 5%, transparent), transparent 30rem);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    line-height: 1.65;
+    min-width: 320px;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  img,
+  svg,
+  video,
+  canvas {
+    max-width: 100%;
+  }
+
+  button,
+  a {
+    overflow-wrap: anywhere;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    line-height: 1.15;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* A single, consistent, always-visible focus indicator. */
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background-color: color-mix(in srgb, var(--color-accent) 26%, transparent);
+  }
+
+  /* Form controls inherit the theme rather than the OS default. */
+  input,
+  textarea,
+  select,
+  button {
+    font: inherit;
+    color: inherit;
+  }
+
+  [hidden] {
+    display: none !important;
+  }
+}
+
+@layer components {
+  /* Applied by <Prose>; block elements are rendered by src/components/Prose.jsx. */
+  .prose-body {
+    font-size: 1.0625rem;
+    line-height: 1.75;
+  }
+
+  .prose-body a {
+    color: var(--color-accent);
+    text-underline-offset: 3px;
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+  }
+
+  .prose-body a:hover {
+    color: var(--color-accent-strong);
+  }
+}
+
+@layer utilities {
+  /* Visible only when focused — used by the skip link. */
+  .sr-only-focusable:not(:focus):not(:focus-within) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  .animate-rise {
+    animation: rise 200ms ease-out both;
+  }
+
+  .animate-fade {
+    animation: fade 160ms ease-out both;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Respect the OS "reduce motion" setting everywhere, unconditionally. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

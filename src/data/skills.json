@@ -1,0 +1,101 @@
+[
+  {
+    "id": "skl-source-comparison",
+    "group": "Research & analysis",
+    "name": "Comparing conflicting sources",
+    "level": "working-knowledge",
+    "evidence": "terrorism-in-india-data-visualization",
+    "note": "Keeping disagreements between sources visible instead of resolving them by preference.",
+    "order": 1
+  },
+  {
+    "id": "skl-data-gaps",
+    "group": "Research & analysis",
+    "name": "Identifying gaps in a dataset",
+    "level": "working-knowledge",
+    "evidence": "terrorism-in-india-data-visualization",
+    "note": "Recognising when missing records are being read as zero values.",
+    "order": 2
+  },
+  {
+    "id": "skl-question-framing",
+    "group": "Research & analysis",
+    "name": "Framing a researchable question",
+    "level": "learning",
+    "evidence": null,
+    "note": "Narrowing a broad interest into something that can actually be answered.",
+    "order": 3
+  },
+  {
+    "id": "skl-longform",
+    "group": "Writing",
+    "name": "Long-form documentary writing",
+    "level": "working-knowledge",
+    "evidence": "osho-documentary-research-document",
+    "note": "Sustaining structure and register across a long document.",
+    "order": 4
+  },
+  {
+    "id": "skl-separating-claims",
+    "group": "Writing",
+    "name": "Separating fact, analysis and opinion",
+    "level": "working-knowledge",
+    "evidence": "osho-documentary-research-document",
+    "note": "Signalling to a reader which kind of claim they are reading.",
+    "order": 5
+  },
+  {
+    "id": "skl-python",
+    "group": "Data",
+    "name": "Python",
+    "level": "learning",
+    "evidence": "terrorism-in-india-data-visualization",
+    "note": "Used for data preparation and plotting; comfortable with the basics.",
+    "order": 6
+  },
+  {
+    "id": "skl-matplotlib",
+    "group": "Data",
+    "name": "matplotlib",
+    "level": "working-knowledge",
+    "evidence": "terrorism-in-india-data-visualization",
+    "note": "Building readable time-series charts that show their own uncertainty.",
+    "order": 7
+  },
+  {
+    "id": "skl-web",
+    "group": "Web & software",
+    "name": "HTML, CSS and JavaScript",
+    "level": "learning",
+    "evidence": null,
+    "note": "This site is the current exercise.",
+    "order": 8
+  },
+  {
+    "id": "skl-react",
+    "group": "Web & software",
+    "name": "React",
+    "level": "learning",
+    "evidence": null,
+    "note": "Learning component structure and state by building rather than by tutorial.",
+    "order": 9
+  },
+  {
+    "id": "skl-system-design",
+    "group": "Web & software",
+    "name": "Layered system design",
+    "level": "learning",
+    "evidence": "worksheet-generator",
+    "note": "Separating concerns on paper. Untested against a real implementation.",
+    "order": 10
+  },
+  {
+    "id": "skl-security-fundamentals",
+    "group": "Security fundamentals",
+    "name": "Defensive security concepts",
+    "level": "learning",
+    "evidence": null,
+    "note": "An active interest with no project behind it yet. Listed as learning, not as a skill.",
+    "order": 11
+  }
+]

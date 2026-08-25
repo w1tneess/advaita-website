@@ -1,0 +1,22 @@
+{
+  "defaultTheme": "system",
+  "accent": {
+    "light": null,
+    "dark": null
+  },
+  "featuredProjectLimit": 3,
+  "latestPostsLimit": 3,
+  "postsPerPage": 6,
+  "showEpistemicLegend": true,
+  "showTimeline": true,
+  "showSkills": true,
+  "blogEmptyState": "No public articles yet. This section will document notes, research, and ideas as they develop.",
+  "footerNote": "Built and maintained by hand. Opinions are my own, and labelled as such.",
+  "contact": {
+    "heading": "Get in touch",
+    "intro": "Email is the most reliable way to reach me — for questions about the research on this site, corrections, or collaboration on something in the same territory.",
+    "privacyNote": "I keep personal details off this site on purpose. I don't publish my location beyond the state, my phone number, or anything about where I study. Please don't send private or sensitive information over email either — treat anything you send as ordinary, unencrypted mail.",
+    "responseNote": "I'm a student, so replies can be slow. If a message goes unanswered it's time, not disinterest.",
+    "corrections": "If you think something here is wrong, tell me what and why, ideally with a source. Corrections are the most useful mail I get."
+  }
+}

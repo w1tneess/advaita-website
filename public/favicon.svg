@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Placeholder favicon: a simple monogram mark, hand-drawn as vector strokes.
+
+  Replacing it is a one-file job -- overwrite this file and nothing else. It is
+  referenced from index.html as %BASE_URL%favicon.svg (for both the icon and the
+  apple-touch-icon), so the filename must stay the same.
+
+  No prefers-color-scheme rule is needed: the mark carries its own dark navy
+  plate, so it reads correctly against light and dark browser chrome alike.
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 32 32"
+  width="32"
+  height="32"
+  role="img"
+>
+  <title>Advaita Chandra</title>
+
+  <!-- Plate -->
+  <rect x="0" y="0" width="32" height="32" rx="7.5" fill="#0E1520" />
+
+  <!-- Geometric "A": two legs plus a crossbar. Stroke-only so it stays open
+       and legible when downscaled to 16px. -->
+  <g
+    fill="none"
+    stroke="#5FBFC9"
+    stroke-width="2.8"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path d="M9 24 L16 8 L23 24" />
+    <path d="M11.2 19 H20.8" />
+  </g>
+</svg>

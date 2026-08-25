@@ -1,0 +1,18 @@
+# Served from the site root as https://advaitachandra.in/robots.txt
+# (Files in public/ are copied verbatim into dist/ by Vite.)
+
+User-agent: *
+Allow: /
+
+# /admin is a local, frontend-only demo editor: there is no server behind it and
+# no secrets in it, so there is nothing here to protect. These two lines only ask
+# crawlers to keep the demo out of search results. This is NOT access control --
+# robots.txt is a request, not a lock, and anyone can still open the page.
+Disallow: /admin
+Disallow: /admin/
+
+Sitemap: https://advaitachandra.in/sitemap.xml
+
+# If this site is ever deployed to a GitHub project page instead of the custom
+# domain, the Sitemap line above must be updated to point at the real origin and
+# base path: https://<username>.github.io/<repo>/sitemap.xml

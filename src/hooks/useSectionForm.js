@@ -1,0 +1,67 @@
+import { useCallback, useMemo, useState } from 'react'
+
+import { useContent } from '../lib/content.jsx'
+import { hasErrors } from '../lib/schema.js'
+import { useToast } from '../lib/toast.jsx'
+
+/**
+ * Draft state for one object section of the content document (profile, home, settings).
+ *
+ * These sections are edited as a whole form rather than field-by-field, so the draft is
+ * held locally and only committed on submit. That is what makes "Discard changes"
+ * meaningful and stops a half-typed value from reaching the public pages mid-keystroke.
+ *
+ * @param {string} sectionKey  top-level document key: 'profile' | 'home' | 'settings'
+ * @param {object} section     the current committed value
+ * @param {Function} validate  (draft) => errors object
+ */
+export function useSectionForm(sectionKey, section, validate) {
+  const { setSection } = useContent()
+  const toast = useToast()
+
+  const [draft, setDraft] = useState(section)
+  const [errors, setErrors] = useState({})
+
+  const set = useCallback((key, value) => {
+    setDraft((current) => ({ ...current, [key]: value }))
+  }, [])
+
+  /** Set a value one level down, e.g. setNested('accent', 'light', '#0f6b73'). */
+  const setNested = useCallback((key, childKey, value) => {
+    setDraft((current) => ({
+      ...current,
+      [key]: { ...current[key], [childKey]: value },
+    }))
+  }, [])
+
+  // Cheap deep comparison. These sections are small, plain-JSON objects.
+  const dirty = useMemo(
+    () => JSON.stringify(draft) !== JSON.stringify(section),
+    [draft, section],
+  )
+
+  const submit = useCallback(
+    (event) => {
+      event?.preventDefault?.()
+      const found = validate(draft)
+      setErrors(found)
+
+      if (hasErrors(found)) {
+        toast.error('Nothing was saved — check the highlighted fields.')
+        return false
+      }
+
+      setSection(sectionKey, draft)
+      toast.success('Saved to this browser. Export and commit to publish.')
+      return true
+    },
+    [draft, sectionKey, setSection, toast, validate],
+  )
+
+  const revert = useCallback(() => {
+    setDraft(section)
+    setErrors({})
+  }, [section])
+
+  return { draft, set, setNested, setDraft, errors, dirty, submit, revert }
+}

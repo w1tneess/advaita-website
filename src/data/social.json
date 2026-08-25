@@ -1,0 +1,62 @@
+[
+  {
+    "id": "soc-email",
+    "platform": "Email",
+    "label": "Email",
+    "icon": "Mail",
+    "url": null,
+    "handle": null,
+    "placeholder": "you@example.com",
+    "kind": "email",
+    "visible": true,
+    "order": 1
+  },
+  {
+    "id": "soc-github",
+    "platform": "GitHub",
+    "label": "GitHub",
+    "icon": "Github",
+    "url": null,
+    "handle": null,
+    "placeholder": "https://github.com/your-username",
+    "kind": "link",
+    "visible": true,
+    "order": 2
+  },
+  {
+    "id": "soc-linkedin",
+    "platform": "LinkedIn",
+    "label": "LinkedIn",
+    "icon": "Linkedin",
+    "url": null,
+    "handle": null,
+    "placeholder": "https://www.linkedin.com/in/your-profile",
+    "kind": "link",
+    "visible": true,
+    "order": 3
+  },
+  {
+    "id": "soc-writing-elsewhere",
+    "platform": "Writing elsewhere",
+    "label": "Writing elsewhere",
+    "icon": "Rss",
+    "url": null,
+    "handle": null,
+    "placeholder": "https://example.com/your-newsletter",
+    "kind": "link",
+    "visible": true,
+    "order": 4
+  },
+  {
+    "id": "soc-other",
+    "platform": "Other",
+    "label": "Other profile",
+    "icon": "AtSign",
+    "url": null,
+    "handle": null,
+    "placeholder": "https://example.com/your-profile",
+    "kind": "link",
+    "visible": false,
+    "order": 5
+  }
+]
