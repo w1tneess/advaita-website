@@ -1,4 +1,4 @@
-# Builds the Vite site and publishes it with the official GitHub Pages actions.
+# Builds the Vite site, validates the Worker, and deploys both to Cloudflare.
 #
 # One-time setup: in the repository, go to Settings -> Pages and set
 # Source = "GitHub Actions". Without that, this workflow builds fine but the
@@ -8,7 +8,7 @@
 # `dist/` on every build. Deleting that file would drop advaitachandra.in the
 # next time this workflow runs.
 
-name: Deploy to GitHub Pages
+name: Build and deploy to Cloudflare
 
 on:
   push:
@@ -18,16 +18,10 @@ on:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
-# Only one Pages deployment at a time. `cancel-in-progress: false` is deliberate:
-# a deployment that is cancelled midway can leave the live site half-updated,
-# serving a new index.html alongside stale hashed assets. Better to let an
-# in-flight deploy finish and queue the next one behind it.
 concurrency:
-  group: pages
-  cancel-in-progress: false
+  group: cloudflare
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -45,41 +39,28 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # BASE_PATH feeds vite.config.js (`base: process.env.BASE_PATH ?? '/'`) and
-      # therefore every asset URL and %BASE_URL% reference in the built site.
-      #
-      #   - Custom domain (advaitachandra.in) or a <username>.github.io repo:
-      #     leave the repository variable unset, or set it to '/'. The site is
-      #     served from the domain root.
-      #
-      #   - Project page at https://<username>.github.io/<repo-name>/:
-      #     set the repository variable BASE_PATH to '/<repo-name>/' -- with BOTH
-      #     a leading and a trailing slash. Omitting either one produces broken
-      #     asset paths on the deployed site.
-      #
-      # The variable lives under Settings -> Secrets and variables -> Actions ->
-      # Variables (not Secrets).
       - name: Build
         run: npm run build
         env:
-          BASE_PATH: ${{ vars.BASE_PATH || '/' }}
-          VITE_ADMIN_PASSWORD_HASH: ${{ vars.VITE_ADMIN_PASSWORD_HASH }}
+          # Cloudflare Pages serves this custom-domain project from the origin root.
+          # Do not reuse the old GitHub Pages repository-subpath variable here.
+          BASE_PATH: /
+          VITE_API_URL: ${{ vars.VITE_API_URL }}
 
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
+      - name: Validate Worker bundle
+        run: npx --yes wrangler deploy --dry-run --outdir /tmp/advaita-worker
 
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: dist
+      - name: Deploy Pages site
+        if: github.ref == 'refs/heads/main'
+        run: npx --yes wrangler pages deploy dist --project-name "$CLOUDFLARE_PAGES_PROJECT"
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_PAGES_PROJECT: ${{ vars.CLOUDFLARE_PAGES_PROJECT }}
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Deploy Worker
+        if: github.ref == 'refs/heads/main'
+        run: npx --yes wrangler deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

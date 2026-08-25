@@ -8,6 +8,8 @@ import Container from '../components/Container.jsx'
 import Icon from '../components/Icon.jsx'
 import Seo from '../components/Seo.jsx'
 import { useContent } from '../lib/content.jsx'
+import { apiConfigured, apiRequest } from '../lib/api.js'
+import { useState } from 'react'
 import { PUBLIC_ROUTES } from '../lib/routes.js'
 
 const ROUTE = PUBLIC_ROUTES.find((route) => route.key === 'contact')
@@ -28,6 +30,20 @@ export default function Contact() {
 
   const email = publicSocialLinks.find((link) => link.kind === 'email')
   const others = publicSocialLinks.filter((link) => link.kind !== 'email')
+  const [form, setForm] = useState({ name: '', email: '', message: '' })
+  const [status, setStatus] = useState('')
+
+  async function submitMessage(event) {
+    event.preventDefault()
+    setStatus('Sending...')
+    try {
+      await apiRequest('/messages', { method: 'POST', body: JSON.stringify(form) })
+      setForm({ name: '', email: '', message: '' })
+      setStatus('Message sent. Thank you.')
+    } catch (error) {
+      setStatus(error.message)
+    }
+  }
 
   return (
     <>
@@ -41,6 +57,18 @@ export default function Contact() {
           <p className="mt-5 max-w-prose text-lg leading-relaxed text-muted">{contact.intro}</p>
 
           <div className="mt-12 grid gap-6 lg:grid-cols-2">
+            {apiConfigured && (
+              <Card className="p-6 sm:p-8">
+                <h2 className="text-lg font-semibold">Send a message</h2>
+                <form onSubmit={submitMessage} className="mt-5 space-y-4">
+                  <label className="block text-sm font-medium">Name<input required value={form.name} onChange={(event) => setForm({ ...form, name: event.target.value })} className="mt-1.5 w-full rounded-lg border border-line bg-surface px-3 py-2.5 text-sm" /></label>
+                  <label className="block text-sm font-medium">Email<input required type="email" value={form.email} onChange={(event) => setForm({ ...form, email: event.target.value })} className="mt-1.5 w-full rounded-lg border border-line bg-surface px-3 py-2.5 text-sm" /></label>
+                  <label className="block text-sm font-medium">Message<textarea required rows="5" value={form.message} onChange={(event) => setForm({ ...form, message: event.target.value })} className="mt-1.5 w-full rounded-lg border border-line bg-surface px-3 py-2.5 text-sm" /></label>
+                  <Button type="submit" disabled={status === 'Sending...'}>Send message</Button>
+                  {status && <p className="text-sm text-muted" role="status">{status}</p>}
+                </form>
+              </Card>
+            )}
             <Card className="p-6 sm:p-8">
               <h2 className="flex items-center gap-2 text-lg font-semibold">
                 <Mail className="h-4.5 w-4.5 text-accent" aria-hidden="true" />
@@ -137,9 +165,7 @@ export default function Contact() {
               <p className="mt-3 flex items-start gap-2">
                 <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden="true" />
                 <span>
-                  There is no comment system and no message form here, so email is the only
-                  route. Nothing you send is stored on this site — it has no server and no
-                  database.
+                  Messages are stored securely for the site owner when the Worker API is enabled.
                 </span>
               </p>
             </Callout>

@@ -2,6 +2,8 @@
 
 /* Class-based dark mode. The class is set pre-paint by the inline script in index.html
    and thereafter managed by src/lib/theme.jsx. */
+/* Tailwind CSS v4 directive; keep class-based dark mode in sync with the app. */
+/* stylelint-disable-next-line at-rule-no-unknown */
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* ---------------------------------------------------------------------------

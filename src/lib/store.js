@@ -61,7 +61,9 @@ export function storageAvailable() {
  * Example:
  *   1: (doc) => ({ ...doc, awards: [], schemaVersion: 2 }),
  */
-const MIGRATIONS = {}
+const MIGRATIONS = {
+  1: (doc) => ({ ...doc, activity: Array.isArray(doc.activity) ? doc.activity : [] }),
+}
 
 function migrate(doc) {
   let current = doc

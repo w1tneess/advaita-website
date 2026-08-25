@@ -15,6 +15,12 @@ import Card from '../../components/Card.jsx'
 import { useContent } from '../../lib/content.jsx'
 import { pluralize } from '../../lib/format.js'
 
+function formatActivityDate(value) {
+  return new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeStyle: 'short' }).format(
+    new Date(value),
+  )
+}
+
 /**
  * Admin landing page.
  *
@@ -56,12 +62,14 @@ export default function Dashboard() {
     blogCategories,
     projectCategories,
     tags,
+    activity,
   } = useContent()
 
   const publishedProjects = projects.filter((project) => project.published !== false).length
   const publishedPosts = posts.filter((post) => post.status === 'published').length
   const draftPosts = posts.length - publishedPosts
   const configuredLinks = socialLinks.filter((link) => link.url).length
+  const totalContent = projects.length + posts.length + interests.length + skills.length + timeline.length
 
   const stats = [
     {
@@ -126,6 +134,13 @@ export default function Dashboard() {
             } still placeholders.`,
       to: '/admin/social',
     },
+    {
+      icon: FileText,
+      label: 'Total content',
+      value: totalContent,
+      detail: 'Editable records across the main content collections.',
+      to: '/admin/data',
+    },
   ]
 
   return (
@@ -142,6 +157,28 @@ export default function Dashboard() {
       </ul>
 
       <PublishChecklist className="mt-8" />
+
+      <Card className="mt-8 p-5">
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <h2 className="font-semibold">Recent activity</h2>
+            <p className="mt-1 text-sm text-muted">Persisted changes in this browser.</p>
+          </div>
+          <span className="text-xs text-muted">Website status: local edits</span>
+        </div>
+        {activity.length > 0 ? (
+          <ul className="mt-4 divide-y divide-line">
+            {activity.slice(0, 8).map((entry) => (
+              <li key={entry.id} className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 py-3 text-sm first:pt-0 last:pb-0">
+                <span><strong className="font-medium capitalize">{entry.action}</strong> {entry.type.replace('categories.', '')} “{entry.label}”</span>
+                <time className="text-xs text-muted" dateTime={entry.at}>{formatActivityDate(entry.at)}</time>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="mt-4 text-sm text-muted">No admin changes recorded yet.</p>
+        )}
+      </Card>
     </AdminPage>
   )
 }

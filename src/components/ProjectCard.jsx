@@ -81,6 +81,15 @@ export default function ProjectCard({ project, variant = 'compact', headingLevel
         {project.title}
       </Heading>
 
+      {project.coverImage && (
+        <img
+          src={project.coverImage}
+          alt=""
+          loading="lazy"
+          className="mt-4 aspect-[16/7] w-full rounded-lg object-cover"
+        />
+      )}
+
       <p className="mt-3 text-sm leading-relaxed text-muted">
         {isFull ? project.description : project.summary}
       </p>

@@ -151,6 +151,9 @@ export function createProject(overrides = {}) {
     categories: [],
     summary: '',
     description: '',
+    projectDate: '',
+    coverImage: '',
+    gallery: [],
     role: '',
     tools: [],
     status: 'concept',
@@ -348,6 +351,7 @@ export function validateProject(project, allProjects = []) {
     role: [rules.required('Role')],
     status: [rules.oneOf(PROJECT_STATUSES.map((s) => s.value), 'Status')],
     categories: [rules.nonEmptyArray('category')],
+    projectDate: [rules.isoDate],
   })
 
   const links = project.links || {}
@@ -355,6 +359,13 @@ export function validateProject(project, allProjects = []) {
     const error = rules.url(links[key])
     if (error) errors[`links.${key}`] = error
   }
+
+  const coverError = rules.url(project.coverImage)
+  if (coverError) errors.coverImage = coverError
+  ;(project.gallery || []).forEach((image, index) => {
+    const error = rules.url(image)
+    if (error) errors[`gallery.${index}`] = error
+  })
 
   return errors
 }

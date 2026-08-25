@@ -172,6 +172,26 @@ export default function ProjectEditor() {
             required
             hint="The fuller account shown on the portfolio page. Describe what was done, not what it proves."
           />
+
+          <div className="mt-5 grid gap-5 sm:grid-cols-2">
+            <Field
+              id="project-date"
+              label="Date"
+              type="date"
+              value={draft.projectDate ?? ''}
+              onChange={(value) => set('projectDate', value)}
+              error={errors.projectDate}
+            />
+            <Field
+              id="project-cover-image"
+              label="Cover image URL"
+              type="url"
+              value={draft.coverImage ?? ''}
+              onChange={(value) => set('coverImage', value)}
+              error={errors.coverImage}
+              hint="Use an image URL from your deployed public assets."
+            />
+          </div>
         </Card>
 
         <Card className="mt-6 p-6">

@@ -1,0 +1,12 @@
+name = "advaita-api"
+main = "worker/src/index.js"
+compatibility_date = "2026-08-25"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "advaita-content"
+database_id = "15aae74d-1ceb-431c-b3fc-0b399c19e8ee"
+migrations_dir = "worker/migrations"
+
+[vars]
+FRONTEND_ORIGIN = "https://advaita-website.pages.dev"

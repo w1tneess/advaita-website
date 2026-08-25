@@ -22,7 +22,7 @@ import interests from './interests.json'
  * Bump when the SHAPE of the content document changes, and add a matching migration
  * in src/lib/store.js so existing local edits are carried forward rather than lost.
  */
-export const SCHEMA_VERSION = 1
+export const SCHEMA_VERSION = 2
 
 /**
  * Bump when the seed CONTENT changes. A visitor with older local edits is shown a
@@ -50,6 +50,7 @@ export function createSeedDocument() {
     social,
     settings,
     interests,
+    activity: [],
   }
 
   return typeof structuredClone === 'function'

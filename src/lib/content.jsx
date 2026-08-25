@@ -11,6 +11,7 @@ import {
   storageAvailable,
 } from './store.js'
 import { useToast } from './toast.jsx'
+import { apiConfigured, getRemoteContent, saveRemoteContent } from './api.js'
 
 /**
  * The content store shared by the public site and the demo admin panel.
@@ -54,6 +55,18 @@ function renumber(collection) {
   )
 }
 
+function recordActivity(document, action, type, item) {
+  const activity = Array.isArray(document.activity) ? document.activity : []
+  const entry = {
+    id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    action,
+    type,
+    label: item?.title || item?.name || item?.label || type,
+    at: new Date().toISOString(),
+  }
+  return { ...document, activity: [entry, ...activity].slice(0, 100) }
+}
+
 export function ContentProvider({ children }) {
   const toast = useToast()
 
@@ -63,10 +76,25 @@ export function ContentProvider({ children }) {
   const [content, setContent] = useState(initial.current.doc)
   const [isLocal, setIsLocal] = useState(initial.current.source === 'local')
   const [previewDrafts, setPreviewDrafts] = useState(false)
+  const [isRemote, setIsRemote] = useState(false)
 
   // Anything queued here is written to localStorage by the effect below.
   const pending = useRef(null)
   const warningShown = useRef(false)
+
+  useEffect(() => {
+    if (!apiConfigured || initial.current.source === 'local') return
+    let active = true
+    getRemoteContent()
+      .then((result) => {
+        if (active && result.document) {
+          setContent(result.document)
+          setIsRemote(true)
+        }
+      })
+      .catch(() => {})
+    return () => { active = false }
+  }, [])
 
   // Surface a load problem (corrupt or unupgradable local data) exactly once.
   useEffect(() => {
@@ -85,6 +113,9 @@ export function ContentProvider({ children }) {
     const result = saveDocument(document)
     if (result.ok) setIsLocal(true)
     else toast.error(result.error)
+    if (apiConfigured) {
+      saveRemoteContent(document).then(() => setIsRemote(true)).catch((error) => toast.error(error.message))
+    }
   }, [content, toast])
 
   const commit = useCallback((updater) => {
@@ -109,7 +140,8 @@ export function ContentProvider({ children }) {
           index === -1
             ? [...collection, item]
             : collection.map((existing) => (existing.id === item.id ? item : existing))
-        return setPath(document, path, renumber(next))
+        const nextDocument = setPath(document, path, renumber(next))
+        return recordActivity(nextDocument, index === -1 ? 'created' : 'edited', path, item)
       })
     },
     [commit],
@@ -120,7 +152,9 @@ export function ContentProvider({ children }) {
       commit((document) => {
         const collection = getPath(document, path) || []
         const next = collection.filter((item) => item.id !== id)
-        return setPath(document, path, renumber(next))
+        const removed = collection.find((item) => item.id === id)
+        const nextDocument = setPath(document, path, renumber(next))
+        return recordActivity(nextDocument, 'deleted', path, removed)
       })
     },
     [commit],
@@ -132,7 +166,9 @@ export function ContentProvider({ children }) {
       commit((document) => {
         const collection = getPath(document, path) || []
         const next = collection.map((item) => (item.id === id ? { ...item, ...patch } : item))
-        return setPath(document, path, next)
+        const nextDocument = setPath(document, path, next)
+        const updated = next.find((item) => item.id === id)
+        return recordActivity(nextDocument, 'updated', path, updated)
       })
     },
     [commit],
@@ -151,7 +187,9 @@ export function ContentProvider({ children }) {
 
         const next = [...collection]
         ;[next[from], next[to]] = [next[to], next[from]]
-        return setPath(document, path, renumber(next))
+        const nextDocument = setPath(document, path, renumber(next))
+        const moved = next.find((item) => item.id === id)
+        return recordActivity(nextDocument, 'reordered', path, moved)
       })
     },
     [commit],
@@ -160,7 +198,10 @@ export function ContentProvider({ children }) {
   /** Merge a partial update into a top-level object section (profile, home, settings). */
   const setSection = useCallback(
     (key, patch) => {
-      commit((document) => ({ ...document, [key]: { ...document[key], ...patch } }))
+      commit((document) => {
+        const nextDocument = { ...document, [key]: { ...document[key], ...patch } }
+        return recordActivity(nextDocument, 'updated', key, nextDocument[key])
+      })
     },
     [commit],
   )
@@ -302,9 +343,11 @@ export function ContentProvider({ children }) {
       setSection,
       replaceDocument,
       resetDocument,
+      activity: content.activity ?? [],
 
       // Storage state.
       isLocal,
+      isRemote,
       storageAvailable: storageAvailable(),
       hasLocalDocument: hasLocalDocument(),
       seedIsNewer: seedIsNewerThan(content),
@@ -339,6 +382,7 @@ export function ContentProvider({ children }) {
       replaceDocument,
       resetDocument,
       isLocal,
+      isRemote,
       previewDrafts,
     ],
   )

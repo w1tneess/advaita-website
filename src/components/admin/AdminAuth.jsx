@@ -1,17 +1,11 @@
 import { LockKeyhole } from 'lucide-react'
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 
 import Button from '../Button.jsx'
+import { apiConfigured, apiRequest } from '../../lib/api.js'
 
-const PASSWORD_HASH = (import.meta.env.VITE_ADMIN_PASSWORD_HASH ?? '').trim().toLowerCase()
 const SESSION_KEY = 'advaita-site.admin-authenticated'
 const AdminAuthContext = createContext(null)
-
-async function hashPassword(password) {
-  const bytes = new TextEncoder().encode(password)
-  const digest = await crypto.subtle.digest('SHA-256', bytes)
-  return [...new Uint8Array(digest)].map((byte) => byte.toString(16).padStart(2, '0')).join('')
-}
 
 function hasSession() {
   try {
@@ -38,27 +32,42 @@ export function useAdminAuth() {
 
 export default function AdminAuth({ children }) {
   const [authenticated, setAuthenticated] = useState(hasSession)
+  const [checking, setChecking] = useState(true)
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
 
-  if (!PASSWORD_HASH) {
+  useEffect(() => {
+    if (!apiConfigured) {
+      setChecking(false)
+      return undefined
+    }
+    apiRequest('/auth/session')
+      .then((result) => setAuthenticated(Boolean(result.authenticated)))
+      .catch(() => setAuthenticated(false))
+      .finally(() => setChecking(false))
+  }, [])
+
+  if (!apiConfigured) {
     return (
       <AuthShell>
         <h1 className="font-display text-3xl font-semibold tracking-tight">Admin unavailable</h1>
         <p className="mt-3 text-sm leading-relaxed text-muted">
-          This deployment has no admin password configured. Set{' '}
-          <code className="rounded bg-raised px-1.5 py-0.5 text-xs">VITE_ADMIN_PASSWORD_HASH</code>{' '}
-          to a SHA-256 password hash before using the admin panel.
+          This deployment has no Worker API configured. Set{' '}
+          <code className="rounded bg-raised px-1.5 py-0.5 text-xs">VITE_API_URL</code>{' '}
+          to the deployed API origin before using the admin panel.
         </p>
       </AuthShell>
     )
   }
+
+  if (checking) return <AuthShell><p className="text-sm text-muted">Checking admin session...</p></AuthShell>
 
   if (authenticated) {
     return (
       <AdminAuthContext.Provider
         value={{
           logout() {
+            apiRequest('/auth/logout', { method: 'POST' }).catch(() => {})
             try {
               sessionStorage.removeItem(SESSION_KEY)
             } catch {}
@@ -76,17 +85,11 @@ export default function AdminAuth({ children }) {
     setError('')
 
     try {
-      const matches = (await hashPassword(password)) === PASSWORD_HASH
-      if (!matches) {
-        setError('That password is not correct.')
-        setPassword('')
-        return
-      }
-
+      await apiRequest('/auth/login', { method: 'POST', body: JSON.stringify({ password }) })
       setSession()
       setAuthenticated(true)
     } catch {
-      setError('The password could not be checked in this browser.')
+      setError('The password could not be verified.')
     }
   }
 
