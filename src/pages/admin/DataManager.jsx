@@ -13,12 +13,14 @@ import {
   parseImportedJson,
 } from '../../lib/store.js'
 import { useToast } from '../../lib/toast.jsx'
+import { buildPublishBundle, publishBundleFilename } from '../../lib/publish.js'
+import { assetPath, validateImageFile } from '../../lib/media.js'
 
 /**
  * Data management: export, import, reset.
  *
- * Everything here operates on the full content document. Export produces a JSON file
- * that can be committed back into src/data/seed.js for deployment. Import replaces
+ * Everything here operates on the full content document. A publish bundle produces the
+ * changed source files and a manifest for committing through GitHub. Import replaces
  * the working document with the file's contents (validated first). Reset discards
  * the local copy so the deployed seed is used again.
  */
@@ -36,6 +38,28 @@ export default function DataManager() {
   const { confirm, dialogProps } = useConfirm()
   const fileRef = useRef(null)
   const [importStatus, setImportStatus] = useState('')
+  const [publishStatus, setPublishStatus] = useState(null)
+  const [assets, setAssets] = useState([])
+
+  const handlePublishBundle = () => {
+    const result = buildPublishBundle(content, assets)
+    if (!result.ok) {
+      setPublishStatus({ ok: false, errors: result.errors })
+      toast.error(`Validation failed: ${result.errors[0]}`)
+      return
+    }
+    const blob = new Blob([JSON.stringify(result.bundle, null, 2)], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const anchor = document.createElement('a')
+    anchor.href = url
+    anchor.download = publishBundleFilename()
+    document.body.appendChild(anchor)
+    anchor.click()
+    document.body.removeChild(anchor)
+    URL.revokeObjectURL(url)
+    setPublishStatus({ ok: true, bundle: result.bundle })
+    toast.success('Publish bundle downloaded.')
+  }
 
   const handleExport = () => {
     const json = documentToJson(content)
@@ -84,7 +108,7 @@ export default function DataManager() {
 
   const handleReset = async () => {
     const confirmed = await confirm({
-      title: 'Reset demo data?',
+      title: 'Reset local edits?',
       message:
         'This discards the current local document and goes back to the deployed seed. Any edits made in this browser that have not been exported will be lost.',
       confirmLabel: 'Reset',
@@ -100,11 +124,34 @@ export default function DataManager() {
   const documentBytes = new Blob([JSON.stringify(content)]).size
 
   return (
-    <AdminPage title="Data manager" description="Export, import, and reset the content document.">
+    <AdminPage title="Data manager" description="Validate, export, import, and reset local content edits.">
+      <section aria-labelledby="publish-bundle-heading" className="mb-10 rounded-xl border border-accent/30 bg-accent/5 p-5">
+        <h2 id="publish-bundle-heading" className="text-xl font-semibold tracking-tight">Export publish bundle</h2>
+        <p className="mt-2 text-sm text-muted">Validate your local edits and download only the changed source files. Apply the bundle in Codespaces, review the diff, then commit through GitHub.</p>
+        <Button onClick={handlePublishBundle} size="sm" className="mt-4">Export publish bundle</Button>
+        {publishStatus?.ok && <p className="mt-4 text-sm" role="status">Validation passed. Modified files: {publishStatus.bundle.modified.length || 'none'}; assets: {publishStatus.bundle.assets.length || 'none'}.</p>}
+        {publishStatus && !publishStatus.ok && <ul className="mt-4 list-disc space-y-1 pl-5 text-sm text-limitation">{publishStatus.errors.slice(0, 8).map((error) => <li key={error}>{error}</li>)}</ul>}
+      </section>
+
+      <section aria-labelledby="media-heading" className="mt-10">
+        <h2 id="media-heading" className="text-xl font-semibold tracking-tight">Local media</h2>
+        <p className="mt-2 text-sm text-muted">Add small public images to the publish bundle. Images are limited to 5 MB and common image formats; apply each generated asset under public/assets/.</p>
+        <input type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/avif" multiple className="mt-4 block text-sm" onChange={(event) => {
+          for (const file of [...(event.target.files || [])]) {
+            const result = validateImageFile(file)
+            if (!result.ok) { toast.error(result.error); continue }
+            const reader = new FileReader()
+            reader.onload = () => setAssets((current) => [...current.filter((asset) => asset.filename !== result.filename), { filename: result.filename, path: assetPath(result.filename), dataUrl: reader.result }])
+            reader.readAsDataURL(file)
+          }
+          event.target.value = ''
+        }} />
+        {assets.length > 0 && <ul className="mt-3 space-y-1 text-sm text-muted">{assets.map((asset) => <li key={asset.filename}>{asset.path}</li>)}</ul>}
+      </section>
       <Callout variant="analysis" title="This manages the whole site">
-        Export creates a JSON file that can be edited by hand or committed back into the
-        repository. Import validates the file first — a bad file is rejected, not loaded.
-        Reset clears local edits and uses the deployed seed again.
+        Export creates a JSON backup. The publish bundle creates changed source files for
+        GitHub. Import validates the file first — a bad file is rejected, not loaded.
+        Reset clears local edits and uses checked-in content again.
       </Callout>
 
       {/* Storage info */}
@@ -184,7 +231,7 @@ export default function DataManager() {
         <div className="mt-4">
           <Button variant="danger" size="sm" onClick={handleReset}>
             <Trash2 className="h-4 w-4" aria-hidden="true" />
-            Reset demo data
+            Reset local edits
           </Button>
         </div>
       </section>

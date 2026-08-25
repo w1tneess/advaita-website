@@ -1,8 +1,7 @@
 import { LockKeyhole } from 'lucide-react'
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useState } from 'react'
 
 import Button from '../Button.jsx'
-import { apiConfigured, apiRequest } from '../../lib/api.js'
 
 const SESSION_KEY = 'advaita-site.admin-authenticated'
 const AdminAuthContext = createContext(null)
@@ -32,42 +31,14 @@ export function useAdminAuth() {
 
 export default function AdminAuth({ children }) {
   const [authenticated, setAuthenticated] = useState(hasSession)
-  const [checking, setChecking] = useState(true)
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
-
-  useEffect(() => {
-    if (!apiConfigured) {
-      setChecking(false)
-      return undefined
-    }
-    apiRequest('/auth/session')
-      .then((result) => setAuthenticated(Boolean(result.authenticated)))
-      .catch(() => setAuthenticated(false))
-      .finally(() => setChecking(false))
-  }, [])
-
-  if (!apiConfigured) {
-    return (
-      <AuthShell>
-        <h1 className="font-display text-3xl font-semibold tracking-tight">Admin unavailable</h1>
-        <p className="mt-3 text-sm leading-relaxed text-muted">
-          This deployment has no Worker API configured. Set{' '}
-          <code className="rounded bg-raised px-1.5 py-0.5 text-xs">VITE_API_URL</code>{' '}
-          to the deployed API origin before using the admin panel.
-        </p>
-      </AuthShell>
-    )
-  }
-
-  if (checking) return <AuthShell><p className="text-sm text-muted">Checking admin session...</p></AuthShell>
 
   if (authenticated) {
     return (
       <AdminAuthContext.Provider
         value={{
           logout() {
-            apiRequest('/auth/logout', { method: 'POST' }).catch(() => {})
             try {
               sessionStorage.removeItem(SESSION_KEY)
             } catch {}
@@ -85,11 +56,11 @@ export default function AdminAuth({ children }) {
     setError('')
 
     try {
-      await apiRequest('/auth/login', { method: 'POST', body: JSON.stringify({ password }) })
+      if (!password.trim()) throw new Error('empty password')
       setSession()
       setAuthenticated(true)
     } catch {
-      setError('The password could not be verified.')
+      setError('Enter a password to unlock this local editor.')
     }
   }
 
@@ -99,7 +70,7 @@ export default function AdminAuth({ children }) {
         <LockKeyhole className="h-6 w-6" aria-hidden="true" />
       </div>
       <h1 className="font-display text-3xl font-semibold tracking-tight">Admin panel</h1>
-      <p className="mt-3 text-sm leading-relaxed text-muted">Enter the password to continue.</p>
+      <p className="mt-3 text-sm leading-relaxed text-muted">Local editor access only. This does not secure GitHub or the published site.</p>
 
       <form onSubmit={handleSubmit} className="mt-6 space-y-4">
         <div>

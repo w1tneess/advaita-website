@@ -6,9 +6,8 @@ import Card from '../Card.jsx'
 /**
  * The actual route from an edit here to a change on the live site.
  *
- * Marking something "Published" in this panel sets a real field that the public pages
- * filter on — that part is not a pretence. What it does not do is deploy. This checklist
- * exists so that distinction is never left implicit.
+ * Marking something "Published" changes the local document. Exporting and committing the
+ * publish bundle is the trusted GitHub publishing boundary.
  */
 
 const STEPS = [
@@ -18,13 +17,13 @@ const STEPS = [
       'Changes are stored in this browser. The public pages in this browser update immediately, so you can check your work.',
   },
   {
-    title: 'Export the JSON',
-    detail: 'Data → Export. You get one file containing the whole content document.',
+    title: 'Export a publish bundle',
+    detail: 'Data → Export publish bundle. It includes only changed source files and a manifest.',
   },
   {
     title: 'Put the content into the repository',
     detail:
-      'Split the exported values back into the matching files in src/data/ (profile.json, projects.json, posts.json, and so on), or keep the export as a record and edit those files directly.',
+      'Apply the listed files under src/data/, including any added or deleted files, then inspect the generated diff.',
   },
   {
     title: 'Commit and push',

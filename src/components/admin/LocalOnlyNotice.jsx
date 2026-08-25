@@ -39,11 +39,11 @@ export default function LocalOnlyNotice({ className = '' }) {
           {isLocal ? (
             <>
               <strong className="font-semibold">Editing a local copy.</strong> Your changes are
-              saved in this browser only — not on any server, and not on the live site.
+                saved in this browser only. Export a publish bundle, then commit it through GitHub.
             </>
           ) : (
             <>
-              <strong className="font-semibold">Showing the deployed content.</strong> Nothing
+              <strong className="font-semibold">Showing checked-in content.</strong> Nothing
               has been edited in this browser yet. The first change you save creates a local
               copy.
             </>

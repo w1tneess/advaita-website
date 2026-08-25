@@ -11,10 +11,9 @@ import {
   storageAvailable,
 } from './store.js'
 import { useToast } from './toast.jsx'
-import { apiConfigured, getRemoteContent, saveRemoteContent } from './api.js'
 
 /**
- * The content store shared by the public site and the demo admin panel.
+ * The content store shared by the public site and the local admin editor.
  *
  * Both read from the same document. The public pages filter to published items;
  * the admin sees everything. Preview mode lets the admin temporarily view the public
@@ -76,25 +75,10 @@ export function ContentProvider({ children }) {
   const [content, setContent] = useState(initial.current.doc)
   const [isLocal, setIsLocal] = useState(initial.current.source === 'local')
   const [previewDrafts, setPreviewDrafts] = useState(false)
-  const [isRemote, setIsRemote] = useState(false)
 
   // Anything queued here is written to localStorage by the effect below.
   const pending = useRef(null)
   const warningShown = useRef(false)
-
-  useEffect(() => {
-    if (!apiConfigured || initial.current.source === 'local') return
-    let active = true
-    getRemoteContent()
-      .then((result) => {
-        if (active && result.document) {
-          setContent(result.document)
-          setIsRemote(true)
-        }
-      })
-      .catch(() => {})
-    return () => { active = false }
-  }, [])
 
   // Surface a load problem (corrupt or unupgradable local data) exactly once.
   useEffect(() => {
@@ -113,9 +97,6 @@ export function ContentProvider({ children }) {
     const result = saveDocument(document)
     if (result.ok) setIsLocal(true)
     else toast.error(result.error)
-    if (apiConfigured) {
-      saveRemoteContent(document).then(() => setIsRemote(true)).catch((error) => toast.error(error.message))
-    }
   }, [content, toast])
 
   const commit = useCallback((updater) => {
@@ -347,7 +328,6 @@ export function ContentProvider({ children }) {
 
       // Storage state.
       isLocal,
-      isRemote,
       storageAvailable: storageAvailable(),
       hasLocalDocument: hasLocalDocument(),
       seedIsNewer: seedIsNewerThan(content),
@@ -382,7 +362,6 @@ export function ContentProvider({ children }) {
       replaceDocument,
       resetDocument,
       isLocal,
-      isRemote,
       previewDrafts,
     ],
   )

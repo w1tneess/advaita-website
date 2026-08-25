@@ -20,7 +20,7 @@ import { createProject } from '../../lib/schema.js'
  * action, not a secondary one.
  */
 export default function ProjectsList() {
-  const { projects, patchItem, removeItem, moveItem, projectCategories } = useContent()
+  const { projects, patchItem, removeItem, moveItem, upsertItem, projectCategories } = useContent()
   const toast = useToast()
   const { confirm, dialogProps } = useConfirm()
   const [query, setQuery] = useState('')

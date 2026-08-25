@@ -1,22 +1,22 @@
 /**
  * Seed content.
  *
- * These JSON files are the published source of truth for the live site. The demo
- * admin panel edits a copy in localStorage; to actually publish a change you export
- * the JSON and commit it back into this directory (see README).
+ * These JSON files are the published source of truth for the live site. The local
+ * admin editor edits a copy in localStorage; publish by exporting a bundle and
+ * committing the changed files back into this directory.
  */
 
-import profile from './profile.json'
-import home from './home.json'
-import projects from './projects.json'
-import posts from './posts.json'
-import categories from './categories.json'
-import tags from './tags.json'
-import skills from './skills.json'
-import timeline from './timeline.json'
-import social from './social.json'
-import settings from './settings.json'
-import interests from './interests.json'
+import profile from './profile.json' with { type: 'json' }
+import home from './home.json' with { type: 'json' }
+import projects from './projects.json' with { type: 'json' }
+import posts from './posts.json' with { type: 'json' }
+import categories from './categories.json' with { type: 'json' }
+import tags from './tags.json' with { type: 'json' }
+import skills from './skills.json' with { type: 'json' }
+import timeline from './timeline.json' with { type: 'json' }
+import social from './social.json' with { type: 'json' }
+import settings from './settings.json' with { type: 'json' }
+import interests from './interests.json' with { type: 'json' }
 
 /**
  * Bump when the SHAPE of the content document changes, and add a matching migration
