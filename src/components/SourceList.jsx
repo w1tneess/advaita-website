@@ -14,11 +14,11 @@ export default function SourceList({ sources = [], headingLevel = 2, id = 'sourc
   const Heading = `h${headingLevel}`
 
   return (
-    <section aria-labelledby={`${id}-heading`} className="mt-12 border-t border-line pt-8">
+    <section aria-labelledby={`${id}-heading`} className="mt-12 border-t border-border pt-8">
       <Heading id={`${id}-heading`} className="text-lg font-semibold">
         Sources and references
       </Heading>
-      <p className="mt-1 mb-5 text-sm text-muted">
+      <p className="mt-1 mb-5 text-sm text-foreground-muted">
         Every sourced claim above traces back to one of these.
       </p>
 
@@ -26,7 +26,7 @@ export default function SourceList({ sources = [], headingLevel = 2, id = 'sourc
         {sources.map((source, index) => (
           <li key={source.id ?? index} className="flex gap-3 text-sm">
             <span
-              className="mt-0.5 shrink-0 font-mono text-xs text-muted tabular-nums"
+              className="mt-0.5 shrink-0 font-mono text-xs text-foreground-muted tabular-nums"
               aria-hidden="true"
             >
               [{index + 1}]
@@ -50,14 +50,14 @@ export default function SourceList({ sources = [], headingLevel = 2, id = 'sourc
               </p>
 
               {(source.publisher || source.accessedAt) && (
-                <p className="mt-0.5 text-muted">
+                <p className="mt-0.5 text-foreground-muted">
                   {source.publisher}
                   {source.publisher && source.accessedAt && ' · '}
                   {source.accessedAt && `accessed ${formatDateShort(source.accessedAt)}`}
                 </p>
               )}
 
-              {source.note && <p className="mt-1 text-muted italic">{source.note}</p>}
+              {source.note && <p className="mt-1 text-foreground-muted italic">{source.note}</p>}
             </div>
           </li>
         ))}

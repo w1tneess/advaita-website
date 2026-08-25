@@ -56,7 +56,7 @@ export const NAV_GROUPS = [
 
 function itemClasses({ isActive }) {
   return `flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm transition-colors ${
-    isActive ? 'bg-accent/12 font-medium text-accent' : 'text-muted hover:bg-raised hover:text-ink'
+    isActive ? 'bg-accent/12 font-medium text-accent' : 'text-foreground-muted hover:bg-surface-elevated hover:text-foreground'
   }`
 }
 
@@ -74,20 +74,20 @@ export default function AdminSidebar({ open, onClose }) {
 
       <div
         id="admin-sidebar"
-        className={`fixed inset-y-0 left-0 z-40 w-64 overflow-y-auto border-r border-line bg-surface transition-transform duration-200 lg:static lg:z-auto lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-40 w-64 overflow-y-auto border-r border-border bg-surface transition-transform duration-200 lg:static lg:z-auto lg:translate-x-0 ${
           open ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <div className="flex items-center justify-between gap-2 border-b border-line px-4 py-4">
+        <div className="flex items-center justify-between gap-2 border-b border-border px-4 py-4">
           <div>
             <p className="font-display text-base font-semibold">Content admin</p>
-            <p className="text-xs text-muted">Demo · local only</p>
+            <p className="text-xs text-foreground-muted">Demo · local only</p>
           </div>
           <button
             type="button"
             onClick={onClose}
             aria-label="Close navigation"
-            className="rounded-lg border border-line p-1.5 text-muted hover:text-ink lg:hidden"
+            className="rounded-lg border border-border p-1.5 text-foreground-muted hover:text-foreground lg:hidden"
           >
             <X className="h-4 w-4" aria-hidden="true" />
           </button>
@@ -96,7 +96,7 @@ export default function AdminSidebar({ open, onClose }) {
         <nav aria-label="Admin sections" className="px-3 py-4">
           {NAV_GROUPS.map((group) => (
             <div key={group.title} className="mb-5 last:mb-0">
-              <h2 className="mb-1.5 px-3 text-xs font-semibold tracking-wide text-muted uppercase">
+              <h2 className="mb-1.5 px-3 text-xs font-semibold tracking-wide text-foreground-muted uppercase">
                 {group.title}
               </h2>
               <ul className="space-y-0.5">
@@ -115,10 +115,10 @@ export default function AdminSidebar({ open, onClose }) {
             </div>
           ))}
 
-          <div className="mt-6 border-t border-line pt-4">
+          <div className="mt-6 border-t border-border pt-4">
             <Link
               to="/"
-              className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-muted transition-colors hover:bg-raised hover:text-ink"
+              className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-foreground-muted transition-colors hover:bg-surface-elevated hover:text-foreground"
             >
               <ExternalLink className="h-4 w-4 shrink-0" aria-hidden="true" />
               View public site

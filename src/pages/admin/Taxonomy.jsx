@@ -67,7 +67,7 @@ export default function Taxonomy() {
         <h2 id="blog-categories-heading" className="text-xl font-semibold tracking-tight">
           Article categories
         </h2>
-        <p className="mt-2 text-sm text-muted">
+        <p className="mt-2 text-sm text-foreground-muted">
           Every article has exactly one. These become the category filters on the blog page.
         </p>
 
@@ -84,8 +84,8 @@ export default function Taxonomy() {
           summary={(item) => (
             <div className="min-w-0">
               <p className="font-medium">{item.name}</p>
-              <p className="mt-0.5 font-mono text-xs text-muted">{item.slug}</p>
-              {item.description && <p className="mt-1.5 text-sm text-muted">{item.description}</p>}
+              <p className="mt-0.5 font-mono text-xs text-foreground-muted">{item.slug}</p>
+              {item.description && <p className="mt-1.5 text-sm text-foreground-muted">{item.description}</p>}
             </div>
           )}
           fields={({ draft, set, errors }) => (
@@ -111,7 +111,7 @@ export default function Taxonomy() {
         <h2 id="project-categories-heading" className="text-xl font-semibold tracking-tight">
           Project categories
         </h2>
-        <p className="mt-2 text-sm text-muted">
+        <p className="mt-2 text-sm text-foreground-muted">
           A project can have several. These become the filters on the portfolio page.
         </p>
 
@@ -128,8 +128,8 @@ export default function Taxonomy() {
           summary={(item) => (
             <div className="min-w-0">
               <p className="font-medium">{item.name}</p>
-              <p className="mt-0.5 font-mono text-xs text-muted">{item.slug}</p>
-              {item.description && <p className="mt-1.5 text-sm text-muted">{item.description}</p>}
+              <p className="mt-0.5 font-mono text-xs text-foreground-muted">{item.slug}</p>
+              {item.description && <p className="mt-1.5 text-sm text-foreground-muted">{item.description}</p>}
             </div>
           )}
           fields={({ draft, set, errors }) => (
@@ -154,7 +154,7 @@ export default function Taxonomy() {
         <h2 id="tags-heading" className="text-xl font-semibold tracking-tight">
           Tags
         </h2>
-        <p className="mt-2 text-sm text-muted">
+        <p className="mt-2 text-sm text-foreground-muted">
           Cross-cutting labels for articles. A tag only appears on the public blog once a
           published article uses it, so an unused tag is invisible rather than misleading.
         </p>
@@ -172,7 +172,7 @@ export default function Taxonomy() {
           summary={(item) => (
             <div className="min-w-0">
               <p className="font-medium">{item.name}</p>
-              <p className="mt-0.5 font-mono text-xs text-muted">{item.slug}</p>
+              <p className="mt-0.5 font-mono text-xs text-foreground-muted">{item.slug}</p>
             </div>
           )}
           fields={({ draft, set, errors }) => slugFields({ draft, set, errors })}

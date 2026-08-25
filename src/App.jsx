@@ -27,8 +27,8 @@ const AdminApp = lazy(() => import('./pages/admin/AdminApp.jsx'))
 
 function AdminFallback() {
   return (
-    <div className="flex min-h-dvh items-center justify-center bg-canvas px-6 text-ink">
-      <p className="text-sm text-muted" role="status">
+    <div className="flex min-h-dvh items-center justify-center bg-canvas px-6 text-foreground">
+      <p className="text-sm text-foreground-muted" role="status">
         Loading the admin panel…
       </p>
     </div>

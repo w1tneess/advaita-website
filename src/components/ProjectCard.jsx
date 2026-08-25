@@ -34,7 +34,7 @@ function ProjectLinks({ links = {} }) {
             href={links[key]}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 font-medium text-accent underline underline-offset-4 hover:text-accent-strong"
+            className="inline-flex items-center gap-1.5 font-medium text-accent underline underline-offset-4 hover:text-accent-hover transition-colors"
           >
             <Icon className="h-3.5 w-3.5" aria-hidden="true" />
             {meta.label}
@@ -45,7 +45,7 @@ function ProjectLinks({ links = {} }) {
 
       {/* Placeholders are stated rather than rendered as dead links. */}
       {unavailable.length > 0 && (
-        <p className="text-muted">
+        <p className="text-foreground-subtle">
           {available.length > 0 && <span aria-hidden="true">· </span>}
           No {unavailable.map(([, meta]) => meta.label.toLowerCase()).join(' or ')} link yet
         </p>
@@ -70,14 +70,14 @@ export default function ProjectCard({ project, variant = 'compact', headingLevel
       interactive={!isFull}
       className={isFull ? 'p-6 sm:p-8' : 'flex h-full flex-col p-6'}
     >
-      <div className="mb-3 flex flex-wrap items-center gap-2">
+      <div className="mb-4 flex flex-wrap items-center gap-2">
         <StatusBadge kind="project" value={project.status} />
         {categoryNames.map((name) => (
           <Badge key={name}>{name}</Badge>
         ))}
       </div>
 
-      <Heading className={`font-semibold ${isFull ? 'text-xl sm:text-2xl' : 'text-lg'}`}>
+      <Heading className={`font-semibold leading-snug ${isFull ? 'text-xl sm:text-2xl' : 'text-lg'}`}>
         {project.title}
       </Heading>
 
@@ -90,20 +90,20 @@ export default function ProjectCard({ project, variant = 'compact', headingLevel
         />
       )}
 
-      <p className="mt-3 text-sm leading-relaxed text-muted">
+      <p className="mt-3 text-sm leading-relaxed text-foreground-muted">
         {isFull ? project.description : project.summary}
       </p>
 
       {project.visibility && (
-        <p className="mt-3 text-xs text-muted italic">{project.visibility}</p>
+        <p className="mt-3 text-xs text-foreground-subtle italic">{project.visibility}</p>
       )}
 
       {isFull ? (
         <>
-          <dl className="mt-6 grid gap-x-8 gap-y-4 border-t border-line pt-5 text-sm sm:grid-cols-2">
+          <dl className="mt-6 grid gap-x-8 gap-y-4 border-t border-border pt-5 text-sm sm:grid-cols-2">
             <div>
               <dt className="font-semibold">Role</dt>
-              <dd className="mt-1 text-muted">{project.role}</dd>
+              <dd className="mt-1 text-foreground-muted">{project.role}</dd>
             </div>
             <div>
               <dt className="font-semibold">Tools</dt>
@@ -111,27 +111,27 @@ export default function ProjectCard({ project, variant = 'compact', headingLevel
                 {(project.tools || []).length > 0 ? (
                   project.tools.map((tool) => <Badge key={tool}>{tool}</Badge>)
                 ) : (
-                  <span className="text-muted">Not applicable</span>
+                  <span className="text-foreground-muted">Not applicable</span>
                 )}
               </dd>
             </div>
           </dl>
 
           {(project.methodology || []).length > 0 && (
-            <div className="mt-6 border-t border-line pt-5">
+            <div className="mt-6 border-t border-border pt-5">
               <h4 className="text-sm font-semibold">Methodology</h4>
               <ol className="mt-3 space-y-3">
                 {project.methodology.map((step, index) => (
                   <li key={step.title ?? index} className="flex gap-3 text-sm">
                     <span
-                      className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-line font-mono text-[0.625rem] text-muted"
+                      className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-border font-mono text-[0.625rem] text-foreground-subtle"
                       aria-hidden="true"
                     >
                       {index + 1}
                     </span>
                     <span>
                       <span className="font-medium">{step.title}</span>
-                      {step.detail && <span className="text-muted"> — {step.detail}</span>}
+                      {step.detail && <span className="text-foreground-muted"> — {step.detail}</span>}
                     </span>
                   </li>
                 ))}
@@ -152,7 +152,7 @@ export default function ProjectCard({ project, variant = 'compact', headingLevel
           <ProjectLinks links={project.links} />
         </>
       ) : (
-        <p className="mt-4 text-xs text-muted">
+        <p className="mt-4 text-xs text-foreground-muted">
           <span className="font-medium">Role:</span> {project.role}
         </p>
       )}

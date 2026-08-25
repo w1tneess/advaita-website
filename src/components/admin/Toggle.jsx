@@ -19,7 +19,7 @@ export default function Toggle({ id, label, description, checked, onChange, clas
           className="peer sr-only"
         />
         <span
-          className="h-5 w-9 rounded-full border border-line bg-raised transition-colors peer-checked:border-accent peer-checked:bg-accent peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-accent"
+          className="h-5 w-9 rounded-full border border-border bg-surface-elevated transition-colors peer-checked:border-accent peer-checked:bg-accent peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-accent"
           aria-hidden="true"
         />
         <span
@@ -33,7 +33,7 @@ export default function Toggle({ id, label, description, checked, onChange, clas
           {label}
         </label>
         {description && (
-          <p id={descriptionId} className="mt-0.5 text-xs text-muted">
+          <p id={descriptionId} className="mt-0.5 text-xs text-foreground-muted">
             {description}
           </p>
         )}

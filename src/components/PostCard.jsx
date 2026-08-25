@@ -17,23 +17,27 @@ export default function PostCard({ post, headingLevel = 3, showStatus = false })
 
   return (
     <Card as="article" interactive className="flex h-full flex-col p-6">
-      <div className="mb-3 flex flex-wrap items-center gap-2">
+      {/* Metadata badges */}
+      <div className="mb-4 flex flex-wrap items-center gap-2">
         {category && <Badge tone="accent">{category.name}</Badge>}
         {showStatus && <StatusBadge kind="post" value={post.status} />}
       </div>
 
-      <Heading className="text-lg font-semibold">
+      {/* Heading */}
+      <Heading className="font-semibold text-lg leading-snug">
         <Link
           to={`/blog/${post.slug}`}
-          className="hover:text-accent focus-visible:text-accent"
+          className="text-foreground hover:text-accent transition-colors"
         >
           {post.title}
         </Link>
       </Heading>
 
-      <p className="mt-2.5 flex-1 text-sm leading-relaxed text-muted">{post.excerpt}</p>
+      {/* Excerpt */}
+      <p className="mt-3 flex-1 text-sm leading-relaxed text-foreground-muted">{post.excerpt}</p>
 
-      <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted">
+      {/* Footer: date, updated, reading time */}
+      <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-foreground-subtle border-t border-border pt-4">
         <time dateTime={isoDateAttr(post.publishedAt)}>{formatDate(post.publishedAt)}</time>
 
         {post.updatedAt && post.updatedAt !== post.publishedAt && (
@@ -50,10 +54,11 @@ export default function PostCard({ post, headingLevel = 3, showStatus = false })
         </span>
       </div>
 
+      {/* Tags */}
       {(post.tags || []).length > 0 && (
         <ul className="mt-3 flex flex-wrap gap-1.5">
           {post.tags.map((tag) => (
-            <li key={tag} className="text-xs text-muted">
+            <li key={tag} className="text-xs text-foreground-subtle">
               #{tag}
             </li>
           ))}

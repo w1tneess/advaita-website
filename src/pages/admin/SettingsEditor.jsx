@@ -28,11 +28,11 @@ export default function SettingsEditor() {
       actions={
         dirty && (
           <div className="flex items-center gap-2">
-            <span className="text-xs text-muted">Unsaved</span>
+            <span className="text-xs text-foreground-muted">Unsaved</span>
             <button
               type="button"
               onClick={revert}
-              className="text-xs text-limitation underline hover:text-limitation/80"
+              className="text-xs text-danger underline hover:text-danger/80"
             >
               Revert
             </button>
@@ -52,7 +52,7 @@ export default function SettingsEditor() {
           <h2 id="settings-theme-heading" className="text-xl font-semibold tracking-tight">
             Theme
           </h2>
-          <p className="mt-2 text-sm text-muted">
+          <p className="mt-2 text-sm text-foreground-muted">
             The default theme is "system". Choose "light" or "dark" to override it.
           </p>
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
@@ -74,7 +74,7 @@ export default function SettingsEditor() {
           <h2 id="settings-accent-heading" className="text-xl font-semibold tracking-tight">
             Accent colours
           </h2>
-          <p className="mt-2 text-sm text-muted">
+          <p className="mt-2 text-sm text-foreground-muted">
             A single accent drives the design system. Provide a hex colour for light and/or dark.
           </p>
           <div className="mt-5 space-y-5">
@@ -108,7 +108,7 @@ export default function SettingsEditor() {
           <h2 id="settings-limits-heading" className="text-xl font-semibold tracking-tight">
             Limits
           </h2>
-          <p className="mt-2 text-sm text-muted">
+          <p className="mt-2 text-sm text-foreground-muted">
             Upper bounds for display items, reading time and pagination. These are only for the
             demo admin panel; the deployed site can have different values.
           </p>
@@ -157,7 +157,7 @@ export default function SettingsEditor() {
           <h2 id="settings-toggles-heading" className="text-xl font-semibold tracking-tight">
             Feature toggles
           </h2>
-          <p className="mt-2 text-sm text-muted">
+          <p className="mt-2 text-sm text-foreground-muted">
             Turn individual features on or off in the demo. These don’t affect the deployed
             site unless you also export and commit the settings.
           </p>
@@ -186,7 +186,7 @@ export default function SettingsEditor() {
           <h2 id="settings-messages-heading" className="text-xl font-semibold tracking-tight">
             Messages
           </h2>
-          <p className="mt-2 text-sm text-muted">
+          <p className="mt-2 text-sm text-foreground-muted">
             User-facing text that changes per deployment or locale. These are only demo values.
           </p>
           <div className="mt-5 space-y-5">
@@ -214,7 +214,7 @@ export default function SettingsEditor() {
             />
             <div className="mt-4">
               <p className="text-sm font-medium">Contact strings (placeholders only)</p>
-              <p className="mt-1 text-xs text-muted">These appear in the footer contact section. All are placeholders — no real email or handle.</p>
+              <p className="mt-1 text-xs text-foreground-muted">These appear in the footer contact section. All are placeholders — no real email or handle.</p>
               <div className="mt-3 grid gap-3 sm:grid-cols-2">
                 <Field
                   id="settings-contact-email"
@@ -253,7 +253,7 @@ export default function SettingsEditor() {
           </div>
         </section>
 
-        <div className="sticky bottom-0 mt-8 flex flex-wrap items-center gap-3 border-t border-line bg-base/90 py-4 backdrop-blur-sm">
+        <div className="sticky bottom-0 mt-8 flex flex-wrap items-center gap-3 border-t border-border bg-base/90 py-4 backdrop-blur-sm">
           <Button type="submit" disabled={!dirty}>Save settings</Button>
           <Button type="button" variant="ghost" onClick={revert} disabled={!dirty}>Discard changes</Button>
         </div>

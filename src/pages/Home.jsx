@@ -33,7 +33,7 @@ export default function Home() {
             {home.heroHeading}
           </h1>
 
-          <p className="mt-6 max-w-prose text-lg leading-relaxed text-muted">{home.heroIntro}</p>
+          <p className="mt-6 max-w-prose text-lg leading-relaxed text-foreground-muted">{home.heroIntro}</p>
 
           <div className="mt-9 flex flex-wrap gap-3">
             <Button to={home.primaryCta.to} size="lg">
@@ -45,7 +45,7 @@ export default function Home() {
             </Button>
           </div>
 
-          <p className="mt-10 text-sm text-muted">
+          <p className="mt-10 text-sm text-foreground-muted">
             {profile.name} · {profile.location}
           </p>
         </div>
@@ -137,7 +137,7 @@ export default function Home() {
           <p className="text-base leading-relaxed">{home.credibilityStatement}</p>
 
           {(home.credibilityPoints || []).length > 0 && (
-            <ul className="mt-6 space-y-3 border-t border-line pt-6">
+            <ul className="mt-6 space-y-3 border-t border-border pt-6">
               {home.credibilityPoints.map((point, index) => (
                 <li key={index} className="flex gap-3 text-sm">
                   <Check className="mt-0.5 h-4 w-4 shrink-0 text-accent" aria-hidden="true" />

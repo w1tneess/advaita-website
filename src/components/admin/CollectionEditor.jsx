@@ -115,7 +115,7 @@ export default function CollectionEditor({
               <button
                 type="button"
                 onClick={close}
-                className="rounded-md p-1 text-muted transition-colors hover:text-ink"
+                className="rounded-md p-1 text-foreground-muted transition-colors hover:text-foreground"
                 aria-label="Cancel editing"
               >
                 <X className="h-4 w-4" aria-hidden="true" />
@@ -124,7 +124,7 @@ export default function CollectionEditor({
 
             <div className="mt-5 space-y-5">{fields({ draft, set, errors })}</div>
 
-            <div className="mt-6 flex flex-wrap gap-3 border-t border-line pt-5">
+            <div className="mt-6 flex flex-wrap gap-3 border-t border-border pt-5">
               <Button type="submit" size="sm">
                 {isNew ? `Add ${singular}` : 'Save changes'}
               </Button>

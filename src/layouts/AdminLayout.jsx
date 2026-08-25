@@ -23,7 +23,7 @@ export default function AdminLayout() {
   }, [pathname])
 
   return (
-    <div className="min-h-dvh bg-canvas text-ink">
+    <div className="min-h-dvh bg-canvas text-foreground">
       <Seo
         title="Content admin"
         description="Local demo content editor."

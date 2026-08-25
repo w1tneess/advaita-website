@@ -3,7 +3,7 @@ import Container from './Container.jsx'
 /**
  * A titled page section.
  *
- * `tone="raised"` gives the off-white/raised content band that alternates against the
+ * `tone="raised"` gives the elevated surface that alternates against the
  * page base colour — the main structural rhythm of the site.
  */
 export default function Section({
@@ -21,8 +21,8 @@ export default function Section({
   const Heading = `h${headingLevel}`
   const tones = {
     base: '',
-    raised: 'bg-raised border-y border-line',
-    surface: 'bg-surface border-y border-line',
+    raised: 'bg-surface-elevated border-y border-border',
+    surface: 'bg-surface border-y border-border',
   }
 
   return (
@@ -49,7 +49,7 @@ export default function Section({
                     {title}
                   </Heading>
                 )}
-                {intro && <p className="mt-3 text-muted">{intro}</p>}
+                {intro && <p className="mt-3 text-foreground-muted">{intro}</p>}
               </div>
               {actions && <div className="w-full shrink-0 sm:w-auto">{actions}</div>}
             </div>

@@ -17,7 +17,7 @@ export default function SearchInput({
       </label>
       <div className="relative">
         <Search
-          className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted"
+          className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-foreground-muted"
           aria-hidden="true"
         />
         <input
@@ -27,21 +27,21 @@ export default function SearchInput({
           onChange={(event) => onChange(event.target.value)}
           placeholder={placeholder}
           aria-describedby={hint ? `${id}-hint` : undefined}
-          className="w-full rounded-lg border border-line bg-surface py-2.5 pr-10 pl-9 text-sm placeholder:text-muted/70 focus:border-accent focus:outline-none"
+          className="w-full rounded-lg border border-border bg-surface py-2.5 pr-10 pl-9 text-sm placeholder:text-foreground-muted/70 focus:border-accent focus:outline-none"
         />
         {value && (
           <button
             type="button"
             onClick={() => onChange('')}
             aria-label="Clear search"
-            className="absolute top-1/2 right-2 -translate-y-1/2 rounded-md p-1.5 text-muted transition-colors hover:bg-raised hover:text-ink"
+            className="absolute top-1/2 right-2 -translate-y-1/2 rounded-md p-1.5 text-foreground-muted transition-colors hover:bg-surface-elevated hover:text-foreground"
           >
             <X className="h-3.5 w-3.5" aria-hidden="true" />
           </button>
         )}
       </div>
       {hint && (
-        <p id={`${id}-hint`} className="mt-1.5 text-xs text-muted">
+        <p id={`${id}-hint`} className="mt-1.5 text-xs text-foreground-muted">
           {hint}
         </p>
       )}

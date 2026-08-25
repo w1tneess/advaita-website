@@ -21,14 +21,14 @@ export default function AdminHeader({ onOpenSidebar }) {
   const { logout } = useAdminAuth()
 
   return (
-    <header className="sticky top-0 z-20 border-b border-line bg-canvas/90 backdrop-blur-md">
+    <header className="sticky top-0 z-20 border-b border-border bg-canvas/90 backdrop-blur-md">
       <div className="flex h-14 items-center gap-3 px-4 sm:px-6">
         <button
           type="button"
           onClick={onOpenSidebar}
           aria-label="Open navigation"
           aria-controls="admin-sidebar"
-          className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-line bg-surface text-muted hover:text-accent lg:hidden"
+          className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-surface text-foreground-muted hover:text-accent lg:hidden"
         >
           <Menu className="h-4 w-4" aria-hidden="true" />
         </button>
@@ -43,7 +43,7 @@ export default function AdminHeader({ onOpenSidebar }) {
           className={`inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs font-medium transition-colors ${
             previewDrafts
               ? 'border-opinion bg-opinion/12 text-opinion'
-              : 'border-line bg-surface text-muted hover:text-accent'
+              : 'border-border bg-surface text-foreground-muted hover:text-accent'
           }`}
         >
           {previewDrafts ? (
@@ -57,7 +57,7 @@ export default function AdminHeader({ onOpenSidebar }) {
 
         <Link
           to="/"
-          className="hidden rounded-lg border border-line bg-surface px-2.5 py-1.5 text-xs font-medium text-muted transition-colors hover:text-accent sm:inline-flex"
+          className="hidden rounded-lg border border-border bg-surface px-2.5 py-1.5 text-xs font-medium text-foreground-muted transition-colors hover:text-accent sm:inline-flex"
         >
           View site
         </Link>
@@ -67,7 +67,7 @@ export default function AdminHeader({ onOpenSidebar }) {
           onClick={logout}
           aria-label="Lock admin panel"
           title="Lock admin panel"
-          className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-line bg-surface text-muted transition-colors hover:text-accent"
+          className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-surface text-foreground-muted transition-colors hover:text-accent"
         >
           <LogOut className="h-4 w-4" aria-hidden="true" />
         </button>

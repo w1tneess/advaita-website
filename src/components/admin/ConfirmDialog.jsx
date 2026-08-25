@@ -86,12 +86,12 @@ export default function ConfirmDialog({
         aria-modal="true"
         aria-labelledby="confirm-title"
         aria-describedby={message ? 'confirm-message' : undefined}
-        className="animate-rise relative w-full max-w-md rounded-card border border-line bg-surface p-6 shadow-raised"
+        className="animate-rise relative w-full max-w-md rounded-card border border-border bg-surface p-6 shadow-raised"
       >
         <div className="flex gap-4">
           {tone === 'danger' && (
             <span
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-limitation/12 text-limitation"
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-limitation/12 text-danger"
               aria-hidden="true"
             >
               <AlertTriangle className="h-5 w-5" />
@@ -102,7 +102,7 @@ export default function ConfirmDialog({
               {title}
             </h2>
             {message && (
-              <p id="confirm-message" className="mt-2 text-sm leading-relaxed text-muted">
+              <p id="confirm-message" className="mt-2 text-sm leading-relaxed text-foreground-muted">
                 {message}
               </p>
             )}

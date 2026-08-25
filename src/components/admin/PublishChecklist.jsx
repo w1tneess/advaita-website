@@ -40,7 +40,7 @@ export default function PublishChecklist({ className = '' }) {
   return (
     <Card className={`p-6 ${className}`}>
       <h2 className="text-base font-semibold">How to actually publish</h2>
-      <p className="mt-1.5 text-sm text-muted">
+      <p className="mt-1.5 text-sm text-foreground-muted">
         Saving in this panel does not change the live site. This is the sequence that does.
       </p>
 
@@ -48,20 +48,20 @@ export default function PublishChecklist({ className = '' }) {
         {STEPS.map((step, index) => (
           <li key={step.title} className="flex gap-3">
             <span
-              className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-line font-mono text-xs text-muted"
+              className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-border font-mono text-xs text-foreground-muted"
               aria-hidden="true"
             >
               {index + 1}
             </span>
             <div className="min-w-0">
               <p className="text-sm font-medium">{step.title}</p>
-              <p className="mt-0.5 text-sm text-muted">{step.detail}</p>
+              <p className="mt-0.5 text-sm text-foreground-muted">{step.detail}</p>
             </div>
           </li>
         ))}
       </ol>
 
-      <p className="mt-6 border-t border-line pt-5 text-sm">
+      <p className="mt-6 border-t border-border pt-5 text-sm">
         <Link
           to="/admin/data"
           className="inline-flex items-center gap-1.5 font-medium text-accent underline underline-offset-4 hover:text-accent-strong"

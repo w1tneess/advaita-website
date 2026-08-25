@@ -40,14 +40,14 @@ function ListItems({ id, items, onChange }) {
                 onChange(items.map((current, i) => (i === index ? event.target.value : current)))
               }
               aria-label={`List item ${index + 1}`}
-              className="w-full rounded-lg border border-line bg-surface px-3 py-2 text-sm focus:border-accent focus:outline-none"
+              className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm focus:border-accent focus:outline-none"
             />
             <button
               type="button"
               onClick={() => onChange(items.filter((_, i) => i !== index))}
               disabled={items.length === 1}
               aria-label={`Remove list item ${index + 1}`}
-              className="mt-1 rounded-md p-1.5 text-muted transition-colors hover:text-limitation disabled:cursor-not-allowed disabled:opacity-40"
+              className="mt-1 rounded-md p-1.5 text-foreground-muted transition-colors hover:text-danger disabled:cursor-not-allowed disabled:opacity-40"
             >
               <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
             </button>
@@ -254,23 +254,23 @@ export default function BlockEditor({ blocks = [], onChange, error }) {
   return (
     <div>
       {error && (
-        <p className="mb-4 flex items-start gap-2 rounded-lg border border-limitation/40 bg-limitation/8 px-4 py-3 text-sm text-limitation">
+        <p className="mb-4 flex items-start gap-2 rounded-lg border border-limitation/40 bg-limitation/8 px-4 py-3 text-sm text-danger">
           <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
           {error}
         </p>
       )}
 
       {blocks.length === 0 ? (
-        <p className="rounded-card border border-dashed border-line p-6 text-sm text-muted">
+        <p className="rounded-card border border-dashed border-border p-6 text-sm text-foreground-muted">
           No blocks yet. An article needs at least one block with content before it can be
           published.
         </p>
       ) : (
         <ol className="space-y-4">
           {blocks.map((block, index) => (
-            <li key={block.id} className="rounded-card border border-line bg-raised/40 p-4">
+            <li key={block.id} className="rounded-card border border-border bg-surface-elevated/40 p-4">
               <div className="mb-4 flex items-center justify-between gap-3">
-                <p className="text-xs font-semibold tracking-wide text-muted uppercase">
+                <p className="text-xs font-semibold tracking-wide text-foreground-muted uppercase">
                   {index + 1}. {TYPE_LABEL[block.type] ?? block.type}
                 </p>
 
@@ -280,7 +280,7 @@ export default function BlockEditor({ blocks = [], onChange, error }) {
                     onClick={() => move(index, -1)}
                     disabled={index === 0}
                     aria-label={`Move block ${index + 1} up`}
-                    className="rounded-md border border-line p-1 text-muted transition-colors hover:text-accent disabled:cursor-not-allowed disabled:opacity-40"
+                    className="rounded-md border border-border p-1 text-foreground-muted transition-colors hover:text-accent disabled:cursor-not-allowed disabled:opacity-40"
                   >
                     <ChevronUp className="h-3.5 w-3.5" aria-hidden="true" />
                   </button>
@@ -289,7 +289,7 @@ export default function BlockEditor({ blocks = [], onChange, error }) {
                     onClick={() => move(index, 1)}
                     disabled={index === blocks.length - 1}
                     aria-label={`Move block ${index + 1} down`}
-                    className="rounded-md border border-line p-1 text-muted transition-colors hover:text-accent disabled:cursor-not-allowed disabled:opacity-40"
+                    className="rounded-md border border-border p-1 text-foreground-muted transition-colors hover:text-accent disabled:cursor-not-allowed disabled:opacity-40"
                   >
                     <ChevronDown className="h-3.5 w-3.5" aria-hidden="true" />
                   </button>
@@ -297,7 +297,7 @@ export default function BlockEditor({ blocks = [], onChange, error }) {
                     type="button"
                     onClick={() => remove(index)}
                     aria-label={`Remove block ${index + 1}`}
-                    className="ml-1 rounded-md border border-line p-1 text-muted transition-colors hover:text-limitation"
+                    className="ml-1 rounded-md border border-border p-1 text-foreground-muted transition-colors hover:text-danger"
                   >
                     <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
                   </button>
@@ -314,7 +314,7 @@ export default function BlockEditor({ blocks = [], onChange, error }) {
         </ol>
       )}
 
-      <div className="mt-5 flex flex-wrap items-end gap-3 border-t border-line pt-5">
+      <div className="mt-5 flex flex-wrap items-end gap-3 border-t border-border pt-5">
         <Field
           id="block-new-type"
           label="Add a block"
@@ -327,7 +327,7 @@ export default function BlockEditor({ blocks = [], onChange, error }) {
         <button
           type="button"
           onClick={() => onChange([...blocks, createBlock(newType)])}
-          className="inline-flex items-center gap-1.5 rounded-lg border border-line bg-surface px-4 py-2.5 text-sm font-medium transition-colors hover:border-accent hover:text-accent"
+          className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface px-4 py-2.5 text-sm font-medium transition-colors hover:border-accent hover:text-accent"
         >
           <Plus className="h-4 w-4" aria-hidden="true" />
           Add block

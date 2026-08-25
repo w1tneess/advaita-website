@@ -13,16 +13,16 @@ import Field from './Field.jsx'
 
 function RowFrame({ index, label, onRemove, canRemove, children }) {
   return (
-    <li className="rounded-lg border border-line bg-raised/40 p-4">
+    <li className="rounded-lg border border-border bg-surface-elevated/40 p-4">
       <div className="mb-3 flex items-center justify-between gap-3">
-        <p className="text-xs font-semibold tracking-wide text-muted uppercase">
+        <p className="text-xs font-semibold tracking-wide text-foreground-muted uppercase">
           {label} {index + 1}
         </p>
         <button
           type="button"
           onClick={onRemove}
           disabled={!canRemove}
-          className="inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs text-muted transition-colors hover:text-limitation disabled:cursor-not-allowed disabled:opacity-40"
+          className="inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs text-foreground-muted transition-colors hover:text-danger disabled:cursor-not-allowed disabled:opacity-40"
         >
           <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
           Remove
@@ -38,7 +38,7 @@ function AddButton({ onClick, children }) {
     <button
       type="button"
       onClick={onClick}
-      className="mt-3 inline-flex items-center gap-1.5 rounded-lg border border-dashed border-line px-3 py-2 text-sm text-muted transition-colors hover:border-accent hover:text-accent"
+      className="mt-3 inline-flex items-center gap-1.5 rounded-lg border border-dashed border-border px-3 py-2 text-sm text-foreground-muted transition-colors hover:border-accent hover:text-accent"
     >
       <Plus className="h-4 w-4" aria-hidden="true" />
       {children}
@@ -68,7 +68,7 @@ export function PairList({
   return (
     <fieldset>
       <legend className="text-sm font-medium">{legend}</legend>
-      {hint && <p className="mt-1 mb-3 text-xs text-muted">{hint}</p>}
+      {hint && <p className="mt-1 mb-3 text-xs text-foreground-muted">{hint}</p>}
 
       <ul className="space-y-3">
         {rows.map((row, index) => (
@@ -121,7 +121,7 @@ export function TextList({
   return (
     <fieldset>
       <legend className="text-sm font-medium">{legend}</legend>
-      {hint && <p className="mt-1 mb-3 text-xs text-muted">{hint}</p>}
+      {hint && <p className="mt-1 mb-3 text-xs text-foreground-muted">{hint}</p>}
 
       <ul className="space-y-3">
         {values.map((value, index) => (

@@ -80,7 +80,7 @@ export default function PostsList() {
       render: (post) => (
         <div className="min-w-0">
           <p className="font-medium">{post.title || 'Untitled article'}</p>
-          <p className="mt-0.5 truncate font-mono text-xs text-muted">/blog/{post.slug}</p>
+          <p className="mt-0.5 truncate font-mono text-xs text-foreground-muted">/blog/{post.slug}</p>
         </div>
       ),
     },
@@ -88,7 +88,7 @@ export default function PostsList() {
       key: 'category',
       header: 'Category',
       render: (post) => (
-        <span className="text-muted">{post.category ? categoryName(post.category) : '—'}</span>
+        <span className="text-foreground-muted">{post.category ? categoryName(post.category) : '—'}</span>
       ),
     },
     {
@@ -100,7 +100,7 @@ export default function PostsList() {
       key: 'date',
       header: 'Date',
       render: (post) => (
-        <div className="text-muted">
+        <div className="text-foreground-muted">
           <p>{formatDateShort(post.publishedAt) || '—'}</p>
           <p className="text-xs">
             {post.body?.length ? `~${readingMinutes(post)} min read` : 'No body yet'}
@@ -176,7 +176,7 @@ export default function PostsList() {
         />
       </div>
 
-      <p className="mt-4 text-sm text-muted" aria-live="polite">
+      <p className="mt-4 text-sm text-foreground-muted" aria-live="polite">
         {visible.length} of {posts.length} {posts.length === 1 ? 'article' : 'articles'} shown.
       </p>
 

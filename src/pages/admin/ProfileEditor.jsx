@@ -158,7 +158,7 @@ export default function ProfileEditor() {
 
         <Card className="mt-6 p-6">
           <h2 className="text-base font-semibold">Approach</h2>
-          <p className="mt-1.5 text-sm text-muted">
+          <p className="mt-1.5 text-sm text-foreground-muted">
             The numbered method shown on the about page. The site ships with four steps.
           </p>
 
@@ -174,14 +174,14 @@ export default function ProfileEditor() {
           />
         </Card>
 
-        <div className="sticky bottom-0 mt-6 flex flex-wrap items-center gap-3 border-t border-line bg-canvas/90 py-4 backdrop-blur-sm">
+        <div className="sticky bottom-0 mt-6 flex flex-wrap items-center gap-3 border-t border-border bg-canvas/90 py-4 backdrop-blur-sm">
           <Button type="submit" disabled={!dirty}>
             Save profile
           </Button>
           <Button type="button" variant="ghost" onClick={revert} disabled={!dirty}>
             Discard changes
           </Button>
-          <p className="text-xs text-muted" aria-live="polite">
+          <p className="text-xs text-foreground-muted" aria-live="polite">
             {dirty ? 'Unsaved changes.' : 'No unsaved changes.'}
           </p>
         </div>
@@ -191,7 +191,7 @@ export default function ProfileEditor() {
         <h2 id="interests-heading" className="text-xl font-semibold tracking-tight">
           Research interests
         </h2>
-        <p className="mt-2 max-w-2xl text-sm text-muted">
+        <p className="mt-2 max-w-2xl text-sm text-foreground-muted">
           Long-running interests, not areas of expertise. The one-line note under each is
           what stops the list reading as a claim of competence — keep it honest about how far
           the interest has actually gone.
@@ -211,7 +211,7 @@ export default function ProfileEditor() {
               <Icon name={item.icon} className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
               <div className="min-w-0">
                 <p className="font-medium">{item.name}</p>
-                {item.note && <p className="mt-0.5 text-sm text-muted">{item.note}</p>}
+                {item.note && <p className="mt-0.5 text-sm text-foreground-muted">{item.note}</p>}
               </div>
             </div>
           )}

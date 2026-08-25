@@ -49,13 +49,13 @@ export default function SkillsEditor() {
         emptyMessage="No abilities listed yet. The abilities section of the About page will be empty."
         summary={(item) => (
           <div className="min-w-0">
-            <p className="text-xs tracking-wide text-muted uppercase">{item.group}</p>
+            <p className="text-xs tracking-wide text-foreground-muted uppercase">{item.group}</p>
             <p className="mt-1 font-medium">{item.name}</p>
-            <p className="mt-1 text-sm text-muted">
+            <p className="mt-1 text-sm text-foreground-muted">
               {SKILL_LEVELS.find((level) => level.value === item.level)?.label ?? item.level}
               {item.evidence ? ` · shown in ${projectTitle(item.evidence)}` : ' · no project yet'}
             </p>
-            {item.note && <p className="mt-1.5 text-sm text-muted">{item.note}</p>}
+            {item.note && <p className="mt-1.5 text-sm text-foreground-muted">{item.note}</p>}
           </div>
         )}
         fields={({ draft, set, errors }) => (

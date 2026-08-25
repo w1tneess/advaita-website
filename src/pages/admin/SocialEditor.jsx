@@ -39,12 +39,12 @@ export default function SocialEditor() {
         summary={(item) => (
           <div className="min-w-0">
             <p className="font-medium">{item.label}</p>
-            <p className="mt-1 text-xs text-muted">{item.platform}</p>
-            <p className="mt-1 text-sm text-muted">
+            <p className="mt-1 text-xs text-foreground-muted">{item.platform}</p>
+            <p className="mt-1 text-sm text-foreground-muted">
               {item.kind === 'email' ? 'Email link' : 'Link'} — {item.url ? item.url : '(no URL)'}
               {item.handle ? ` @${item.handle}` : ''}
             </p>
-            {item.placeholder && <p className="mt-1.5 text-sm text-muted">{item.placeholder}</p>}
+            {item.placeholder && <p className="mt-1.5 text-sm text-foreground-muted">{item.placeholder}</p>}
           </div>
         )}
         fields={({ draft, set, errors }) => (

@@ -20,12 +20,12 @@ export default function EpistemicLegend({
   return (
     <section
       aria-labelledby={`${id}-heading`}
-      className={`rounded-card border border-line bg-surface p-5 sm:p-6 ${className}`}
+      className={`rounded-card border border-border bg-surface p-5 sm:p-6 ${className}`}
     >
       <Heading id={`${id}-heading`} className="text-base font-semibold">
         How claims are labelled here
       </Heading>
-      <p className="mt-1 text-sm text-muted">
+      <p className="mt-1 text-sm text-foreground-muted">
         Four different kinds of statement, kept visually distinct so you never have to
         guess which one you are reading.
       </p>
@@ -44,7 +44,7 @@ export default function EpistemicLegend({
               </span>
               <div>
                 <dt className={`text-sm font-semibold ${meta.accent}`}>{meta.label}</dt>
-                <dd className="mt-0.5 text-sm text-muted">{meta.explanation}</dd>
+                <dd className="mt-0.5 text-sm text-foreground-muted">{meta.explanation}</dd>
               </div>
             </div>
           )

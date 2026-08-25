@@ -27,11 +27,11 @@ export default function NotFound() {
 
       <Container>
         <div className="max-w-xl py-20 sm:py-28">
-          <p className="font-mono text-sm text-muted">404</p>
+          <p className="font-mono text-sm text-foreground-muted">404</p>
           <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
             This page doesn&rsquo;t exist
           </h1>
-          <p className="mt-5 text-lg text-muted">
+          <p className="mt-5 text-lg text-foreground-muted">
             The address <code className="font-mono text-base break-words">{pathname}</code>{' '}
             doesn&rsquo;t match anything here. It may have been mistyped, or it may be
             something I have not written yet.

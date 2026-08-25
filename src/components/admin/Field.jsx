@@ -9,11 +9,11 @@ import { AlertCircle } from 'lucide-react'
  */
 
 const CONTROL_CLASSES =
-  'w-full rounded-lg border bg-surface px-3 py-2.5 text-sm transition-colors placeholder:text-muted/70 focus:outline-none disabled:opacity-60'
+  'w-full rounded-lg border bg-surface px-3 py-2.5 text-sm transition-colors placeholder:text-foreground-muted/70 focus:outline-none disabled:opacity-60'
 
 function controlClasses(hasError) {
   return `${CONTROL_CLASSES} ${
-    hasError ? 'border-limitation focus:border-limitation' : 'border-line focus:border-accent'
+    hasError ? 'border-limitation focus:border-limitation' : 'border-border focus:border-accent'
   }`
 }
 
@@ -45,7 +45,7 @@ export function FieldShell({
         <label htmlFor={id} className="block text-sm font-medium">
           {label}
           {required && (
-            <span className="ml-1 text-limitation" aria-hidden="true">
+            <span className="ml-1 text-danger" aria-hidden="true">
               *
             </span>
           )}
@@ -54,7 +54,7 @@ export function FieldShell({
 
         {typeof limit === 'number' && length !== null && (
           <span
-            className={`text-xs tabular-nums ${length > limit ? 'text-limitation' : 'text-muted'}`}
+            className={`text-xs tabular-nums ${length > limit ? 'text-danger' : 'text-foreground-muted'}`}
           >
             {length}/{limit}
           </span>
@@ -69,13 +69,13 @@ export function FieldShell({
       })}
 
       {hint && (
-        <p id={hintId} className="mt-1.5 text-xs text-muted">
+        <p id={hintId} className="mt-1.5 text-xs text-foreground-muted">
           {hint}
         </p>
       )}
 
       {error && (
-        <p id={errorId} className="mt-1.5 flex items-start gap-1.5 text-xs text-limitation">
+        <p id={errorId} className="mt-1.5 flex items-start gap-1.5 text-xs text-danger">
           <AlertCircle className="mt-0.5 h-3 w-3 shrink-0" aria-hidden="true" />
           {error}
         </p>
@@ -232,7 +232,7 @@ export function CheckboxGroup({
       <legend className="mb-1.5 text-sm font-medium">
         {label}
         {required && (
-          <span className="ml-1 text-limitation" aria-hidden="true">
+          <span className="ml-1 text-danger" aria-hidden="true">
             *
           </span>
         )}
@@ -247,7 +247,7 @@ export function CheckboxGroup({
               className={`inline-flex cursor-pointer items-center gap-2 rounded-full border px-3 py-1.5 text-sm transition-colors ${
                 checked
                   ? 'border-accent bg-accent/12 text-accent'
-                  : 'border-line bg-surface text-muted hover:border-accent'
+                  : 'border-border bg-surface text-foreground-muted hover:border-accent'
               }`}
             >
               <input
@@ -263,13 +263,13 @@ export function CheckboxGroup({
       </div>
 
       {hint && (
-        <p id={hintId} className="mt-1.5 text-xs text-muted">
+        <p id={hintId} className="mt-1.5 text-xs text-foreground-muted">
           {hint}
         </p>
       )}
 
       {error && (
-        <p id={errorId} className="mt-1.5 flex items-start gap-1.5 text-xs text-limitation">
+        <p id={errorId} className="mt-1.5 flex items-start gap-1.5 text-xs text-danger">
           <AlertCircle className="mt-0.5 h-3 w-3 shrink-0" aria-hidden="true" />
           {error}
         </p>

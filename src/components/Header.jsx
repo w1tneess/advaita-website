@@ -10,6 +10,9 @@ import { NAV_ITEMS } from '../lib/routes.js'
 /**
  * Site header.
  *
+ * Minimal, sticky navigation with theme toggle. Active links are indicated with
+ * the accent color. Mobile menu is accessible and keyboard-friendly.
+ *
  * The admin panel is deliberately absent from this navigation: it is a local demo
  * tool, not part of the public site.
  */
@@ -38,23 +41,23 @@ export default function Header() {
   }, [menuOpen])
 
   const linkClasses = ({ isActive }) =>
-    `rounded-md px-1 py-1 text-sm font-semibold transition-colors ${
-      isActive ? 'text-accent' : 'text-muted hover:text-ink'
+    `px-1 py-1 text-sm font-medium transition-colors ${
+      isActive ? 'text-accent' : 'text-foreground-muted hover:text-foreground'
     }`
 
   return (
-    <header className="sticky top-0 z-40 border-b border-line bg-canvas/80 shadow-[0_1px_0_rgb(255_255_255/0.35)] backdrop-blur-xl">
+    <header className="sticky top-0 z-40 border-b border-border bg-canvas/80 backdrop-blur-subtle">
       <Container>
-        <div className="flex h-16 items-center justify-between gap-3 sm:gap-4">
+        <div className="flex h-14 items-center justify-between gap-3 sm:gap-4">
           <Link
             to="/"
-            className="min-w-0 truncate font-display text-lg font-semibold tracking-tight"
+            className="min-w-0 truncate font-display text-lg font-semibold tracking-tight text-foreground"
           >
             {profile.name}
           </Link>
 
-          <nav aria-label="Main" className="hidden min-w-0 md:block">
-            <ul className="flex items-center gap-4 lg:gap-7">
+          <nav aria-label="Main" className="hidden md:block">
+            <ul className="flex items-center gap-6">
               {NAV_ITEMS.map((item) => (
                 <li key={item.path}>
                   <NavLink to={item.path} end={item.path === '/'} className={linkClasses}>
@@ -74,7 +77,7 @@ export default function Header() {
               aria-expanded={menuOpen}
               aria-controls="mobile-nav"
               aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-              className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-line bg-surface text-muted transition-colors hover:border-accent hover:text-accent md:hidden"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-border bg-surface text-foreground-muted transition-colors hover:border-accent hover:text-accent md:hidden"
             >
               {menuOpen ? (
                 <X className="h-4 w-4" aria-hidden="true" />
@@ -90,7 +93,7 @@ export default function Header() {
         <nav
           id="mobile-nav"
           aria-label="Main"
-          className="animate-fade border-t border-line bg-surface md:hidden"
+          className="animate-slide-in-down border-t border-border bg-surface md:hidden"
         >
           <Container>
             <ul className="flex flex-col py-2">
@@ -100,8 +103,8 @@ export default function Header() {
                     to={item.path}
                     end={item.path === '/'}
                     className={({ isActive }) =>
-                      `block border-b border-line py-3 text-sm font-semibold last:border-0 ${
-                        isActive ? 'text-accent' : 'text-ink'
+                      `block border-b border-border py-3 text-sm font-medium last:border-0 transition-colors ${
+                        isActive ? 'text-accent' : 'text-foreground-muted'
                       }`
                     }
                   >

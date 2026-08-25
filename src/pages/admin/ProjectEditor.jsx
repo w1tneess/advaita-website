@@ -241,7 +241,7 @@ export default function ProjectEditor() {
             hint="Whether the work can be seen — for example “Personal project, not publicly released”. Leave blank if there is nothing to say."
           />
 
-          <div className="mt-6 space-y-4 border-t border-line pt-5">
+          <div className="mt-6 space-y-4 border-t border-border pt-5">
             <Toggle
               id="project-published"
               label="Show on the public portfolio"
@@ -261,7 +261,7 @@ export default function ProjectEditor() {
 
         <Card className="mt-6 p-6">
           <h2 className="text-base font-semibold">Methodology</h2>
-          <p className="mt-1.5 text-sm text-muted">
+          <p className="mt-1.5 text-sm text-foreground-muted">
             The steps actually taken, in order. For a concept-stage design, these are the parts
             of the design rather than work that has been carried out.
           </p>
@@ -299,7 +299,7 @@ export default function ProjectEditor() {
 
         <Card className="mt-6 p-6">
           <h2 className="text-base font-semibold">Links</h2>
-          <p className="mt-1.5 text-sm text-muted">
+          <p className="mt-1.5 text-sm text-foreground-muted">
             Leave a field blank if there is nothing to link. A blank field renders as nothing at
             all — it never renders as a broken or placeholder link.
           </p>
@@ -335,7 +335,7 @@ export default function ProjectEditor() {
           </div>
         </Card>
 
-        <div className="sticky bottom-0 mt-6 flex flex-wrap items-center gap-3 border-t border-line bg-canvas/90 py-4 backdrop-blur-sm">
+        <div className="sticky bottom-0 mt-6 flex flex-wrap items-center gap-3 border-t border-border bg-canvas/90 py-4 backdrop-blur-sm">
           <Button type="submit">{isNew ? 'Create project' : 'Save project'}</Button>
           <Button type="button" variant="ghost" onClick={() => navigate('/admin/projects')}>
             Cancel

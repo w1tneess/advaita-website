@@ -63,7 +63,7 @@ export default function Blog() {
       <Container>
         <div className="py-14 sm:py-20">
           <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Writing</h1>
-          <p className="mt-5 max-w-prose text-lg leading-relaxed text-muted">
+          <p className="mt-5 max-w-prose text-lg leading-relaxed text-foreground-muted">
             Notes, research and unfinished thinking. Sources are cited, and each claim is
             labelled by the kind of claim it is.
           </p>
@@ -110,7 +110,7 @@ export default function Blog() {
               )}
 
               <div className="flex flex-wrap items-center gap-4">
-                <p className="text-sm text-muted" role="status">
+                <p className="text-sm text-foreground-muted" role="status">
                   {filtered.length} {pluralize(filtered.length, 'article')}
                   {filtered.length !== publicPosts.length && ` of ${publicPosts.length}`}.
                 </p>

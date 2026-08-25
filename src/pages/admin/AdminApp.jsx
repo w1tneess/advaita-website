@@ -29,7 +29,7 @@ function AdminNotFound() {
   return (
     <div>
       <h1 className="text-2xl font-semibold tracking-tight">Admin page not found</h1>
-      <p className="mt-3 text-sm text-muted">
+      <p className="mt-3 text-sm text-foreground-muted">
         That admin URL does not exist. Use the navigation, or go back to the dashboard.
       </p>
       <Button to="/admin" variant="secondary" className="mt-6">

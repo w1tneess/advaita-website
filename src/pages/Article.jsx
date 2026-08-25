@@ -68,7 +68,7 @@ export default function Article() {
         <article className="py-14 sm:py-20">
           <Link
             to="/blog"
-            className="inline-flex items-center gap-1.5 text-sm text-muted hover:text-accent"
+            className="inline-flex items-center gap-1.5 text-sm text-foreground-muted hover:text-accent"
           >
             <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
             All writing
@@ -87,9 +87,9 @@ export default function Article() {
               {post.title}
             </h1>
 
-            {post.excerpt && <p className="mt-5 text-lg text-muted">{post.excerpt}</p>}
+            {post.excerpt && <p className="mt-5 text-lg text-foreground-muted">{post.excerpt}</p>}
 
-            <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-line pt-5 text-sm text-muted">
+            <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-border pt-5 text-sm text-foreground-muted">
               <span>{profile.name}</span>
 
               {post.publishedAt && (
@@ -121,7 +121,7 @@ export default function Article() {
           <SourceList sources={post.sources} />
 
           {(post.tags || []).length > 0 && (
-            <div className="mt-10 border-t border-line pt-6">
+            <div className="mt-10 border-t border-border pt-6">
               <h2 className="text-sm font-semibold">Tags</h2>
               <ul className="mt-3 flex flex-wrap gap-2">
                 {post.tags.map((tag) => (

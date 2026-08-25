@@ -48,7 +48,7 @@ export default function Portfolio() {
       <Container>
         <div className="py-14 sm:py-20">
           <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Portfolio</h1>
-          <p className="mt-5 max-w-prose text-lg leading-relaxed text-muted">
+          <p className="mt-5 max-w-prose text-lg leading-relaxed text-foreground-muted">
             Three projects. Each entry states its role, tools, method and current status, and
             ends with what it does not show — including the one that is a design rather than a
             working product.
@@ -66,7 +66,7 @@ export default function Portfolio() {
             counts={counts}
           />
 
-          <p className="mt-6 text-sm text-muted" role="status">
+          <p className="mt-6 text-sm text-foreground-muted" role="status">
             Showing {visible.length} {pluralize(visible.length, 'project')}
             {values.category !== 'all' && ` of ${publicProjects.length}`}.
           </p>

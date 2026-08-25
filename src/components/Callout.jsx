@@ -37,14 +37,14 @@ export const VARIANT_META = {
     icon: HelpCircle,
     explanation: 'Something unknown, unresolved, or outside what this work can show.',
     classes: 'border-limitation/30 bg-limitation/8',
-    accent: 'text-limitation',
+    accent: 'text-danger',
   },
   note: {
     label: 'Note',
     icon: Info,
     explanation: 'A neutral aside or clarification.',
-    classes: 'border-line bg-raised',
-    accent: 'text-muted',
+    classes: 'border-border bg-surface-elevated',
+    accent: 'text-foreground-muted',
   },
 }
 
@@ -62,7 +62,7 @@ export default function Callout({ variant = 'note', title, children, className =
         {meta.label}
       </p>
       {title && <p className="mb-1 font-semibold">{title}</p>}
-      <div className="text-sm leading-relaxed text-ink/90">{children}</div>
+      <div className="text-sm leading-relaxed text-foreground/90">{children}</div>
     </aside>
   )
 }

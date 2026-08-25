@@ -26,7 +26,7 @@ export default function Avatar({ profile, size = 'md', className = '' }) {
         height={112}
         loading="lazy"
         decoding="async"
-        className={`${sizes[size]} rounded-full border border-line object-cover ${className}`}
+        className={`${sizes[size]} rounded-full border border-border object-cover ${className}`}
       />
     )
   }
@@ -35,7 +35,7 @@ export default function Avatar({ profile, size = 'md', className = '' }) {
     <span
       role="img"
       aria-label={`Placeholder avatar showing the initials ${initials.split('').join(' ')}. No photograph has been added yet.`}
-      className={`${sizes[size]} inline-flex shrink-0 items-center justify-center rounded-full border border-dashed border-line bg-raised font-display font-semibold text-muted ${className}`}
+      className={`${sizes[size]} inline-flex shrink-0 items-center justify-center rounded-full border border-dashed border-border bg-surface-elevated font-display font-semibold text-foreground-muted ${className}`}
     >
       {initials}
     </span>

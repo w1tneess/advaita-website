@@ -1,6 +1,6 @@
 /**
  * Surface container with a subtle border and shadow.
- * `interactive` adds the hover lift used by project and article cards.
+ * `interactive` adds the hover lift and border effects for cards like projects and articles.
  */
 export default function Card({
   as: Tag = 'div',
@@ -12,9 +12,9 @@ export default function Card({
   return (
     <Tag
       className={[
-        'rounded-card border border-line bg-surface shadow-subtle',
+        'rounded-lg border border-border bg-surface shadow-subtle',
         interactive
-          ? 'transition-[background-color,box-shadow,border-color,transform] duration-200 hover:-translate-y-0.5 hover:border-accent/40 hover:bg-surface-hover hover:shadow-raised motion-reduce:hover:translate-y-0'
+          ? 'transition-[background-color,box-shadow,border-color,transform] duration-200 ease-out hover:-translate-y-0.5 hover:border-accent/50 hover:bg-surface-elevated hover:shadow-raised motion-reduce:hover:translate-y-0'
           : '',
         className,
       ]

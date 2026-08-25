@@ -43,7 +43,7 @@ export default function About() {
                   </li>
                 ))}
               </ul>
-              <p className="mt-3 text-sm text-muted">{profile.location}</p>
+              <p className="mt-3 text-sm text-foreground-muted">{profile.location}</p>
             </div>
           </div>
 
@@ -51,7 +51,7 @@ export default function About() {
           <p className="mt-10 max-w-prose text-lg leading-relaxed">{profile.bio}</p>
 
           {profile.epistemicNote && (
-            <p className="mt-5 max-w-prose text-muted">{profile.epistemicNote}</p>
+            <p className="mt-5 max-w-prose text-foreground-muted">{profile.epistemicNote}</p>
           )}
         </div>
       </Container>
@@ -90,7 +90,7 @@ export default function About() {
                           <h4 className="text-base font-semibold">{skill.name}</h4>
                           <StatusBadge kind="skill" value={skill.level} />
                         </div>
-                        {skill.note && <p className="mt-2 text-sm text-muted">{skill.note}</p>}
+                        {skill.note && <p className="mt-2 text-sm text-foreground-muted">{skill.note}</p>}
                         {project && (
                           <p className="mt-3 text-sm">
                             <Link
@@ -120,7 +120,7 @@ export default function About() {
         <p className="max-w-prose text-lg leading-relaxed">{profile.learningDirection}</p>
 
         {settings.showTimeline && timeline.length > 0 && (
-          <ol className="mt-10 space-y-0 border-l border-line pl-6">
+          <ol className="mt-10 space-y-0 border-l border-border pl-6">
             {timeline.map((item) => (
               <li key={item.id} className="relative pb-8 last:pb-0">
                 <span
@@ -131,7 +131,7 @@ export default function About() {
                   {item.period}
                 </p>
                 <h3 className="mt-1 text-base font-semibold">{item.title}</h3>
-                <p className="mt-1.5 max-w-prose text-sm text-muted">{item.detail}</p>
+                <p className="mt-1.5 max-w-prose text-sm text-foreground-muted">{item.detail}</p>
               </li>
             ))}
           </ol>
@@ -155,7 +155,7 @@ export default function About() {
                 </span>
                 <h3 className="text-lg font-semibold">{step.title}</h3>
               </div>
-              <p className="mt-3 text-sm leading-relaxed text-muted">{step.detail}</p>
+              <p className="mt-3 text-sm leading-relaxed text-foreground-muted">{step.detail}</p>
             </Card>
           ))}
         </ol>

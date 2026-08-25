@@ -9,17 +9,17 @@ export default function DataTable({ caption, columns, rows, rowKey = (row) => ro
   if (rows.length === 0) return empty ?? null
 
   return (
-    <div className="overflow-hidden rounded-card border border-line bg-surface">
+    <div className="overflow-hidden rounded-card border border-border bg-surface">
       <table className="w-full border-collapse text-sm">
         {caption && <caption className="sr-only">{caption}</caption>}
 
-        <thead className="hidden border-b border-line bg-raised sm:table-header-group">
+        <thead className="hidden border-b border-border bg-surface-elevated sm:table-header-group">
           <tr>
             {columns.map((column) => (
               <th
                 key={column.key}
                 scope="col"
-                className={`px-4 py-3 text-left text-xs font-semibold tracking-wide text-muted uppercase ${
+                className={`px-4 py-3 text-left text-xs font-semibold tracking-wide text-foreground-muted uppercase ${
                   column.className ?? ''
                 }`}
               >
@@ -33,7 +33,7 @@ export default function DataTable({ caption, columns, rows, rowKey = (row) => ro
           {rows.map((row) => (
             <tr
               key={rowKey(row)}
-              className="block border-b border-line last:border-0 sm:table-row"
+              className="block border-b border-border last:border-0 sm:table-row"
             >
               {columns.map((column) => (
                 <td
@@ -44,7 +44,7 @@ export default function DataTable({ caption, columns, rows, rowKey = (row) => ro
                 >
                   {/* Column label, shown only in the stacked mobile layout. */}
                   <span
-                    className="mb-1 block text-xs font-semibold tracking-wide text-muted uppercase sm:hidden"
+                    className="mb-1 block text-xs font-semibold tracking-wide text-foreground-muted uppercase sm:hidden"
                     aria-hidden="true"
                   >
                     {column.header}

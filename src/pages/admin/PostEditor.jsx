@@ -162,7 +162,7 @@ export default function PostEditor() {
               hint="Tags only appear as filters on the blog page once at least one published article uses them."
             />
           ) : (
-            <p className="mt-6 rounded-lg border border-dashed border-line px-4 py-3 text-sm text-muted">
+            <p className="mt-6 rounded-lg border border-dashed border-border px-4 py-3 text-sm text-foreground-muted">
               No tags exist yet. Add some under Categories &amp; tags, then come back to apply them.
             </p>
           )}
@@ -228,7 +228,7 @@ export default function PostEditor() {
         <Card className="mt-6 p-6">
           <div className="flex flex-wrap items-baseline justify-between gap-3">
             <h2 className="text-base font-semibold">Body</h2>
-            <p className="text-xs text-muted">
+            <p className="text-xs text-foreground-muted">
               Estimated reading time: ~{readingMinutes(draft)} min
             </p>
           </div>
@@ -250,21 +250,21 @@ export default function PostEditor() {
 
         <Card className="mt-6 p-6">
           <h2 className="text-base font-semibold">Sources</h2>
-          <p className="mt-1.5 text-sm text-muted">
+          <p className="mt-1.5 text-sm text-foreground-muted">
             Listed as references at the end of the article. A sourced-fact callout without a
             matching entry here is not actually sourced.
           </p>
 
           {(draft.sources ?? []).length === 0 ? (
-            <p className="mt-5 rounded-lg border border-dashed border-line px-4 py-3 text-sm text-muted">
+            <p className="mt-5 rounded-lg border border-dashed border-border px-4 py-3 text-sm text-foreground-muted">
               No sources yet.
             </p>
           ) : (
             <ol className="mt-5 space-y-4">
               {draft.sources.map((source, index) => (
-                <li key={source.id} className="rounded-lg border border-line bg-raised/40 p-4">
+                <li key={source.id} className="rounded-lg border border-border bg-surface-elevated/40 p-4">
                   <div className="mb-3 flex items-center justify-between gap-3">
-                    <p className="text-xs font-semibold tracking-wide text-muted uppercase">
+                    <p className="text-xs font-semibold tracking-wide text-foreground-muted uppercase">
                       Source {index + 1}
                     </p>
                     <button
@@ -275,7 +275,7 @@ export default function PostEditor() {
                           draft.sources.filter((_, i) => i !== index),
                         )
                       }
-                      className="inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs text-muted transition-colors hover:text-limitation"
+                      className="inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs text-foreground-muted transition-colors hover:text-danger"
                     >
                       <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
                       Remove
@@ -331,14 +331,14 @@ export default function PostEditor() {
           <button
             type="button"
             onClick={() => set('sources', [...(draft.sources ?? []), createSource()])}
-            className="mt-4 inline-flex items-center gap-1.5 rounded-lg border border-dashed border-line px-3 py-2 text-sm text-muted transition-colors hover:border-accent hover:text-accent"
+            className="mt-4 inline-flex items-center gap-1.5 rounded-lg border border-dashed border-border px-3 py-2 text-sm text-foreground-muted transition-colors hover:border-accent hover:text-accent"
           >
             <Plus className="h-4 w-4" aria-hidden="true" />
             Add source
           </button>
         </Card>
 
-        <div className="sticky bottom-0 mt-6 flex flex-wrap items-center gap-3 border-t border-line bg-canvas/90 py-4 backdrop-blur-sm">
+        <div className="sticky bottom-0 mt-6 flex flex-wrap items-center gap-3 border-t border-border bg-canvas/90 py-4 backdrop-blur-sm">
           <Button type="submit">{isNew ? 'Create article' : 'Save article'}</Button>
           <Button type="button" variant="ghost" onClick={() => navigate('/admin/posts')}>
             Cancel

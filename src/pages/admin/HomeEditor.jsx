@@ -23,7 +23,7 @@ function CtaFields({ id, legend, cta, onChange, hint }) {
   return (
     <fieldset>
       <legend className="text-sm font-medium">{legend}</legend>
-      {hint && <p className="mt-1 text-xs text-muted">{hint}</p>}
+      {hint && <p className="mt-1 text-xs text-foreground-muted">{hint}</p>}
       <div className="mt-3 grid gap-4 sm:grid-cols-2">
         <Field
           id={`${id}-label`}
@@ -111,7 +111,7 @@ export default function HomeEditor() {
 
         <Card className="mt-6 p-6">
           <h2 className="text-base font-semibold">Section headings</h2>
-          <p className="mt-1.5 text-sm text-muted">
+          <p className="mt-1.5 text-sm text-foreground-muted">
             Each block on the home page has a heading and a short introduction.
           </p>
 
@@ -183,14 +183,14 @@ export default function HomeEditor() {
           />
         </Card>
 
-        <div className="sticky bottom-0 mt-6 flex flex-wrap items-center gap-3 border-t border-line bg-canvas/90 py-4 backdrop-blur-sm">
+        <div className="sticky bottom-0 mt-6 flex flex-wrap items-center gap-3 border-t border-border bg-canvas/90 py-4 backdrop-blur-sm">
           <Button type="submit" disabled={!dirty}>
             Save home page
           </Button>
           <Button type="button" variant="ghost" onClick={revert} disabled={!dirty}>
             Discard changes
           </Button>
-          <p className="text-xs text-muted" aria-live="polite">
+          <p className="text-xs text-foreground-muted" aria-live="polite">
             {dirty ? 'Unsaved changes.' : 'No unsaved changes.'}
           </p>
         </div>

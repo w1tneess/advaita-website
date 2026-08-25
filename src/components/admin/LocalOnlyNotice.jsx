@@ -20,7 +20,7 @@ export default function LocalOnlyNotice({ className = '' }) {
         className={`rounded-card border border-limitation/40 bg-limitation/10 p-4 ${className}`}
       >
         <p className="flex items-start gap-2.5 text-sm">
-          <TriangleAlert className="mt-0.5 h-4 w-4 shrink-0 text-limitation" aria-hidden="true" />
+          <TriangleAlert className="mt-0.5 h-4 w-4 shrink-0 text-danger" aria-hidden="true" />
           <span>
             <strong className="font-semibold">This browser is blocking local storage.</strong>{' '}
             You can still edit and export, but nothing will survive a page reload. Private or
@@ -32,9 +32,9 @@ export default function LocalOnlyNotice({ className = '' }) {
   }
 
   return (
-    <div className={`rounded-card border border-line bg-surface p-4 ${className}`}>
+    <div className={`rounded-card border border-border bg-surface p-4 ${className}`}>
       <p className="flex items-start gap-2.5 text-sm">
-        <HardDrive className="mt-0.5 h-4 w-4 shrink-0 text-muted" aria-hidden="true" />
+        <HardDrive className="mt-0.5 h-4 w-4 shrink-0 text-foreground-muted" aria-hidden="true" />
         <span>
           {isLocal ? (
             <>
@@ -58,7 +58,7 @@ export default function LocalOnlyNotice({ className = '' }) {
       </p>
 
       {seedIsNewer && (
-        <p className="mt-3 flex items-start gap-2.5 border-t border-line pt-3 text-sm text-muted">
+        <p className="mt-3 flex items-start gap-2.5 border-t border-border pt-3 text-sm text-foreground-muted">
           <Info className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
           <span>
             The deployed site&rsquo;s default content is newer than your local copy. Your edits

@@ -116,16 +116,16 @@ export default function ProjectsList() {
       <div className="mb-5 grid gap-3 sm:grid-cols-[1fr_auto]">
         <label className="relative block">
           <span className="sr-only">Search projects</span>
-          <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted" aria-hidden="true" />
-          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search title, slug, summary or tools" className="w-full rounded-lg border border-line bg-surface py-2.5 pr-3 pl-9 text-sm focus:border-accent focus:outline-none" />
+          <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-foreground-muted" aria-hidden="true" />
+          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search title, slug, summary or tools" className="w-full rounded-lg border border-border bg-surface py-2.5 pr-3 pl-9 text-sm focus:border-accent focus:outline-none" />
         </label>
-        <select value={status} onChange={(event) => setStatus(event.target.value)} aria-label="Filter project status" className="rounded-lg border border-line bg-surface px-3 py-2.5 text-sm">
+        <select value={status} onChange={(event) => setStatus(event.target.value)} aria-label="Filter project status" className="rounded-lg border border-border bg-surface px-3 py-2.5 text-sm">
           <option value="all">All visibility</option>
           <option value="published">Published</option>
           <option value="draft">Draft</option>
         </select>
       </div>
-      <p className="mb-4 text-sm text-muted" role="status">Showing {visibleProjects.length} of {projects.length} projects</p>
+      <p className="mb-4 text-sm text-foreground-muted" role="status">Showing {visibleProjects.length} of {projects.length} projects</p>
       <ReorderList
         items={visibleProjects}
         labelFor={(project) => project.title || 'Untitled project'}
@@ -134,7 +134,7 @@ export default function ProjectsList() {
         renderItem={(project) => (
           <div className="min-w-0">
             <p className="font-medium">{project.title || 'Untitled project'}</p>
-            <p className="mt-0.5 truncate font-mono text-xs text-muted">/{project.slug}</p>
+            <p className="mt-0.5 truncate font-mono text-xs text-foreground-muted">/{project.slug}</p>
 
             <div className="mt-2 flex flex-wrap items-center gap-1.5">
               <StatusBadge kind="project" value={project.status} />
@@ -151,7 +151,7 @@ export default function ProjectsList() {
             </div>
 
             {project.summary && (
-              <p className="mt-2 text-sm text-muted">{project.summary}</p>
+              <p className="mt-2 text-sm text-foreground-muted">{project.summary}</p>
             )}
           </div>
         )}

@@ -17,13 +17,13 @@ export default function PublicLayout() {
   const { previewDrafts, setPreviewDrafts } = useContent()
 
   return (
-    <div className="flex min-h-dvh flex-col bg-canvas text-ink">
+    <div className="flex min-h-dvh flex-col bg-canvas text-foreground">
       <SkipLink />
 
       {/* Only ever visible after the admin turns preview on, so the public site is never
           silently showing unpublished work without saying so. */}
       {previewDrafts && (
-        <div className="border-b border-line bg-opinion/12 text-ink">
+        <div className="border-b border-border bg-opinion/12 text-foreground">
           <Container>
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1 py-2 text-sm">
               <Eye className="h-4 w-4 text-opinion" aria-hidden="true" />
@@ -40,7 +40,7 @@ export default function PublicLayout() {
               </button>
               <Link
                 to="/admin"
-                className="text-muted underline underline-offset-4 hover:text-accent"
+                className="text-foreground-muted underline underline-offset-4 hover:text-accent"
               >
                 Back to admin
               </Link>

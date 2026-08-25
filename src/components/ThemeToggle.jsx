@@ -13,7 +13,7 @@ export default function ThemeToggle({ className = '' }) {
       onClick={toggle}
       title={label}
       aria-label={label}
-      className={`inline-flex h-9 w-9 items-center justify-center rounded-lg border border-line bg-surface text-muted transition-colors hover:border-accent hover:text-accent ${className}`}
+      className={`inline-flex h-9 w-9 items-center justify-center rounded-md border border-border bg-surface text-foreground-muted transition-colors hover:border-accent hover:text-accent ${className}`}
     >
       {isDark ? (
         <Sun className="h-4 w-4" aria-hidden="true" />

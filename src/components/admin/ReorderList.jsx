@@ -22,7 +22,7 @@ export default function ReorderList({
 
   if (items.length === 0) {
     return (
-      <p className={`rounded-card border border-dashed border-line p-6 text-sm text-muted ${className}`}>
+      <p className={`rounded-card border border-dashed border-border p-6 text-sm text-foreground-muted ${className}`}>
         {emptyMessage}
       </p>
     )
@@ -42,7 +42,7 @@ export default function ReorderList({
         {items.map((item, index) => (
           <li
             key={item.id}
-            className="flex items-start gap-3 rounded-card border border-line bg-surface p-4"
+            className="flex items-start gap-3 rounded-card border border-border bg-surface p-4"
           >
             <div className="flex shrink-0 flex-col gap-1">
               <button
@@ -50,7 +50,7 @@ export default function ReorderList({
                 onClick={() => move(item, -1, index)}
                 disabled={index === 0}
                 aria-label={`Move ${labelFor ? labelFor(item) : 'item'} up`}
-                className="rounded-md border border-line p-1 text-muted transition-colors hover:text-accent disabled:cursor-not-allowed disabled:opacity-40"
+                className="rounded-md border border-border p-1 text-foreground-muted transition-colors hover:text-accent disabled:cursor-not-allowed disabled:opacity-40"
               >
                 <ChevronUp className="h-3.5 w-3.5" aria-hidden="true" />
               </button>
@@ -59,7 +59,7 @@ export default function ReorderList({
                 onClick={() => move(item, 1, index)}
                 disabled={index === items.length - 1}
                 aria-label={`Move ${labelFor ? labelFor(item) : 'item'} down`}
-                className="rounded-md border border-line p-1 text-muted transition-colors hover:text-accent disabled:cursor-not-allowed disabled:opacity-40"
+                className="rounded-md border border-border p-1 text-foreground-muted transition-colors hover:text-accent disabled:cursor-not-allowed disabled:opacity-40"
               >
                 <ChevronDown className="h-3.5 w-3.5" aria-hidden="true" />
               </button>

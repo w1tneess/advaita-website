@@ -35,12 +35,12 @@ function StatCard({ icon: Icon, label, value, detail, to }) {
     <Card className="p-5">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <p className="text-sm text-muted">{label}</p>
+          <p className="text-sm text-foreground-muted">{label}</p>
           <p className="mt-1 font-display text-3xl leading-none tabular-nums">{value}</p>
         </div>
         <Icon className="h-5 w-5 shrink-0 text-accent" aria-hidden="true" />
       </div>
-      {detail && <p className="mt-3 text-xs text-muted">{detail}</p>}
+      {detail && <p className="mt-3 text-xs text-foreground-muted">{detail}</p>}
       <Link
         to={to}
         className="mt-4 inline-block text-sm font-medium text-accent underline underline-offset-4 hover:text-accent-strong"
@@ -162,21 +162,21 @@ export default function Dashboard() {
         <div className="flex items-center justify-between gap-3">
           <div>
             <h2 className="font-semibold">Recent activity</h2>
-            <p className="mt-1 text-sm text-muted">Persisted changes in this browser.</p>
+            <p className="mt-1 text-sm text-foreground-muted">Persisted changes in this browser.</p>
           </div>
-          <span className="text-xs text-muted">Website status: local edits</span>
+          <span className="text-xs text-foreground-muted">Website status: local edits</span>
         </div>
         {activity.length > 0 ? (
           <ul className="mt-4 divide-y divide-line">
             {activity.slice(0, 8).map((entry) => (
               <li key={entry.id} className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 py-3 text-sm first:pt-0 last:pb-0">
                 <span><strong className="font-medium capitalize">{entry.action}</strong> {entry.type.replace('categories.', '')} “{entry.label}”</span>
-                <time className="text-xs text-muted" dateTime={entry.at}>{formatActivityDate(entry.at)}</time>
+                <time className="text-xs text-foreground-muted" dateTime={entry.at}>{formatActivityDate(entry.at)}</time>
               </li>
             ))}
           </ul>
         ) : (
-          <p className="mt-4 text-sm text-muted">No admin changes recorded yet.</p>
+          <p className="mt-4 text-sm text-foreground-muted">No admin changes recorded yet.</p>
         )}
       </Card>
     </AdminPage>

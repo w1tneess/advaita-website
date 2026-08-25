@@ -37,7 +37,7 @@ export default function Contact() {
           <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
             {contact.heading}
           </h1>
-          <p className="mt-5 max-w-prose text-lg leading-relaxed text-muted">{contact.intro}</p>
+          <p className="mt-5 max-w-prose text-lg leading-relaxed text-foreground-muted">{contact.intro}</p>
 
           <div className="mt-12 grid gap-6 lg:grid-cols-2">
             <Card className="p-6 sm:p-8">
@@ -48,7 +48,7 @@ export default function Contact() {
 
               {email?.url ? (
                 <>
-                  <p className="mt-3 text-sm text-muted">
+                  <p className="mt-3 text-sm text-foreground-muted">
                     Opens in whatever mail application this device uses.
                   </p>
                   <Button href={`mailto:${email.url}`} className="mt-5 w-full sm:w-auto">
@@ -57,12 +57,12 @@ export default function Contact() {
                 </>
               ) : (
                 <>
-                  <p className="mt-3 text-sm text-muted">
+                  <p className="mt-3 text-sm text-foreground-muted">
                     No address is published yet. This is a placeholder — see the README for
                     how to set it.
                   </p>
                   <p className="mt-5 flex flex-wrap items-center gap-2">
-                    <code className="rounded-md border border-dashed border-line bg-raised px-2.5 py-1.5 font-mono text-sm text-muted">
+                    <code className="rounded-md border border-dashed border-border bg-surface-elevated px-2.5 py-1.5 font-mono text-sm text-foreground-muted">
                       {email?.placeholder ?? 'you@example.com'}
                     </code>
                     <Badge tone="opinion">Placeholder</Badge>
@@ -71,7 +71,7 @@ export default function Contact() {
               )}
 
               {contact.responseNote && (
-                <p className="mt-6 border-t border-line pt-5 text-sm text-muted">
+                <p className="mt-6 border-t border-border pt-5 text-sm text-foreground-muted">
                   {contact.responseNote}
                 </p>
               )}
@@ -79,7 +79,7 @@ export default function Contact() {
 
             <Card className="p-6 sm:p-8">
               <h2 className="text-lg font-semibold">Profiles</h2>
-              <p className="mt-3 text-sm text-muted">
+              <p className="mt-3 text-sm text-foreground-muted">
                 Anything still marked as a placeholder has not been set up yet.
               </p>
 
@@ -87,7 +87,7 @@ export default function Contact() {
                 {others.map((link) => (
                   <li key={link.id} className="flex items-start gap-3">
                     <span
-                      className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-line bg-raised text-muted"
+                      className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-border bg-surface-elevated text-foreground-muted"
                       aria-hidden="true"
                     >
                       <Icon name={link.icon} className="h-4 w-4" />
@@ -105,7 +105,7 @@ export default function Contact() {
                           <span className="sr-only"> (opens in a new tab)</span>
                         </a>
                       ) : (
-                        <p className="text-sm break-words text-muted">
+                        <p className="text-sm break-words text-foreground-muted">
                           <span className="font-mono">{link.placeholder}</span>
                           <span className="ml-2 text-xs uppercase">— placeholder</span>
                         </p>
@@ -124,8 +124,8 @@ export default function Contact() {
                 <ShieldCheck className="h-4.5 w-4.5 text-accent" aria-hidden="true" />
                 A note on privacy
               </h2>
-              <p className="mt-3 text-sm leading-relaxed text-muted">{contact.privacyNote}</p>
-              <p className="mt-4 text-sm text-muted">
+              <p className="mt-3 text-sm leading-relaxed text-foreground-muted">{contact.privacyNote}</p>
+              <p className="mt-4 text-sm text-foreground-muted">
                 Location published on this site: <strong>{profile.location}</strong>. Nothing
                 more precise than that.
               </p>

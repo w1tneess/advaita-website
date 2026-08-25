@@ -13,16 +13,16 @@ import { useToast } from '../lib/toast.jsx'
  */
 
 const VARIANTS = {
-  info: { icon: Info, classes: 'border-line bg-surface text-ink', iconClass: 'text-muted' },
+  info: { icon: Info, classes: 'border-border bg-surface text-foreground', iconClass: 'text-foreground-muted' },
   success: {
     icon: CheckCircle2,
-    classes: 'border-accent/40 bg-surface text-ink',
+    classes: 'border-accent/40 bg-surface text-foreground',
     iconClass: 'text-accent',
   },
   error: {
     icon: AlertCircle,
-    classes: 'border-limitation/50 bg-surface text-ink',
-    iconClass: 'text-limitation',
+    classes: 'border-limitation/50 bg-surface text-foreground',
+    iconClass: 'text-danger',
   },
 }
 
@@ -51,7 +51,7 @@ export default function ToastViewport() {
               type="button"
               onClick={() => dismiss(toast.id)}
               aria-label="Dismiss notification"
-              className="-m-1 rounded p-1 text-muted transition-colors hover:text-ink"
+              className="-m-1 rounded p-1 text-foreground-muted transition-colors hover:text-foreground"
             >
               <X className="h-3.5 w-3.5" aria-hidden="true" />
             </button>

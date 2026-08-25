@@ -13,11 +13,11 @@ export default function EmptyState({
 }) {
   return (
     <div
-      className={`rounded-card border border-dashed border-line bg-surface/60 px-6 py-14 text-center ${className}`}
+      className={`rounded-card border border-dashed border-border bg-surface/60 px-6 py-14 text-center ${className}`}
     >
-      <Icon className="mx-auto mb-4 h-8 w-8 text-muted" aria-hidden="true" />
+      <Icon className="mx-auto mb-4 h-8 w-8 text-foreground-muted" aria-hidden="true" />
       {title && <h3 className="text-lg font-semibold">{title}</h3>}
-      {message && <p className="mx-auto mt-2 max-w-md text-sm text-muted">{message}</p>}
+      {message && <p className="mx-auto mt-2 max-w-md text-sm text-foreground-muted">{message}</p>}
       {action && <div className="mt-6 flex justify-center">{action}</div>}
     </div>
   )

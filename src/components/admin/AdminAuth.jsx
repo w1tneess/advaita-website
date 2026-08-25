@@ -70,7 +70,7 @@ export default function AdminAuth({ children }) {
         <LockKeyhole className="h-6 w-6" aria-hidden="true" />
       </div>
       <h1 className="font-display text-3xl font-semibold tracking-tight">Admin panel</h1>
-      <p className="mt-3 text-sm leading-relaxed text-muted">Local editor access only. This does not secure GitHub or the published site.</p>
+      <p className="mt-3 text-sm leading-relaxed text-foreground-muted">Local editor access only. This does not secure GitHub or the published site.</p>
 
       <form onSubmit={handleSubmit} className="mt-6 space-y-4">
         <div>
@@ -89,10 +89,10 @@ export default function AdminAuth({ children }) {
             autoFocus
             aria-invalid={Boolean(error)}
             aria-describedby={error ? 'admin-password-error' : undefined}
-            className="mt-1.5 w-full rounded-lg border border-line bg-surface px-3 py-2.5 text-sm focus:border-accent focus:outline-none"
+            className="mt-1.5 w-full rounded-lg border border-border bg-surface px-3 py-2.5 text-sm focus:border-accent focus:outline-none"
           />
           {error && (
-            <p id="admin-password-error" className="mt-1.5 text-xs text-limitation" role="alert">
+            <p id="admin-password-error" className="mt-1.5 text-xs text-danger" role="alert">
               {error}
             </p>
           )}
@@ -107,8 +107,8 @@ export default function AdminAuth({ children }) {
 
 function AuthShell({ children }) {
   return (
-    <main className="flex min-h-dvh items-center justify-center bg-canvas px-6 py-12 text-ink">
-      <section className="w-full max-w-sm rounded-card border border-line bg-surface p-6 shadow-raised sm:p-8">
+    <main className="flex min-h-dvh items-center justify-center bg-canvas px-6 py-12 text-foreground">
+      <section className="w-full max-w-sm rounded-card border border-border bg-surface p-6 shadow-raised sm:p-8">
         {children}
       </section>
     </main>

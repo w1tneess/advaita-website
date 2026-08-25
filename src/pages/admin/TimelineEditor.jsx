@@ -39,9 +39,9 @@ export default function TimelineEditor() {
         emptyMessage="No timeline entries yet. The learning direction section will be empty."
         summary={(item) => (
           <div className="min-w-0">
-            <p className="text-xs tracking-wide text-muted uppercase">{item.period}</p>
+            <p className="text-xs tracking-wide text-foreground-muted uppercase">{item.period}</p>
             <p className="mt-1 font-medium">{item.title}</p>
-            {item.detail && <p className="mt-1.5 text-sm text-muted">{item.detail}</p>}
+            {item.detail && <p className="mt-1.5 text-sm text-foreground-muted">{item.detail}</p>}
           </div>
         )}
         fields={({ draft, set, errors }) => (

@@ -58,7 +58,7 @@ function Block({ block }) {
         <figure className="my-7 border-l-2 border-accent/50 pl-5">
           <blockquote className="text-lg leading-relaxed italic">{block.text}</blockquote>
           {block.attribution && (
-            <figcaption className="mt-2 text-sm text-muted not-italic">
+            <figcaption className="mt-2 text-sm text-foreground-muted not-italic">
               — {block.attribution}
             </figcaption>
           )}
@@ -76,9 +76,9 @@ function Block({ block }) {
       return (
         <div className="my-7">
           {block.language && (
-            <p className="mb-1 font-mono text-xs text-muted">{block.language}</p>
+            <p className="mb-1 font-mono text-xs text-foreground-muted">{block.language}</p>
           )}
-          <pre className="overflow-x-auto rounded-card border border-line bg-raised p-4 text-sm">
+          <pre className="overflow-x-auto rounded-card border border-border bg-surface-elevated p-4 text-sm">
             <code className="font-mono">{block.code}</code>
           </pre>
         </div>
@@ -93,10 +93,10 @@ function Block({ block }) {
             alt={block.alt || ''}
             loading="lazy"
             decoding="async"
-            className="w-full rounded-card border border-line"
+            className="w-full rounded-card border border-border"
           />
           {block.caption && (
-            <figcaption className="mt-2 text-center text-sm text-muted">
+            <figcaption className="mt-2 text-center text-sm text-foreground-muted">
               {block.caption}
             </figcaption>
           )}

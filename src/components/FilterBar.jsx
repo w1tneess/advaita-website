@@ -33,7 +33,7 @@ export default function FilterBar({
               className={`inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-sm font-medium transition-colors ${
                 isActive
                   ? 'border-accent bg-accent/12 text-accent'
-                  : 'border-line bg-surface text-muted hover:border-accent hover:text-accent'
+                  : 'border-border bg-surface text-foreground-muted hover:border-accent hover:text-accent'
               }`}
             >
               {option.label}
