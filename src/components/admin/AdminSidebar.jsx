@@ -66,7 +66,7 @@ export default function AdminSidebar({ open, onClose }) {
       {/* Mobile backdrop. Hidden from assistive tech: the close button is the labelled control. */}
       {open && (
         <div
-          className="fixed inset-0 z-30 bg-ink/40 lg:hidden"
+          className="fixed inset-0 z-30 bg-foreground/40 lg:hidden"
           onClick={onClose}
           aria-hidden="true"
         />

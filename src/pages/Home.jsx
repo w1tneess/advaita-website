@@ -21,21 +21,22 @@ export default function Home() {
     <>
       <Seo title={ROUTE.title} description={ROUTE.description} path="/" />
 
-      {/* Hero — deliberately restrained: no statistics, no claims, no badges of
-          achievement. Just who this is and what the site is for. */}
+      {/* Hero — Deliberately restrained with strong typography hierarchy. */}
       <Container>
-        <div className="max-w-3xl py-16 sm:py-24">
+        <div className="max-w-3xl py-16 sm:py-24 lg:py-32">
           {home.heroKicker && (
-            <p className="text-sm font-medium tracking-wide text-accent">{home.heroKicker}</p>
+            <p className="text-sm font-semibold tracking-wide text-accent uppercase">{home.heroKicker}</p>
           )}
 
-          <h1 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">
+          <h1 className="mt-3 text-4xl font-semibold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
             {home.heroHeading}
           </h1>
 
-          <p className="mt-6 max-w-prose text-lg leading-relaxed text-foreground-muted">{home.heroIntro}</p>
+          <p className="mt-6 max-w-prose text-lg leading-relaxed text-foreground-muted sm:text-xl">
+            {home.heroIntro}
+          </p>
 
-          <div className="mt-9 flex flex-wrap gap-3">
+          <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
             <Button to={home.primaryCta.to} size="lg">
               {home.primaryCta.label}
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -45,8 +46,8 @@ export default function Home() {
             </Button>
           </div>
 
-          <p className="mt-10 text-sm text-foreground-muted">
-            {profile.name} · {profile.location}
+          <p className="mt-12 text-sm text-foreground-muted">
+            <span className="font-medium">{profile.name}</span> · {profile.location}
           </p>
         </div>
       </Container>
@@ -64,7 +65,7 @@ export default function Home() {
         }
       >
         {featuredProjects.length > 0 ? (
-          <ul className="grid gap-6 md:grid-cols-3">
+          <ul className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {featuredProjects.map((project) => (
               <li key={project.id} className="h-full">
                 <ProjectCard project={project} variant="compact" />
@@ -98,7 +99,7 @@ export default function Home() {
         }
       >
         {latestPosts.length > 0 ? (
-          <ul className="grid gap-6 md:grid-cols-3">
+          <ul className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {latestPosts.map((post) => (
               <li key={post.id} className="h-full">
                 <PostCard post={post} />
@@ -133,14 +134,14 @@ export default function Home() {
       </Section>
 
       <Section id="credibility" title={home.credibilityHeading} width="prose">
-        <Card className="p-6 sm:p-8">
-          <p className="text-base leading-relaxed">{home.credibilityStatement}</p>
+        <Card className="p-6 sm:p-8 lg:p-10">
+          <p className="text-base leading-relaxed text-foreground">{home.credibilityStatement}</p>
 
           {(home.credibilityPoints || []).length > 0 && (
-            <ul className="mt-6 space-y-3 border-t border-border pt-6">
+            <ul className="mt-8 space-y-3 border-t border-border pt-8">
               {home.credibilityPoints.map((point, index) => (
                 <li key={index} className="flex gap-3 text-sm">
-                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
+                  <Check className="mt-0.5 h-5 w-5 shrink-0 text-accent flex-shrink-0" aria-hidden="true" />
                   <span>{point}</span>
                 </li>
               ))}

@@ -75,7 +75,7 @@ export default function ConfirmDialog({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Clicking the backdrop cancels — the same as Escape, never the same as confirming. */}
       <div
-        className="absolute inset-0 bg-ink/45 backdrop-blur-sm"
+        className="absolute inset-0 bg-foreground/45 backdrop-blur-sm"
         onClick={onCancel}
         aria-hidden="true"
       />
@@ -86,12 +86,12 @@ export default function ConfirmDialog({
         aria-modal="true"
         aria-labelledby="confirm-title"
         aria-describedby={message ? 'confirm-message' : undefined}
-        className="animate-rise relative w-full max-w-md rounded-card border border-border bg-surface p-6 shadow-raised"
+        className="animate-rise relative w-full max-w-md rounded-lg border border-border bg-surface p-6 shadow-raised"
       >
         <div className="flex gap-4">
           {tone === 'danger' && (
             <span
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-limitation/12 text-danger"
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-danger/12 text-danger"
               aria-hidden="true"
             >
               <AlertTriangle className="h-5 w-5" />
