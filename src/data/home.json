@@ -1,8 +1,8 @@
 {
-  "heroKicker": "Student researcher · Writer · Building things on the web",
-  "heroHeading": "Learning in public, one question at a time.",
-  "heroIntro": "I'm Advaita. I research things that interest me — philosophy, Indian politics, technology, history and data — and I publish the working notes rather than only the conclusions. This site is the record of that process, including the parts that are unfinished.",
-  "primaryCta": { "label": "Explore My Work", "to": "/portfolio" },
+  "heroKicker": "",
+  "heroHeading": "Hi, I'm Advaita Chandra.",
+  "heroIntro": "Student, Explorer, and Builder, in India.",
+  "primaryCta": { "label": "See My Work", "to": "/projects" },
   "secondaryCta": { "label": "Read My Writing", "to": "/blog" },
   "featuredHeading": "Selected work",
   "featuredIntro": "Three projects so far. Each one lists its method, its current status, and what it does not show.",
