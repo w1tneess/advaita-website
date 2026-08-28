@@ -29,7 +29,7 @@ export default function Section({
     <section
       id={id}
       aria-labelledby={title ? `${id}-heading` : undefined}
-      className={`py-14 sm:py-20 ${tones[tone]} ${className}`}
+      className={`py-12 sm:py-16 md:py-32 ${tones[tone]} ${className}`}
     >
       <Container width={width}>
         {(title || intro || kicker) && (

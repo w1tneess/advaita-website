@@ -26,9 +26,9 @@ export default function NotFound() {
       />
 
       <Container>
-        <div className="max-w-xl py-20 sm:py-28">
+        <div className="max-w-xl py-16 sm:py-24 md:py-32">
           <p className="font-mono text-sm text-muted">404</p>
-          <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
+          <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">
             This page doesn&rsquo;t exist
           </h1>
           <p className="mt-5 text-lg text-muted">

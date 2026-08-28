@@ -27,7 +27,7 @@ export default function SearchInput({
           onChange={(event) => onChange(event.target.value)}
           placeholder={placeholder}
           aria-describedby={hint ? `${id}-hint` : undefined}
-          className="w-full rounded-lg border border-line bg-surface py-2.5 pr-10 pl-9 text-sm placeholder:text-muted/70 focus:border-accent focus:outline-none"
+          className="w-full rounded-lg border border-line bg-surface py-2.5 pr-10 pl-9 text-base sm:text-sm placeholder:text-muted/70 focus:border-accent focus:outline-none"
         />
         {value && (
           <button

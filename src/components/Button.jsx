@@ -18,9 +18,9 @@ const VARIANTS = {
 }
 
 const SIZES = {
-  sm: 'px-3 py-1.5 text-sm gap-1.5',
-  md: 'px-4 py-2.5 text-sm gap-2',
-  lg: 'px-5 py-3 text-base gap-2',
+  sm: 'px-3 py-2.5 min-h-[44px] min-w-[44px] text-base gap-1.5 sm:min-h-0 sm:min-w-0 sm:py-1.5 sm:text-sm',
+  md: 'px-4 py-3 min-h-[44px] min-w-[44px] text-base gap-2 sm:min-h-0 sm:min-w-0 sm:py-2.5 sm:text-sm',
+  lg: 'px-5 py-3 min-h-[44px] min-w-[44px] text-base gap-2',
 }
 
 export default function Button({
@@ -39,8 +39,8 @@ export default function Button({
     'inline-flex max-w-full items-center justify-center rounded-lg font-semibold break-words text-center transition-[background-color,border-color,color,box-shadow,transform] duration-200',
     'disabled:cursor-not-allowed disabled:opacity-50',
     variant === 'link'
-      ? ''
-      : 'hover:-translate-y-px active:translate-y-0 motion-reduce:hover:translate-y-0',
+      ? 'min-h-[44px] min-w-[44px] sm:min-h-0 sm:min-w-0'
+      : 'active:scale-95 sm:hover:-translate-y-px sm:active:scale-100 sm:active:translate-y-0 motion-reduce:sm:hover:translate-y-0',
     sizeClasses,
     VARIANTS[variant],
     className,

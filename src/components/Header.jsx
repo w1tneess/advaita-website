@@ -74,12 +74,12 @@ export default function Header() {
               aria-expanded={menuOpen}
               aria-controls="mobile-nav"
               aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-              className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-line bg-surface text-muted transition-colors hover:border-accent hover:text-accent md:hidden"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-line bg-surface text-muted transition-colors hover:border-accent hover:text-accent active:bg-surface-hover md:hidden"
             >
               {menuOpen ? (
-                <X className="h-4 w-4" aria-hidden="true" />
+                <X className="h-5 w-5" aria-hidden="true" />
               ) : (
-                <Menu className="h-4 w-4" aria-hidden="true" />
+                <Menu className="h-5 w-5" aria-hidden="true" />
               )}
             </button>
           </div>
@@ -100,7 +100,7 @@ export default function Header() {
                     to={item.path}
                     end={item.path === '/'}
                     className={({ isActive }) =>
-                      `block border-b border-line py-3 text-sm font-semibold last:border-0 ${
+                      `block border-b border-line py-4 text-base font-semibold last:border-0 active:bg-surface-hover/50 ${
                         isActive ? 'text-accent' : 'text-ink'
                       }`
                     }

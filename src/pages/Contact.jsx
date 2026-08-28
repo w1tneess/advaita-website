@@ -36,12 +36,12 @@ export default function Contact() {
 
       <Container>
         <motion.div
-          className="py-14 sm:py-20"
+          className="py-12 sm:py-20 md:py-32"
           initial="hidden"
           animate="visible"
           variants={pageLoadVariant}
         >
-          <h1 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">
+          <h1 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">
             {contact.heading}
           </h1>
           <p className="mt-5 max-w-prose text-lg leading-relaxed text-muted">{contact.intro}</p>

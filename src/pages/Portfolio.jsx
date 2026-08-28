@@ -46,8 +46,8 @@ export default function Portfolio() {
       <Seo title={ROUTE.title} description={ROUTE.description} path="/portfolio" />
 
       <Container>
-        <div className="py-14 sm:py-20">
-          <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Portfolio</h1>
+        <div className="py-12 sm:py-16 md:py-32">
+          <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">Portfolio</h1>
           <p className="mt-5 max-w-prose text-lg leading-relaxed text-muted">
             Three projects. Each entry states its role, tools, method and current status, and
             ends with what it does not show — including the one that is a design rather than a

@@ -38,15 +38,15 @@ export default function About() {
 
       <Container>
         <motion.div
-          className="py-14 sm:py-20"
+          className="py-12 sm:py-16 md:py-32"
           initial="hidden"
           animate="visible"
           variants={pageLoadVariant}
         >
           <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
             <Avatar profile={profile} size="lg" />
-            <div>
-              <h1 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">
+            <header className="max-w-2xl">
+              <h1 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">
                 {profile.name}
               </h1>
               <ul className="mt-3 flex flex-wrap gap-2">
@@ -57,7 +57,7 @@ export default function About() {
                 ))}
               </ul>
               <p className="mt-3 text-sm text-muted">{profile.location}</p>
-            </div>
+            </header>
           </div>
 
           {/* The biography is the text supplied for this site, unchanged. */}

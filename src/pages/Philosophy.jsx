@@ -29,15 +29,15 @@ export default function Philosophy() {
 
       <Container>
         <motion.div
-          className="py-14 sm:py-20"
+          className="py-12 sm:py-16 md:py-32"
           initial="hidden"
           animate="visible"
           variants={pageLoadVariant}
         >
-          <div className="grid gap-12 lg:grid-cols-12">
+          <div className="grid gap-12 lg:gap-24 lg:grid-cols-12">
             <header className="lg:col-span-4">
               <div className="sticky top-24">
-                <h1 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">
+                <h1 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">
                   Philosophy
                 </h1>
                 <p className="mt-5 text-lg leading-relaxed text-muted">{philosophy.intro}</p>

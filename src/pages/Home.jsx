@@ -34,12 +34,12 @@ export default function Home() {
           no statistics, no claims, no badges of achievement. */}
       <Container>
         <motion.div
-          className="max-w-5xl py-20 sm:py-28"
+          className="max-w-5xl py-16 sm:py-24 md:py-32"
           variants={heroContainer}
           initial="hidden"
           animate="visible"
         >
-          <div className="grid gap-12 md:grid-cols-2 md:items-center">
+          <div className="grid gap-8 md:gap-24 md:grid-cols-2 md:items-center">
             {/* Left Column: Text */}
             <div>
               {home.heroKicker && (
@@ -63,6 +63,13 @@ export default function Home() {
                 variants={heroLine}
               >
                 {home.heroIntro}
+              </motion.p>
+
+              <motion.p
+                className="mt-4 max-w-prose text-zinc-600 dark:text-zinc-400 leading-relaxed"
+                variants={heroLine}
+              >
+                A place for unfinished thoughts, strange questions, and things worth looking at twice. I’m interested in how ideas take shape—in code, in design, in writing, and in the spaces between them. Not everything here has a definitive answer; some things are here simply because I’m still thinking about them.
               </motion.p>
 
               <motion.div className="mt-9 flex flex-wrap gap-3" variants={heroLine}>

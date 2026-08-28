@@ -45,14 +45,14 @@ export default function Photography() {
 
       <Container>
         <motion.div
-          className="py-14 sm:py-20"
+          className="py-12 sm:py-16 md:py-32"
           initial="hidden"
           animate="visible"
           variants={pageLoadVariant}
         >
           {/* Page header */}
           <header className="max-w-2xl">
-            <h1 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">
+            <h1 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">
               Photography
             </h1>
             <p className="mt-5 text-lg leading-relaxed text-muted">

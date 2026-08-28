@@ -22,6 +22,7 @@ export default function ProjectCard({ project, headingLevel = 3 }) {
       as={motion.article} 
       className="p-6 sm:p-8 transform-gpu origin-left"
       whileHover={{ scale: 1.01 }}
+      whileTap={{ scale: 0.97 }}
       transition={{ duration: 0.2, ease: "easeOut" }}
     >
       <div className="flex flex-wrap items-center gap-2">
