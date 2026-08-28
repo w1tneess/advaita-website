@@ -41,7 +41,7 @@ export default function Home() {
         >
           <div className="grid gap-12 md:grid-cols-2 md:items-center">
             {/* Left Column: Text */}
-            <div className="order-2 md:order-1">
+            <div>
               {home.heroKicker && (
                 <motion.p
                   className="text-sm font-medium tracking-wide text-accent"
@@ -84,7 +84,7 @@ export default function Home() {
 
             {/* Right Column: Edgeless Image */}
             <motion.div 
-              className="flex justify-center md:justify-end order-1 md:order-2 mb-8 md:mb-0"
+              className="flex justify-center md:justify-end"
               variants={heroLine}
             >
               <img 
