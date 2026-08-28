@@ -55,7 +55,7 @@ export default function Header() {
         <div className="flex h-16 items-center justify-between gap-3 sm:gap-4">
           <Link
             to="/"
-            className="group min-w-0 truncate py-2 font-display text-lg font-semibold tracking-tight transition-colors hover:text-accent"
+            className="group min-w-0 truncate py-2 font-display text-xl md:text-lg font-semibold tracking-tight transition-colors hover:text-accent"
           >
             {profile.name}
           </Link>
