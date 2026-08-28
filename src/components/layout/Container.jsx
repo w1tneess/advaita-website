@@ -10,6 +10,6 @@ export default function Container({ as: Tag = 'div', width = 'default', classNam
   }
 
   return (
-    <Tag className={`mx-auto w-full ${widths[width]} px-5 sm:px-8 ${className}`}>{children}</Tag>
+    <Tag className={`mx-auto w-full ${widths[width]} px-6 md:px-8 lg:px-10 ${className}`}>{children}</Tag>
   )
 }

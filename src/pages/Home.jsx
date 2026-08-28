@@ -41,7 +41,7 @@ export default function Home() {
         >
           <div className="grid gap-12 md:grid-cols-2 md:items-center">
             {/* Left Column: Text */}
-            <div>
+            <div className="order-2 md:order-1">
               {home.heroKicker && (
                 <motion.p
                   className="text-sm font-medium tracking-wide text-accent"
@@ -52,14 +52,14 @@ export default function Home() {
               )}
 
               <motion.h1
-                className="mt-4 font-display text-4xl font-semibold tracking-tight sm:text-5xl lg:text-[3.5rem] lg:leading-tight"
+                className="mt-4 font-display text-3xl font-semibold tracking-tight md:text-5xl lg:text-[3.5rem] lg:leading-tight"
                 variants={heroLine}
               >
                 {home.heroHeading}
               </motion.h1>
 
               <motion.p
-                className="mt-6 max-w-prose text-lg leading-relaxed text-muted"
+                className="mt-6 max-w-prose text-base md:text-lg leading-relaxed text-muted"
                 variants={heroLine}
               >
                 {home.heroIntro}
@@ -82,13 +82,13 @@ export default function Home() {
 
             {/* Right Column: Edgeless Image */}
             <motion.div 
-              className="flex justify-center md:justify-end"
+              className="flex justify-center md:justify-end order-1 md:order-2 mb-8 md:mb-0"
               variants={heroLine}
             >
               <img 
                 src="/pfp.png" 
                 alt={profile.name} 
-                className="w-56 sm:w-64 md:w-96 lg:w-[28rem] object-cover dark:opacity-90 dark:mix-blend-luminosity [mask-image:linear-gradient(to_bottom,black_70%,transparent_100%)]"
+                className="w-48 mx-auto md:mx-0 md:w-96 lg:w-[28rem] object-cover dark:opacity-90 dark:mix-blend-luminosity [mask-image:linear-gradient(to_bottom,black_70%,transparent_100%)]"
               />
             </motion.div>
           </div>

@@ -59,7 +59,7 @@ export default function Philosophy() {
               </h2>
               {thinkers.length > 0 ? (
                 <motion.ul
-                  className="mt-6 grid gap-6 sm:grid-cols-2"
+                  className="mt-6 grid gap-6 sm:gap-8 sm:grid-cols-2"
                   variants={staggerContainer}
                   initial="hidden"
                   whileInView="visible"

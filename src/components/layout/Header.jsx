@@ -55,7 +55,7 @@ export default function Header() {
         <div className="flex h-16 items-center justify-between gap-3 sm:gap-4">
           <Link
             to="/"
-            className="group min-w-0 truncate font-display text-lg font-semibold tracking-tight transition-colors hover:text-accent"
+            className="group min-w-0 truncate py-2 font-display text-lg font-semibold tracking-tight transition-colors hover:text-accent"
           >
             {profile.name}
           </Link>
@@ -97,7 +97,7 @@ export default function Header() {
               aria-expanded={menuOpen}
               aria-controls="mobile-nav"
               aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-              className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-line bg-surface text-muted transition-colors hover:border-accent hover:text-accent md:hidden"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-line bg-surface text-muted transition-colors hover:border-accent hover:text-accent md:hidden"
             >
               {menuOpen ? (
                 <X className="h-4 w-4" aria-hidden="true" />
