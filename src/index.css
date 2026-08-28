@@ -33,30 +33,36 @@
 
 @theme {
   /* Surfaces and text — light theme values; .dark overrides follow below. */
-  --color-canvas: #f5f3ee;
-  --color-surface: #fffdf8;
-  --color-raised: #e7efec;
-  --color-ink: #172629;
-  --color-muted: #536469;
-  --color-line: #d7e0dc;
+  --color-canvas: #fafaf9;
+  --color-surface: #ffffff;
+  --color-raised: #f5f5f4;
+  --color-ink: #292524;
+  --color-muted: #57534e;
+  --color-line: #e4e4e7;
 
-  --color-accent: #bd4d3b;
-  --color-accent-strong: #963a2d;
+  --color-accent: #475569;
+  --color-accent-strong: #334155;
   --color-on-accent: #ffffff;
 
-  /* Epistemic label hues — used by Callout, SourceList and StatusBadge.
-     Deliberately distinct from the accent so content labels never read as branding. */
-  --color-fact: #23658a;
-  --color-analysis: #65578d;
-  --color-opinion: #946116;
-  --color-limitation: #a64d5c;
+  /* Epistemic label hues — used by Callout, SourceList and StatusBadge. */
+  --color-fact: #0284c7;
+  --color-analysis: #7c3aed;
+  --color-opinion: #b45309;
+  --color-limitation: #e11d48;
 
-  /* Typography — system stacks only: no network requests, no FOUT, no dependency.
-     See README to swap in a webfont such as Fraunces or Newsreader. */
-  --font-display: 'Avenir Next', Avenir, 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
-  --font-sans: 'Avenir Next', Avenir, 'Segoe UI', Helvetica, Arial, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono',
-    monospace;
+  /* Typography */
+  --font-display: 'Playfair Display', ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+
+  /* Fluid Typography Scale */
+  --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  --text-lg: clamp(1.125rem, 1.05rem + 0.38vw, 1.25rem);
+  --text-xl: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
+  --text-2xl: clamp(1.5rem, 1.35rem + 0.75vw, 1.875rem);
+  --text-3xl: clamp(1.875rem, 1.65rem + 1.13vw, 2.25rem);
+  --text-4xl: clamp(2.25rem, 1.95rem + 1.5vw, 3rem);
+  --text-5xl: clamp(3rem, 2.5rem + 2.5vw, 4rem);
 
   /* A comfortable measure for long-form reading. */
   --container-prose: 68ch;
@@ -65,28 +71,37 @@
 
   --shadow-subtle: 0 1px 2px rgb(23 38 41 / 0.04), 0 4px 12px rgb(23 38 41 / 0.05);
   --shadow-raised: 0 2px 4px rgb(23 38 41 / 0.05), 0 14px 32px rgb(23 38 41 / 0.1);
+  --shadow-card-hover: 0 4px 8px rgb(23 38 41 / 0.06), 0 20px 40px rgb(23 38 41 / 0.12);
+
+  /* Animation timing */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 400ms;
 }
 
 /* Dark theme. `:root.dark` (0,2,0) outranks the `:root` (0,1,0) rule that @theme emits. */
 :root.dark {
-  --color-canvas: #101a1c;
-  --color-surface: #172628;
-  --color-raised: #203335;
-  --color-ink: #edf2ef;
-  --color-muted: #a5b5b1;
-  --color-line: #2c4545;
+  --color-canvas: #09090b;
+  --color-surface: #18181b;
+  --color-raised: #27272a;
+  --color-ink: #d4d4d8;
+  --color-muted: #a1a1aa;
+  --color-line: #27272a;
 
-  --color-accent: #ef8a72;
-  --color-accent-strong: #ffad95;
-  --color-on-accent: #22100d;
+  --color-accent: #64748b;
+  --color-accent-strong: #94a3b8;
+  --color-on-accent: #09090b;
 
-  --color-fact: #81c1e2;
-  --color-analysis: #c0b4e5;
-  --color-opinion: #efc56b;
-  --color-limitation: #f2a1ae;
+  --color-fact: #38bdf8;
+  --color-analysis: #a78bfa;
+  --color-opinion: #fbbf24;
+  --color-limitation: #fb7185;
 
-  --shadow-subtle: 0 1px 2px rgb(0 0 0 / 0.3), 0 5px 14px rgb(0 0 0 / 0.25);
-  --shadow-raised: 0 3px 6px rgb(0 0 0 / 0.3), 0 16px 36px rgb(0 0 0 / 0.42);
+  --shadow-subtle: none;
+  --shadow-raised: none;
+  --shadow-card-hover: none;
 }
 
 @layer base {
@@ -99,20 +114,50 @@
     -webkit-text-size-adjust: 100%;
   }
 
+  /* Lenis smooth scrolling root */
+  html.lenis, html.lenis body {
+    height: auto;
+  }
+
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
   body {
     background-color: var(--color-canvas);
-    background-image: linear-gradient(
+    background-image:
+      linear-gradient(
         135deg,
-        color-mix(in srgb, var(--color-accent) 4%, transparent) 0,
-        transparent 42%
-      ),
-      radial-gradient(circle at 85% 8%, color-mix(in srgb, var(--color-fact) 5%, transparent), transparent 30rem);
+        color-mix(in srgb, var(--color-accent) 2%, transparent) 0,
+        transparent 35%
+      );
     color: var(--color-ink);
     font-family: var(--font-sans);
-    line-height: 1.65;
+    line-height: 1.7;
     min-width: 320px;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+  }
+
+  /* Subtle grain texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 256px 256px;
   }
 
   img,
@@ -131,13 +176,26 @@
   h2,
   h3,
   h4 {
+    color: var(--color-ink);
     font-family: var(--font-display);
-    line-height: 1.15;
+    line-height: 1.25;
     text-wrap: balance;
+  }
+  
+  :root.dark h1,
+  :root.dark h2,
+  :root.dark h3,
+  :root.dark h4 {
+    color: #f4f4f5; /* text-zinc-100 for dark mode headings */
   }
 
   p {
     text-wrap: pretty;
+    margin-bottom: 0.75em;
+  }
+  
+  p:last-child {
+    margin-bottom: 0;
   }
 
   /* A single, consistent, always-visible focus indicator. */
@@ -181,6 +239,42 @@
 
   .prose-body a:hover {
     color: var(--color-accent-strong);
+  }
+
+  /* Nav link animated underline */
+  .nav-link {
+    position: relative;
+  }
+
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 1.5px;
+    background-color: var(--color-accent);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform var(--duration-normal) var(--ease-out-quart);
+  }
+
+  .nav-link:hover::after,
+  .nav-link[data-active='true']::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  /* Card with interactive hover state */
+  .card-interactive {
+    transition:
+      transform var(--duration-normal) var(--ease-out-quart),
+      box-shadow var(--duration-normal) var(--ease-out-quart);
+  }
+
+  .card-interactive:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-card-hover);
   }
 }
 
@@ -240,5 +334,10 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  /* Disable grain texture for reduced motion */
+  body::before {
+    display: none;
   }
 }

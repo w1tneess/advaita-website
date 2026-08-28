@@ -1,16 +1,25 @@
 import { ArrowRight, Check } from 'lucide-react'
+import { motion } from 'framer-motion'
 
-import Button from '../components/Button.jsx'
-import Card from '../components/Card.jsx'
-import Container from '../components/Container.jsx'
-import EmptyState from '../components/EmptyState.jsx'
-import InterestCard from '../components/InterestCard.jsx'
-import PostCard from '../components/PostCard.jsx'
-import ProjectCard from '../components/ProjectCard.jsx'
-import Section from '../components/Section.jsx'
-import Seo from '../components/Seo.jsx'
+import Button from '../components/ui/Button.jsx'
+import Card from '../components/ui/Card.jsx'
+import Container from '../components/layout/Container.jsx'
+import EmptyState from '../components/ui/EmptyState.jsx'
+import InterestCard from '../components/features/InterestCard.jsx'
+
+import ProjectCard from '../components/features/ProjectCard.jsx'
+import Section from '../components/layout/Section.jsx'
+import Seo from '../components/meta/Seo.jsx'
 import { useContent } from '../lib/content.jsx'
-import { PUBLIC_ROUTES } from '../lib/routes.js'
+import { PUBLIC_ROUTES } from '../config/nav.js'
+import {
+  heroContainer,
+  heroLine,
+  sectionReveal,
+  staggerContainer,
+  staggerItem,
+  scrollViewport,
+} from '../lib/animations.js'
 
 const ROUTE = PUBLIC_ROUTES.find((route) => route.key === 'home')
 
@@ -21,133 +30,175 @@ export default function Home() {
     <>
       <Seo title={ROUTE.title} description={ROUTE.description} path="/" />
 
-      {/* Hero — deliberately restrained: no statistics, no claims, no badges of
-          achievement. Just who this is and what the site is for. */}
+      {/* Hero — typography-led entrance animation, deliberately restrained:
+          no statistics, no claims, no badges of achievement. */}
       <Container>
-        <div className="max-w-3xl py-16 sm:py-24">
-          {home.heroKicker && (
-            <p className="text-sm font-medium tracking-wide text-accent">{home.heroKicker}</p>
-          )}
+        <motion.div
+          className="max-w-5xl py-20 sm:py-28"
+          variants={heroContainer}
+          initial="hidden"
+          animate="visible"
+        >
+          <div className="grid gap-12 md:grid-cols-2 md:items-center">
+            {/* Left Column: Text */}
+            <div>
+              {home.heroKicker && (
+                <motion.p
+                  className="text-sm font-medium tracking-wide text-accent"
+                  variants={heroLine}
+                >
+                  {home.heroKicker}
+                </motion.p>
+              )}
 
-          <h1 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">
-            {home.heroHeading}
-          </h1>
+              <motion.h1
+                className="mt-4 font-display text-4xl font-semibold tracking-tight sm:text-5xl lg:text-[3.5rem] lg:leading-tight"
+                variants={heroLine}
+              >
+                {home.heroHeading}
+              </motion.h1>
 
-          <p className="mt-6 max-w-prose text-lg leading-relaxed text-muted">{home.heroIntro}</p>
+              <motion.p
+                className="mt-6 max-w-prose text-lg leading-relaxed text-muted"
+                variants={heroLine}
+              >
+                {home.heroIntro}
+              </motion.p>
 
-          <div className="mt-9 flex flex-wrap gap-3">
-            <Button to={home.primaryCta.to} size="lg">
-              {home.primaryCta.label}
-              <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </Button>
-            <Button to={home.secondaryCta.to} variant="secondary" size="lg">
-              {home.secondaryCta.label}
-            </Button>
+              <motion.div className="mt-9 flex flex-wrap gap-3" variants={heroLine}>
+                <Button to={home.primaryCta.to} size="lg">
+                  {home.primaryCta.label}
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </Button>
+                <Button to={home.secondaryCta.to} variant="secondary" size="lg">
+                  {home.secondaryCta.label}
+                </Button>
+              </motion.div>
+
+              <motion.p className="mt-10 text-sm text-muted" variants={heroLine}>
+                {profile.name} · {profile.location}
+              </motion.p>
+            </div>
+
+            {/* Right Column: Edgeless Image */}
+            <motion.div 
+              className="flex justify-center md:justify-end"
+              variants={heroLine}
+            >
+              <img 
+                src="/pfp.png" 
+                alt={profile.name} 
+                className="w-56 sm:w-64 md:w-96 lg:w-[28rem] object-cover dark:opacity-90 dark:mix-blend-luminosity [mask-image:linear-gradient(to_bottom,black_70%,transparent_100%)]"
+              />
+            </motion.div>
           </div>
-
-          <p className="mt-10 text-sm text-muted">
-            {profile.name} · {profile.location}
-          </p>
-        </div>
+        </motion.div>
       </Container>
 
-      <Section
-        id="featured"
-        tone="raised"
-        title={home.featuredHeading}
-        intro={home.featuredIntro}
-        actions={
-          <Button to="/portfolio" variant="secondary" size="sm">
-            All projects
-            <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
-          </Button>
-        }
+      {/* Featured projects */}
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={scrollViewport}
+        variants={sectionReveal}
       >
-        {featuredProjects.length > 0 ? (
-          <ul className="grid gap-6 md:grid-cols-3">
-            {featuredProjects.map((project) => (
-              <li key={project.id} className="h-full">
-                <ProjectCard project={project} variant="compact" />
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <EmptyState
-            title="No featured projects yet"
-            message="Projects marked as featured will appear here."
-            action={
-              <Button to="/portfolio" variant="secondary" size="sm">
-                View the portfolio
-              </Button>
-            }
-          />
-        )}
-      </Section>
-
-      <Section
-        id="latest"
-        title={home.postsHeading}
-        intro={home.postsIntro}
-        actions={
-          latestPosts.length > 0 ? (
-            <Button to="/blog" variant="secondary" size="sm">
-              All writing
+        <Section
+          id="featured"
+          tone="raised"
+          title={home.featuredHeading}
+          intro={home.featuredIntro}
+          actions={
+            <Button to="/projects" variant="secondary" size="sm">
+              All projects
               <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
             </Button>
-          ) : null
-        }
-      >
-        {latestPosts.length > 0 ? (
-          <ul className="grid gap-6 md:grid-cols-3">
-            {latestPosts.map((post) => (
-              <li key={post.id} className="h-full">
-                <PostCard post={post} />
-              </li>
-            ))}
-          </ul>
-        ) : (
-          /* The blog ships empty rather than with invented articles. */
-          <EmptyState
-            title="Nothing published yet"
-            message={settings.blogEmptyState}
-            action={
-              <Button to="/blog" variant="secondary" size="sm">
-                Go to Writing
-              </Button>
-            }
-          />
-        )}
-      </Section>
-
-      <Section
-        id="interests"
-        tone="raised"
-        title={home.interestsHeading}
-        intro={home.interestsIntro}
-      >
-        <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {interests.map((interest) => (
-            <InterestCard key={interest.id} interest={interest} />
-          ))}
-        </ul>
-      </Section>
-
-      <Section id="credibility" title={home.credibilityHeading} width="prose">
-        <Card className="p-6 sm:p-8">
-          <p className="text-base leading-relaxed">{home.credibilityStatement}</p>
-
-          {(home.credibilityPoints || []).length > 0 && (
-            <ul className="mt-6 space-y-3 border-t border-line pt-6">
-              {home.credibilityPoints.map((point, index) => (
-                <li key={index} className="flex gap-3 text-sm">
-                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
-                  <span>{point}</span>
-                </li>
+          }
+        >
+          {featuredProjects.length > 0 ? (
+            <motion.ul
+              className="grid gap-6 md:grid-cols-3"
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={scrollViewport}
+            >
+              {featuredProjects.map((project) => (
+                <motion.li key={project.id} className="h-full" variants={staggerItem}>
+                  <ProjectCard project={project} variant="compact" />
+                </motion.li>
               ))}
-            </ul>
+            </motion.ul>
+          ) : (
+            <EmptyState
+              title="No featured projects yet"
+              message="Projects marked as featured will appear here."
+              action={
+                <Button to="/projects" variant="secondary" size="sm">
+                  View the portfolio
+                </Button>
+              }
+            />
           )}
-        </Card>
-      </Section>
+        </Section>
+      </motion.div>
+
+
+
+      {/* Interests */}
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={scrollViewport}
+        variants={sectionReveal}
+      >
+        <Section
+          id="interests"
+          tone="raised"
+          title={home.interestsHeading}
+          intro={home.interestsIntro}
+        >
+          <motion.ul
+            className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={scrollViewport}
+          >
+            {interests.map((interest) => (
+              <motion.li key={interest.id} variants={staggerItem}>
+                <InterestCard interest={interest} />
+              </motion.li>
+            ))}
+          </motion.ul>
+        </Section>
+      </motion.div>
+
+      {/* Credibility statement */}
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={scrollViewport}
+        variants={sectionReveal}
+      >
+        <Section id="credibility" title={home.credibilityHeading} width="prose">
+          <div>
+            <p className="text-lg leading-8 border-l-2 border-line pl-6 py-1">
+              {home.credibilityStatement}
+            </p>
+
+            {(home.credibilityPoints || []).length > 0 && (
+              <ul className="mt-12 space-y-4">
+                {home.credibilityPoints.map((point, index) => (
+                  <li key={index} className="flex items-start gap-3 text-sm text-muted">
+                    <Check className="mt-1 h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
+                    <span>{point}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </Section>
+      </motion.div>
     </>
   )
 }

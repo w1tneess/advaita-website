@@ -145,5 +145,49 @@
     },
     "featured": true,
     "order": 3
+  },
+  {
+    "id": "prj-personal-website",
+    "slug": "personal-website",
+    "title": "advaitachandra.in",
+    "categories": [
+      "technology"
+    ],
+    "summary": "This site — a personal space built with React, Vite, Tailwind, and Supabase, deployed on GitHub Pages.",
+    "description": "The website you are looking at right now. Built as a learning project to understand modern front-end development: component architecture, responsive design, data persistence with Supabase, and deployment via GitHub Pages. It is also the container for everything else on this site — the research, the photography, and the writing.",
+    "role": "Design, development, and content — everything on this site is my own work.",
+    "tools": [
+      "React",
+      "Vite",
+      "Tailwind CSS",
+      "Framer Motion",
+      "Supabase",
+      "GitHub Pages"
+    ],
+    "status": "in_progress",
+    "visibility": "Public — you are looking at it.",
+    "published": true,
+    "methodology": [
+      {
+        "title": "Built incrementally",
+        "detail": "Started with static pages and layered in interactivity, animation, and data persistence as I learned each piece."
+      },
+      {
+        "title": "Content-first approach",
+        "detail": "The design serves the content — editorial typography, clear hierarchy, and honest labelling of what each piece of work actually is."
+      }
+    ],
+    "limitations": [
+      "This is a student project, not a professional web application. The code reflects learning in progress.",
+      "The Supabase integration is still being refined — some admin panel features may not yet reliably round-trip to the public site.",
+      "The site is a living document and will change as I learn more."
+    ],
+    "links": {
+      "repository": "https://github.com/w1tneess/advaita-website",
+      "live": "https://advaitachandra.in",
+      "writeup": null
+    },
+    "featured": false,
+    "order": 4
   }
 ]

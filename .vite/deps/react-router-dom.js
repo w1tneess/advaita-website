@@ -5694,7 +5694,7 @@ var invalidProtocols = [
   "devtools:",
   "file:",
   "filesystem:",
-  // eslint-disable-next-line no-script-url
+   
   "javascript:"
 ];
 function hasInvalidProtocol(location2) {
@@ -6392,7 +6392,7 @@ function useNavigateUnstable() {
       if (dataRouterContext == null && basename !== "/") {
         path.pathname = path.pathname === "/" ? basename : joinPaths([basename, path.pathname]);
       }
-      (!!options.replace ? navigator.replace : navigator.push)(
+      (options.replace ? navigator.replace : navigator.push)(
         path,
         options.state,
         options
@@ -11188,7 +11188,7 @@ function ScrollRestoration({
       return userKey !== location2.key ? userKey : null;
     },
     // Nah, we only need this the first time for the SSR render
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     []
   );
   if (!remixContext || remixContext.isSpaMode) {

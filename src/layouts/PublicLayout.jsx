@@ -1,11 +1,13 @@
 import { Eye } from 'lucide-react'
-import { Link, Outlet } from 'react-router-dom'
+import { Link, Outlet, useLocation } from 'react-router-dom'
+import { AnimatePresence, motion } from 'framer-motion'
 
-import Container from '../components/Container.jsx'
-import Footer from '../components/Footer.jsx'
-import Header from '../components/Header.jsx'
-import SkipLink from '../components/SkipLink.jsx'
+import Container from '../components/layout/Container.jsx'
+import Footer from '../components/layout/Footer.jsx'
+import Header from '../components/layout/Header.jsx'
+import SkipLink from '../components/layout/SkipLink.jsx'
 import { useContent } from '../lib/content.jsx'
+import { useSmoothScroll } from '../lib/smooth-scroll.js'
 
 /**
  * Shell for every public page.
@@ -15,6 +17,10 @@ import { useContent } from '../lib/content.jsx'
  */
 export default function PublicLayout() {
   const { previewDrafts, setPreviewDrafts } = useContent()
+  const location = useLocation()
+
+  // Initialize smooth scrolling
+  useSmoothScroll()
 
   return (
     <div className="flex min-h-dvh flex-col bg-canvas text-ink">
@@ -51,9 +57,20 @@ export default function PublicLayout() {
 
       <Header />
 
-      <main id="main-content" tabIndex={-1} className="flex-1 focus:outline-none">
-        <Outlet />
-      </main>
+      <AnimatePresence mode="wait">
+        <motion.main
+          key={location.pathname}
+          id="main-content"
+          tabIndex={-1}
+          className="flex-1 focus:outline-none"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          <Outlet />
+        </motion.main>
+      </AnimatePresence>
 
       <Footer />
     </div>

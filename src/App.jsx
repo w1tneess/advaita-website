@@ -1,16 +1,17 @@
 import { lazy, Suspense } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
-import ScrollToTop from './components/ScrollToTop.jsx'
-import ToastViewport from './components/ToastViewport.jsx'
+import ScrollToTop from './components/ui/ScrollToTop.jsx'
+import ToastViewport from './components/ui/ToastViewport.jsx'
 import PublicLayout from './layouts/PublicLayout.jsx'
 import About from './pages/About.jsx'
-import Article from './pages/Article.jsx'
-import Blog from './pages/Blog.jsx'
 import Contact from './pages/Contact.jsx'
 import Home from './pages/Home.jsx'
 import NotFound from './pages/NotFound.jsx'
+import Philosophy from './pages/Philosophy.jsx'
+import Photography from './pages/Photography.jsx'
 import Portfolio from './pages/Portfolio.jsx'
+import Projects from './pages/Projects.jsx'
 
 /**
  * Route table.
@@ -44,9 +45,10 @@ export default function App() {
         <Route element={<PublicLayout />}>
           <Route index element={<Home />} />
           <Route path="about" element={<About />} />
+          <Route path="philosophy" element={<Philosophy />} />
+          <Route path="photography" element={<Photography />} />
+          <Route path="projects" element={<Projects />} />
           <Route path="portfolio" element={<Portfolio />} />
-          <Route path="blog" element={<Blog />} />
-          <Route path="blog/:slug" element={<Article />} />
           <Route path="contact" element={<Contact />} />
           <Route path="*" element={<NotFound />} />
         </Route>

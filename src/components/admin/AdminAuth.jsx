@@ -1,116 +1,183 @@
-import { LockKeyhole } from 'lucide-react'
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
+import { supabase } from '../../lib/supabase/client.js'
 import Button from '../Button.jsx'
+import Container from '../Container.jsx'
+import { useToast } from '../../lib/toast.jsx'
 
-const SESSION_KEY = 'advaita-site.admin-authenticated'
+/**
+ * Real Supabase authentication for admin panel.
+ * Requires email/password login. No demo access.
+ */
+
 const AdminAuthContext = createContext(null)
-
-function hasSession() {
-  try {
-    return sessionStorage.getItem(SESSION_KEY) === 'true'
-  } catch {
-    return false
-  }
-}
-
-function setSession() {
-  try {
-    sessionStorage.setItem(SESSION_KEY, 'true')
-  } catch {
-    return false
-  }
-  return true
-}
 
 export function useAdminAuth() {
   const context = useContext(AdminAuthContext)
-  if (!context) throw new Error('useAdminAuth must be used inside AdminAuth')
+  if (!context) {
+    throw new Error('useAdminAuth must be used inside AdminAuth provider')
+  }
   return context
 }
 
 export default function AdminAuth({ children }) {
-  const [authenticated, setAuthenticated] = useState(hasSession)
+  const navigate = useNavigate()
+  const toast = useToast()
+
+  const [session, setSession] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
+  const [signingIn, setSigningIn] = useState(false)
 
-  if (authenticated) {
-    return (
-      <AdminAuthContext.Provider
-        value={{
-          logout() {
-            try {
-              sessionStorage.removeItem(SESSION_KEY)
-            } catch {}
-            setAuthenticated(false)
-          },
-        }}
-      >
-        {children}
-      </AdminAuthContext.Provider>
+  // Check auth on mount
+  useEffect(() => {
+    async function checkAuth() {
+      try {
+        const { data: { session } } = await supabase.auth.getSession()
+        setSession(session)
+      } catch (error) {
+        console.error('Auth check error:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    checkAuth()
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setSession(session)
+      }
     )
-  }
 
-  async function handleSubmit(event) {
-    event.preventDefault()
-    setError('')
+    return () => subscription?.unsubscribe()
+  }, [])
+
+  const handleSignIn = async (e) => {
+    e.preventDefault()
+    setSigningIn(true)
 
     try {
-      if (!password.trim()) throw new Error('empty password')
-      setSession()
-      setAuthenticated(true)
-    } catch {
-      setError('Enter a password to unlock this local editor.')
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
+
+      if (error) {
+        toast.error(error.message || 'Login failed')
+        return
+      }
+
+      toast.success('Logged in!')
+      setEmail('')
+      setPassword('')
+    } catch (error) {
+      toast.error('An error occurred')
+    } finally {
+      setSigningIn(false)
     }
   }
 
-  return (
-    <AuthShell>
-      <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-full bg-accent/10 text-accent">
-        <LockKeyhole className="h-6 w-6" aria-hidden="true" />
+  const handleSignOut = async () => {
+    try {
+      await supabase.auth.signOut()
+      toast.success('Logged out')
+    } catch (error) {
+      toast.error('Logout failed')
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="flex min-h-dvh items-center justify-center bg-canvas px-6">
+        <p className="text-sm text-muted">Loading...</p>
       </div>
-      <h1 className="font-display text-3xl font-semibold tracking-tight">Admin panel</h1>
-      <p className="mt-3 text-sm leading-relaxed text-muted">Local editor access only. This does not secure GitHub or the published site.</p>
+    )
+  }
 
-      <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-        <div>
-          <label htmlFor="admin-password" className="block text-sm font-medium">
-            Password
-          </label>
-          <input
-            id="admin-password"
-            type="password"
-            value={password}
-            onChange={(event) => {
-              setPassword(event.target.value)
-              setError('')
-            }}
-            autoComplete="current-password"
-            autoFocus
-            aria-invalid={Boolean(error)}
-            aria-describedby={error ? 'admin-password-error' : undefined}
-            className="mt-1.5 w-full rounded-lg border border-line bg-surface px-3 py-2.5 text-sm focus:border-accent focus:outline-none"
-          />
-          {error && (
-            <p id="admin-password-error" className="mt-1.5 text-xs text-limitation" role="alert">
-              {error}
-            </p>
-          )}
-        </div>
-        <Button type="submit" className="w-full">
-          Unlock admin panel
-        </Button>
-      </form>
-    </AuthShell>
-  )
-}
+  // Show login if not authenticated
+  if (!session) {
+    return (
+      <div className="flex min-h-dvh items-center justify-center bg-canvas px-6 py-12">
+        <Container className="w-full max-w-md">
+          <div className="space-y-6">
+            <div>
+              <h1 className="text-2xl font-bold text-ink">Admin Panel</h1>
+              <p className="mt-2 text-sm text-muted">Sign in to manage content</p>
+            </div>
 
-function AuthShell({ children }) {
+            <form onSubmit={handleSignIn} className="space-y-4">
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-ink">
+                  Email
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="your@email.com"
+                  required
+                  disabled={signingIn}
+                  className="mt-1 w-full rounded-lg border border-line bg-surface px-3 py-2 text-sm text-ink placeholder:text-muted focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-canvas"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="password" className="block text-sm font-medium text-ink">
+                  Password
+                </label>
+                <input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  required
+                  disabled={signingIn}
+                  className="mt-1 w-full rounded-lg border border-line bg-surface px-3 py-2 text-sm text-ink placeholder:text-muted focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-canvas"
+                />
+              </div>
+
+              <Button type="submit" disabled={signingIn} className="w-full">
+                {signingIn ? 'Signing in...' : 'Sign in'}
+              </Button>
+            </form>
+
+            <div className="space-y-2 rounded-lg border border-line bg-raised p-4">
+              <p className="text-xs font-medium uppercase tracking-wide text-muted">Authentication</p>
+              <p className="text-sm text-muted">
+                This admin panel requires real Supabase authentication. Only authorized users can access.
+              </p>
+            </div>
+          </div>
+        </Container>
+      </div>
+    )
+  }
+
+  // Show admin panel with logout button
   return (
-    <main className="flex min-h-dvh items-center justify-center bg-canvas px-6 py-12 text-ink">
-      <section className="w-full max-w-sm rounded-card border border-line bg-surface p-6 shadow-raised sm:p-8">
+    <AdminAuthContext.Provider
+      value={{
+        session,
+        logout: handleSignOut,
+      }}
+    >
+      <div>
+        <div className="flex justify-end border-b border-line bg-surface p-4">
+          <div className="flex items-center gap-3">
+            <span className="text-sm text-muted">{session.user?.email}</span>
+            <Button onClick={handleSignOut} variant="secondary" className="text-sm">
+              Sign out
+            </Button>
+          </div>
+        </div>
         {children}
-      </section>
-    </main>
+      </div>
+    </AdminAuthContext.Provider>
   )
 }

@@ -34,7 +34,6 @@ export default function ProjectEditor() {
 
   const isNew = id === 'new'
   const existing = projects.find((project) => project.id === id) ?? null
-
   const [draft, setDraft] = useState(() => (isNew ? createProject() : existing ? { ...existing } : null))
   const [errors, setErrors] = useState({})
   // Once the slug has been edited by hand, stop deriving it from the title.

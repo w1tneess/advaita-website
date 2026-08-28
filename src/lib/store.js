@@ -63,6 +63,25 @@ export function storageAvailable() {
  */
 const MIGRATIONS = {
   1: (doc) => ({ ...doc, activity: Array.isArray(doc.activity) ? doc.activity : [] }),
+  2: (doc) => ({
+    ...doc,
+    philosophy: doc.philosophy || {
+      intro: '',
+      description: '',
+      thinkers: [],
+      notesIntro: '',
+      notesDescription: '',
+      notes: [],
+    },
+    photography: doc.photography || {
+      intro: '',
+      description: '',
+      note: '',
+      categoriesNote: '',
+      categories: [],
+      photos: [],
+    },
+  }),
 }
 
 function migrate(doc) {

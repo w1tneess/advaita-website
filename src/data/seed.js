@@ -17,18 +17,20 @@ import timeline from './timeline.json' with { type: 'json' }
 import social from './social.json' with { type: 'json' }
 import settings from './settings.json' with { type: 'json' }
 import interests from './interests.json' with { type: 'json' }
+import philosophy from './philosophy.json' with { type: 'json' }
+import photography from './photography.json' with { type: 'json' }
 
 /**
  * Bump when the SHAPE of the content document changes, and add a matching migration
  * in src/lib/store.js so existing local edits are carried forward rather than lost.
  */
-export const SCHEMA_VERSION = 2
+export const SCHEMA_VERSION = 3
 
 /**
  * Bump when the seed CONTENT changes. A visitor with older local edits is shown a
  * non-destructive notice in the admin panel; their edits are never overwritten.
  */
-export const SEED_VERSION = 1
+export const SEED_VERSION = 2
 
 /**
  * A fresh, deeply-cloned content document.
@@ -50,6 +52,8 @@ export function createSeedDocument() {
     social,
     settings,
     interests,
+    philosophy,
+    photography,
     activity: [],
   }
 

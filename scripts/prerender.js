@@ -24,7 +24,8 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import { PUBLIC_ROUTES, SITE_URL, allPrerenderRoutes } from '../src/lib/routes.js'
+import { allPrerenderRoutes } from '../src/config/nav.js'
+import { SITE_URL } from '../src/config/site.js'
 import { buildMeta, renderMetaTags } from '../src/lib/seo.js'
 
 const here = dirname(fileURLToPath(import.meta.url))
@@ -93,23 +94,50 @@ function renderSitemap(routes) {
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`
 }
 
-async function readPublishedPosts() {
+import { createClient } from '@supabase/supabase-js'
+import dotenv from 'dotenv'
+
+dotenv.config()
+dotenv.config({ path: '.env.local' })
+
+const supabaseUrl = process.env.VITE_SUPABASE_URL
+const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY
+const supabase = supabaseUrl && supabaseAnonKey ? createClient(supabaseUrl, supabaseAnonKey) : null
+
+async function getLatestUpdate() {
+  if (!supabase) return null
+  
   try {
-    const raw = await readFile(join(root, 'src', 'data', 'posts.json'), 'utf8')
-    const posts = JSON.parse(raw)
-    if (!Array.isArray(posts)) return []
-    // Only published articles become real URLs. A draft has no public page, so listing it in
-    // the sitemap would advertise a route that renders "not found".
-    return posts.filter((post) => post.status === 'published' && post.slug)
-  } catch {
-    return []
+    const { data: projData } = await supabase.from('projects').select('updated_at').order('updated_at', { ascending: false }).limit(1)
+    const { data: noteData } = await supabase.from('notes').select('updated_at').order('updated_at', { ascending: false }).limit(1)
+    
+    let latest = null
+    if (projData?.[0]?.updated_at) latest = new Date(projData[0].updated_at)
+    
+    if (noteData?.[0]?.updated_at) {
+      const noteDate = new Date(noteData[0].updated_at)
+      if (!latest || noteDate > latest) latest = noteDate
+    }
+    
+    return latest ? latest.toISOString() : null
+  } catch (e) {
+    return null
   }
 }
 
 async function main() {
   const template = await readFile(join(dist, 'index.html'), 'utf8')
-  const posts = await readPublishedPosts()
-  const routes = allPrerenderRoutes(posts)
+  const routes = allPrerenderRoutes()
+  
+  const latestUpdate = await getLatestUpdate()
+  if (latestUpdate) {
+    routes.forEach(route => {
+      // Set lastmod on dynamic pages if they are updated
+      if (['projects', 'philosophy'].includes(route.key)) {
+        route.lastmod = latestUpdate
+      }
+    })
+  }
 
   const written = []
   for (const route of routes) {
@@ -145,16 +173,12 @@ async function main() {
     // No robots.txt in public/ — nothing to rewrite.
   }
 
-  const postCount = posts.length
   console.log(
     [
       `Pre-rendered ${written.length} route${written.length === 1 ? '' : 's'} at base "${basePath}":`,
       ...written.map((file) => `  ${file}`),
       `  404.html`,
       `  sitemap.xml (${routes.length} URLs)`,
-      postCount === 0
-        ? `  no published articles yet — ${PUBLIC_ROUTES.length} static routes only`
-        : `  including ${postCount} published article${postCount === 1 ? '' : 's'}`,
     ].join('\n'),
   )
 }

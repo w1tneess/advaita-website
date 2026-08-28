@@ -69,11 +69,11 @@ function recordActivity(document, action, type, item) {
 export function ContentProvider({ children }) {
   const toast = useToast()
 
-  const initial = useRef(null)
-  if (initial.current === null) initial.current = loadDocument()
+  const [initialState] = useState(() => loadDocument())
+  const initial = useRef(initialState)
 
-  const [content, setContent] = useState(initial.current.doc)
-  const [isLocal, setIsLocal] = useState(initial.current.source === 'local')
+  const [content, setContent] = useState(initialState.doc)
+  const [isLocal, setIsLocal] = useState(initialState.source === 'local')
   const [previewDrafts, setPreviewDrafts] = useState(false)
 
   // Anything queued here is written to localStorage by the effect below.
@@ -293,6 +293,8 @@ export function ContentProvider({ children }) {
       profile: content.profile,
       home: content.home,
       settings,
+      philosophy: content.philosophy || {},
+      photography: content.photography || {},
       blogCategories: content.categories.blog,
       projectCategories: content.categories.project,
       tags: content.tags,
