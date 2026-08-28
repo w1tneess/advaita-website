@@ -70,9 +70,11 @@ export default function Home() {
                   {home.primaryCta.label}
                   <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </Button>
-                <Button to={home.secondaryCta.to} variant="secondary" size="lg">
-                  {home.secondaryCta.label}
-                </Button>
+                {home.secondaryCta && (
+                  <Button to={home.secondaryCta.to} variant="secondary" size="lg">
+                    {home.secondaryCta.label}
+                  </Button>
+                )}
               </motion.div>
 
               <motion.p className="mt-10 text-sm text-muted" variants={heroLine}>
