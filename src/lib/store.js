@@ -107,42 +107,28 @@ function migrate(doc) {
    Load / save / clear
    -------------------------------------------------------------------------- */
 
+import { fetchContentFromSupabase, saveContentToSupabase, clearContentInSupabase } from './supabase/sync.js'
+
 /**
- * Load the active content document.
+ * Load the active content document asynchronously from Supabase.
  *
- * @returns {{doc: object, source: 'seed'|'local', warning: string|null}}
+ * @returns {Promise<{doc: object, source: 'seed'|'remote', warning: string|null}>}
  */
-export function loadDocument() {
-  const storage = getStorage()
-  if (!storage) {
-    return { doc: createSeedDocument(), source: 'seed', warning: null }
-  }
-
-  const raw = storage.getItem(STORAGE_KEY)
+export async function loadDocument() {
+  const raw = await fetchContentFromSupabase()
+  
   if (!raw) {
-    // No local edits: use the deployed seed and write nothing.
+    // No remote edits: use the deployed seed and write nothing.
     return { doc: createSeedDocument(), source: 'seed', warning: null }
   }
 
-  let parsed
-  try {
-    parsed = JSON.parse(raw)
-  } catch {
-    return {
-      doc: createSeedDocument(),
-      source: 'seed',
-      warning:
-        'Saved local content could not be read and was ignored. The site is showing its published content instead.',
-    }
-  }
-
-  const { doc: migrated, blockedAt } = migrate(parsed)
+  const { doc: migrated, blockedAt } = migrate(raw)
 
   if (blockedAt !== null) {
     return {
       doc: createSeedDocument(),
       source: 'seed',
-      warning: `Saved local content uses an older format (v${blockedAt}) that cannot be upgraded automatically, so it was ignored. Export it from another browser if you need it, or reset the demo data.`,
+      warning: `Saved remote content uses an older format (v${blockedAt}) that cannot be upgraded automatically, so it was ignored. Export it from another browser if you need it, or reset the demo data.`,
     }
   }
 
@@ -151,62 +137,29 @@ export function loadDocument() {
     return {
       doc: createSeedDocument(),
       source: 'seed',
-      warning: `Saved local content is not valid (${problems[0]}) and was ignored. The site is showing its published content instead.`,
+      warning: `Saved remote content is not valid (${problems[0]}) and was ignored. The site is showing its published content instead.`,
     }
   }
 
-  return { doc: migrated, source: 'local', warning: null }
+  return { doc: migrated, source: 'remote', warning: null }
 }
 
 /**
- * Persist the whole document.
- * @returns {{ok: boolean, error: string|null}}
+ * Persist the whole document asynchronously.
+ * @returns {Promise<{ok: boolean, error: string|null}>}
  */
-export function saveDocument(doc) {
-  const storage = getStorage()
-  if (!storage) {
-    return {
-      ok: false,
-      error:
-        'This browser is blocking local storage, so the change could not be saved. Private browsing mode is the usual cause.',
-    }
-  }
-
-  try {
-    storage.setItem(STORAGE_KEY, JSON.stringify(doc))
-    return { ok: true, error: null }
-  } catch (error) {
-    const quotaExceeded =
-      error?.name === 'QuotaExceededError' || error?.name === 'NS_ERROR_DOM_QUOTA_REACHED'
-    return {
-      ok: false,
-      error: quotaExceeded
-        ? 'Local storage is full. Export your content, then reset the demo data to free up space.'
-        : 'The change could not be saved to local storage.',
-    }
-  }
+export async function saveDocument(doc) {
+  return await saveContentToSupabase(doc)
 }
 
-/** Discard local edits so the deployed seed is used again. */
-export function clearDocument() {
-  const storage = getStorage()
-  if (!storage) return { ok: false, error: 'Local storage is unavailable.' }
-  try {
-    storage.removeItem(STORAGE_KEY)
-    return { ok: true, error: null }
-  } catch {
-    return { ok: false, error: 'Local edits could not be cleared.' }
-  }
+/** Discard remote edits so the deployed seed is used again. */
+export async function clearDocument() {
+  return await clearContentInSupabase()
 }
 
-export function hasLocalDocument() {
-  const storage = getStorage()
-  if (!storage) return false
-  try {
-    return storage.getItem(STORAGE_KEY) !== null
-  } catch {
-    return false
-  }
+export async function hasLocalDocument() {
+  const raw = await fetchContentFromSupabase()
+  return raw !== null
 }
 
 /**

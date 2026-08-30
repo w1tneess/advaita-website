@@ -69,22 +69,36 @@ function recordActivity(document, action, type, item) {
 export function ContentProvider({ children }) {
   const toast = useToast()
 
-  const [initialState] = useState(() => loadDocument())
-  const initial = useRef(initialState)
+  const [isLoaded, setIsLoaded] = useState(false)
+  const initial = useRef(null)
 
-  const [content, setContent] = useState(initialState.doc)
-  const [isLocal, setIsLocal] = useState(initialState.source === 'local')
+  const [content, setContent] = useState(null)
+  const [isLocal, setIsLocal] = useState(false) // represents if we are using remote DB
   const [previewDrafts, setPreviewDrafts] = useState(false)
 
-  // Anything queued here is written to localStorage by the effect below.
+  // Anything queued here is written by the effect below.
   const pending = useRef(null)
   const warningShown = useRef(false)
 
-  // Surface a load problem (corrupt or unupgradable local data) exactly once.
   useEffect(() => {
-    if (warningShown.current) return
-    warningShown.current = true
-    if (initial.current.warning) toast.error(initial.current.warning)
+    async function init() {
+      try {
+        const state = await loadDocument()
+        initial.current = state
+        setContent(state.doc)
+        setIsLocal(state.source === 'remote')
+        setIsLoaded(true)
+        
+        if (!warningShown.current && state.warning) {
+          warningShown.current = true
+          toast.error(state.warning)
+        }
+      } catch (error) {
+        console.error('Failed to load content', error)
+        toast.error('Failed to load content from database')
+      }
+    }
+    init()
   }, [toast])
 
   // Persist after the state change, not inside the updater: updaters must stay pure,
@@ -94,9 +108,12 @@ export function ContentProvider({ children }) {
     const document = pending.current
     pending.current = null
 
-    const result = saveDocument(document)
-    if (result.ok) setIsLocal(true)
-    else toast.error(result.error)
+    async function persist() {
+      const result = await saveDocument(document)
+      if (result.ok) setIsLocal(true)
+      else toast.error(result.error)
+    }
+    persist()
   }, [content, toast])
 
   const commit = useCallback((updater) => {
@@ -106,6 +123,14 @@ export function ContentProvider({ children }) {
       return next
     })
   }, [])
+
+  if (!isLoaded) {
+    return (
+      <div className="flex min-h-dvh items-center justify-center bg-canvas">
+        <p className="text-sm text-muted animate-pulse">Loading...</p>
+      </div>
+    )
+  }
 
   /* ------------------------------------------------------------------------
      Mutations
@@ -330,8 +355,8 @@ export function ContentProvider({ children }) {
 
       // Storage state.
       isLocal,
-      storageAvailable: storageAvailable(),
-      hasLocalDocument: hasLocalDocument(),
+      storageAvailable: true, // Supabase is always available over network
+      hasLocalDocument: isLocal, // If source is remote, we have a document
       seedIsNewer: seedIsNewerThan(content),
 
       // Preview mode.
