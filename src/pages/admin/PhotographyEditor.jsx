@@ -22,19 +22,23 @@ export default function PhotographyEditor() {
   const isNew = id === 'new'
   const existing = (photography.photos || []).find((p) => p.id === id) ?? null
 
-  const [draft, setDraft] = useState(() => (isNew ? createPhotography() : existing ? { ...existing } : null))
+  const [draft, setDraft] = useState(() =>
+    isNew ? createPhotography() : existing ? { ...existing } : null,
+  )
   const [errors, setErrors] = useState({})
   const [isSaving, setIsSaving] = useState(false)
   const [saveStatus, setSaveStatus] = useState('idle')
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
-  
+
   const [file, setFile] = useState(null)
   const [uploading, setUploading] = useState(false)
 
   if (draft === null) {
     return (
       <AdminPage title="Photo not found" description="There is no photo with that id.">
-        <Button to="/admin/photography" variant="secondary">Back to gallery</Button>
+        <Button to="/admin/photography" variant="secondary">
+          Back to gallery
+        </Button>
       </AdminPage>
     )
   }
@@ -53,7 +57,7 @@ export default function PhotographyEditor() {
 
   const submit = async (event) => {
     event.preventDefault()
-    
+
     // If it's new and no file is selected, it's an error
     if (isNew && !file && !draft.image_url) {
       setErrors({ image_url: 'Please select an image to upload.' })
@@ -72,7 +76,7 @@ export default function PhotographyEditor() {
         const { storagePath, publicUrl } = await uploadImage(file, path)
         finalDraft.image_url = publicUrl
         finalDraft.storage_path = storagePath
-      } catch (err) {
+      } catch (_err) {
         setUploading(false)
         toast.error('Image upload failed.')
         return
@@ -97,7 +101,7 @@ export default function PhotographyEditor() {
       setHasUnsavedChanges(false)
       toast.success(`“${finalDraft.title}” ${isNew ? 'uploaded' : 'saved'}.`)
       setTimeout(() => navigate('/admin/photography'), 800)
-    } catch (e) {
+    } catch (_e) {
       setSaveStatus('error')
     } finally {
       setIsSaving(false)
@@ -108,7 +112,11 @@ export default function PhotographyEditor() {
     <AdminPage
       title={isNew ? 'Upload photo' : 'Edit photo'}
       description="Add or edit photos in the gallery."
-      actions={<Button to="/admin/photography" variant="secondary" size="sm">Back</Button>}
+      actions={
+        <Button to="/admin/photography" variant="secondary" size="sm">
+          Back
+        </Button>
+      }
     >
       <UnsavedChangesDialog hasUnsavedChanges={hasUnsavedChanges} />
       <form onSubmit={submit} noValidate>
@@ -116,15 +124,17 @@ export default function PhotographyEditor() {
           <div className="mt-5">
             {draft.image_url ? (
               <div className="mb-4">
-                <img src={draft.image_url} alt="Preview" className="h-48 w-48 object-cover rounded-lg border border-line" />
+                <img
+                  src={draft.image_url}
+                  alt="Preview"
+                  className="h-48 w-48 object-cover rounded-lg border border-line"
+                />
               </div>
             ) : null}
-            
-            <label className="block text-sm font-medium text-ink">
-              Select Image File
-            </label>
-            <input 
-              type="file" 
+
+            <label className="block text-sm font-medium text-ink">Select Image File</label>
+            <input
+              type="file"
               accept="image/*"
               onChange={handleFileChange}
               className="mt-2 block w-full text-sm text-muted file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-raised file:text-ink hover:file:bg-line cursor-pointer"
@@ -134,21 +144,64 @@ export default function PhotographyEditor() {
         </FormSection>
 
         <FormSection title="Details" description="Information about the photo." className="mt-6">
+          <Field
+            className="mt-5"
+            id="photo-title"
+            label="Title"
+            value={draft.title}
+            onChange={(value) => set('title', value)}
+            error={errors.title}
+            required
+            limit={140}
+          />
 
-          <Field className="mt-5" id="photo-title" label="Title" value={draft.title} onChange={(value) => set('title', value)} error={errors.title} required limit={140} />
-          
-          <Field className="mt-5" id="photo-category" label="Category" type="select" value={draft.category} onChange={(value) => set('category', value)} options={[
-            { value: 'everyday', label: 'Everyday' },
-            { value: 'street', label: 'Street' },
-            { value: 'landscape', label: 'Landscape' }
-          ]} error={errors.category} required />
-          
-          <Field className="mt-5" id="photo-caption" label="Caption" type="textarea" rows={2} value={draft.caption ?? ''} onChange={(value) => set('caption', value)} error={errors.caption} limit={300} />
-          
-          <Field className="mt-5" id="photo-alt" label="Alt text" value={draft.alt_text ?? ''} onChange={(value) => set('alt_text', value)} error={errors.alt_text} required hint="Describe the image for screen readers." />
-          
+          <Field
+            className="mt-5"
+            id="photo-category"
+            label="Category"
+            type="select"
+            value={draft.category}
+            onChange={(value) => set('category', value)}
+            options={[
+              { value: 'everyday', label: 'Everyday' },
+              { value: 'street', label: 'Street' },
+              { value: 'landscape', label: 'Landscape' },
+            ]}
+            error={errors.category}
+            required
+          />
+
+          <Field
+            className="mt-5"
+            id="photo-caption"
+            label="Caption"
+            type="textarea"
+            rows={2}
+            value={draft.caption ?? ''}
+            onChange={(value) => set('caption', value)}
+            error={errors.caption}
+            limit={300}
+          />
+
+          <Field
+            className="mt-5"
+            id="photo-alt"
+            label="Alt text"
+            value={draft.alt_text ?? ''}
+            onChange={(value) => set('alt_text', value)}
+            error={errors.alt_text}
+            required
+            hint="Describe the image for screen readers."
+          />
+
           <div className="mt-6 border-t border-line pt-5">
-            <Toggle id="photo-featured" label="Feature on gallery top" description="Show this prominently in the gallery." checked={Boolean(draft.featured)} onChange={(value) => set('featured', value)} />
+            <Toggle
+              id="photo-featured"
+              label="Feature on gallery top"
+              description="Show this prominently in the gallery."
+              checked={Boolean(draft.featured)}
+              onChange={(value) => set('featured', value)}
+            />
           </div>
         </FormSection>
 
@@ -157,7 +210,12 @@ export default function PhotographyEditor() {
             <Button type="submit" disabled={uploading || isSaving}>
               {uploading ? 'Uploading...' : isNew ? 'Upload photo' : 'Save photo'}
             </Button>
-            <Button type="button" variant="ghost" onClick={() => navigate('/admin/photography')} disabled={uploading || isSaving}>
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={() => navigate('/admin/photography')}
+              disabled={uploading || isSaving}
+            >
               Cancel
             </Button>
           </div>

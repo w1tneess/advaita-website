@@ -9,11 +9,7 @@ import Icon from '../components/meta/Icon.jsx'
 import Seo from '../components/meta/Seo.jsx'
 import { useContent } from '../lib/content.jsx'
 import { PUBLIC_ROUTES } from '../config/nav.js'
-import {
-  pageLoadVariant,
-  sectionReveal,
-  scrollViewport,
-} from '../lib/animations.js'
+import { pageLoadVariant, sectionReveal, scrollViewport } from '../lib/animations.js'
 
 const ROUTE = PUBLIC_ROUTES.find((route) => route.key === 'contact')
 
@@ -115,13 +111,13 @@ export default function Contact() {
           <div className="grid gap-6 pb-14 lg:grid-cols-2">
             <Card className="p-6 sm:p-8">
               <h2 className="flex items-center gap-2 text-lg font-semibold">
-                <ShieldCheck className="h-4.5 w-4.5 text-accent" aria-hidden="true" />
-                A note on privacy
+                <ShieldCheck className="h-4.5 w-4.5 text-accent" aria-hidden="true" />A note on
+                privacy
               </h2>
               <p className="mt-3 text-sm leading-relaxed text-muted">{contact.privacyNote}</p>
               <p className="mt-4 text-sm text-muted">
-                Location published on this site: <strong>{profile.location}</strong>. Nothing
-                more precise than that.
+                Location published on this site: <strong>{profile.location}</strong>. Nothing more
+                precise than that.
               </p>
             </Card>
 
@@ -130,7 +126,8 @@ export default function Contact() {
               <p className="mt-3 flex items-start gap-2">
                 <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden="true" />
                 <span>
-                  Messages are stored in a secure database. No personal inbox is exposed on this site.
+                  Messages are stored in a secure database. No personal inbox is exposed on this
+                  site.
                 </span>
               </p>
             </Callout>

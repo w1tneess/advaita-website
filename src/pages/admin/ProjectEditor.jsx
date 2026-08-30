@@ -34,7 +34,9 @@ export default function ProjectEditor() {
 
   const isNew = id === 'new'
   const existing = projects.find((project) => project.id === id) ?? null
-  const [draft, setDraft] = useState(() => (isNew ? createProject() : existing ? { ...existing } : null))
+  const [draft, setDraft] = useState(() =>
+    isNew ? createProject() : existing ? { ...existing } : null,
+  )
   const [errors, setErrors] = useState({})
   // Once the slug has been edited by hand, stop deriving it from the title.
   const [slugLocked, setSlugLocked] = useState(!isNew)
@@ -261,8 +263,8 @@ export default function ProjectEditor() {
         <Card className="mt-6 p-6">
           <h2 className="text-base font-semibold">Methodology</h2>
           <p className="mt-1.5 text-sm text-muted">
-            The steps actually taken, in order. For a concept-stage design, these are the parts
-            of the design rather than work that has been carried out.
+            The steps actually taken, in order. For a concept-stage design, these are the parts of
+            the design rather than work that has been carried out.
           </p>
 
           <PairList
@@ -278,11 +280,15 @@ export default function ProjectEditor() {
         <Card className="mt-6 p-6">
           <h2 className="text-base font-semibold">Limitations</h2>
 
-          <Callout variant="limitation" title="This is the field that keeps the entry honest" className="mt-4">
-            State what the work does not show: gaps in the data, questions it cannot answer,
-            things that are designed but not built. If a project has no working code, say so
-            here as well as in the status. Do not record a conclusion, a statistic or a result
-            that was not actually produced.
+          <Callout
+            variant="limitation"
+            title="This is the field that keeps the entry honest"
+            className="mt-4"
+          >
+            State what the work does not show: gaps in the data, questions it cannot answer, things
+            that are designed but not built. If a project has no working code, say so here as well
+            as in the status. Do not record a conclusion, a statistic or a result that was not
+            actually produced.
           </Callout>
 
           <TextList
@@ -299,8 +305,8 @@ export default function ProjectEditor() {
         <Card className="mt-6 p-6">
           <h2 className="text-base font-semibold">Links</h2>
           <p className="mt-1.5 text-sm text-muted">
-            Leave a field blank if there is nothing to link. A blank field renders as nothing at
-            all — it never renders as a broken or placeholder link.
+            Leave a field blank if there is nothing to link. A blank field renders as nothing at all
+            — it never renders as a broken or placeholder link.
           </p>
 
           <div className="mt-5 space-y-5">

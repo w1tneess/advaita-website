@@ -52,24 +52,12 @@ function StatCard({ icon: Icon, label, value, detail, to }) {
 }
 
 export default function Dashboard() {
-  const {
-    projects,
-    posts,
-    interests,
-    skills,
-    timeline,
-    socialLinks,
-    blogCategories,
-    projectCategories,
-    tags,
-    activity,
-  } = useContent()
+  const { projects, interests, skills, timeline, socialLinks, projectCategories, activity } =
+    useContent()
 
   const publishedProjects = projects.filter((project) => project.published !== false).length
-  const publishedPosts = posts.filter((post) => post.status === 'published').length
-  const draftPosts = posts.length - publishedPosts
   const configuredLinks = socialLinks.filter((link) => link.url).length
-  const totalContent = projects.length + posts.length + interests.length + skills.length + timeline.length
+  const totalContent = projects.length + interests.length + skills.length + timeline.length
 
   const stats = [
     {
@@ -82,22 +70,12 @@ export default function Dashboard() {
       to: '/admin/projects',
     },
     {
-      icon: FileText,
-      label: 'Articles',
-      value: posts.length,
-      detail:
-        posts.length === 0
-          ? 'None yet. The public blog shows its empty-state message.'
-          : `${publishedPosts} published, ${draftPosts} ${pluralize(draftPosts, 'draft')}.`,
-      to: '/admin/posts',
-    },
-    {
       icon: Tags,
-      label: 'Categories & tags',
-      value: blogCategories.length + projectCategories.length + tags.length,
-      detail: `${blogCategories.length} article, ${projectCategories.length} project, ${tags.length} ${pluralize(
-        tags.length,
-        'tag',
+      label: 'Categories',
+      value: projectCategories.length,
+      detail: `${projectCategories.length} project ${pluralize(
+        projectCategories.length,
+        'category',
       )}.`,
       to: '/admin/taxonomy',
     },
@@ -169,9 +147,17 @@ export default function Dashboard() {
         {activity.length > 0 ? (
           <ul className="mt-4 divide-y divide-line">
             {activity.slice(0, 8).map((entry) => (
-              <li key={entry.id} className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 py-3 text-sm first:pt-0 last:pb-0">
-                <span><strong className="font-medium capitalize">{entry.action}</strong> {entry.type.replace('categories.', '')} “{entry.label}”</span>
-                <time className="text-xs text-muted" dateTime={entry.at}>{formatActivityDate(entry.at)}</time>
+              <li
+                key={entry.id}
+                className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 py-3 text-sm first:pt-0 last:pb-0"
+              >
+                <span>
+                  <strong className="font-medium capitalize">{entry.action}</strong>{' '}
+                  {entry.type.replace('categories.', '')} “{entry.label}”
+                </span>
+                <time className="text-xs text-muted" dateTime={entry.at}>
+                  {formatActivityDate(entry.at)}
+                </time>
               </li>
             ))}
           </ul>

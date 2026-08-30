@@ -81,12 +81,16 @@ export function byNewest(posts = []) {
 
 /** Case-insensitive "does this record match the search text" across given fields. */
 export function matchesQuery(record, query, fields = []) {
-  const needle = String(query || '').trim().toLowerCase()
+  const needle = String(query || '')
+    .trim()
+    .toLowerCase()
   if (!needle) return true
   return fields.some((field) => {
     const value = field.split('.').reduce((acc, key) => acc?.[key], record)
     if (Array.isArray(value)) return value.join(' ').toLowerCase().includes(needle)
-    return String(value ?? '').toLowerCase().includes(needle)
+    return String(value ?? '')
+      .toLowerCase()
+      .includes(needle)
   })
 }
 

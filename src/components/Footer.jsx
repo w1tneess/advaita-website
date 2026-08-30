@@ -35,7 +35,8 @@ export default function Footer() {
               to="/contact"
               className="mt-4 inline-block text-sm text-muted transition-colors hover:text-ink"
             >
-              Get in touch <span className="text-text-muted">about research, writing or collaboration</span>
+              Get in touch{' '}
+              <span className="text-text-muted">about research, writing or collaboration</span>
             </Link>
 
             {configured.length > 0 && (
@@ -63,13 +64,18 @@ export default function Footer() {
               Explore
             </h2>
             <ul className="mt-4 space-y-3">
-              {NAV_ITEMS.filter((item) => item.key !== 'home' && item.key !== 'contact').map((item) => (
-                <li key={item.path}>
-                  <Link to={item.path} className="text-sm text-muted transition-colors hover:text-ink">
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
+              {NAV_ITEMS.filter((item) => item.key !== 'home' && item.key !== 'contact').map(
+                (item) => (
+                  <li key={item.path}>
+                    <Link
+                      to={item.path}
+                      className="text-sm text-muted transition-colors hover:text-ink"
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                ),
+              )}
             </ul>
           </nav>
 
@@ -78,19 +84,26 @@ export default function Footer() {
               Pages
             </h2>
             <ul className="mt-4 space-y-3">
-              {NAV_ITEMS.filter((item) => item.key === 'home' || item.key === 'contact').map((item) => (
-                <li key={item.path}>
-                  <Link to={item.path} className="text-sm text-muted transition-colors hover:text-ink">
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
+              {NAV_ITEMS.filter((item) => item.key === 'home' || item.key === 'contact').map(
+                (item) => (
+                  <li key={item.path}>
+                    <Link
+                      to={item.path}
+                      className="text-sm text-muted transition-colors hover:text-ink"
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                ),
+              )}
             </ul>
           </nav>
         </div>
 
         <div className="flex flex-col gap-3 border-t border-line py-6 text-xs text-text-muted sm:flex-row sm:items-center sm:justify-between">
-          <p>© {year} {profile.name}</p>
+          <p>
+            © {year} {profile.name}
+          </p>
           {settings.footerNote && <p className="sm:text-right">{settings.footerNote}</p>}
         </div>
       </Container>

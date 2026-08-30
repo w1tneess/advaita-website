@@ -52,7 +52,7 @@ export default function NotesList() {
           ? `“${note.title}” is now published.`
           : `“${note.title}” is back to draft and hidden.`,
       )
-    } catch (e) {
+    } catch (_e) {
       // error handled in content provider
     }
   }
@@ -68,7 +68,7 @@ export default function NotesList() {
     try {
       await removeNote(note.id)
       toast.success('Note deleted.')
-    } catch (e) {
+    } catch (_e) {
       // error handled in content provider
     }
   }
@@ -87,9 +87,7 @@ export default function NotesList() {
     {
       key: 'category',
       header: 'Category',
-      render: (note) => (
-        <span className="text-muted">{note.category ? note.category : '—'}</span>
-      ),
+      render: (note) => <span className="text-muted">{note.category ? note.category : '—'}</span>,
     },
     {
       key: 'status',
@@ -127,9 +125,7 @@ export default function NotesList() {
               <EyeOff className="h-3.5 w-3.5" aria-hidden="true" />
             )}
             <span className="sr-only">
-              {note.status === 'published'
-                ? `Unpublish ${note.title}`
-                : `Publish ${note.title}`}
+              {note.status === 'published' ? `Unpublish ${note.title}` : `Publish ${note.title}`}
             </span>
           </Button>
           <Button variant="danger" size="sm" onClick={() => requestDelete(note)}>

@@ -22,7 +22,9 @@ export default function ReorderList({
 
   if (items.length === 0) {
     return (
-      <p className={`rounded-card border border-dashed border-line p-6 text-sm text-muted ${className}`}>
+      <p
+        className={`rounded-card border border-dashed border-line p-6 text-sm text-muted ${className}`}
+      >
         {emptyMessage}
       </p>
     )
@@ -31,9 +33,7 @@ export default function ReorderList({
   const move = (item, delta, index) => {
     onMove(item.id, delta)
     const label = labelFor ? labelFor(item) : 'Item'
-    setAnnouncement(
-      `${label} moved to position ${index + 1 + delta} of ${items.length}.`,
-    )
+    setAnnouncement(`${label} moved to position ${index + 1 + delta} of ${items.length}.`)
   }
 
   return (

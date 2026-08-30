@@ -94,9 +94,7 @@ export default function ProjectCard({ project, variant = 'compact', headingLevel
         {isFull ? project.description : project.summary}
       </p>
 
-      {project.visibility && (
-        <p className="mt-3 text-xs text-muted italic">{project.visibility}</p>
-      )}
+      {project.visibility && <p className="mt-3 text-xs text-muted italic">{project.visibility}</p>}
 
       {isFull ? (
         <>

@@ -38,13 +38,11 @@ export async function saveContentToSupabase(contentDocument) {
   if (!supabase) return { ok: false, error: 'Supabase client not initialized.' }
 
   try {
-    const { error } = await supabase
-      .from('site_content')
-      .upsert({
-        id: 'main',
-        data: contentDocument,
-        updated_at: new Date().toISOString()
-      })
+    const { error } = await supabase.from('site_content').upsert({
+      id: 'main',
+      data: contentDocument,
+      updated_at: new Date().toISOString(),
+    })
 
     if (error) throw error
     return { ok: true, error: null }
@@ -61,10 +59,7 @@ export async function clearContentInSupabase() {
   if (!supabase) return { ok: false, error: 'Supabase client not initialized.' }
 
   try {
-    const { error } = await supabase
-      .from('site_content')
-      .delete()
-      .eq('id', 'main')
+    const { error } = await supabase.from('site_content').delete().eq('id', 'main')
 
     if (error) throw error
     return { ok: true, error: null }

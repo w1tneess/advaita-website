@@ -56,9 +56,7 @@ export default function StatusSelector({
               )}
             </button>
             <p className="mt-1 text-xs text-muted">
-              {published !== false
-                ? 'Visible on portfolio page'
-                : 'Hidden from public site'}
+              {published !== false ? 'Visible on portfolio page' : 'Hidden from public site'}
             </p>
           </div>
 
@@ -68,17 +66,11 @@ export default function StatusSelector({
               onClick={() => setFeatured(!featured)}
               className="flex w-full items-center justify-between text-sm"
             >
-              <span className="font-medium text-ink">
-                {featured ? 'Featured' : 'Not featured'}
-              </span>
-              <span className={featured ? 'text-accent' : 'text-muted'}>
-                ★
-              </span>
+              <span className="font-medium text-ink">{featured ? 'Featured' : 'Not featured'}</span>
+              <span className={featured ? 'text-accent' : 'text-muted'}>★</span>
             </button>
             <p className="mt-1 text-xs text-muted">
-              {featured
-                ? 'Shown on homepage'
-                : 'Not shown on homepage'}
+              {featured ? 'Shown on homepage' : 'Not shown on homepage'}
             </p>
           </div>
         </>

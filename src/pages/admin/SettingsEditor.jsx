@@ -41,9 +41,9 @@ export default function SettingsEditor() {
       }
     >
       <Callout variant="analysis" title="These settings are front-end only">
-        Everything here is a client-side tweak. The real site will be deployed from the
-        exported seed document. Save → Export → Commit → Rebuild is the publish path. Nothing
-        here writes to a backend or persists beyond this browser.
+        Everything here is a client-side tweak. The real site will be deployed from the exported
+        seed document. Save → Export → Commit → Rebuild is the publish path. Nothing here writes to
+        a backend or persists beyond this browser.
       </Callout>
 
       <form onSubmit={submit} noValidate className="mt-8 space-y-8">
@@ -61,8 +61,12 @@ export default function SettingsEditor() {
               label="Default theme"
               type="select"
               value={draft.defaultTheme ?? ''}
-              onChange={(value) => set("defaultTheme", value)}
-              options={[{ value: 'system', label: 'System' }, { value: 'light', label: 'Light' }, { value: 'dark', label: 'Dark' }]}
+              onChange={(value) => set('defaultTheme', value)}
+              options={[
+                { value: 'system', label: 'System' },
+                { value: 'light', label: 'Light' },
+                { value: 'dark', label: 'Dark' },
+              ]}
               error={errors.defaultTheme}
               required
             />
@@ -83,7 +87,7 @@ export default function SettingsEditor() {
               label="Light theme accent"
               type="text"
               value={draft.accent?.light ?? ''}
-              onChange={value => setNested('accent', 'light', value)}
+              onChange={(value) => setNested('accent', 'light', value)}
               error={errors['accent.light']}
               placeholder="#0f6b73"
               hint="Hex colour for buttons, links and UI highlights in light mode. Leave blank for default."
@@ -94,7 +98,7 @@ export default function SettingsEditor() {
               label="Dark theme accent"
               type="text"
               value={draft.accent?.dark ?? ''}
-              onChange={value => setNested('accent', 'dark', value)}
+              onChange={(value) => setNested('accent', 'dark', value)}
               error={errors['accent.dark']}
               placeholder="#5fbdc9"
               hint="Hex colour for buttons, links and UI highlights in dark mode. Leave blank for default."
@@ -109,8 +113,8 @@ export default function SettingsEditor() {
             Limits
           </h2>
           <p className="mt-2 text-sm text-muted">
-            Upper bounds for display items, reading time and pagination. These are only for the
-            demo admin panel; the deployed site can have different values.
+            Upper bounds for display items, reading time and pagination. These are only for the demo
+            admin panel; the deployed site can have different values.
           </p>
           <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             <Field
@@ -118,7 +122,7 @@ export default function SettingsEditor() {
               label="Featured projects on home"
               type="number"
               value={draft.featuredProjectLimit ?? ''}
-              onChange={value => set("featuredProjectLimit", value)}
+              onChange={(value) => set('featuredProjectLimit', value)}
               error={errors.featuredProjectLimit}
               min={1}
               max={50}
@@ -130,7 +134,7 @@ export default function SettingsEditor() {
               label="Latest posts on home"
               type="number"
               value={draft.latestPostsLimit ?? ''}
-              onChange={value => set("latestPostsLimit", value)}
+              onChange={(value) => set('latestPostsLimit', value)}
               error={errors.latestPostsLimit}
               min={1}
               max={50}
@@ -142,7 +146,7 @@ export default function SettingsEditor() {
               label="Posts per blog page"
               type="number"
               value={draft.postsPerPage ?? ''}
-              onChange={value => set("postsPerPage", value)}
+              onChange={(value) => set('postsPerPage', value)}
               error={errors.postsPerPage}
               min={1}
               max={50}
@@ -158,8 +162,8 @@ export default function SettingsEditor() {
             Feature toggles
           </h2>
           <p className="mt-2 text-sm text-muted">
-            Turn individual features on or off in the demo. These don’t affect the deployed
-            site unless you also export and commit the settings.
+            Turn individual features on or off in the demo. These don’t affect the deployed site
+            unless you also export and commit the settings.
           </p>
           <div className="mt-5 space-y-4">
             <Field
@@ -167,7 +171,7 @@ export default function SettingsEditor() {
               label="Enable analytics"
               type="checkbox"
               value={draft.enableAnalytics ?? false}
-              onChange={value => set("enableAnalytics", value)}
+              onChange={(value) => set('enableAnalytics', value)}
               hint="Show analytics snippet. Useful for demos but not for production."
             />
             <Field
@@ -175,7 +179,7 @@ export default function SettingsEditor() {
               label="Enable comments"
               type="checkbox"
               value={draft.enableComments ?? false}
-              onChange={value => set("enableComments", value)}
+              onChange={(value) => set('enableComments', value)}
               hint="Show comment widget. Not a real backend here — this is demo-only."
             />
           </div>
@@ -196,7 +200,7 @@ export default function SettingsEditor() {
               type="textarea"
               rows={2}
               value={draft.blogEmptyState ?? ''}
-              onChange={value => set("blogEmptyState", value)}
+              onChange={(value) => set('blogEmptyState', value)}
               error={errors.blogEmptyState}
               required
               limit={200}
@@ -208,19 +212,22 @@ export default function SettingsEditor() {
               type="textarea"
               rows={2}
               value={draft.footerNote ?? ''}
-              onChange={value => set("footerNote", value)}
+              onChange={(value) => set('footerNote', value)}
               limit={120}
               hint="Optional line that appears in the footer. Use for credits or legal text."
             />
             <div className="mt-4">
               <p className="text-sm font-medium">Contact strings (placeholders only)</p>
-              <p className="mt-1 text-xs text-muted">These appear in the footer contact section. All are placeholders — no real email or handle.</p>
+              <p className="mt-1 text-xs text-muted">
+                These appear in the footer contact section. All are placeholders — no real email or
+                handle.
+              </p>
               <div className="mt-3 grid gap-3 sm:grid-cols-2">
                 <Field
                   id="settings-contact-email"
                   label="Email"
                   value={draft.contact?.email ?? ''}
-                  onChange={value => setNested('contact', 'email', value)}
+                  onChange={(value) => setNested('contact', 'email', value)}
                   placeholder="example@domain.com"
                   hint="Shown as a mailto: link. Not used for real mail."
                 />
@@ -228,7 +235,7 @@ export default function SettingsEditor() {
                   id="settings-contact-github"
                   label="GitHub"
                   value={draft.contact?.github ?? ''}
-                  onChange={value => setNested('contact', 'github', value)}
+                  onChange={(value) => setNested('contact', 'github', value)}
                   placeholder="/username"
                   hint="Link to a GitHub profile. No verification."
                 />
@@ -236,7 +243,7 @@ export default function SettingsEditor() {
                   id="settings-contact-linkedin"
                   label="LinkedIn"
                   value={draft.contact?.linkedin ?? ''}
-                  onChange={value => setNested('contact', 'linkedin', value)}
+                  onChange={(value) => setNested('contact', 'linkedin', value)}
                   placeholder="/in/username"
                   hint="Link to a LinkedIn profile. No verification."
                 />
@@ -244,7 +251,7 @@ export default function SettingsEditor() {
                   id="settings-contact-x"
                   label="X (formerly Twitter)"
                   value={draft.contact?.x ?? ''}
-                  onChange={value => setNested('contact', 'x', value)}
+                  onChange={(value) => setNested('contact', 'x', value)}
                   placeholder="@handle"
                   hint="Link to an X/Twitter profile. No verification."
                 />
@@ -254,8 +261,12 @@ export default function SettingsEditor() {
         </section>
 
         <div className="sticky bottom-0 mt-8 flex flex-wrap items-center gap-3 border-t border-line bg-base/90 py-4 backdrop-blur-sm">
-          <Button type="submit" disabled={!dirty}>Save settings</Button>
-          <Button type="button" variant="ghost" onClick={revert} disabled={!dirty}>Discard changes</Button>
+          <Button type="submit" disabled={!dirty}>
+            Save settings
+          </Button>
+          <Button type="button" variant="ghost" onClick={revert} disabled={!dirty}>
+            Discard changes
+          </Button>
         </div>
       </form>
     </AdminPage>

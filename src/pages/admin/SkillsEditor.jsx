@@ -31,10 +31,10 @@ export default function SkillsEditor() {
       description="What Advaita can currently do, grouped, with the project that shows it where one exists."
     >
       <Callout variant="limitation" title="Two levels, on purpose">
-        “Learning” means exactly that, and is not a claim of competence. “Working knowledge”
-        means the ability has been used in at least one real project. There is no third level
-        and no percentage, because neither was ever measured — and an unmeasured number on a
-        portfolio is just decoration.
+        “Learning” means exactly that, and is not a claim of competence. “Working knowledge” means
+        the ability has been used in at least one real project. There is no third level and no
+        percentage, because neither was ever measured — and an unmeasured number on a portfolio is
+        just decoration.
       </Callout>
 
       <CollectionEditor

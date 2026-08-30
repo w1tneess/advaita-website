@@ -12,6 +12,8 @@ import Philosophy from './pages/Philosophy.jsx'
 import Photography from './pages/Photography.jsx'
 import Portfolio from './pages/Portfolio.jsx'
 import Projects from './pages/Projects.jsx'
+import Blog from './pages/Blog.jsx'
+import BlogPost from './pages/BlogPost.jsx'
 
 /**
  * Route table.
@@ -49,6 +51,8 @@ export default function App() {
           <Route path="photography" element={<Photography />} />
           <Route path="projects" element={<Projects />} />
           <Route path="portfolio" element={<Portfolio />} />
+          <Route path="blog" element={<Blog />} />
+          <Route path="blog/:slug" element={<BlogPost />} />
           <Route path="contact" element={<Contact />} />
           <Route path="*" element={<NotFound />} />
         </Route>

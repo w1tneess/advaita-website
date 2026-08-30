@@ -13,11 +13,11 @@ export default function InterestCard({ interest, headingLevel = 3 }) {
   const Heading = `h${headingLevel}`
 
   return (
-    <Card 
-      as={motion.div} 
+    <Card
+      as={motion.div}
       className="flex gap-4 p-5 h-full transform-gpu origin-left"
       whileHover={{ scale: 1.02 }}
-      transition={{ duration: 0.2, ease: "easeOut" }}
+      transition={{ duration: 0.2, ease: 'easeOut' }}
     >
       <span
         className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-line bg-raised text-accent"

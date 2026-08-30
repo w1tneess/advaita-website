@@ -4,7 +4,6 @@ import { createSeedDocument } from '../data/seed.js'
 import { byNewest, byOrder } from './format.js'
 import {
   clearDocument,
-  hasLocalDocument,
   loadDocument,
   saveDocument,
   seedIsNewerThan,
@@ -88,7 +87,7 @@ export function ContentProvider({ children }) {
         setContent(state.doc)
         setIsLocal(state.source === 'remote')
         setIsLoaded(true)
-        
+
         if (!warningShown.current && state.warning) {
           warningShown.current = true
           toast.error(state.warning)
@@ -123,14 +122,6 @@ export function ContentProvider({ children }) {
       return next
     })
   }, [])
-
-  if (!isLoaded) {
-    return (
-      <div className="flex min-h-dvh items-center justify-center bg-canvas">
-        <p className="text-sm text-muted animate-pulse">Loading...</p>
-      </div>
-    )
-  }
 
   /* ------------------------------------------------------------------------
      Mutations
@@ -237,9 +228,9 @@ export function ContentProvider({ children }) {
      Derived views
      ------------------------------------------------------------------------ */
 
-  const settings = content.settings
+  const settings = content?.settings ?? {}
 
-  const projects = useMemo(() => byOrder(content.projects), [content.projects])
+  const projects = useMemo(() => byOrder(content?.projects ?? []), [content?.projects])
 
   const publicProjects = useMemo(
     () => (previewDrafts ? projects : projects.filter((project) => project.published !== false)),
@@ -254,22 +245,16 @@ export function ContentProvider({ children }) {
     [publicProjects, settings.featuredProjectLimit],
   )
 
-  const posts = useMemo(() => byNewest(content.posts), [content.posts])
+  const interests = useMemo(() => byOrder(content?.interests ?? []), [content?.interests])
+  const skills = useMemo(() => byOrder(content?.skills ?? []), [content?.skills])
+  const timeline = useMemo(() => byOrder(content?.timeline ?? []), [content?.timeline])
+  const socialLinks = useMemo(() => byOrder(content?.social ?? []), [content?.social])
+  const blog = useMemo(() => byNewest(content?.blog ?? [], 'published_at'), [content?.blog])
 
-  const publicPosts = useMemo(
-    () => (previewDrafts ? posts : posts.filter((post) => post.status === 'published')),
-    [posts, previewDrafts],
+  const publicBlogPosts = useMemo(
+    () => (previewDrafts ? blog : blog.filter((post) => post.status === 'published')),
+    [blog, previewDrafts],
   )
-
-  const latestPosts = useMemo(
-    () => publicPosts.slice(0, settings.latestPostsLimit ?? 3),
-    [publicPosts, settings.latestPostsLimit],
-  )
-
-  const interests = useMemo(() => byOrder(content.interests), [content.interests])
-  const skills = useMemo(() => byOrder(content.skills), [content.skills])
-  const timeline = useMemo(() => byOrder(content.timeline), [content.timeline])
-  const socialLinks = useMemo(() => byOrder(content.social), [content.social])
 
   /** Social links to show publicly: visible ones, including unconfigured placeholders. */
   const publicSocialLinks = useMemo(
@@ -288,60 +273,43 @@ export function ContentProvider({ children }) {
     return [...groups.entries()].map(([name, items]) => ({ name, items }))
   }, [skills])
 
-  /** Tags that are actually used by at least one visible post, with counts. */
-  const activeTags = useMemo(() => {
-    const counts = new Map()
-    for (const post of publicPosts) {
-      for (const tag of post.tags || []) {
-        counts.set(tag, (counts.get(tag) || 0) + 1)
-      }
-    }
-    return byOrder(content.tags)
-      .filter((tag) => counts.has(tag.slug))
-      .map((tag) => ({ ...tag, count: counts.get(tag.slug) }))
-  }, [content.tags, publicPosts])
-
-  const findPostBySlug = useCallback(
-    (slug) => publicPosts.find((post) => post.slug === slug) ?? null,
-    [publicPosts],
-  )
-
   const findProjectBySlug = useCallback(
     (slug) => publicProjects.find((project) => project.slug === slug) ?? null,
     [publicProjects],
+  )
+
+  const findBlogPostBySlug = useCallback(
+    (slug) => publicBlogPosts.find((post) => post.slug === slug) ?? null,
+    [publicBlogPosts],
   )
 
   const value = useMemo(
     () => ({
       // Raw document — the admin panel edits this.
       content,
-      profile: content.profile,
-      home: content.home,
+      profile: content?.profile,
+      home: content?.home,
       settings,
-      philosophy: content.philosophy || {},
-      photography: content.photography || {},
-      blogCategories: content.categories.blog,
-      projectCategories: content.categories.project,
-      tags: content.tags,
+      philosophy: content?.philosophy || {},
+      photography: content?.photography || {},
+      projectCategories: content?.categories?.project,
 
       // Admin-facing collections (everything, including drafts).
       projects,
-      posts,
       interests,
       skills,
       timeline,
       socialLinks,
+      blog,
 
       // Public-facing views.
       publicProjects,
       featuredProjects,
-      publicPosts,
-      latestPosts,
       publicSocialLinks,
       skillGroups,
-      activeTags,
-      findPostBySlug,
+      publicBlogPosts,
       findProjectBySlug,
+      findBlogPostBySlug,
 
       // Mutations.
       upsertItem,
@@ -351,13 +319,13 @@ export function ContentProvider({ children }) {
       setSection,
       replaceDocument,
       resetDocument,
-      activity: content.activity ?? [],
+      activity: content?.activity ?? [],
 
       // Storage state.
       isLocal,
       storageAvailable: true, // Supabase is always available over network
       hasLocalDocument: isLocal, // If source is remote, we have a document
-      seedIsNewer: seedIsNewerThan(content),
+      seedIsNewer: content ? seedIsNewerThan(content) : false,
 
       // Preview mode.
       previewDrafts,
@@ -367,20 +335,18 @@ export function ContentProvider({ children }) {
       content,
       settings,
       projects,
-      posts,
       interests,
       skills,
       timeline,
       socialLinks,
+      blog,
       publicProjects,
       featuredProjects,
-      publicPosts,
-      latestPosts,
       publicSocialLinks,
       skillGroups,
-      activeTags,
-      findPostBySlug,
+      publicBlogPosts,
       findProjectBySlug,
+      findBlogPostBySlug,
       upsertItem,
       removeItem,
       patchItem,
@@ -392,6 +358,14 @@ export function ContentProvider({ children }) {
       previewDrafts,
     ],
   )
+
+  if (!isLoaded) {
+    return (
+      <div className="flex min-h-dvh items-center justify-center bg-canvas">
+        <p className="text-sm text-muted animate-pulse">Loading...</p>
+      </div>
+    )
+  }
 
   return <ContentContext.Provider value={value}>{children}</ContentContext.Provider>
 }

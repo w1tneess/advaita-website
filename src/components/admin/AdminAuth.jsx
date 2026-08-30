@@ -22,7 +22,7 @@ export function useAdminAuth() {
 }
 
 export default function AdminAuth({ children }) {
-  const navigate = useNavigate()
+  const _navigate = useNavigate()
   const toast = useToast()
 
   const [session, setSession] = useState(null)
@@ -35,7 +35,9 @@ export default function AdminAuth({ children }) {
   useEffect(() => {
     async function checkAuth() {
       try {
-        const { data: { session } } = await supabase.auth.getSession()
+        const {
+          data: { session },
+        } = await supabase.auth.getSession()
         setSession(session)
       } catch (error) {
         console.error('Auth check error:', error)
@@ -47,11 +49,11 @@ export default function AdminAuth({ children }) {
     checkAuth()
 
     // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setSession(session)
-      }
-    )
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      setSession(session)
+    })
 
     return () => subscription?.unsubscribe()
   }, [])
@@ -74,7 +76,7 @@ export default function AdminAuth({ children }) {
       toast.success('Logged in!')
       setEmail('')
       setPassword('')
-    } catch (error) {
+    } catch (_error) {
       toast.error('An error occurred')
     } finally {
       setSigningIn(false)
@@ -85,7 +87,7 @@ export default function AdminAuth({ children }) {
     try {
       await supabase.auth.signOut()
       toast.success('Logged out')
-    } catch (error) {
+    } catch (_error) {
       toast.error('Logout failed')
     }
   }
@@ -148,9 +150,12 @@ export default function AdminAuth({ children }) {
             </form>
 
             <div className="space-y-2 rounded-lg border border-line bg-raised p-4">
-              <p className="text-xs font-medium uppercase tracking-wide text-muted">Authentication</p>
+              <p className="text-xs font-medium uppercase tracking-wide text-muted">
+                Authentication
+              </p>
               <p className="text-sm text-muted">
-                This admin panel requires real Supabase authentication. Only authorized users can access.
+                This admin panel requires real Supabase authentication. Only authorized users can
+                access.
               </p>
             </div>
           </div>

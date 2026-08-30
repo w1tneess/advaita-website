@@ -120,7 +120,7 @@ async function getLatestUpdate() {
     }
     
     return latest ? latest.toISOString() : null
-  } catch (e) {
+  } catch (_e) {
     return null
   }
 }

@@ -45,7 +45,10 @@ export default function ToastViewport() {
             role={toast.variant === 'error' ? 'alert' : undefined}
             className={`animate-rise pointer-events-auto flex w-full max-w-sm items-start gap-3 rounded-lg border px-4 py-3 shadow-raised ${variant.classes}`}
           >
-            <ToastIcon className={`mt-0.5 h-4 w-4 shrink-0 ${variant.iconClass}`} aria-hidden="true" />
+            <ToastIcon
+              className={`mt-0.5 h-4 w-4 shrink-0 ${variant.iconClass}`}
+              aria-hidden="true"
+            />
             <p className="flex-1 text-sm">{toast.message}</p>
             <button
               type="button"

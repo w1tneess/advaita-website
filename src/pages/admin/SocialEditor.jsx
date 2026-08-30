@@ -20,10 +20,10 @@ export default function SocialEditor() {
       description="Placeholder URLs and handles — the privacy rules apply. No real credentials here."
     >
       <Callout variant="limitation" title="No real handles">
-        These are demonstration links only. Do not enter real email addresses, GitHub tokens,
-        or any private information. All social fields are placeholders meant to show the
-        pattern, not to be used for actual outreach or identification. The privacy rules
-        on the Profile page apply here as well.
+        These are demonstration links only. Do not enter real email addresses, GitHub tokens, or any
+        private information. All social fields are placeholders meant to show the pattern, not to be
+        used for actual outreach or identification. The privacy rules on the Profile page apply here
+        as well.
       </Callout>
 
       <CollectionEditor

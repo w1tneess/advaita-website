@@ -33,8 +33,8 @@ export default function NotFound() {
           </h1>
           <p className="mt-5 text-lg text-muted">
             The address <code className="font-mono text-base break-words">{pathname}</code>{' '}
-            doesn&rsquo;t match anything here. It may have been mistyped, or it may be
-            something I have not written yet.
+            doesn&rsquo;t match anything here. It may have been mistyped, or it may be something I
+            have not written yet.
           </p>
 
           <nav aria-label="Site pages" className="mt-8">

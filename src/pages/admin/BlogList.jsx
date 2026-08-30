@@ -5,72 +5,68 @@ import AdminPage from '../../components/admin/AdminPage.jsx'
 import ConfirmDialog from '../../components/admin/ConfirmDialog.jsx'
 import DataTable from '../../components/admin/DataTable.jsx'
 import Field from '../../components/admin/Field.jsx'
-import Button from '../../components/Button.jsx'
-import EmptyState from '../../components/EmptyState.jsx'
-import SearchInput from '../../components/SearchInput.jsx'
-import StatusBadge from '../../components/StatusBadge.jsx'
-import { useConfirm } from '../../hooks/useConfirm.jsx'
-import { useDebouncedValue } from '../../hooks/useDebouncedValue.js'
-import { useFilters } from '../../hooks/useFilters.js'
-import { useContent } from '../../lib/content.jsx'
-import { formatDateShort, matchesQuery, readingMinutes } from '../../lib/format.js'
-import { POST_STATUSES, todayIso } from '../../lib/schema.js'
-import { useToast } from '../../lib/toast.jsx'
+import Button from '@/components/ui/Button.jsx'
+import EmptyState from '@/components/ui/EmptyState.jsx'
+import SearchInput from '@/components/features/SearchInput.jsx'
+import StatusBadge from '@/components/ui/StatusBadge.jsx'
+import { useConfirm } from '@/hooks/useConfirm.jsx'
+import { useDebouncedValue } from '@/hooks/useDebouncedValue.js'
+import { useFilters } from '@/hooks/useFilters.js'
+import { useContent } from '@/lib/content.jsx'
+import { formatDateShort, matchesQuery } from '@/lib/format.js'
+import { POST_STATUSES, todayIso } from '@/lib/schema.js'
+import { useToast } from '@/lib/toast.jsx'
 
-/**
- * Article list.
- *
- * A table rather than a reorderable list: articles are ordered by publication date on the
- * public site, so a manual order here would be a control that does nothing.
- */
-
-// Module scope so useFilters keeps a stable reference to it across renders.
 const INITIAL_FILTERS = { query: '', status: 'all' }
-const SEARCH_FIELDS = ['title', 'excerpt', 'slug', 'tags']
+const SEARCH_FIELDS = ['title', 'excerpt', 'slug', 'category']
 
-export default function PostsList() {
-  const { posts, blogCategories, patchItem, removeItem } = useContent()
+export default function BlogList() {
+  const { blog, upsertItem, removeItem } = useContent()
   const toast = useToast()
   const { confirm, dialogProps } = useConfirm()
   const { values, setValue, reset, hasActiveFilters } = useFilters(INITIAL_FILTERS)
   const debouncedQuery = useDebouncedValue(values.query, 200)
 
-  const categoryName = (slug) =>
-    blogCategories.find((category) => category.slug === slug)?.name ?? slug
-
   const visible = useMemo(
     () =>
-      posts
+      blog
         .filter((post) => values.status === 'all' || post.status === values.status)
         .filter((post) => matchesQuery(post, debouncedQuery, SEARCH_FIELDS)),
-    [posts, values.status, debouncedQuery],
+    [blog, values.status, debouncedQuery],
   )
 
-  const toggleStatus = (post) => {
+  const toggleStatus = async (post) => {
     const next = post.status === 'published' ? 'draft' : 'published'
-    patchItem('posts', post.id, {
-      status: next,
-      // Publishing something that was never dated would leave the article header blank.
-      publishedAt: post.publishedAt || todayIso(),
-    })
-    toast.success(
-      next === 'published'
-        ? `“${post.title}” is now published.`
-        : `“${post.title}” is back to draft and hidden from the public blog.`,
-    )
+    try {
+      await upsertItem('blog', {
+        ...post,
+        status: next,
+        published_at: post.published_at || todayIso(),
+      })
+      toast.success(
+        next === 'published'
+          ? `“${post.title}” is now published.`
+          : `“${post.title}” is back to draft and hidden.`,
+      )
+    } catch (_e) {
+      // error handled in content provider
+    }
   }
 
   const requestDelete = async (post) => {
     const confirmed = await confirm({
       title: `Delete “${post.title}”?`,
-      message:
-        'This removes the article and its body blocks and sources from your local copy of the content. It cannot be undone from here.',
-      confirmLabel: 'Delete article',
+      message: 'This removes the post. It cannot be undone.',
+      confirmLabel: 'Delete post',
     })
     if (!confirmed) return
 
-    removeItem('posts', post.id)
-    toast.success('Article deleted.')
+    try {
+      await removeItem('blog', post.id)
+      toast.success('Post deleted.')
+    } catch (_e) {
+      // error handled in content provider
+    }
   }
 
   const columns = [
@@ -79,7 +75,7 @@ export default function PostsList() {
       header: 'Title',
       render: (post) => (
         <div className="min-w-0">
-          <p className="font-medium">{post.title || 'Untitled article'}</p>
+          <p className="font-medium">{post.title || 'Untitled post'}</p>
           <p className="mt-0.5 truncate font-mono text-xs text-muted">/blog/{post.slug}</p>
         </div>
       ),
@@ -87,9 +83,7 @@ export default function PostsList() {
     {
       key: 'category',
       header: 'Category',
-      render: (post) => (
-        <span className="text-muted">{post.category ? categoryName(post.category) : '—'}</span>
-      ),
+      render: (post) => <span className="text-muted">{post.category ? post.category : '—'}</span>,
     },
     {
       key: 'status',
@@ -101,10 +95,7 @@ export default function PostsList() {
       header: 'Date',
       render: (post) => (
         <div className="text-muted">
-          <p>{formatDateShort(post.publishedAt) || '—'}</p>
-          <p className="text-xs">
-            {post.body?.length ? `~${readingMinutes(post)} min read` : 'No body yet'}
-          </p>
+          <p>{formatDateShort(post.published_at) || '—'}</p>
         </div>
       ),
     },
@@ -114,7 +105,7 @@ export default function PostsList() {
       className: 'sm:w-px sm:whitespace-nowrap',
       render: (post) => (
         <div className="flex flex-wrap gap-2">
-          <Button variant="secondary" size="sm" to={`/admin/posts/${post.id}`}>
+          <Button variant="secondary" size="sm" to={`/admin/blog/${post.id}`}>
             <Pencil className="h-3.5 w-3.5" aria-hidden="true" />
             <span className="sr-only sm:not-sr-only">Edit</span>
           </Button>
@@ -130,9 +121,7 @@ export default function PostsList() {
               <EyeOff className="h-3.5 w-3.5" aria-hidden="true" />
             )}
             <span className="sr-only">
-              {post.status === 'published'
-                ? `Unpublish ${post.title}`
-                : `Publish ${post.title}`}
+              {post.status === 'published' ? `Unpublish ${post.title}` : `Publish ${post.title}`}
             </span>
           </Button>
           <Button variant="danger" size="sm" onClick={() => requestDelete(post)}>
@@ -146,25 +135,25 @@ export default function PostsList() {
 
   return (
     <AdminPage
-      title="Writing"
-      description="Articles for the blog. Drafts are stored alongside published articles and are hidden from the public pages."
+      title="Writing / Blog"
+      description="Manage your blog posts and articles."
       actions={
-        <Button to="/admin/posts/new" size="sm">
+        <Button to="/admin/blog/new" size="sm">
           <Plus className="h-4 w-4" aria-hidden="true" />
-          New article
+          New post
         </Button>
       }
     >
       <div className="grid gap-4 sm:grid-cols-[1fr_auto] sm:items-end">
         <SearchInput
-          id="posts-search"
-          label="Search articles"
+          id="blog-search"
+          label="Search posts"
           value={values.query}
           onChange={(value) => setValue('query', value)}
-          placeholder="Title, excerpt, slug or tag…"
+          placeholder="Title, excerpt, slug or category…"
         />
         <Field
-          id="posts-status"
+          id="blog-status"
           label="Status"
           type="select"
           value={values.status}
@@ -177,24 +166,24 @@ export default function PostsList() {
       </div>
 
       <p className="mt-4 text-sm text-muted" aria-live="polite">
-        {visible.length} of {posts.length} {posts.length === 1 ? 'article' : 'articles'} shown.
+        {visible.length} of {blog.length} {blog.length === 1 ? 'post' : 'posts'} shown.
       </p>
 
       <div className="mt-4">
         <DataTable
-          caption="Articles, with their category, status and publication date"
+          caption="Blog posts, with their category, status and publication date"
           columns={columns}
           rows={visible}
           empty={
-            posts.length === 0 ? (
+            blog.length === 0 ? (
               <EmptyState
-                title="No articles yet"
-                message="The public blog is showing its empty-state message. Add a real article when there is one to publish — placeholder posts are worse than an empty section."
-                action={<Button to="/admin/posts/new">Write the first one</Button>}
+                title="No posts yet"
+                message="The blog is empty."
+                action={<Button to="/admin/blog/new">Write the first one</Button>}
               />
             ) : (
               <EmptyState
-                title="No articles match"
+                title="No posts match"
                 message="Nothing matches the current search and status filter."
                 action={
                   hasActiveFilters ? (

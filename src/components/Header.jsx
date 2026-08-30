@@ -44,17 +44,17 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-canvas/80 shadow-[0_1px_0_rgb(255_255_255/0.35)] backdrop-blur-xl">
-      <Container>
+      <Container width="wide" className="lg:px-12 xl:px-16">
         <div className="flex h-16 items-center justify-between gap-3 sm:gap-4">
           <Link
             to="/"
-            className="min-w-0 truncate font-display text-lg font-semibold tracking-tight"
+            className="group shrink-0 min-w-0 py-2 font-display text-xl md:text-lg font-semibold tracking-tight transition-colors hover:text-accent"
           >
             {profile.name}
           </Link>
 
-          <nav aria-label="Main" className="hidden min-w-0 md:block">
-            <ul className="flex items-center gap-4 lg:gap-7">
+          <nav aria-label="Main" className="hidden min-w-0 lg:block">
+            <ul className="flex items-center gap-4 lg:gap-5 xl:gap-8">
               {NAV_ITEMS.map((item) => (
                 <li key={item.path}>
                   <NavLink to={item.path} end={item.path === '/'} className={linkClasses}>
@@ -74,7 +74,7 @@ export default function Header() {
               aria-expanded={menuOpen}
               aria-controls="mobile-nav"
               aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-              className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-line bg-surface text-muted transition-colors hover:border-accent hover:text-accent active:bg-surface-hover md:hidden"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-line bg-surface text-muted transition-colors hover:border-accent hover:text-accent active:bg-surface-hover lg:hidden"
             >
               {menuOpen ? (
                 <X className="h-5 w-5" aria-hidden="true" />
@@ -90,9 +90,9 @@ export default function Header() {
         <nav
           id="mobile-nav"
           aria-label="Main"
-          className="animate-fade border-t border-line bg-surface md:hidden"
+          className="animate-fade border-t border-line bg-surface lg:hidden"
         >
-          <Container>
+          <Container width="wide" className="lg:px-12 xl:px-16">
             <ul className="flex flex-col py-2">
               {NAV_ITEMS.map((item) => (
                 <li key={item.path}>

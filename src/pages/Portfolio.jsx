@@ -35,9 +35,7 @@ export default function Portfolio() {
     () =>
       values.category === 'all'
         ? publicProjects
-        : publicProjects.filter((project) =>
-            (project.categories || []).includes(values.category),
-          ),
+        : publicProjects.filter((project) => (project.categories || []).includes(values.category)),
     [publicProjects, values.category],
   )
 
@@ -47,11 +45,13 @@ export default function Portfolio() {
 
       <Container>
         <div className="py-12 sm:py-16 md:py-32">
-          <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">Portfolio</h1>
+          <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">
+            Portfolio
+          </h1>
           <p className="mt-5 max-w-prose text-lg leading-relaxed text-muted">
-            Three projects. Each entry states its role, tools, method and current status, and
-            ends with what it does not show — including the one that is a design rather than a
-            working product.
+            Three projects. Each entry states its role, tools, method and current status, and ends
+            with what it does not show — including the one that is a design rather than a working
+            product.
           </p>
 
           <FilterBar

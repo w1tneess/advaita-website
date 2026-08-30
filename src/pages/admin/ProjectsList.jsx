@@ -32,11 +32,15 @@ export default function ProjectsList() {
   const visibleProjects = useMemo(() => {
     const normalized = query.trim().toLowerCase()
     return projects.filter((project) => {
-      const matchesQuery = !normalized || [project.title, project.slug, project.summary, ...(project.tools || [])]
-        .join(' ')
-        .toLowerCase()
-        .includes(normalized)
-      const matchesStatus = status === 'all' || (status === 'published' ? project.published !== false : project.published === false)
+      const matchesQuery =
+        !normalized ||
+        [project.title, project.slug, project.summary, ...(project.tools || [])]
+          .join(' ')
+          .toLowerCase()
+          .includes(normalized)
+      const matchesStatus =
+        status === 'all' ||
+        (status === 'published' ? project.published !== false : project.published === false)
       return matchesQuery && matchesStatus
     })
   }, [projects, query, status])
@@ -67,7 +71,9 @@ export default function ProjectsList() {
     if (currentIndex < 0 || targetIndex < 0 || targetIndex >= visibleProjects.length) return
 
     const fullCurrentIndex = projects.findIndex((project) => project.id === id)
-    const fullTargetIndex = projects.findIndex((project) => project.id === visibleProjects[targetIndex].id)
+    const fullTargetIndex = projects.findIndex(
+      (project) => project.id === visibleProjects[targetIndex].id,
+    )
     const steps = fullTargetIndex - fullCurrentIndex
     const direction = steps < 0 ? -1 : 1
     for (let step = 0; step < Math.abs(steps); step += 1) moveItem('projects', id, direction)
@@ -86,7 +92,9 @@ export default function ProjectsList() {
   const toggleFeatured = (project) => {
     const next = !project.featured
     patchItem('projects', project.id, { featured: next })
-    toast.success(next ? 'Added to the home page selection.' : 'Removed from the home page selection.')
+    toast.success(
+      next ? 'Added to the home page selection.' : 'Removed from the home page selection.',
+    )
   }
 
   const requestDelete = async (project) => {
@@ -116,16 +124,31 @@ export default function ProjectsList() {
       <div className="mb-5 grid gap-3 sm:grid-cols-[1fr_auto]">
         <label className="relative block">
           <span className="sr-only">Search projects</span>
-          <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted" aria-hidden="true" />
-          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search title, slug, summary or tools" className="w-full rounded-lg border border-line bg-surface py-2.5 pr-3 pl-9 text-sm focus:border-accent focus:outline-none" />
+          <Search
+            className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted"
+            aria-hidden="true"
+          />
+          <input
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="Search title, slug, summary or tools"
+            className="w-full rounded-lg border border-line bg-surface py-2.5 pr-3 pl-9 text-sm focus:border-accent focus:outline-none"
+          />
         </label>
-        <select value={status} onChange={(event) => setStatus(event.target.value)} aria-label="Filter project status" className="rounded-lg border border-line bg-surface px-3 py-2.5 text-sm">
+        <select
+          value={status}
+          onChange={(event) => setStatus(event.target.value)}
+          aria-label="Filter project status"
+          className="rounded-lg border border-line bg-surface px-3 py-2.5 text-sm"
+        >
           <option value="all">All visibility</option>
           <option value="published">Published</option>
           <option value="draft">Draft</option>
         </select>
       </div>
-      <p className="mb-4 text-sm text-muted" role="status">Showing {visibleProjects.length} of {projects.length} projects</p>
+      <p className="mb-4 text-sm text-muted" role="status">
+        Showing {visibleProjects.length} of {projects.length} projects
+      </p>
       <ReorderList
         items={visibleProjects}
         labelFor={(project) => project.title || 'Untitled project'}
@@ -150,9 +173,7 @@ export default function ProjectsList() {
               ))}
             </div>
 
-            {project.summary && (
-              <p className="mt-2 text-sm text-muted">{project.summary}</p>
-            )}
+            {project.summary && <p className="mt-2 text-sm text-muted">{project.summary}</p>}
           </div>
         )}
         renderActions={(project) => (
@@ -162,12 +183,22 @@ export default function ProjectsList() {
               <span className="sr-only sm:not-sr-only">Edit</span>
             </Button>
 
-            <Button variant="ghost" size="sm" onClick={() => duplicate(project)} title="Duplicate as draft">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => duplicate(project)}
+              title="Duplicate as draft"
+            >
               <Copy className="h-3.5 w-3.5" aria-hidden="true" />
               <span className="sr-only">Duplicate {project.title}</span>
             </Button>
 
-            <Button variant="ghost" size="sm" to={`/portfolio#project-${project.slug}`} title="Preview on public site">
+            <Button
+              variant="ghost"
+              size="sm"
+              to={`/portfolio#project-${project.slug}`}
+              title="Preview on public site"
+            >
               <Eye className="h-3.5 w-3.5" aria-hidden="true" />
               <span className="sr-only">Preview {project.title}</span>
             </Button>
@@ -184,9 +215,7 @@ export default function ProjectsList() {
                 <Eye className="h-3.5 w-3.5" aria-hidden="true" />
               )}
               <span className="sr-only">
-                {project.published === false
-                  ? `Publish ${project.title}`
-                  : `Hide ${project.title}`}
+                {project.published === false ? `Publish ${project.title}` : `Hide ${project.title}`}
               </span>
             </Button>
 

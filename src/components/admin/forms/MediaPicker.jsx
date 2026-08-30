@@ -89,15 +89,8 @@ export default function MediaPicker({
               <X className="h-4 w-4" />
             </button>
           </div>
-          {value.name && (
-            <p className="text-xs text-muted">{value.name}</p>
-          )}
-          <Button
-            type="button"
-            variant="secondary"
-            size="sm"
-            onClick={handleClick}
-          >
+          {value.name && <p className="text-xs text-muted">{value.name}</p>}
+          <Button type="button" variant="secondary" size="sm" onClick={handleClick}>
             Change image
           </Button>
         </div>

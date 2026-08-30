@@ -55,9 +55,7 @@ export default function Photography() {
             <h1 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">
               Photography
             </h1>
-            <p className="mt-5 text-lg leading-relaxed text-muted">
-              {photography.intro}
-            </p>
+            <p className="mt-5 text-lg leading-relaxed text-muted">{photography.intro}</p>
             <p className="mt-4 max-w-prose text-base leading-relaxed text-muted">
               {photography.description}
             </p>
@@ -140,9 +138,7 @@ export default function Photography() {
           ) : (
             <div className="mt-10 rounded-xl border border-dashed border-line bg-raised/50 px-6 py-16 text-center">
               <Camera className="mx-auto h-10 w-10 text-muted/40" aria-hidden="true" />
-              <p className="mt-4 text-sm font-medium text-muted">
-                No photographs yet.
-              </p>
+              <p className="mt-4 text-sm font-medium text-muted">No photographs yet.</p>
               <p className="mt-2 max-w-md mx-auto text-xs text-muted">
                 This gallery is where photographs will appear. The architecture is ready — images
                 just haven't been added yet.
@@ -184,9 +180,7 @@ export default function Photography() {
                   </motion.li>
                 ))}
               </motion.ul>
-              <p className="mt-6 text-xs text-muted italic">
-                {photography.categoriesNote}
-              </p>
+              <p className="mt-6 text-xs text-muted italic">{photography.categoriesNote}</p>
             </motion.section>
           )}
         </motion.div>

@@ -33,10 +33,9 @@ export default function ProfileEditor() {
       description="The identity used across the site: name, tagline, biography, approach, and the research interests shown on the home and about pages."
     >
       <Callout variant="limitation" title="Keep private details out of these fields">
-        This is a public website. Do not enter a date of birth, an age, a school or
-        institution name, an exact address, a district or town, a phone number, exam results
-        or anything else you would not put on a public page. The location field is meant to
-        stay at state level.
+        This is a public website. Do not enter a date of birth, an age, a school or institution
+        name, an exact address, a district or town, a phone number, exam results or anything else
+        you would not put on a public page. The location field is meant to stay at state level.
       </Callout>
 
       <form onSubmit={submit} noValidate className="mt-8">
@@ -192,9 +191,9 @@ export default function ProfileEditor() {
           Research interests
         </h2>
         <p className="mt-2 max-w-2xl text-sm text-muted">
-          Long-running interests, not areas of expertise. The one-line note under each is
-          what stops the list reading as a claim of competence — keep it honest about how far
-          the interest has actually gone.
+          Long-running interests, not areas of expertise. The one-line note under each is what stops
+          the list reading as a claim of competence — keep it honest about how far the interest has
+          actually gone.
         </p>
 
         <CollectionEditor

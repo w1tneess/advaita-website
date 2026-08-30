@@ -20,7 +20,10 @@ export default function Seo({
   publishedAt,
   updatedAt,
 }) {
-  const meta = buildMeta({ title, description, path, image, type, noindex }, import.meta.env.BASE_URL)
+  const meta = buildMeta(
+    { title, description, path, image, type, noindex },
+    import.meta.env.BASE_URL,
+  )
 
   return (
     <>

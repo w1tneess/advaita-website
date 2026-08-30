@@ -1,4 +1,12 @@
-import { CircleDashed, CircleDot, CircleCheck, Eye, EyeOff, GraduationCap, Wrench } from 'lucide-react'
+import {
+  CircleDashed,
+  CircleDot,
+  CircleCheck,
+  Eye,
+  EyeOff,
+  GraduationCap,
+  Wrench,
+} from 'lucide-react'
 
 import Badge from '@/components/ui/Badge.jsx'
 

@@ -113,10 +113,7 @@ export default function AdminBreadcrumbs() {
             {index > 0 && (
               <>
                 {crumb.path ? (
-                  <Link
-                    to={crumb.path}
-                    className="text-muted hover:text-ink transition-colors"
-                  >
+                  <Link to={crumb.path} className="text-muted hover:text-ink transition-colors">
                     {crumb.label}
                   </Link>
                 ) : (

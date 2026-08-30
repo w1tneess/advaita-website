@@ -32,7 +32,7 @@ export const PUBLIC_ROUTES = [
     nav: true,
     title: 'Advaita Chandra — Thinking. Building. Noticing.',
     description:
-      'A personal space for things I\'m thinking about, making, and noticing — philosophy, photography, and projects.',
+      "A personal space for things I'm thinking about, making, and noticing — philosophy, photography, and projects.",
     priority: '1.0',
     changefreq: 'monthly',
   },
@@ -43,7 +43,7 @@ export const PUBLIC_ROUTES = [
     nav: true,
     title: 'Philosophy',
     description:
-      'A record of what I\'m reading, questioning, and trying to understand more clearly — Krishnamurti, Camus, Dostoevsky, Ramana Maharshi, and Osho.',
+      "A record of what I'm reading, questioning, and trying to understand more clearly — Krishnamurti, Camus, Dostoevsky, Ramana Maharshi, and Osho.",
     priority: '0.8',
     changefreq: 'monthly',
   },
@@ -54,9 +54,19 @@ export const PUBLIC_ROUTES = [
     nav: true,
     title: 'Photography',
     description:
-      'A visual notebook of things I\'ve noticed through a camera — street, landscape, and everyday moments.',
+      "A visual notebook of things I've noticed through a camera — street, landscape, and everyday moments.",
     priority: '0.8',
     changefreq: 'monthly',
+  },
+  {
+    path: '/blog',
+    key: 'blog',
+    label: 'Writing',
+    nav: true,
+    title: 'Writing / Blog',
+    description: 'Notes, research, and ideas as they develop.',
+    priority: '0.9',
+    changefreq: 'weekly',
   },
   {
     path: '/projects',
@@ -65,7 +75,7 @@ export const PUBLIC_ROUTES = [
     nav: true,
     title: 'Projects',
     description:
-      'Things I\'m building — some finished, most still evolving. School worksheet generator, school website, and this site.',
+      "Things I'm building — some finished, most still evolving. School worksheet generator, school website, and this site.",
     priority: '0.9',
     changefreq: 'monthly',
   },
@@ -76,7 +86,7 @@ export const PUBLIC_ROUTES = [
     nav: true,
     title: 'About',
     description:
-      'Who I am, what I\'m interested in, and how I approach a question. Student researcher, not an expert.',
+      "Who I am, what I'm interested in, and how I approach a question. Student researcher, not an expert.",
     priority: '0.8',
     changefreq: 'monthly',
   },
@@ -96,14 +106,23 @@ export const PUBLIC_ROUTES = [
 export const ADMIN_ROUTE_PREFIX = '/admin'
 
 /** Navigation items for the public header and footer. */
-export const NAV_ITEMS = PUBLIC_ROUTES.filter((route) => route.nav).map(
-  ({ path, label, key }) => ({ path, label, key }),
-)
+export const NAV_ITEMS = PUBLIC_ROUTES.filter((route) => route.nav).map(({ path, label, key }) => ({
+  path,
+  label,
+  key,
+}))
 
 /**
  * Every route to pre-render, given the published posts.
  * @param {Array<object>} publishedPosts
  */
 export function allPrerenderRoutes(publishedPosts = []) {
-  return [...PUBLIC_ROUTES]
+  return [
+    ...PUBLIC_ROUTES,
+    ...publishedPosts.map((post) => ({
+      path: `/blog/${post.slug}`,
+      changefreq: 'monthly',
+      priority: '0.7',
+    })),
+  ]
 }

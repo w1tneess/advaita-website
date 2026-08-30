@@ -53,7 +53,9 @@ export default function Lightbox({ photos, index, onClose, onChange }) {
     } else {
       document.body.style.overflow = ''
     }
-    return () => { document.body.style.overflow = '' }
+    return () => {
+      document.body.style.overflow = ''
+    }
   }, [isOpen])
 
   return (
@@ -100,9 +102,7 @@ export default function Lightbox({ photos, index, onClose, onChange }) {
 
             {/* Caption */}
             {photo.caption && (
-              <p className="mt-4 max-w-lg text-center text-sm text-canvas/80">
-                {photo.caption}
-              </p>
+              <p className="mt-4 max-w-lg text-center text-sm text-canvas/80">{photo.caption}</p>
             )}
 
             {/* Counter */}

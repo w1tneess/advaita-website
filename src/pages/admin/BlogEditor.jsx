@@ -10,35 +10,35 @@ import SaveStatus from '../../components/admin/feedback/SaveStatus.jsx'
 import UnsavedChangesDialog from '../../components/admin/feedback/UnsavedChangesDialog.jsx'
 import Button from '@/components/ui/Button.jsx'
 import { useContent } from '@/lib/content.jsx'
-import { createNote, hasErrors, slugify, todayIso, validateNote } from '@/lib/schema.js'
+import { createBlogPost, hasErrors, slugify, todayIso, validateBlogPost } from '@/lib/schema.js'
 import { useToast } from '@/lib/toast.jsx'
 
-export default function NoteEditor() {
+export default function BlogEditor() {
   const { id } = useParams()
   const navigate = useNavigate()
   const toast = useToast()
-  const { notes, upsertNote } = useContent()
+  const { blog, upsertItem } = useContent()
 
   const isNew = id === 'new'
-  const existing = notes.find((n) => n.id === id) ?? null
+  const existing = blog.find((p) => p.id === id) ?? null
 
   const [draft, setDraft] = useState(() =>
-    isNew ? createNote() : existing ? { ...existing } : null,
+    isNew ? createBlogPost() : existing ? { ...existing } : null,
   )
   const [errors, setErrors] = useState({})
   const [slugLocked, setSlugLocked] = useState(!isNew)
   const [isSaving, setIsSaving] = useState(false)
-  const [saveStatus, setSaveStatus] = useState('idle') // idle, saving, success, error
+  const [saveStatus, setSaveStatus] = useState('idle')
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
 
   if (draft === null) {
     return (
       <AdminPage
-        title="Note not found"
-        description="There is no note with that id in the database."
+        title="Post not found"
+        description="There is no post with that id in the database."
       >
-        <Button to="/admin/notes" variant="secondary">
-          Back to notes
+        <Button to="/admin/blog" variant="secondary">
+          Back to writing
         </Button>
       </AdminPage>
     )
@@ -62,7 +62,7 @@ export default function NoteEditor() {
 
   const submit = async (event) => {
     event.preventDefault()
-    const found = validateNote(draft, notes)
+    const found = validateBlogPost(draft, blog)
     setErrors(found)
 
     if (hasErrors(found)) {
@@ -74,11 +74,11 @@ export default function NoteEditor() {
     setSaveStatus('saving')
     setIsSaving(true)
     try {
-      await upsertNote(draft)
+      await upsertItem('blog', draft)
       setSaveStatus('success')
       setHasUnsavedChanges(false)
       toast.success(`“${draft.title}” ${isNew ? 'created' : 'saved'}.`)
-      setTimeout(() => navigate('/admin/notes'), 800)
+      setTimeout(() => navigate('/admin/blog'), 800)
     } catch (_e) {
       setSaveStatus('error')
     } finally {
@@ -88,59 +88,59 @@ export default function NoteEditor() {
 
   return (
     <AdminPage
-      title={isNew ? 'New note' : 'Edit note'}
+      title={isNew ? 'New blog post' : 'Edit blog post'}
       description={
         isNew
-          ? 'Write a note for the philosophy section. It stays a draft until you publish it.'
+          ? 'Write a post for the blog section. It stays a draft until you publish it.'
           : 'Changes take effect immediately upon saving.'
       }
       actions={
-        <Button to="/admin/notes" variant="secondary" size="sm">
-          Back to notes
+        <Button to="/admin/blog" variant="secondary" size="sm">
+          Back to writing
         </Button>
       }
     >
       <UnsavedChangesDialog hasUnsavedChanges={hasUnsavedChanges} />
       <form onSubmit={submit} noValidate>
-        <FormSection title="Note details" description="Basic information about the note.">
+        <FormSection title="Post details" description="Basic information about the post.">
           <Field
             className="mt-5"
-            id="note-title"
+            id="post-title"
             label="Title"
             value={draft.title}
             onChange={onTitleChange}
             error={errors.title}
             required
-            limit={140}
+            limit={120}
           />
 
           <div className="mt-5">
             <SlugField
-              id="note-slug"
+              id="post-slug"
               title="URL Slug"
               value={draft.slug}
               onChange={(value) => set('slug', value)}
               locked={slugLocked}
               onLockChange={setSlugLocked}
               error={errors.slug}
-              hint={`The note's URL will be /philosophy/${draft.slug || 'your-slug'}.`}
+              hint={`The post's URL will be /blog/${draft.slug || 'your-slug'}.`}
             />
           </div>
 
           <Field
             className="mt-5"
-            id="note-category"
+            id="post-category"
             label="Category"
             value={draft.category}
             onChange={(value) => set('category', value)}
             error={errors.category}
             required
-            placeholder="e.g. Design, Thoughts, Reflections"
+            placeholder="e.g. Technology, Thoughts, Notes"
           />
 
           <Field
             className="mt-6"
-            id="note-excerpt"
+            id="post-excerpt"
             label="Excerpt"
             type="textarea"
             rows={3}
@@ -148,18 +148,18 @@ export default function NoteEditor() {
             onChange={(value) => set('excerpt', value)}
             error={errors.excerpt}
             limit={300}
-            hint="Shown on the philosophy card and used as the page's meta description."
+            hint="Shown on the blog list and used as the page's meta description."
+            required
           />
 
           <div className="mt-5 grid gap-5 sm:grid-cols-2">
             <Field
-              id="note-published-at"
+              id="post-published-at"
               label="Publication date"
               type="date"
               value={draft.published_at}
               onChange={(value) => set('published_at', value)}
               error={errors.published_at}
-              required
             />
           </div>
 
@@ -183,12 +183,12 @@ export default function NoteEditor() {
 
         <FormSection
           title="Content (Markdown)"
-          description="The full note content."
+          description="The full article content."
           className="mt-6"
         >
           <div className="mt-6">
             <Field
-              id="note-content"
+              id="post-content"
               label="Markdown Content"
               type="textarea"
               rows={20}
@@ -200,15 +200,15 @@ export default function NoteEditor() {
           </div>
         </FormSection>
 
-        <div className="sticky bottom-0 mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-line bg-canvas/90 py-4 backdrop-blur-sm">
+        <div className="sticky bottom-0 mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-line bg-canvas/90 py-4 backdrop-blur-sm z-10">
           <div className="flex items-center gap-3">
             <Button type="submit" disabled={isSaving}>
-              {isNew ? 'Create note' : 'Save note'}
+              {isNew ? 'Create post' : 'Save post'}
             </Button>
             <Button
               type="button"
               variant="ghost"
-              onClick={() => navigate('/admin/notes')}
+              onClick={() => navigate('/admin/blog')}
               disabled={isSaving}
             >
               Cancel

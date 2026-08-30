@@ -26,8 +26,8 @@ export default function EpistemicLegend({
         How claims are labelled here
       </Heading>
       <p className="mt-1 text-sm text-muted">
-        Four different kinds of statement, kept visually distinct so you never have to
-        guess which one you are reading.
+        Four different kinds of statement, kept visually distinct so you never have to guess which
+        one you are reading.
       </p>
 
       <dl className={`mt-5 grid gap-4 ${compact ? 'sm:grid-cols-2' : 'sm:grid-cols-2'}`}>

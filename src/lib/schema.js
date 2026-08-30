@@ -12,7 +12,11 @@ import { COLLECTION_KEYS } from '../data/seed.js'
    -------------------------------------------------------------------------- */
 
 export const SOCIAL_KINDS = [
-  { value: 'link', label: 'Link', description: 'A regular hyperlink to an external profile or site.' },
+  {
+    value: 'link',
+    label: 'Link',
+    description: 'A regular hyperlink to an external profile or site.',
+  },
   { value: 'email', label: 'Email', description: 'A mailto: link to an email address.' },
 ]
 
@@ -36,11 +40,7 @@ export const PROJECT_STATUSES = [
 
 export const POST_STATUSES = [
   { value: 'draft', label: 'Draft', description: 'Hidden from the public site.' },
-  {
-    value: 'published',
-    label: 'Published',
-    description: 'Visible on the public site once the site is rebuilt.',
-  },
+  { value: 'published', label: 'Published', description: 'Visible to everyone.' },
 ]
 
 export const SKILL_LEVELS = [
@@ -168,24 +168,6 @@ export function createProject(overrides = {}) {
   }
 }
 
-export function createPost(overrides = {}) {
-  return {
-    id: uid('post'),
-    slug: '',
-    title: '',
-    category: '',
-    tags: [],
-    excerpt: '',
-    publishedAt: todayIso(),
-    updatedAt: '',
-    status: 'draft',
-    body: [],
-    sources: [],
-    order: 999,
-    ...overrides,
-  }
-}
-
 export function createBlock(type = 'paragraph') {
   const base = { id: uid('blk'), type }
   switch (type) {
@@ -208,15 +190,19 @@ export function createBlock(type = 'paragraph') {
 }
 
 export function createSource(overrides = {}) {
-  return { id: uid('src'), title: '', publisher: '', url: '', accessedAt: '', note: '', ...overrides }
+  return {
+    id: uid('src'),
+    title: '',
+    publisher: '',
+    url: '',
+    accessedAt: '',
+    note: '',
+    ...overrides,
+  }
 }
 
 export function createCategory(overrides = {}) {
   return { id: uid('cat'), slug: '', name: '', description: '', ...overrides }
-}
-
-export function createTag(overrides = {}) {
-  return { id: uid('tag'), slug: '', name: '', order: 999, ...overrides }
 }
 
 export function createSkill(overrides = {}) {
@@ -254,6 +240,20 @@ export function createSocialLink(overrides = {}) {
 
 export function createInterest(overrides = {}) {
   return { id: uid('int'), name: '', icon: 'BookOpen', note: '', order: 999, ...overrides }
+}
+
+export function createBlogPost(overrides = {}) {
+  return {
+    id: uid('post'),
+    slug: '',
+    title: '',
+    excerpt: '',
+    content: '',
+    category: '',
+    published_at: '',
+    status: 'draft',
+    ...overrides,
+  }
 }
 
 /* --------------------------------------------------------------------------
@@ -349,7 +349,12 @@ export function validateProject(project, allProjects = []) {
     summary: [rules.required('Summary'), rules.maxLength(260, 'Summary')],
     description: [rules.required('Description'), rules.minLength(40, 'Description')],
     role: [rules.required('Role')],
-    status: [rules.oneOf(PROJECT_STATUSES.map((s) => s.value), 'Status')],
+    status: [
+      rules.oneOf(
+        PROJECT_STATUSES.map((s) => s.value),
+        'Status',
+      ),
+    ],
     categories: [rules.nonEmptyArray('category')],
     projectDate: [rules.isoDate],
   })
@@ -370,47 +375,6 @@ export function validateProject(project, allProjects = []) {
   return errors
 }
 
-export function validatePost(post, allPosts = []) {
-  const errors = validate(post, {
-    title: [rules.required('Title'), rules.maxLength(140, 'Title')],
-    slug: [rules.required('Slug'), rules.slug, rules.unique(otherSlugs(allPosts, post.id), 'slug')],
-    category: [rules.required('Category')],
-    excerpt: [rules.required('Excerpt'), rules.maxLength(300, 'Excerpt')],
-    status: [rules.oneOf(POST_STATUSES.map((s) => s.value), 'Status')],
-    publishedAt: [rules.required('Publication date'), rules.isoDate],
-    updatedAt: [rules.isoDate],
-  })
-
-  // A published article with no body would render as a blank page.
-  if (post.status === 'published') {
-    const hasContent = (post.body || []).some((block) => {
-      if (block.type === 'list') return (block.items || []).some((item) => !isBlank(item))
-      if (block.type === 'image') return !isBlank(block.src)
-      if (block.type === 'code') return !isBlank(block.code)
-      return !isBlank(block.text)
-    })
-    if (!hasContent) {
-      errors.body = 'Add at least one block with content before marking this as published.'
-    }
-
-    // An image without alt text is invisible to a screen reader.
-    const imageMissingAlt = (post.body || []).findIndex(
-      (block) => block.type === 'image' && !isBlank(block.src) && isBlank(block.alt),
-    )
-    if (imageMissingAlt !== -1) {
-      errors.body = `Image in block ${imageMissingAlt + 1} needs alt text before this can be published.`
-    }
-  }
-
-  ;(post.sources || []).forEach((source, index) => {
-    if (isBlank(source.title)) errors[`sources.${index}.title`] = 'Source title is required.'
-    const urlError = rules.url(source.url)
-    if (urlError) errors[`sources.${index}.url`] = urlError
-  })
-
-  return errors
-}
-
 export function validateCategory(category, siblings = []) {
   return validate(category, {
     name: [rules.required('Name'), rules.maxLength(60, 'Name')],
@@ -423,18 +387,16 @@ export function validateCategory(category, siblings = []) {
   })
 }
 
-export function validateTag(tag, siblings = []) {
-  return validate(tag, {
-    name: [rules.required('Name'), rules.maxLength(40, 'Name')],
-    slug: [rules.required('Slug'), rules.slug, rules.unique(otherSlugs(siblings, tag.id), 'slug')],
-  })
-}
-
 export function validateSkill(skill) {
   return validate(skill, {
     name: [rules.required('Name'), rules.maxLength(80, 'Name')],
     group: [rules.required('Group')],
-    level: [rules.oneOf(SKILL_LEVELS.map((l) => l.value), 'Level')],
+    level: [
+      rules.oneOf(
+        SKILL_LEVELS.map((l) => l.value),
+        'Level',
+      ),
+    ],
     note: [rules.maxLength(200, 'Note')],
   })
 }
@@ -481,6 +443,23 @@ export function validateProfile(profile) {
   })
 }
 
+export function validateBlogPost(post, allPosts = []) {
+  return validate(post, {
+    title: [rules.required('Title'), rules.maxLength(120, 'Title')],
+    slug: [rules.required('Slug'), rules.slug, rules.unique(otherSlugs(allPosts, post.id), 'slug')],
+    excerpt: [rules.required('Excerpt'), rules.maxLength(300, 'Excerpt')],
+    content: [rules.required('Content')],
+    category: [rules.required('Category')],
+    status: [
+      rules.oneOf(
+        POST_STATUSES.map((s) => s.value),
+        'Status',
+      ),
+    ],
+    published_at: [rules.isoDate],
+  })
+}
+
 export function validateHome(home) {
   return validate(home, {
     heroHeading: [rules.required('Hero heading'), rules.maxLength(120, 'Hero heading')],
@@ -497,17 +476,17 @@ const HEX_COLOR = /^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i
 export function validateSettings(settings) {
   const errors = validate(settings, {
     defaultTheme: [rules.oneOf(['system', 'light', 'dark'], 'Default theme')],
-    blogEmptyState: [rules.required('Blog empty state message')],
   })
 
   const accent = settings.accent || {}
   for (const key of ['light', 'dark']) {
     if (!isBlank(accent[key]) && !HEX_COLOR.test(String(accent[key]).trim())) {
-      errors[`accent.${key}`] = 'Enter a hex colour such as #0f6b73, or leave blank for the default.'
+      errors[`accent.${key}`] =
+        'Enter a hex colour such as #0f6b73, or leave blank for the default.'
     }
   }
 
-  for (const key of ['featuredProjectLimit', 'latestPostsLimit', 'postsPerPage']) {
+  for (const key of ['featuredProjectLimit']) {
     const value = Number(settings[key])
     if (!Number.isInteger(value) || value < 1 || value > 50) {
       errors[key] = 'Enter a whole number between 1 and 50.'
@@ -554,7 +533,7 @@ export function validateDocument(doc) {
   }
 
   if (doc.categories && typeof doc.categories === 'object') {
-    for (const key of ['blog', 'project']) {
+    for (const key of ['project']) {
       if (!Array.isArray(doc.categories[key])) {
         problems.push(`"categories.${key}" must be an array.`)
       }

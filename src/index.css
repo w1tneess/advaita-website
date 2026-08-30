@@ -52,8 +52,11 @@
 
   /* Typography */
   --font-display: 'Playfair Display', ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
-  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+  --font-sans:
+    'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-mono:
+    ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
 
   /* Fluid Typography Scale */
   --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
@@ -83,12 +86,12 @@
 
 /* Dark theme. `:root.dark` (0,2,0) outranks the `:root` (0,1,0) rule that @theme emits. */
 :root.dark {
-  --color-canvas: #09090b;
-  --color-surface: #18181b;
-  --color-raised: #27272a;
-  --color-ink: #d4d4d8;
-  --color-muted: #a1a1aa;
-  --color-line: #27272a;
+  --color-canvas: #000000;
+  --color-surface: #0a0a0a;
+  --color-raised: #171717;
+  --color-ink: #ffffff;
+  --color-muted: #a3a3a3;
+  --color-line: #171717;
 
   --color-accent: #64748b;
   --color-accent-strong: #94a3b8;
@@ -115,7 +118,8 @@
   }
 
   /* Lenis smooth scrolling root */
-  html.lenis, html.lenis body {
+  html.lenis,
+  html.lenis body {
     height: auto;
   }
 
@@ -133,12 +137,11 @@
 
   body {
     background-color: var(--color-canvas);
-    background-image:
-      linear-gradient(
-        135deg,
-        color-mix(in srgb, var(--color-accent) 2%, transparent) 0,
-        transparent 35%
-      );
+    background-image: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--color-accent) 2%, transparent) 0,
+      transparent 35%
+    );
     color: var(--color-ink);
     font-family: var(--font-sans);
     line-height: 1.7;
@@ -181,7 +184,7 @@
     line-height: 1.25;
     text-wrap: balance;
   }
-  
+
   :root.dark h1,
   :root.dark h2,
   :root.dark h3,
@@ -193,7 +196,7 @@
     text-wrap: pretty;
     margin-bottom: 0.75em;
   }
-  
+
   p:last-child {
     margin-bottom: 0;
   }

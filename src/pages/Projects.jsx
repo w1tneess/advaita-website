@@ -4,12 +4,7 @@ import ProjectCard from '@/components/features/ProjectCard.jsx'
 import Seo from '@/components/meta/Seo.jsx'
 import { useContent } from '@/lib/content.jsx'
 import { PUBLIC_ROUTES } from '@/config/nav.js'
-import {
-  pageLoadVariant,
-  staggerContainer,
-  staggerItem,
-  scrollViewport,
-} from '@/lib/animations.js'
+import { pageLoadVariant, staggerContainer, staggerItem, scrollViewport } from '@/lib/animations.js'
 
 const ROUTE = PUBLIC_ROUTES.find((route) => route.key === 'projects')
 
@@ -35,9 +30,9 @@ export default function Projects() {
               Things I'm building — some finished, most still evolving.
             </p>
             <p className="mt-4 max-w-prose text-base leading-relaxed text-muted">
-              I prefer showing the actual process over waiting until everything looks perfect.
-              Some projects may change direction, some may remain unfinished, and that's part of
-              building things.
+              I prefer showing the actual process over waiting until everything looks perfect. Some
+              projects may change direction, some may remain unfinished, and that's part of building
+              things.
             </p>
           </header>
 

@@ -6,8 +6,8 @@ import AdminLayout from '../../layouts/AdminLayout.jsx'
 import Dashboard from './Dashboard.jsx'
 import DataManager from './DataManager.jsx'
 import HomeEditor from './HomeEditor.jsx'
-import PostEditor from './PostEditor.jsx'
-import PostsList from './PostsList.jsx'
+import BlogList from './BlogList.jsx'
+import BlogEditor from './BlogEditor.jsx'
 import ProfileEditor from './ProfileEditor.jsx'
 import ProjectEditor from './ProjectEditor.jsx'
 import ProjectsList from './ProjectsList.jsx'
@@ -49,8 +49,8 @@ export default function AdminApp() {
           <Route path="home" element={<HomeEditor />} />
           <Route path="projects" element={<ProjectsList />} />
           <Route path="projects/:id" element={<ProjectEditor />} />
-          <Route path="posts" element={<PostsList />} />
-          <Route path="posts/:id" element={<PostEditor />} />
+          <Route path="blog" element={<BlogList />} />
+          <Route path="blog/:id" element={<BlogEditor />} />
           <Route path="taxonomy" element={<Taxonomy />} />
           <Route path="skills" element={<SkillsEditor />} />
           <Route path="timeline" element={<TimelineEditor />} />

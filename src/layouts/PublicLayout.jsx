@@ -34,8 +34,8 @@ export default function PublicLayout() {
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1 py-2 text-sm">
               <Eye className="h-4 w-4 text-opinion" aria-hidden="true" />
               <span>
-                <strong className="font-semibold">Preview mode.</strong> Drafts and hidden
-                items are visible. This affects your browser only.
+                <strong className="font-semibold">Preview mode.</strong> Drafts and hidden items are
+                visible. This affects your browser only.
               </span>
               <button
                 type="button"

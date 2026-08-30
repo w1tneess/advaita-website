@@ -31,10 +31,7 @@ export default function DataTable({ caption, columns, rows, rowKey = (row) => ro
 
         <tbody>
           {rows.map((row) => (
-            <tr
-              key={rowKey(row)}
-              className="block border-b border-line last:border-0 sm:table-row"
-            >
+            <tr key={rowKey(row)} className="block border-b border-line last:border-0 sm:table-row">
               {columns.map((column) => (
                 <td
                   key={column.key}

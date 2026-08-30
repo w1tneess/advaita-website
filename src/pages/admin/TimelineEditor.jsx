@@ -21,10 +21,9 @@ export default function TimelineEditor() {
       description="Milestones in Advita's ongoing learning and practice. No dates that reveal age or school — only period labels, titles and details."
     >
       <Callout variant="limitation" title="No age- or school-leak">
-        Use period labels that don't reveal exact age: phrases like "2024–2025", "Q3 2025",
-        "Summer 2025", "During masters study" or "First year of studies". Do not include
-        exact months, days, or school names. The privacy note on the Profile page explains
-        why this matters.
+        Use period labels that don't reveal exact age: phrases like "2024–2025", "Q3 2025", "Summer
+        2025", "During masters study" or "First year of studies". Do not include exact months, days,
+        or school names. The privacy note on the Profile page explains why this matters.
       </Callout>
 
       <CollectionEditor

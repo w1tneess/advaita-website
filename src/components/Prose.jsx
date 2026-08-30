@@ -75,9 +75,7 @@ function Block({ block }) {
     case 'code':
       return (
         <div className="my-7">
-          {block.language && (
-            <p className="mb-1 font-mono text-xs text-muted">{block.language}</p>
-          )}
+          {block.language && <p className="mb-1 font-mono text-xs text-muted">{block.language}</p>}
           <pre className="overflow-x-auto rounded-card border border-line bg-raised p-4 text-sm">
             <code className="font-mono">{block.code}</code>
           </pre>
@@ -96,9 +94,7 @@ function Block({ block }) {
             className="w-full rounded-card border border-line"
           />
           {block.caption && (
-            <figcaption className="mt-2 text-center text-sm text-muted">
-              {block.caption}
-            </figcaption>
+            <figcaption className="mt-2 text-center text-sm text-muted">{block.caption}</figcaption>
           )}
         </figure>
       )

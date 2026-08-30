@@ -2,12 +2,7 @@
   "name": "Advaita Chandra",
   "shortName": "Advaita",
   "tagline": "Learning in public, one question at a time.",
-  "roles": [
-    "Student researcher",
-    "Developing web builder",
-    "Writer",
-    "Independent learner"
-  ],
+  "roles": ["Student researcher", "Developing web builder", "Writer", "Independent learner"],
   "location": "India",
   "photo": null,
   "photoAlt": "Placeholder illustration standing in for a profile photograph.",

@@ -17,7 +17,10 @@ import { validateHome } from '../../lib/schema.js'
  * edited beside a reminder of what it may and may not say.
  */
 
-const DESTINATIONS = NAV_ITEMS.map((item) => ({ value: item.path, label: `${item.label} (${item.path})` }))
+const DESTINATIONS = NAV_ITEMS.map((item) => ({
+  value: item.path,
+  label: `${item.label} (${item.path})`,
+}))
 
 function CtaFields({ id, legend, cta, onChange, hint }) {
   return (
@@ -145,10 +148,10 @@ export default function HomeEditor() {
           <h2 className="text-base font-semibold">Credibility statement</h2>
 
           <Callout variant="limitation" title="What this field may contain" className="mt-4">
-            Describe the work that exists and the method used on it. It must not claim an
-            award, a publication, a qualification, a client, a number of readers, a statistic
-            or a result that has not actually been produced. If a project is only a design,
-            the statement has to say so.
+            Describe the work that exists and the method used on it. It must not claim an award, a
+            publication, a qualification, a client, a number of readers, a statistic or a result
+            that has not actually been produced. If a project is only a design, the statement has to
+            say so.
           </Callout>
 
           <Field

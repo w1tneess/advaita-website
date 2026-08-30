@@ -9,15 +9,10 @@ import { useConfirm } from '@/hooks/useConfirm.jsx'
  * Offers options to save, discard, or cancel.
  */
 
-export default function UnsavedChangesDialog({
-  isDirty,
-  onSave,
-  onDiscard,
-  itemName = 'changes',
-}) {
-  const { confirm, dialogProps } = useConfirm()
+export default function UnsavedChangesDialog({ isDirty, onSave, onDiscard, itemName = 'changes' }) {
+  const { confirm, ..._dialogProps } = useConfirm()
 
-  const handleNavigation = async () => {
+  const _handleNavigation = async () => {
     const confirmed = await confirm({
       title: 'Unsaved changes',
       message: `You have unsaved ${itemName}. Do you want to save them before leaving?`,

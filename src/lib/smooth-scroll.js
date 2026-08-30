@@ -19,9 +19,7 @@ export function useSmoothScroll() {
 
   useEffect(() => {
     // Respect the user's motion preference
-    const prefersReducedMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)',
-    ).matches
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
     if (prefersReducedMotion) return
 

@@ -8,12 +8,7 @@ import Button from '@/components/ui/Button.jsx'
  * Prepared for future use when collections grow large.
  */
 
-export default function Pagination({
-  page,
-  pageSize,
-  total,
-  onChange,
-}) {
+export default function Pagination({ page, pageSize, total, onChange }) {
   const totalPages = Math.ceil(total / pageSize)
   const hasPrev = page > 1
   const hasNext = page < totalPages

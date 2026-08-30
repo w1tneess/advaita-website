@@ -24,12 +24,7 @@ export default function AdminLayout() {
 
   return (
     <div className="min-h-dvh bg-canvas text-ink">
-      <Seo
-        title="Content admin"
-        description="Local demo content editor."
-        path={pathname}
-        noindex
-      />
+      <Seo title="Content admin" description="Local demo content editor." path={pathname} noindex />
 
       <SkipLink />
       <DemoBanner />

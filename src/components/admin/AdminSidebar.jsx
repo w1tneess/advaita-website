@@ -33,7 +33,7 @@ export const NAV_GROUPS = [
       { to: '/admin/profile', label: 'Profile & interests', icon: User },
       { to: '/admin/home', label: 'Home page', icon: Home },
       { to: '/admin/projects', label: 'Projects', icon: FolderGit2 },
-      { to: '/admin/posts', label: 'Writing', icon: FileText },
+      { to: '/admin/blog', label: 'Writing', icon: FileText },
     ],
   },
   {

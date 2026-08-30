@@ -139,7 +139,9 @@ export default function Philosophy() {
             <div className="rounded-xl border border-dashed border-line bg-canvas px-6 py-12 text-center">
               <BookMarked className="mx-auto h-8 w-8 text-muted/40" aria-hidden="true" />
               <p className="mt-3 text-sm font-medium text-muted">No notes yet</p>
-              <p className="mt-1 text-xs text-muted">Raw thoughts and reading notes will go here.</p>
+              <p className="mt-1 text-xs text-muted">
+                Raw thoughts and reading notes will go here.
+              </p>
             </div>
           )}
         </Section>

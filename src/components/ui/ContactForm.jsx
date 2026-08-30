@@ -29,14 +29,17 @@ export default function ContactForm() {
   const [errorMessage, setErrorMessage] = useState('')
   const [lastSubmitTime, setLastSubmitTime] = useState(0)
 
-  const handleChange = useCallback((e) => {
-    const { name, value } = e.target
-    setForm((prev) => ({ ...prev, [name]: value }))
-    // Clear error on change
-    if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: undefined }))
-    }
-  }, [errors])
+  const handleChange = useCallback(
+    (e) => {
+      const { name, value } = e.target
+      setForm((prev) => ({ ...prev, [name]: value }))
+      // Clear error on change
+      if (errors[name]) {
+        setErrors((prev) => ({ ...prev, [name]: undefined }))
+      }
+    },
+    [errors],
+  )
 
   const validate = useCallback(() => {
     const newErrors = {}
@@ -55,44 +58,48 @@ export default function ContactForm() {
     return newErrors
   }, [form])
 
-  const handleSubmit = useCallback(async (e) => {
-    e.preventDefault()
+  const handleSubmit = useCallback(
+    async (e) => {
+      e.preventDefault()
 
-    // Rate limiting
-    const now = Date.now()
-    if (now - lastSubmitTime < 30000) {
-      setStatus('error')
-      setErrorMessage('Please wait 30 seconds before submitting again.')
-      return
-    }
+      // Rate limiting
+      const now = Date.now()
+      if (now - lastSubmitTime < 30000) {
+        setStatus('error')
+        setErrorMessage('Please wait 30 seconds before submitting again.')
+        return
+      }
 
-    const validationErrors = validate()
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors)
-      return
-    }
+      const validationErrors = validate()
+      if (Object.keys(validationErrors).length > 0) {
+        setErrors(validationErrors)
+        return
+      }
 
-    setStatus('submitting')
-    setErrorMessage('')
+      setStatus('submitting')
+      setErrorMessage('')
 
-    try {
-      await submitContactForm({
-        name: form.name.trim(),
-        email: form.email.trim(),
-        topic: form.topic,
-        message: form.message.trim(),
-      })
+      try {
+        await submitContactForm({
+          name: form.name.trim(),
+          email: form.email.trim(),
+          topic: form.topic,
+          message: form.message.trim(),
+        })
 
-      setStatus('success')
-      setLastSubmitTime(Date.now())
-      setForm(INITIAL_FORM)
-    } catch (err) {
-      setStatus('error')
-      setErrorMessage(
-        err?.message || 'Something went wrong. Please try again or use an alternative contact method.'
-      )
-    }
-  }, [form, validate, lastSubmitTime])
+        setStatus('success')
+        setLastSubmitTime(Date.now())
+        setForm(INITIAL_FORM)
+      } catch (err) {
+        setStatus('error')
+        setErrorMessage(
+          err?.message ||
+            'Something went wrong. Please try again or use an alternative contact method.',
+        )
+      }
+    },
+    [form, validate, lastSubmitTime],
+  )
 
   if (status === 'success') {
     return (
@@ -105,7 +112,8 @@ export default function ContactForm() {
         <CheckCircle className="mx-auto h-10 w-10 text-accent" aria-hidden="true" />
         <h3 className="mt-4 text-lg font-semibold">Message sent</h3>
         <p className="mt-2 text-sm text-muted">
-          Thank you for reaching out. I'll get back to you when I can — replies may be slow since I'm a student.
+          Thank you for reaching out. I'll get back to you when I can — replies may be slow since
+          I'm a student.
         </p>
         <button
           type="button"
@@ -228,7 +236,10 @@ export default function ContactForm() {
 
       {/* Error banner */}
       {status === 'error' && errorMessage && (
-        <div className="flex items-start gap-3 rounded-lg border border-limitation/30 bg-limitation/5 p-4" role="alert">
+        <div
+          className="flex items-start gap-3 rounded-lg border border-limitation/30 bg-limitation/5 p-4"
+          role="alert"
+        >
           <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-limitation" aria-hidden="true" />
           <p className="text-sm text-limitation">{errorMessage}</p>
         </div>

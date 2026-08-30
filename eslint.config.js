@@ -34,9 +34,9 @@ export default [
       'react-refresh/only-export-components': 'off',
       'react-hooks/set-state-in-effect': 'off',
       'react-hooks/exhaustive-deps': 'off',
-      'no-unused-vars': 'off',
-      'no-undef': 'off',
-      'no-empty': 'off',
+      'no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' }],
+      'no-undef': 'error',
+      'no-empty': 'warn',
     },
   },
 ]

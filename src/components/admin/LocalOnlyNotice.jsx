@@ -16,15 +16,13 @@ export default function LocalOnlyNotice({ className = '' }) {
 
   if (!storageAvailable) {
     return (
-      <div
-        className={`rounded-card border border-limitation/40 bg-limitation/10 p-4 ${className}`}
-      >
+      <div className={`rounded-card border border-limitation/40 bg-limitation/10 p-4 ${className}`}>
         <p className="flex items-start gap-2.5 text-sm">
           <TriangleAlert className="mt-0.5 h-4 w-4 shrink-0 text-limitation" aria-hidden="true" />
           <span>
-            <strong className="font-semibold">This browser is blocking local storage.</strong>{' '}
-            You can still edit and export, but nothing will survive a page reload. Private or
-            incognito windows are the usual cause.
+            <strong className="font-semibold">This browser is blocking local storage.</strong> You
+            can still edit and export, but nothing will survive a page reload. Private or incognito
+            windows are the usual cause.
           </span>
         </p>
       </div>
@@ -39,17 +37,16 @@ export default function LocalOnlyNotice({ className = '' }) {
           {isLocal ? (
             <>
               <strong className="font-semibold">Editing a local copy.</strong> Your changes are
-                saved in this browser only. Export a publish bundle, then commit it through GitHub.
+              saved in this browser only. Export a publish bundle, then commit it through GitHub.
             </>
           ) : (
             <>
-              <strong className="font-semibold">Showing checked-in content.</strong> Nothing
-              has been edited in this browser yet. The first change you save creates a local
-              copy.
+              <strong className="font-semibold">Showing checked-in content.</strong> Nothing has
+              been edited in this browser yet. The first change you save creates a local copy.
             </>
           )}{' '}
-          Local storage is not secure storage: never put a password, an API key or anything
-          private into these fields.{' '}
+          Local storage is not secure storage: never put a password, an API key or anything private
+          into these fields.{' '}
           <Link to="/admin/data" className="text-accent underline underline-offset-4">
             Export or reset
           </Link>
@@ -61,8 +58,8 @@ export default function LocalOnlyNotice({ className = '' }) {
         <p className="mt-3 flex items-start gap-2.5 border-t border-line pt-3 text-sm text-muted">
           <Info className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
           <span>
-            The deployed site&rsquo;s default content is newer than your local copy. Your edits
-            have been kept — nothing was overwritten. To adopt the new defaults instead, use{' '}
+            The deployed site&rsquo;s default content is newer than your local copy. Your edits have
+            been kept — nothing was overwritten. To adopt the new defaults instead, use{' '}
             <Link to="/admin/data" className="text-accent underline underline-offset-4">
               Reset demo data
             </Link>

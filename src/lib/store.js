@@ -82,6 +82,7 @@ const MIGRATIONS = {
       photos: [],
     },
   }),
+  3: (doc) => ({ ...doc, blog: doc.blog || [] }),
 }
 
 function migrate(doc) {
@@ -107,7 +108,11 @@ function migrate(doc) {
    Load / save / clear
    -------------------------------------------------------------------------- */
 
-import { fetchContentFromSupabase, saveContentToSupabase, clearContentInSupabase } from './supabase/sync.js'
+import {
+  fetchContentFromSupabase,
+  saveContentToSupabase,
+  clearContentInSupabase,
+} from './supabase/sync.js'
 
 /**
  * Load the active content document asynchronously from Supabase.
@@ -116,7 +121,7 @@ import { fetchContentFromSupabase, saveContentToSupabase, clearContentInSupabase
  */
 export async function loadDocument() {
   const raw = await fetchContentFromSupabase()
-  
+
   if (!raw) {
     // No remote edits: use the deployed seed and write nothing.
     return { doc: createSeedDocument(), source: 'seed', warning: null }

@@ -57,7 +57,9 @@ export default function Callout({ variant = 'note', title, children, className =
       className={`rounded-card border px-4 py-4 sm:px-5 ${meta.classes} ${className}`}
       aria-label={`${meta.label}${title ? `: ${title}` : ''}`}
     >
-      <p className={`mb-2 flex items-center gap-2 text-xs font-semibold tracking-wide uppercase ${meta.accent}`}>
+      <p
+        className={`mb-2 flex items-center gap-2 text-xs font-semibold tracking-wide uppercase ${meta.accent}`}
+      >
         <Icon className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
         {meta.label}
       </p>

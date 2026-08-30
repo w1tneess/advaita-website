@@ -4,13 +4,7 @@ import { Inbox } from 'lucide-react'
  * Honest empty state. Used wherever a collection is genuinely empty — most visibly on
  * the blog, which ships with no articles rather than with invented ones.
  */
-export default function EmptyState({
-  icon: Icon = Inbox,
-  title,
-  message,
-  action,
-  className = '',
-}) {
+export default function EmptyState({ icon: Icon = Inbox, title, message, action, className = '' }) {
   return (
     <div
       className={`rounded-card border border-dashed border-line bg-surface/60 px-6 py-14 text-center ${className}`}

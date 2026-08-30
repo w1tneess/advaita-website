@@ -35,10 +35,7 @@ export function useSectionForm(sectionKey, section, validate) {
   }, [])
 
   // Cheap deep comparison. These sections are small, plain-JSON objects.
-  const dirty = useMemo(
-    () => JSON.stringify(draft) !== JSON.stringify(section),
-    [draft, section],
-  )
+  const dirty = useMemo(() => JSON.stringify(draft) !== JSON.stringify(section), [draft, section])
 
   const submit = useCallback(
     (event) => {

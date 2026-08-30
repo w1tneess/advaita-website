@@ -158,7 +158,68 @@ export const lightboxContent = {
   },
 }
 
-// ─── 10. Mobile menu slide ─────────────────────────────────────────────────────
+// ─── 10. Editorial hero — cinematic entrance ───────────────────────────────────
+export const editorialHeroContainer = {
+  hidden: { opacity: 1 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.18,
+      delayChildren: 0.15,
+    },
+  },
+}
+
+export const editorialNameReveal = {
+  hidden: { opacity: 0, y: 40, filter: 'blur(6px)' },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: 'blur(0px)',
+    transition: {
+      duration: 0.9,
+      ease: EASE_OUT_EXPO,
+    },
+  },
+}
+
+export const editorialPortraitReveal = {
+  hidden: { opacity: 0, scale: 1.06 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 1.1,
+      ease: EASE_OUT_EXPO,
+    },
+  },
+}
+
+export const editorialCopyReveal = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.7,
+      ease: EASE_OUT_QUART,
+    },
+  },
+}
+
+export const editorialScrollReveal = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 0.35,
+    transition: {
+      duration: 0.8,
+      delay: 0.4,
+      ease: 'easeOut',
+    },
+  },
+}
+
+// ─── 11. Mobile menu slide ─────────────────────────────────────────────────────
 export const mobileMenuVariants = {
   closed: {
     opacity: 0,

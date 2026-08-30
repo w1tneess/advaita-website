@@ -18,12 +18,12 @@ export default function ProjectCard({ project, headingLevel = 3 }) {
   const hasLive = project.links?.live
 
   return (
-    <Card 
-      as={motion.article} 
+    <Card
+      as={motion.article}
       className="p-6 sm:p-8 transform-gpu origin-left"
       whileHover={{ scale: 1.01 }}
       whileTap={{ scale: 0.97 }}
-      transition={{ duration: 0.2, ease: "easeOut" }}
+      transition={{ duration: 0.2, ease: 'easeOut' }}
     >
       <div className="flex flex-wrap items-center gap-2">
         <StatusBadge kind="project" value={project.status} />
@@ -33,9 +33,7 @@ export default function ProjectCard({ project, headingLevel = 3 }) {
         {project.title}
       </Heading>
 
-      <p className="mt-3 max-w-prose text-base leading-relaxed text-muted">
-        {project.description}
-      </p>
+      <p className="mt-3 max-w-prose text-base leading-relaxed text-muted">{project.description}</p>
 
       {project.tools && project.tools.length > 0 && (
         <ul className="mt-4 flex flex-wrap gap-2">

@@ -21,9 +21,7 @@ export default function LoadingState({
   if (variant === 'overlay') {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/20 backdrop-blur-sm">
-        <div className="rounded-lg bg-surface p-8 shadow-lg">
-          {content}
-        </div>
+        <div className="rounded-lg bg-surface p-8 shadow-lg">{content}</div>
       </div>
     )
   }

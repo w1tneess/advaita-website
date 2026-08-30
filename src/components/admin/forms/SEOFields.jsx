@@ -56,11 +56,7 @@ export default function SEOFields({
       </Field>
 
       {showKeywords && (
-        <Field
-          id="keywords"
-          label="Keywords"
-          hint="Comma-separated keywords (optional)"
-        >
+        <Field id="keywords" label="Keywords" hint="Comma-separated keywords (optional)">
           <input
             id="keywords"
             type="text"

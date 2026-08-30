@@ -2,8 +2,6 @@ import { ArrowRight, Check } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 import Button from '../components/ui/Button.jsx'
-import Card from '../components/ui/Card.jsx'
-import Container from '../components/layout/Container.jsx'
 import EmptyState from '../components/ui/EmptyState.jsx'
 import InterestCard from '../components/features/InterestCard.jsx'
 
@@ -13,96 +11,84 @@ import Seo from '../components/meta/Seo.jsx'
 import { useContent } from '../lib/content.jsx'
 import { PUBLIC_ROUTES } from '../config/nav.js'
 import {
-  heroContainer,
-  heroLine,
+  editorialHeroContainer,
+  editorialPortraitReveal,
+  editorialCopyReveal,
   sectionReveal,
   staggerContainer,
   staggerItem,
   scrollViewport,
 } from '../lib/animations.js'
+import './HeroSection.css'
 
 const ROUTE = PUBLIC_ROUTES.find((route) => route.key === 'home')
 
 export default function Home() {
-  const { profile, home, settings, featuredProjects, latestPosts, interests } = useContent()
+  const { profile, home, featuredProjects, interests, social } = useContent()
 
   return (
     <>
       <Seo title={ROUTE.title} description={ROUTE.description} path="/" />
 
-      {/* Hero — typography-led entrance animation, deliberately restrained:
-          no statistics, no claims, no badges of achievement. */}
-      <Container>
-        <motion.div
-          className="max-w-5xl py-16 sm:py-24 md:py-32"
-          variants={heroContainer}
-          initial="hidden"
-          animate="visible"
-        >
-          <div className="grid gap-8 md:gap-24 md:grid-cols-2 md:items-center">
-            {/* Left Column: Text */}
-            <div>
-              {home.heroKicker && (
-                <motion.p
-                  className="text-sm font-medium tracking-wide text-accent"
-                  variants={heroLine}
-                >
-                  {home.heroKicker}
-                </motion.p>
-              )}
-
-              <motion.h1
-                className="mt-4 font-display text-3xl font-semibold tracking-tight md:text-5xl lg:text-[3.5rem] lg:leading-tight"
-                variants={heroLine}
-              >
-                {home.heroHeading}
-              </motion.h1>
-
-              <motion.p
-                className="mt-6 max-w-prose text-base md:text-lg leading-relaxed text-muted"
-                variants={heroLine}
-              >
-                {home.heroIntro}
-              </motion.p>
-
-              <motion.p
-                className="mt-4 max-w-prose text-zinc-600 dark:text-zinc-400 leading-relaxed"
-                variants={heroLine}
-              >
-                A place for unfinished thoughts, strange questions, and things worth looking at twice. I’m interested in how ideas take shape—in code, in design, in writing, and in the spaces between them. Not everything here has a definitive answer; some things are here simply because I’m still thinking about them.
-              </motion.p>
-
-              <motion.div className="mt-9 flex flex-wrap gap-3" variants={heroLine}>
-                <Button to={home.primaryCta.to} size="lg">
-                  {home.primaryCta.label}
-                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
-                </Button>
-                {home.secondaryCta && (
-                  <Button to={home.secondaryCta.to} variant="secondary" size="lg">
-                    {home.secondaryCta.label}
-                  </Button>
-                )}
-              </motion.div>
-
-              <motion.p className="mt-10 text-sm text-muted" variants={heroLine}>
-                {profile.name} · {profile.location}
-              </motion.p>
-            </div>
-
-            {/* Right Column: Edgeless Image */}
-            <motion.div 
-              className="flex justify-center md:justify-end"
-              variants={heroLine}
-            >
-              <img 
-                src="/pfp.png" 
-                alt={profile.name} 
-                className="w-48 mx-auto md:mx-0 md:w-96 lg:w-[28rem] object-cover dark:opacity-90 dark:mix-blend-luminosity [mask-image:linear-gradient(to_bottom,black_70%,transparent_100%)]"
-              />
-            </motion.div>
-          </div>
+      {/* ─── Cinematic Editorial Hero ──────────────────────────────────────
+           Extreme minimalist dark canvas layout inspired by Kirill Pritula reference.
+           ────────────────────────────────────────────────────────────────── */}
+      <motion.section
+        className="hero-cinematic"
+        aria-label="Introduction"
+        variants={editorialHeroContainer}
+        initial="hidden"
+        animate="visible"
+      >
+        {/* Background Portrait Layer */}
+        <motion.div className="hero-bg-portrait-wrapper" variants={editorialPortraitReveal}>
+          <img
+            src="/pfp.png"
+            alt={`Portrait of ${profile.name}`}
+            className="hero-bg-portrait"
+            loading="eager"
+            fetchPriority="high"
+          />
         </motion.div>
-      </Container>
+
+        {/* Left Column: Massive Typography */}
+        <motion.div className="hero-col-left" variants={editorialCopyReveal}>
+          <h1 className="hero-name-massive">
+            <span>{profile.name.split(' ')[0]}</span>
+            <span>{profile.name.split(' ')[1] || ''}</span>
+          </h1>
+          <div className="hero-identity-line">
+            <span className="hero-identity-separator" aria-hidden="true"></span>
+            <span>THINKER / BUILDER / OBSERVER</span>
+          </div>
+          <p className="hero-intro-text">
+            {home.heroIntro ||
+              "A personal space for things I'm thinking about, making, and noticing."}
+          </p>
+        </motion.div>
+
+        {/* Bottom Right: Socials */}
+        <motion.div className="hero-bottom-right" variants={editorialCopyReveal}>
+          <ul className="hero-social-horizontal">
+            {social
+              ?.filter((s) => s.visible && s.kind === 'link')
+              .slice(0, 3)
+              .map((item, index, arr) => (
+                <li key={item.id} className="flex items-center gap-3">
+                  <a
+                    href={item.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={item.label}
+                  >
+                    {item.platform}
+                  </a>
+                  {index < arr.length - 1 && <span className="hero-social-separator">/</span>}
+                </li>
+              ))}
+          </ul>
+        </motion.div>
+      </motion.section>
 
       {/* Featured projects */}
       <motion.div
@@ -151,8 +137,6 @@ export default function Home() {
         </Section>
       </motion.div>
 
-
-
       {/* Interests */}
       <motion.div
         initial="hidden"
@@ -189,22 +173,33 @@ export default function Home() {
         viewport={scrollViewport}
         variants={sectionReveal}
       >
-        <Section id="credibility" title={home.credibilityHeading} width="prose">
-          <div>
-            <p className="text-lg leading-8 border-l-2 border-line pl-6 py-1">
-              {home.credibilityStatement}
-            </p>
+        <Section id="credibility" width="default" className="border-t border-line/40">
+          <div className="grid gap-10 lg:gap-16 lg:grid-cols-12">
+            <div className="lg:col-span-5">
+              <p className="text-xs font-semibold tracking-wider text-accent uppercase mb-3">
+                Transparency & Approach
+              </p>
+              <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl text-ink leading-tight">
+                {home.credibilityHeading}
+              </h2>
+            </div>
 
-            {(home.credibilityPoints || []).length > 0 && (
-              <ul className="mt-12 space-y-4">
-                {home.credibilityPoints.map((point, index) => (
-                  <li key={index} className="flex items-start gap-3 text-sm text-muted">
-                    <Check className="mt-1 h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
-                    <span>{point}</span>
-                  </li>
-                ))}
-              </ul>
-            )}
+            <div className="lg:col-span-7">
+              <p className="text-lg leading-relaxed text-ink border-l-2 border-accent/60 pl-6 py-1">
+                {home.credibilityStatement}
+              </p>
+
+              {(home.credibilityPoints || []).length > 0 && (
+                <ul className="mt-8 grid gap-4 sm:grid-cols-2">
+                  {home.credibilityPoints.map((point, index) => (
+                    <li key={index} className="flex items-start gap-3 text-sm text-muted">
+                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
+                      <span className="leading-snug">{point}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
           </div>
         </Section>
       </motion.div>

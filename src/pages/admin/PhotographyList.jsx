@@ -1,6 +1,5 @@
 import { Eye, EyeOff, Pencil, Plus, Trash2 } from 'lucide-react'
 
-
 import AdminPage from '../../components/admin/AdminPage.jsx'
 import ConfirmDialog from '../../components/admin/ConfirmDialog.jsx'
 import DataTable from '../../components/admin/DataTable.jsx'
@@ -23,13 +22,16 @@ export default function PhotographyList() {
     try {
       await upsertPhotography({ ...photo, featured: next })
       toast.success(next ? 'Added to featured photos.' : 'Removed from featured.')
-    } catch (e) { console.error(e) }
+    } catch (e) {
+      console.error(e)
+    }
   }
 
   const requestDelete = async (photo) => {
     const confirmed = await confirm({
       title: `Delete “${photo.title}”?`,
-      message: 'This removes the photo from Supabase Storage and the database. It cannot be undone.',
+      message:
+        'This removes the photo from Supabase Storage and the database. It cannot be undone.',
       confirmLabel: 'Delete photo',
     })
     if (!confirmed) return
@@ -37,7 +39,9 @@ export default function PhotographyList() {
     try {
       await removePhotography(photo.id, photo.storage_path)
       toast.success('Photo deleted.')
-    } catch (e) { console.error(e) }
+    } catch (e) {
+      console.error(e)
+    }
   }
 
   const columns = [
@@ -45,11 +49,7 @@ export default function PhotographyList() {
       key: 'image',
       header: 'Photo',
       render: (photo) => (
-        <img 
-          src={photo.image_url} 
-          alt={photo.title} 
-          className="h-16 w-16 object-cover rounded" 
-        />
+        <img src={photo.image_url} alt={photo.title} className="h-16 w-16 object-cover rounded" />
       ),
     },
     {
@@ -131,10 +131,7 @@ export default function PhotographyList() {
                 action={<Button to="/admin/photography/new">Upload the first one</Button>}
               />
             ) : (
-              <EmptyState
-                title="No photos match"
-                message="Nothing matches the current filters."
-              />
+              <EmptyState title="No photos match" message="Nothing matches the current filters." />
             )
           }
         />

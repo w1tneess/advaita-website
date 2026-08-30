@@ -91,9 +91,11 @@ export const PUBLIC_ROUTES = [
 export const ADMIN_ROUTE_PREFIX = '/admin'
 
 /** Navigation items for the public header and footer. */
-export const NAV_ITEMS = PUBLIC_ROUTES.filter((route) => route.nav).map(
-  ({ path, label, key }) => ({ path, label, key }),
-)
+export const NAV_ITEMS = PUBLIC_ROUTES.filter((route) => route.nav).map(({ path, label, key }) => ({
+  path,
+  label,
+  key,
+}))
 
 /**
  * Build the route entry for a single published article.

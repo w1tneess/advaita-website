@@ -30,7 +30,7 @@ export default function About() {
 
   /** Map a skill's `evidence` slug to the project it points at, if that project is public. */
   const evidenceFor = (slug) =>
-    slug ? publicProjects.find((project) => project.slug === slug) ?? null : null
+    slug ? (publicProjects.find((project) => project.slug === slug) ?? null) : null
 
   return (
     <>
@@ -234,23 +234,21 @@ export default function About() {
       >
         <Section id="about-labels" tone="raised">
           <div className="grid gap-6 lg:grid-cols-2">
-
-
             {/* Stated plainly rather than buried: this is a student's site. */}
             <Callout variant="limitation" title="What I am not claiming">
               <ul className="space-y-2">
                 <li className="flex gap-2">
                   <Check className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden="true" />
                   <span>
-                    I am a student, not an expert. Nothing here is peer-reviewed or
-                    professionally credentialed.
+                    I am a student, not an expert. Nothing here is peer-reviewed or professionally
+                    credentialed.
                   </span>
                 </li>
                 <li className="flex gap-2">
                   <Check className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden="true" />
                   <span>
-                    The projects listed are personal work. None of them was commissioned, and
-                    none has been published or externally reviewed.
+                    The projects listed are personal work. None of them was commissioned, and none
+                    has been published or externally reviewed.
                   </span>
                 </li>
                 <li className="flex gap-2">

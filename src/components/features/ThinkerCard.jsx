@@ -15,9 +15,10 @@ export default function ThinkerCard({ thinker }) {
   const [expanded, setExpanded] = useState(false)
   const isLong = thinker.description && thinker.description.length > TRUNCATE_LENGTH
 
-  const displayText = !isLong || expanded
-    ? thinker.description
-    : thinker.description.slice(0, TRUNCATE_LENGTH).trim() + '…'
+  const displayText =
+    !isLong || expanded
+      ? thinker.description
+      : thinker.description.slice(0, TRUNCATE_LENGTH).trim() + '…'
 
   return (
     <motion.div
@@ -34,9 +35,7 @@ export default function ThinkerCard({ thinker }) {
       aria-expanded={isLong ? expanded : undefined}
     >
       <div className="flex items-start justify-between gap-3">
-        <h3 className="font-display text-lg font-semibold tracking-tight">
-          {thinker.name}
-        </h3>
+        <h3 className="font-display text-lg font-semibold tracking-tight">{thinker.name}</h3>
         {isLong && (
           <motion.span
             className="mt-1 shrink-0 text-muted"

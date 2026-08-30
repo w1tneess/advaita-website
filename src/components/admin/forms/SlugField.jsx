@@ -14,7 +14,7 @@ export default function SlugField({
   title,
   locked = false,
   onLockChange,
-  validateUnique,
+  _validateUnique = false,
   hint,
   error,
 }) {
@@ -33,7 +33,7 @@ export default function SlugField({
 
       onChange(normalized)
     },
-    [onChange]
+    [onChange],
   )
 
   const toggleLock = useCallback(() => {
