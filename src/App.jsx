@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { Analytics } from '@vercel/analytics/react'
 
 import ScrollToTop from './components/ui/ScrollToTop.jsx'
 import ToastViewport from './components/ui/ToastViewport.jsx'
@@ -68,6 +69,7 @@ export default function App() {
       </Routes>
 
       <ToastViewport />
+      <Analytics />
     </BrowserRouter>
   )
 }
