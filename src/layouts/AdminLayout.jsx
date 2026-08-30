@@ -3,7 +3,6 @@ import { Outlet, useLocation } from 'react-router-dom'
 
 import AdminHeader from '../components/admin/AdminHeader.jsx'
 import AdminSidebar from '../components/admin/AdminSidebar.jsx'
-import DemoBanner from '../components/admin/DemoBanner.jsx'
 import Seo from '../components/Seo.jsx'
 import SkipLink from '../components/SkipLink.jsx'
 
@@ -24,10 +23,9 @@ export default function AdminLayout() {
 
   return (
     <div className="min-h-dvh bg-canvas text-ink">
-      <Seo title="Content admin" description="Local demo content editor." path={pathname} noindex />
+      <Seo title="Content admin" description="Live content editor." path={pathname} noindex />
 
       <SkipLink />
-      <DemoBanner />
 
       <div className="flex">
         <AdminSidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />

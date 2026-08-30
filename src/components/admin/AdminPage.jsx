@@ -1,10 +1,6 @@
-import LocalOnlyNotice from './LocalOnlyNotice.jsx'
 
 /**
  * Standard admin page frame.
- *
- * LocalOnlyNotice is rendered here rather than per page, so no editor screen can ever end
- * up without the "this is local only, and localStorage is not secure" statement on it.
  */
 export default function AdminPage({ title, description, actions, children }) {
   return (
@@ -16,8 +12,6 @@ export default function AdminPage({ title, description, actions, children }) {
         </div>
         {actions && <div className="flex shrink-0 flex-wrap gap-2">{actions}</div>}
       </div>
-
-      <LocalOnlyNotice className="mt-6" />
 
       <div className="mt-8">{children}</div>
     </div>

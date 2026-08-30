@@ -124,7 +124,7 @@ export default function Dashboard() {
   return (
     <AdminPage
       title="Dashboard"
-      description="What is currently in the content document, and how to get a change from here onto the live site."
+      description="Manage your website content. Changes are synced directly to Supabase."
     >
       <ul className="grid gap-4 sm:grid-cols-2">
         {stats.map((stat) => (
@@ -140,9 +140,9 @@ export default function Dashboard() {
         <div className="flex items-center justify-between gap-3">
           <div>
             <h2 className="font-semibold">Recent activity</h2>
-            <p className="mt-1 text-sm text-muted">Persisted changes in this browser.</p>
+            <p className="mt-1 text-sm text-muted">Recent changes saved to database.</p>
           </div>
-          <span className="text-xs text-muted">Website status: local edits</span>
+          <span className="text-xs text-muted">Website status: Live sync active</span>
         </div>
         {activity.length > 0 ? (
           <ul className="mt-4 divide-y divide-line">

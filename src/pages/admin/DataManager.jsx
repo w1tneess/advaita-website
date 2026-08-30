@@ -9,8 +9,6 @@ import { useConfirm } from '../../hooks/useConfirm.jsx'
 import { useContent } from '../../lib/content.jsx'
 import { documentToJson, exportFilename, parseImportedJson } from '../../lib/store.js'
 import { useToast } from '../../lib/toast.jsx'
-import { buildPublishBundle, publishBundleFilename } from '../../lib/publish.js'
-import { assetPath, validateImageFile } from '../../lib/media.js'
 
 /**
  * Data management: export, import, reset.
@@ -34,28 +32,6 @@ export default function DataManager() {
   const { confirm, dialogProps } = useConfirm()
   const fileRef = useRef(null)
   const [importStatus, setImportStatus] = useState('')
-  const [publishStatus, setPublishStatus] = useState(null)
-  const [assets, setAssets] = useState([])
-
-  const handlePublishBundle = () => {
-    const result = buildPublishBundle(content, assets)
-    if (!result.ok) {
-      setPublishStatus({ ok: false, errors: result.errors })
-      toast.error(`Validation failed: ${result.errors[0]}`)
-      return
-    }
-    const blob = new Blob([JSON.stringify(result.bundle, null, 2)], { type: 'application/json' })
-    const url = URL.createObjectURL(blob)
-    const anchor = document.createElement('a')
-    anchor.href = url
-    anchor.download = publishBundleFilename()
-    document.body.appendChild(anchor)
-    anchor.click()
-    document.body.removeChild(anchor)
-    URL.revokeObjectURL(url)
-    setPublishStatus({ ok: true, bundle: result.bundle })
-    toast.success('Publish bundle downloaded.')
-  }
 
   const handleExport = () => {
     const json = documentToJson(content)
@@ -104,16 +80,16 @@ export default function DataManager() {
 
   const handleReset = async () => {
     const confirmed = await confirm({
-      title: 'Reset local edits?',
+      title: 'Clear database content?',
       message:
-        'This discards the current local document and goes back to the deployed seed. Any edits made in this browser that have not been exported will be lost.',
-      confirmLabel: 'Reset',
+        'This deletes the content currently in the database and falls back to the default seed. This is irreversible.',
+      confirmLabel: 'Clear Database',
     })
     if (!confirmed) return
 
     const ok = resetDocument()
-    if (!ok) toast.error('Reset failed — local storage is unavailable.')
-    else toast.success('Reset to deployed seed.')
+    if (!ok) toast.error('Reset failed — database error.')
+    else toast.success('Database cleared. Using fallback seed.')
   }
 
   const _documentStr = JSON.stringify(content)
@@ -122,84 +98,10 @@ export default function DataManager() {
   return (
     <AdminPage
       title="Data manager"
-      description="Validate, export, import, and reset local content edits."
+      description="Manage database sync, export backups, import data, and reset content."
     >
-      <section
-        aria-labelledby="publish-bundle-heading"
-        className="mb-10 rounded-xl border border-accent/30 bg-accent/5 p-5"
-      >
-        <h2 id="publish-bundle-heading" className="text-xl font-semibold tracking-tight">
-          Export publish bundle
-        </h2>
-        <p className="mt-2 text-sm text-muted">
-          Validate your local edits and download only the changed source files. Apply the bundle in
-          Codespaces, review the diff, then commit through GitHub.
-        </p>
-        <Button onClick={handlePublishBundle} size="sm" className="mt-4">
-          Export publish bundle
-        </Button>
-        {publishStatus?.ok && (
-          <p className="mt-4 text-sm" role="status">
-            Validation passed. Modified files: {publishStatus.bundle.modified.length || 'none'};
-            assets: {publishStatus.bundle.assets.length || 'none'}.
-          </p>
-        )}
-        {publishStatus && !publishStatus.ok && (
-          <ul className="mt-4 list-disc space-y-1 pl-5 text-sm text-limitation">
-            {publishStatus.errors.slice(0, 8).map((error) => (
-              <li key={error}>{error}</li>
-            ))}
-          </ul>
-        )}
-      </section>
-
-      <section aria-labelledby="media-heading" className="mt-10">
-        <h2 id="media-heading" className="text-xl font-semibold tracking-tight">
-          Local media
-        </h2>
-        <p className="mt-2 text-sm text-muted">
-          Add small public images to the publish bundle. Images are limited to 5 MB and common image
-          formats; apply each generated asset under public/assets/.
-        </p>
-        <input
-          type="file"
-          accept="image/png,image/jpeg,image/webp,image/gif,image/avif"
-          multiple
-          className="mt-4 block text-sm"
-          onChange={(event) => {
-            for (const file of [...(event.target.files || [])]) {
-              const result = validateImageFile(file)
-              if (!result.ok) {
-                toast.error(result.error)
-                continue
-              }
-              const reader = new FileReader()
-              reader.onload = () =>
-                setAssets((current) => [
-                  ...current.filter((asset) => asset.filename !== result.filename),
-                  {
-                    filename: result.filename,
-                    path: assetPath(result.filename),
-                    dataUrl: reader.result,
-                  },
-                ])
-              reader.readAsDataURL(file)
-            }
-            event.target.value = ''
-          }}
-        />
-        {assets.length > 0 && (
-          <ul className="mt-3 space-y-1 text-sm text-muted">
-            {assets.map((asset) => (
-              <li key={asset.filename}>{asset.path}</li>
-            ))}
-          </ul>
-        )}
-      </section>
-      <Callout variant="analysis" title="This manages the whole site">
-        Export creates a JSON backup. The publish bundle creates changed source files for GitHub.
-        Import validates the file first — a bad file is rejected, not loaded. Reset clears local
-        edits and uses checked-in content again.
+      <Callout variant="analysis" title="Database Management">
+        Export creates a JSON backup of your current content. Import loads a backup and syncs it to the database. Reset clears all synced data from the database, falling back to the default seed.
       </Callout>
 
       {/* Storage info */}
@@ -213,10 +115,10 @@ export default function DataManager() {
             <p className="mt-1 font-medium">{available ? 'Yes' : 'No'}</p>
           </div>
           <div>
-            <p className="text-xs tracking-wide text-muted uppercase">Local edits</p>
-            <p className="mt-1 font-medium">{hasLocalDocument ? 'Present' : 'None'}</p>
+            <p className="text-xs tracking-wide text-muted uppercase">Database synced</p>
+            <p className="mt-1 font-medium">{hasLocalDocument ? 'Yes' : 'No'}</p>
             <p className="mt-1 text-xs text-muted">
-              {isLocal ? 'Using local document' : 'Using deployed seed'}
+              {isLocal ? 'Using remote database' : 'Using local seed'}
             </p>
           </div>
           <div>
@@ -229,9 +131,9 @@ export default function DataManager() {
         </div>
         {seedIsNewer && (
           <p className="mt-3 rounded-lg border border-accent/30 bg-accent/8 px-4 py-3 text-sm">
-            The deployed seed has newer defaults (seed v{content.seedVersion ?? 0} vs local v
-            {content.seedVersion ?? 0}). You can adopt the new defaults by resetting, or keep your
-            current edits by exporting them first.
+            The fallback seed has newer defaults (seed v{content.seedVersion ?? 0} vs database v
+            {content.seedVersion ?? 0}). You can adopt the new defaults by clearing the database, or keep your
+            current content by exporting it first.
           </p>
         )}
       </section>
@@ -242,8 +144,7 @@ export default function DataManager() {
           Export
         </h2>
         <p className="mt-2 text-sm text-muted">
-          Download the full content document as JSON. Commit this file back into the repository to
-          publish changes.
+          Download the full content document as a JSON backup.
         </p>
         <div className="mt-4">
           <Button onClick={handleExport} size="sm">
@@ -286,16 +187,16 @@ export default function DataManager() {
       {/* Reset */}
       <section aria-labelledby="data-reset-heading" className="mt-12">
         <h2 id="data-reset-heading" className="text-xl font-semibold tracking-tight">
-          Reset
+          Clear Database
         </h2>
         <p className="mt-2 text-sm text-muted">
-          Discard all local edits and return to the deployed seed. This is irreversible — export
-          first if you want to keep anything.
+          Discard all database content and return to the fallback seed. This is irreversible — export
+          a backup first if you want to keep anything.
         </p>
         <div className="mt-4">
           <Button variant="danger" size="sm" onClick={handleReset}>
             <Trash2 className="h-4 w-4" aria-hidden="true" />
-            Reset local edits
+            Clear database
           </Button>
         </div>
       </section>

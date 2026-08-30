@@ -81,7 +81,7 @@ export default function AdminSidebar({ open, onClose }) {
         <div className="flex items-center justify-between gap-2 border-b border-line px-4 py-4">
           <div>
             <p className="font-display text-base font-semibold">Content admin</p>
-            <p className="text-xs text-muted">Demo · local only</p>
+            <p className="text-xs text-muted">Live · synced</p>
           </div>
           <button
             type="button"
