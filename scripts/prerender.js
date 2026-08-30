@@ -32,14 +32,7 @@ const here = dirname(fileURLToPath(import.meta.url))
 const root = resolve(here, '..')
 const dist = join(root, 'dist')
 
-/** Same normalisation as vite.config.js: always absolute, always trailing-slashed. */
-function normaliseBase(value) {
-  if (!value || value === '/') return '/'
-  const withLeading = value.startsWith('/') ? value : `/${value}`
-  return withLeading.endsWith('/') ? withLeading : `${withLeading}/`
-}
-
-const basePath = normaliseBase(process.env.BASE_PATH)
+const basePath = '/'
 
 const MARKER_START = '<!--seo-->'
 const MARKER_END = '<!--/seo-->'
