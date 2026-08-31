@@ -39,7 +39,7 @@ ALTER TABLE public.contact_submissions ENABLE ROW LEVEL SECURITY;
 -- Allow public to insert contact submissions
 CREATE POLICY "Public can insert contact submissions" ON public.contact_submissions
   FOR INSERT
-  TO public
+  TO anon
   WITH CHECK (true);
 
 -- Allow only authenticated admins to view contact submissions

@@ -3,7 +3,7 @@ import { supabase } from './client.js'
 export async function submitContactForm({ name, email, topic, message }) {
   if (!supabase) throw new Error('Supabase client not initialized')
 
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from('contact_submissions')
     .insert({
       name,
@@ -11,11 +11,9 @@ export async function submitContactForm({ name, email, topic, message }) {
       topic,
       message,
     })
-    .select()
-    .single()
 
   if (error) throw error
-  return data
+  return true
 }
 
 export async function uploadImage(file, path) {
