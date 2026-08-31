@@ -53,14 +53,23 @@ function StatCard({ icon: Icon, label, value, detail, to }) {
 }
 
 export default function Dashboard() {
-  const { projects, interests, skills, timeline, socialLinks, projectCategories, activity, photography } =
-    useContent()
+  const {
+    projects,
+    interests,
+    skills,
+    timeline,
+    socialLinks,
+    projectCategories,
+    activity,
+    photography,
+  } = useContent()
 
   const photos = photography?.photos || []
 
   const publishedProjects = projects.filter((project) => project.published !== false).length
   const configuredLinks = socialLinks.filter((link) => link.url).length
-  const totalContent = projects.length + interests.length + skills.length + timeline.length + photos.length
+  const totalContent =
+    projects.length + interests.length + skills.length + timeline.length + photos.length
 
   const stats = [
     {

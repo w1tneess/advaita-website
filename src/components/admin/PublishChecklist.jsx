@@ -6,7 +6,8 @@ export default function PublishChecklist({ className = '' }) {
     <Card className={`p-6 ${className}`}>
       <h2 className="text-base font-semibold">Live Sync Active</h2>
       <p className="mt-1.5 text-sm text-muted">
-        Changes made in the admin panel are immediately saved to the Supabase database and are live on your website.
+        Changes made in the admin panel are immediately saved to the Supabase database and are live
+        on your website.
       </p>
 
       <div className="mt-5 flex items-center gap-3 rounded-lg border border-line bg-surface p-4">
@@ -15,7 +16,9 @@ export default function PublishChecklist({ className = '' }) {
         </span>
         <div>
           <p className="text-sm font-medium">Supabase Database Connected</p>
-          <p className="mt-0.5 text-sm text-muted">Vercel deployments fetch the latest data automatically.</p>
+          <p className="mt-0.5 text-sm text-muted">
+            Vercel deployments fetch the latest data automatically.
+          </p>
         </div>
       </div>
     </Card>

@@ -1,4 +1,3 @@
-
 /**
  * Standard admin page frame.
  */

@@ -101,7 +101,9 @@ export default function DataManager() {
       description="Manage database sync, export backups, import data, and reset content."
     >
       <Callout variant="analysis" title="Database Management">
-        Export creates a JSON backup of your current content. Import loads a backup and syncs it to the database. Reset clears all synced data from the database, falling back to the default seed.
+        Export creates a JSON backup of your current content. Import loads a backup and syncs it to
+        the database. Reset clears all synced data from the database, falling back to the default
+        seed.
       </Callout>
 
       {/* Storage info */}
@@ -132,8 +134,8 @@ export default function DataManager() {
         {seedIsNewer && (
           <p className="mt-3 rounded-lg border border-accent/30 bg-accent/8 px-4 py-3 text-sm">
             The fallback seed has newer defaults (seed v{content.seedVersion ?? 0} vs database v
-            {content.seedVersion ?? 0}). You can adopt the new defaults by clearing the database, or keep your
-            current content by exporting it first.
+            {content.seedVersion ?? 0}). You can adopt the new defaults by clearing the database, or
+            keep your current content by exporting it first.
           </p>
         )}
       </section>
@@ -190,8 +192,8 @@ export default function DataManager() {
           Clear Database
         </h2>
         <p className="mt-2 text-sm text-muted">
-          Discard all database content and return to the fallback seed. This is irreversible — export
-          a backup first if you want to keep anything.
+          Discard all database content and return to the fallback seed. This is irreversible —
+          export a backup first if you want to keep anything.
         </p>
         <div className="mt-4">
           <Button variant="danger" size="sm" onClick={handleReset}>

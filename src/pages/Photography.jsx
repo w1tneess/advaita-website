@@ -7,12 +7,7 @@ import Lightbox from '@/components/ui/Lightbox.jsx'
 import Seo from '@/components/meta/Seo.jsx'
 import { useContent } from '@/lib/content.jsx'
 import { PUBLIC_ROUTES } from '@/config/nav.js'
-import {
-  pageLoadVariant,
-  staggerContainer,
-  imageReveal,
-  scrollViewport,
-} from '@/lib/animations.js'
+import { pageLoadVariant, staggerContainer, imageReveal, scrollViewport } from '@/lib/animations.js'
 
 const ROUTE = PUBLIC_ROUTES.find((route) => route.key === 'photography')
 
@@ -162,8 +157,6 @@ export default function Photography() {
               </p>
             </div>
           )}
-
-
         </motion.div>
       </Container>
 

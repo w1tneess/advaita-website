@@ -42,7 +42,11 @@ export default function MessagesList() {
     })
     if (!confirmed) return
 
-    const { data, error } = await supabase.from('contact_submissions').delete().eq('id', msg.id).select()
+    const { data, error } = await supabase
+      .from('contact_submissions')
+      .delete()
+      .eq('id', msg.id)
+      .select()
     if (error) {
       toast.error('Failed to delete message')
       console.error(error)

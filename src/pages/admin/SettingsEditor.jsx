@@ -47,8 +47,6 @@ export default function SettingsEditor() {
       </Callout>
 
       <form onSubmit={submit} noValidate className="mt-8 space-y-8">
-
-
         {/* Accent colour */}
         <section aria-labelledby="settings-accent-heading" className="mt-12">
           <h2 id="settings-accent-heading" className="text-xl font-semibold tracking-tight">

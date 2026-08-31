@@ -3,14 +3,12 @@ import { supabase } from './client.js'
 export async function submitContactForm({ name, email, topic, message }) {
   if (!supabase) throw new Error('Supabase client not initialized')
 
-  const { error } = await supabase
-    .from('contact_submissions')
-    .insert({
-      name,
-      email,
-      topic,
-      message,
-    })
+  const { error } = await supabase.from('contact_submissions').insert({
+    name,
+    email,
+    topic,
+    message,
+  })
 
   if (error) throw error
   return true

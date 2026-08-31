@@ -1,9 +1,4 @@
-import {
-  createContext,
-  useContext,
-  useLayoutEffect,
-  useMemo,
-} from 'react'
+import { createContext, useContext, useLayoutEffect, useMemo } from 'react'
 
 import { useContent } from './content.jsx'
 
@@ -20,10 +15,7 @@ export function ThemeProvider({ children }) {
     if (override) {
       root.style.setProperty('--color-accent', override)
       // Derive the hover shade so it stays in the same hue family as the override.
-      root.style.setProperty(
-        '--color-accent-strong',
-        `color-mix(in srgb, ${override} 82%, white)`,
-      )
+      root.style.setProperty('--color-accent-strong', `color-mix(in srgb, ${override} 82%, white)`)
     } else {
       root.style.removeProperty('--color-accent')
       root.style.removeProperty('--color-accent-strong')
@@ -31,10 +23,7 @@ export function ThemeProvider({ children }) {
   }, [settings.accent])
 
   // Mock toggle and isDark to maintain compatibility with existing usages (though toggle is removed)
-  const value = useMemo(
-    () => ({ isDark: true, toggle: () => {} }),
-    [],
-  )
+  const value = useMemo(() => ({ isDark: true, toggle: () => {} }), [])
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
 }

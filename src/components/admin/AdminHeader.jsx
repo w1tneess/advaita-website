@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 
 import { NAV_GROUPS } from './AdminSidebar.jsx'
 import { useAdminAuth } from './AdminAuth.jsx'
-import ThemeToggle from '../ThemeToggle.jsx'
+
 import { useContent } from '../../lib/content.jsx'
 
 /** Longest matching nav item wins, so /admin/projects/abc still reads "Projects". */
@@ -71,8 +71,6 @@ export default function AdminHeader({ onOpenSidebar }) {
         >
           <LogOut className="h-4 w-4" aria-hidden="true" />
         </button>
-
-        <ThemeToggle />
       </div>
     </header>
   )
