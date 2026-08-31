@@ -6,6 +6,7 @@ import {
   Home,
   LayoutDashboard,
   Link2,
+  MessageSquare,
   Milestone,
   Settings,
   Tags,
@@ -25,7 +26,10 @@ import { NavLink, Link } from 'react-router-dom'
 export const NAV_GROUPS = [
   {
     title: 'Overview',
-    items: [{ to: '/admin', label: 'Dashboard', icon: LayoutDashboard, end: true }],
+    items: [
+      { to: '/admin', label: 'Dashboard', icon: LayoutDashboard, end: true },
+      { to: '/admin/messages', label: 'Messages', icon: MessageSquare },
+    ],
   },
   {
     title: 'Content',

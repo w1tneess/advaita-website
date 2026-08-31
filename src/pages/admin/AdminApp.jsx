@@ -16,6 +16,7 @@ import SkillsEditor from './SkillsEditor.jsx'
 import SocialEditor from './SocialEditor.jsx'
 import Taxonomy from './Taxonomy.jsx'
 import TimelineEditor from './TimelineEditor.jsx'
+import MessagesList from './MessagesList.jsx'
 
 /**
  * The whole admin panel, in one lazily-loaded module.
@@ -56,6 +57,7 @@ export default function AdminApp() {
           <Route path="timeline" element={<TimelineEditor />} />
           <Route path="social" element={<SocialEditor />} />
           <Route path="settings" element={<SettingsEditor />} />
+          <Route path="messages" element={<MessagesList />} />
           <Route path="data" element={<DataManager />} />
           <Route path="*" element={<AdminNotFound />} />
         </Route>
