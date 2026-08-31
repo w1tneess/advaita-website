@@ -42,10 +42,12 @@ export default function MessagesList() {
     })
     if (!confirmed) return
 
-    const { error } = await supabase.from('contact_submissions').delete().eq('id', msg.id)
+    const { data, error } = await supabase.from('contact_submissions').delete().eq('id', msg.id).select()
     if (error) {
       toast.error('Failed to delete message')
       console.error(error)
+    } else if (!data || data.length === 0) {
+      toast.error('Could not delete message. Check database permissions.')
     } else {
       toast.success('Message deleted')
       setMessages((prev) => prev.filter((m) => m.id !== msg.id))
