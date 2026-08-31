@@ -256,6 +256,21 @@ export function createBlogPost(overrides = {}) {
   }
 }
 
+export function createPhotography(overrides = {}) {
+  return {
+    id: uid('pht'),
+    title: '',
+    category: 'everyday',
+    caption: '',
+    alt_text: '',
+    featured: false,
+    image_url: '',
+    storage_path: '',
+    created_at: new Date().toISOString(),
+    ...overrides,
+  }
+}
+
 /* --------------------------------------------------------------------------
    Validation primitives
    -------------------------------------------------------------------------- */
@@ -468,6 +483,15 @@ export function validateHome(home) {
       rules.required('Credibility statement'),
       rules.maxLength(900, 'Credibility statement'),
     ],
+  })
+}
+
+export function validatePhotography(photo) {
+  return validate(photo, {
+    title: [rules.required('Title'), rules.maxLength(140, 'Title')],
+    category: [rules.required('Category')],
+    alt_text: [rules.required('Alt text')],
+    caption: [rules.maxLength(300, 'Caption')],
   })
 }
 

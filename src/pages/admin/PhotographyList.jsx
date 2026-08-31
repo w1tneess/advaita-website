@@ -9,6 +9,7 @@ import { useConfirm } from '@/hooks/useConfirm.jsx'
 import { useContent } from '@/lib/content.jsx'
 import { useToast } from '@/lib/toast.jsx'
 import { formatDateShort } from '@/lib/format.js'
+import { removeImage } from '@/lib/supabase/api.js'
 
 export default function PhotographyList() {
   const { photography, upsertPhotography, removePhotography } = useContent()
@@ -37,10 +38,14 @@ export default function PhotographyList() {
     if (!confirmed) return
 
     try {
-      await removePhotography(photo.id, photo.storage_path)
+      if (photo.storage_path) {
+        await removeImage(photo.storage_path)
+      }
+      removePhotography(photo.id)
       toast.success('Photo deleted.')
     } catch (e) {
       console.error(e)
+      toast.error('Failed to delete photo.')
     }
   }
 

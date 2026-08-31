@@ -321,6 +321,9 @@ export function ContentProvider({ children }) {
       resetDocument,
       activity: content?.activity ?? [],
 
+      upsertPhotography: (photo) => upsertItem('photography.photos', photo),
+      removePhotography: (id) => removeItem('photography.photos', id),
+
       // Storage state.
       isLocal,
       storageAvailable: true, // Supabase is always available over network

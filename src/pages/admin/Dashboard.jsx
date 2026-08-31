@@ -6,6 +6,7 @@ import {
   Link2,
   Milestone,
   Tags,
+  Camera,
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
@@ -52,12 +53,14 @@ function StatCard({ icon: Icon, label, value, detail, to }) {
 }
 
 export default function Dashboard() {
-  const { projects, interests, skills, timeline, socialLinks, projectCategories, activity } =
+  const { projects, interests, skills, timeline, socialLinks, projectCategories, activity, photography } =
     useContent()
+
+  const photos = photography?.photos || []
 
   const publishedProjects = projects.filter((project) => project.published !== false).length
   const configuredLinks = socialLinks.filter((link) => link.url).length
-  const totalContent = projects.length + interests.length + skills.length + timeline.length
+  const totalContent = projects.length + interests.length + skills.length + timeline.length + photos.length
 
   const stats = [
     {
@@ -118,6 +121,13 @@ export default function Dashboard() {
       value: totalContent,
       detail: 'Editable records across the main content collections.',
       to: '/admin/data',
+    },
+    {
+      icon: Camera,
+      label: 'Photography',
+      value: photos.length,
+      detail: `${photos.filter((p) => p.featured).length} featured photos.`,
+      to: '/admin/photography',
     },
   ]
 

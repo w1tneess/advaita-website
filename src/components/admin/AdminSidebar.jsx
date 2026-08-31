@@ -13,6 +13,7 @@ import {
   User,
   Wrench,
   X,
+  Camera,
 } from 'lucide-react'
 import { NavLink, Link } from 'react-router-dom'
 
@@ -38,6 +39,7 @@ export const NAV_GROUPS = [
       { to: '/admin/home', label: 'Home page', icon: Home },
       { to: '/admin/projects', label: 'Projects', icon: FolderGit2 },
       { to: '/admin/blog', label: 'Writing', icon: FileText },
+      { to: '/admin/photography', label: 'Photography', icon: Camera },
     ],
   },
   {

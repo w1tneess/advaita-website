@@ -32,3 +32,11 @@ export async function uploadImage(file, path) {
 
   return { storagePath: data.path, publicUrl }
 }
+
+export async function removeImage(path) {
+  if (!supabase) throw new Error('Supabase client not initialized')
+
+  const { error } = await supabase.storage.from('images').remove([path])
+  if (error) throw error
+  return true
+}
