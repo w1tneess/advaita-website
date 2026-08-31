@@ -1,8 +1,10 @@
-import { Mail, RefreshCw } from 'lucide-react'
+import { Mail, RefreshCw, Trash2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 import AdminPage from '../../components/admin/AdminPage.jsx'
 import Button from '../../components/Button.jsx'
+import ConfirmDialog from '../../components/admin/ConfirmDialog.jsx'
+import { useConfirm } from '../../hooks/useConfirm.jsx'
 import { supabase } from '../../lib/supabase/client.js'
 import { useToast } from '../../lib/toast.jsx'
 
@@ -10,6 +12,7 @@ export default function MessagesList() {
   const [messages, setMessages] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const toast = useToast()
+  const { confirm, dialogProps } = useConfirm()
 
   const fetchMessages = async () => {
     setIsLoading(true)
@@ -30,6 +33,24 @@ export default function MessagesList() {
   useEffect(() => {
     fetchMessages()
   }, [])
+
+  const handleDelete = async (msg) => {
+    const confirmed = await confirm({
+      title: 'Delete this message?',
+      message: 'This action cannot be undone.',
+      confirmLabel: 'Delete message',
+    })
+    if (!confirmed) return
+
+    const { error } = await supabase.from('contact_submissions').delete().eq('id', msg.id)
+    if (error) {
+      toast.error('Failed to delete message')
+      console.error(error)
+    } else {
+      toast.success('Message deleted')
+      setMessages((prev) => prev.filter((m) => m.id !== msg.id))
+    }
+  }
 
   return (
     <AdminPage
@@ -74,10 +95,17 @@ export default function MessagesList() {
                 )}
               </div>
               <div className="whitespace-pre-wrap text-sm text-ink">{msg.message}</div>
+              <div className="mt-4 flex justify-end">
+                <Button variant="danger" size="sm" onClick={() => handleDelete(msg)}>
+                  <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
+                  Delete
+                </Button>
+              </div>
             </div>
           ))
         )}
       </div>
+      <ConfirmDialog {...dialogProps} />
     </AdminPage>
   )
 }
