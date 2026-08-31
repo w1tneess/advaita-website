@@ -158,17 +158,12 @@ export default function PhotographyEditor() {
           <Field
             className="mt-5"
             id="photo-category"
-            label="Category"
-            type="select"
-            value={draft.category}
+            label="Category (optional)"
+            value={draft.category ?? ''}
             onChange={(value) => set('category', value)}
-            options={[
-              { value: 'everyday', label: 'Everyday' },
-              { value: 'street', label: 'Street' },
-              { value: 'landscape', label: 'Landscape' },
-            ]}
             error={errors.category}
-            required
+            hint="Freedom of expression. Type any category, or leave blank."
+            limit={60}
           />
 
           <Field

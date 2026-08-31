@@ -64,7 +64,7 @@ export default function PhotographyList() {
         <div className="min-w-0">
           <p className="font-medium">{photo.title || 'Untitled photo'}</p>
           <p className="mt-0.5 truncate text-xs text-muted">
-            {photo.category} • {photo.caption || 'No caption'}
+            {photo.category ? `${photo.category} • ` : ''}{photo.caption || 'No caption'}
           </p>
         </div>
       ),

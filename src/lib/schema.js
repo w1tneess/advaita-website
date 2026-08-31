@@ -260,7 +260,7 @@ export function createPhotography(overrides = {}) {
   return {
     id: uid('pht'),
     title: '',
-    category: 'everyday',
+    category: '',
     caption: '',
     alt_text: '',
     featured: false,
@@ -489,7 +489,7 @@ export function validateHome(home) {
 export function validatePhotography(photo) {
   return validate(photo, {
     title: [rules.required('Title'), rules.maxLength(140, 'Title')],
-    category: [rules.required('Category')],
+    category: [rules.maxLength(60, 'Category')],
     alt_text: [rules.required('Alt text')],
     caption: [rules.maxLength(300, 'Caption')],
   })

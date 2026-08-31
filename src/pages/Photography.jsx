@@ -26,6 +26,23 @@ export default function Photography() {
   const categories = photography.categories || []
   const photos = photography.photos || []
 
+  const dynamicCategories = useMemo(() => {
+    const all = [...categories]
+    const existingSlugs = new Set(all.map((c) => c.slug || c.name))
+
+    photos.forEach((photo) => {
+      if (photo.category && !existingSlugs.has(photo.category)) {
+        existingSlugs.add(photo.category)
+        all.push({
+          id: `dynamic-${photo.category}`,
+          slug: photo.category,
+          name: photo.category,
+        })
+      }
+    })
+    return all
+  }, [categories, photos])
+
   const filtered = useMemo(
     () =>
       activeCategory === 'all'
@@ -77,7 +94,7 @@ export default function Photography() {
                   All
                 </button>
               </li>
-              {categories.map((cat) => (
+              {dynamicCategories.map((cat) => (
                 <li key={cat.id}>
                   <button
                     type="button"
