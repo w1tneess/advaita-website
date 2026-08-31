@@ -1,10 +1,6 @@
 @import 'tailwindcss';
 
-/* Class-based dark mode. The class is set pre-paint by the inline script in index.html
-   and thereafter managed by src/lib/theme.jsx. */
-/* Tailwind CSS v4 directive; keep class-based dark mode in sync with the app. */
-/* stylelint-disable-next-line at-rule-no-unknown */
-@custom-variant dark (&:where(.dark, .dark *));
+/* Tailwind CSS v4 directive. */
 
 /* ---------------------------------------------------------------------------
    DESIGN SYSTEM
@@ -13,16 +9,13 @@
   terracotta accent with cool supporting tones.
 
    The accent is a PLACEHOLDER. To rebrand the site, change --color-accent and
-   --color-accent-strong below (and their .dark overrides) — nothing else.
-
-   Two accent values are required, one per theme: a single hex cannot meet WCAG AA
-   against both a near-white and a near-black background.
+   --color-accent-strong below.
 
    Contrast pairings (all meet WCAG AA for normal text at minimum):
-     ink    on canvas    ~16.0:1 light  ~15.9:1 dark   AAA
-     muted  on canvas     ~7.0:1 light   ~7.4:1 dark   AAA
-     accent on canvas     ~5.0:1 light   ~8.6:1 dark   AA
-     on-accent on accent  ~5.9:1 light   ~8.9:1 dark   AA
+     ink    on canvas    ~15.9:1   AAA
+     muted  on canvas     ~7.4:1   AAA
+     accent on canvas     ~8.6:1   AA
+     on-accent on accent  ~8.9:1   AA
    Re-check with a contrast checker if you change the accent.
 
    NOTE ON THE TOKEN NAME: the page background token is --color-canvas, not
@@ -32,23 +25,23 @@
 --------------------------------------------------------------------------- */
 
 @theme {
-  /* Surfaces and text — light theme values; .dark overrides follow below. */
-  --color-canvas: #fafaf9;
-  --color-surface: #ffffff;
-  --color-raised: #f5f5f4;
-  --color-ink: #292524;
-  --color-muted: #57534e;
-  --color-line: #e4e4e7;
+  /* Surfaces and text — dark theme values */
+  --color-canvas: #000000;
+  --color-surface: #0a0a0a;
+  --color-raised: #171717;
+  --color-ink: #ffffff;
+  --color-muted: #a3a3a3;
+  --color-line: #171717;
 
-  --color-accent: #475569;
-  --color-accent-strong: #334155;
-  --color-on-accent: #ffffff;
+  --color-accent: #64748b;
+  --color-accent-strong: #94a3b8;
+  --color-on-accent: #09090b;
 
   /* Epistemic label hues — used by Callout, SourceList and StatusBadge. */
-  --color-fact: #0284c7;
-  --color-analysis: #7c3aed;
-  --color-opinion: #b45309;
-  --color-limitation: #e11d48;
+  --color-fact: #38bdf8;
+  --color-analysis: #a78bfa;
+  --color-opinion: #fbbf24;
+  --color-limitation: #fb7185;
 
   /* Typography */
   --font-display: 'Playfair Display', ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
@@ -72,9 +65,9 @@
 
   --radius-card: 1rem;
 
-  --shadow-subtle: 0 1px 2px rgb(23 38 41 / 0.04), 0 4px 12px rgb(23 38 41 / 0.05);
-  --shadow-raised: 0 2px 4px rgb(23 38 41 / 0.05), 0 14px 32px rgb(23 38 41 / 0.1);
-  --shadow-card-hover: 0 4px 8px rgb(23 38 41 / 0.06), 0 20px 40px rgb(23 38 41 / 0.12);
+  --shadow-subtle: none;
+  --shadow-raised: none;
+  --shadow-card-hover: none;
 
   /* Animation timing */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
@@ -82,29 +75,6 @@
   --duration-fast: 150ms;
   --duration-normal: 250ms;
   --duration-slow: 400ms;
-}
-
-/* Dark theme. `:root.dark` (0,2,0) outranks the `:root` (0,1,0) rule that @theme emits. */
-:root.dark {
-  --color-canvas: #000000;
-  --color-surface: #0a0a0a;
-  --color-raised: #171717;
-  --color-ink: #ffffff;
-  --color-muted: #a3a3a3;
-  --color-line: #171717;
-
-  --color-accent: #64748b;
-  --color-accent-strong: #94a3b8;
-  --color-on-accent: #09090b;
-
-  --color-fact: #38bdf8;
-  --color-analysis: #a78bfa;
-  --color-opinion: #fbbf24;
-  --color-limitation: #fb7185;
-
-  --shadow-subtle: none;
-  --shadow-raised: none;
-  --shadow-card-hover: none;
 }
 
 @layer base {
@@ -179,17 +149,10 @@
   h2,
   h3,
   h4 {
-    color: var(--color-ink);
+    color: #f4f4f5; /* text-zinc-100 for dark mode headings */
     font-family: var(--font-display);
     line-height: 1.25;
     text-wrap: balance;
-  }
-
-  :root.dark h1,
-  :root.dark h2,
-  :root.dark h3,
-  :root.dark h4 {
-    color: #f4f4f5; /* text-zinc-100 for dark mode headings */
   }
 
   p {

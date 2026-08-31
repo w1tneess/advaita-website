@@ -9,9 +9,7 @@ import { useContent } from '@/lib/content.jsx'
 import { PUBLIC_ROUTES } from '@/config/nav.js'
 import {
   pageLoadVariant,
-  sectionReveal,
   staggerContainer,
-  staggerItem,
   imageReveal,
   scrollViewport,
 } from '@/lib/animations.js'

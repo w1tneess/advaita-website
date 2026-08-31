@@ -498,16 +498,10 @@ export function validatePhotography(photo) {
 const HEX_COLOR = /^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i
 
 export function validateSettings(settings) {
-  const errors = validate(settings, {
-    defaultTheme: [rules.oneOf(['system', 'light', 'dark'], 'Default theme')],
-  })
+  const errors = validate(settings, {})
 
-  const accent = settings.accent || {}
-  for (const key of ['light', 'dark']) {
-    if (!isBlank(accent[key]) && !HEX_COLOR.test(String(accent[key]).trim())) {
-      errors[`accent.${key}`] =
-        'Enter a hex colour such as #0f6b73, or leave blank for the default.'
-    }
+  if (!isBlank(settings.accent) && !HEX_COLOR.test(String(settings.accent).trim())) {
+    errors.accent = 'Enter a hex colour such as #0f6b73, or leave blank for the default.'
   }
 
   for (const key of ['featuredProjectLimit']) {

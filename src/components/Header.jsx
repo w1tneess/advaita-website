@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 
 import Container from './Container.jsx'
-import ThemeToggle from './ThemeToggle.jsx'
 import { useContent } from '../lib/content.jsx'
 import { NAV_ITEMS } from '../lib/routes.js'
 
@@ -66,7 +65,6 @@ export default function Header() {
           </nav>
 
           <div className="flex items-center gap-2">
-            <ThemeToggle />
             <button
               ref={toggleRef}
               type="button"

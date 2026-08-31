@@ -34,9 +34,6 @@
   transition:
     transform 0.4s ease,
     opacity 0.4s ease;
-}
-
-:root.dark .hero-bg-portrait {
   filter: grayscale(1);
   /* Soft edge fades into dark canvas */
   mask-image:
@@ -47,13 +44,6 @@
     linear-gradient(to right, transparent 0%, black 4%, black 96%, transparent 100%);
   mask-composite: intersect;
   -webkit-mask-composite: source-in;
-}
-
-:root:not(.dark) .hero-bg-portrait {
-  filter: grayscale(1);
-  mix-blend-mode: multiply;
-  mask-image: linear-gradient(to bottom, black 95%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to bottom, black 95%, transparent 100%);
 }
 
 /* ── Typography & Content Column ── */

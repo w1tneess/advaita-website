@@ -1,9 +1,5 @@
 {
-  "defaultTheme": "system",
-  "accent": {
-    "light": null,
-    "dark": null
-  },
+  "accent": null,
   "featuredProjectLimit": 3,
   "latestPostsLimit": 3,
   "postsPerPage": 6,

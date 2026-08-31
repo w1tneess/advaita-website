@@ -4,7 +4,6 @@ import { Link, NavLink, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 
 import Container from '@/components/layout/Container.jsx'
-import ThemeToggle from '@/components/meta/ThemeToggle.jsx'
 import { useContent } from '@/lib/content.jsx'
 import { NAV_ITEMS } from '@/config/nav.js'
 
@@ -105,8 +104,6 @@ export default function Header() {
 
             {/* Header Right Controls */}
             <div className="flex items-center gap-3 sm:gap-4">
-              <ThemeToggle />
-
               {/* Mobile Menu Trigger Button */}
               <button
                 ref={toggleRef}
@@ -149,7 +146,6 @@ export default function Header() {
                 {profile.name}
               </Link>
               <div className="flex items-center gap-3">
-                <ThemeToggle />
                 <button
                   type="button"
                   onClick={() => setMenuOpen(false)}

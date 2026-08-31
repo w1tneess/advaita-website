@@ -47,61 +47,26 @@ export default function SettingsEditor() {
       </Callout>
 
       <form onSubmit={submit} noValidate className="mt-8 space-y-8">
-        {/* Theme */}
-        <section aria-labelledby="settings-theme-heading">
-          <h2 id="settings-theme-heading" className="text-xl font-semibold tracking-tight">
-            Theme
-          </h2>
-          <p className="mt-2 text-sm text-muted">
-            The default theme is "system". Choose "light" or "dark" to override it.
-          </p>
-          <div className="mt-5 grid gap-4 sm:grid-cols-2">
-            <Field
-              id="settings-default-theme"
-              label="Default theme"
-              type="select"
-              value={draft.defaultTheme ?? ''}
-              onChange={(value) => set('defaultTheme', value)}
-              options={[
-                { value: 'system', label: 'System' },
-                { value: 'light', label: 'Light' },
-                { value: 'dark', label: 'Dark' },
-              ]}
-              error={errors.defaultTheme}
-              required
-            />
-          </div>
-        </section>
 
-        {/* Accent colours */}
+
+        {/* Accent colour */}
         <section aria-labelledby="settings-accent-heading" className="mt-12">
           <h2 id="settings-accent-heading" className="text-xl font-semibold tracking-tight">
-            Accent colours
+            Accent colour
           </h2>
           <p className="mt-2 text-sm text-muted">
-            A single accent drives the design system. Provide a hex colour for light and/or dark.
+            A single accent drives the design system. Provide a hex colour.
           </p>
           <div className="mt-5 space-y-5">
             <Field
-              id="settings-accent-light"
-              label="Light theme accent"
+              id="settings-accent"
+              label="Theme accent"
               type="text"
-              value={draft.accent?.light ?? ''}
-              onChange={(value) => setNested('accent', 'light', value)}
-              error={errors['accent.light']}
+              value={draft.accent ?? ''}
+              onChange={(value) => set('accent', value)}
+              error={errors.accent}
               placeholder="#0f6b73"
-              hint="Hex colour for buttons, links and UI highlights in light mode. Leave blank for default."
-              limit={20}
-            />
-            <Field
-              id="settings-accent-dark"
-              label="Dark theme accent"
-              type="text"
-              value={draft.accent?.dark ?? ''}
-              onChange={(value) => setNested('accent', 'dark', value)}
-              error={errors['accent.dark']}
-              placeholder="#5fbdc9"
-              hint="Hex colour for buttons, links and UI highlights in dark mode. Leave blank for default."
+              hint="Hex colour for buttons, links and UI highlights. Leave blank for default."
               limit={20}
             />
           </div>
