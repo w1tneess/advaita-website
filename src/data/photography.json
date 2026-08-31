@@ -2,29 +2,6 @@
   "intro": "A digital album of what I've been shooting — not curated for a portfolio in the traditional sense, more a visual notebook. Captions where there's a story worth telling; otherwise the image speaks for itself.",
   "description": "Not a traditional portfolio, and not necessarily a collection of perfectly planned photographs. Just places, moments, details, and ordinary things that caught my attention.",
   "note": "The gallery is organized around photographs rather than equipment or technical specifications. When there's a story behind an image, I'll add a short caption. Otherwise, I'll let the photograph speak for itself.",
-  "categoriesNote": "Themes may change as I shoot more. The collection should reflect what I'm actually photographing, not what a portfolio is expected to contain.",
-  "categories": [
-    {
-      "id": "photo-cat-street",
-      "slug": "street",
-      "name": "Street",
-      "description": "People, places, movement, and the character of everyday life.",
-      "order": 1
-    },
-    {
-      "id": "photo-cat-landscape",
-      "slug": "landscape",
-      "name": "Landscape",
-      "description": "Spaces, light, weather, and the world outside the frame of ordinary routines.",
-      "order": 2
-    },
-    {
-      "id": "photo-cat-everyday",
-      "slug": "everyday",
-      "name": "Everyday",
-      "description": "Small moments and details that would otherwise be easy to overlook.",
-      "order": 3
-    }
-  ],
+
   "photos": []
 }

@@ -23,25 +23,27 @@ export default function Photography() {
   const [activeCategory, setActiveCategory] = useState('all')
   const [lightboxIndex, setLightboxIndex] = useState(null)
 
-  const categories = photography.categories || []
   const photos = photography.photos || []
 
   const dynamicCategories = useMemo(() => {
-    const all = [...categories]
-    const existingSlugs = new Set(all.map((c) => c.slug || c.name))
+    const slugs = new Set()
+    const result = []
 
     photos.forEach((photo) => {
-      if (photo.category && !existingSlugs.has(photo.category)) {
-        existingSlugs.add(photo.category)
-        all.push({
-          id: `dynamic-${photo.category}`,
-          slug: photo.category,
-          name: photo.category,
-        })
+      if (photo.category) {
+        const slug = photo.category.toLowerCase()
+        if (!slugs.has(slug)) {
+          slugs.add(slug)
+          result.push({
+            id: `dynamic-${slug}`,
+            slug: photo.category,
+            name: photo.category,
+          })
+        }
       }
     })
-    return all
-  }, [categories, photos])
+    return result
+  }, [photos])
 
   const filtered = useMemo(
     () =>
@@ -163,43 +165,7 @@ export default function Photography() {
             </div>
           )}
 
-          {/* Category descriptions */}
-          {categories.length > 0 && (
-            <motion.section
-              aria-labelledby="themes-heading"
-              className="mt-16 border-t border-line pt-12"
-              initial="hidden"
-              whileInView="visible"
-              viewport={scrollViewport}
-              variants={sectionReveal}
-            >
-              <h2
-                id="themes-heading"
-                className="text-sm font-semibold tracking-wide text-accent uppercase"
-              >
-                Themes
-              </h2>
-              <motion.ul
-                className="mt-6 grid gap-4 sm:grid-cols-3"
-                variants={staggerContainer}
-                initial="hidden"
-                whileInView="visible"
-                viewport={scrollViewport}
-              >
-                {categories.map((cat) => (
-                  <motion.li
-                    key={cat.id}
-                    className="card-interactive rounded-xl border border-line bg-surface p-5 shadow-subtle"
-                    variants={staggerItem}
-                  >
-                    <h3 className="text-base font-semibold">{cat.name}</h3>
-                    <p className="mt-1.5 text-sm text-muted">{cat.description}</p>
-                  </motion.li>
-                ))}
-              </motion.ul>
-              <p className="mt-6 text-xs text-muted italic">{photography.categoriesNote}</p>
-            </motion.section>
-          )}
+
         </motion.div>
       </Container>
 
