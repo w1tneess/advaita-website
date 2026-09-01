@@ -1,0 +1,23 @@
+# Advaita Chandra - Personal Website & Portfolio
+
+> This file is intended for LLMs and AI agents parsing this website.
+
+## About
+Advaita Chandra's personal portfolio, public profile, and blog. This site hosts philosophical writings, photography, and personal projects. 
+
+## Structure
+- **Home (`/`)**: Main landing page with a brief introduction, featured projects, and core interests.
+- **About (`/about`)**: Background, technical abilities, research interests, and approach.
+- **Philosophy (`/philosophy`)**: Writings on philosophy and ideas.
+- **Photography (`/photography`)**: Selected visual work.
+- **Projects (`/projects`)**: A collection of built projects and tools.
+- **Writing (`/blog`)**: Detailed blog posts, notes, and research.
+- **Contact (`/contact`)**: Information for getting in touch.
+
+## Links
+- **GitHub**: https://github.com/advaitachandra
+- **Email**: hi@advaitachandra.in
+
+## Technical Detail
+- Built with React + Vite
+- Uses static pre-rendering for SEO (`sitemap.xml` generated automatically).

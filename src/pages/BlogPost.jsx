@@ -1,6 +1,6 @@
-import { ArrowLeft } from 'lucide-react'
-import { useParams, Navigate, Link } from 'react-router-dom'
+import { useParams, Navigate } from 'react-router-dom'
 
+import Breadcrumbs from '@/components/ui/Breadcrumbs.jsx'
 import Container from '@/components/layout/Container.jsx'
 import Seo from '@/components/meta/Seo.jsx'
 import { useContent } from '@/lib/content.jsx'
@@ -27,13 +27,7 @@ export default function BlogPost() {
 
       <article className="py-12 sm:py-16 md:py-32">
         <Container className="max-w-3xl">
-          <Link
-            to="/blog"
-            className="inline-flex items-center gap-2 text-sm font-medium text-muted hover:text-ink transition-colors mb-10"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back to writing
-          </Link>
+          <Breadcrumbs />
 
           <header>
             <div className="flex items-center gap-x-4 text-sm mb-4">

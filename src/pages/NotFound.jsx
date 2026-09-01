@@ -1,10 +1,10 @@
 import { ArrowRight } from 'lucide-react'
 import { Link, useLocation } from 'react-router-dom'
 
-import Button from '../components/Button.jsx'
-import Container from '../components/Container.jsx'
-import Seo from '../components/Seo.jsx'
-import { NAV_ITEMS } from '../lib/routes.js'
+import Button from '../components/ui/Button.jsx'
+import Container from '../components/layout/Container.jsx'
+import Seo from '../components/meta/Seo.jsx'
+import { NAV_ITEMS } from '../config/nav.js'
 
 /**
  * 404 page.

@@ -19,7 +19,7 @@ import { createInterest, validateInterest, validateProfile } from '../../lib/sch
  */
 export default function ProfileEditor() {
   const { profile, interests } = useContent()
-  const { draft, set, errors, dirty, submit, revert } = useSectionForm(
+  const { draft, set, errors, dirty, submit, revert, isSubmitting } = useSectionForm(
     'profile',
     profile,
     validateProfile,
@@ -174,10 +174,10 @@ export default function ProfileEditor() {
         </Card>
 
         <div className="sticky bottom-0 mt-6 flex flex-wrap items-center gap-3 border-t border-line bg-canvas/90 py-4 backdrop-blur-sm">
-          <Button type="submit" disabled={!dirty}>
-            Save profile
+          <Button type="submit" disabled={!dirty || isSubmitting}>
+            {isSubmitting ? 'Saving...' : 'Save profile'}
           </Button>
-          <Button type="button" variant="ghost" onClick={revert} disabled={!dirty}>
+          <Button type="button" variant="ghost" onClick={revert} disabled={!dirty || isSubmitting}>
             Discard changes
           </Button>
           <p className="text-xs text-muted" aria-live="polite">

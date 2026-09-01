@@ -1,7 +1,8 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 
 import { createSeedDocument } from '../data/seed.js'
-import { byNewest, byOrder } from './format.js'
+import { byOrder } from './format.js'
+import { useDerivedContent } from '../hooks/useDerivedContent.js'
 import {
   clearDocument,
   loadDocument,
@@ -75,8 +76,6 @@ export function ContentProvider({ children }) {
   const [isLocal, setIsLocal] = useState(false) // represents if we are using remote DB
   const [previewDrafts, setPreviewDrafts] = useState(false)
 
-  // Anything queued here is written by the effect below.
-  const pending = useRef(null)
   const warningShown = useRef(false)
 
   useEffect(() => {
@@ -100,28 +99,24 @@ export function ContentProvider({ children }) {
     init()
   }, [toast])
 
-  // Persist after the state change, not inside the updater: updaters must stay pure,
-  // and React invokes them twice in development StrictMode.
-  useEffect(() => {
-    if (pending.current === null) return
-    const document = pending.current
-    pending.current = null
-
-    async function persist() {
-      const result = await saveDocument(document)
-      if (result.ok) setIsLocal(true)
-      else toast.error(result.error)
-    }
-    persist()
-  }, [content, toast])
-
-  const commit = useCallback((updater) => {
+  const commit = useCallback(async (updater) => {
+    let nextDoc
     setContent((previous) => {
-      const next = typeof updater === 'function' ? updater(previous) : updater
-      pending.current = next
-      return next
+      nextDoc = typeof updater === 'function' ? updater(previous) : updater
+      return nextDoc
     })
-  }, [])
+
+    const result = await saveDocument(nextDoc)
+    if (result.ok) {
+      setIsLocal(true)
+      return { ok: true }
+    } else {
+      toast.error(result.error || 'Failed to save changes.')
+      // We don't automatically revert optimistic state here, to avoid losing user's work.
+      // But we inform them it didn't save.
+      return { ok: false, error: result.error }
+    }
+  }, [toast])
 
   /* ------------------------------------------------------------------------
      Mutations
@@ -130,7 +125,7 @@ export function ContentProvider({ children }) {
   /** Insert or replace an item by id, appending new items at the end. */
   const upsertItem = useCallback(
     (path, item) => {
-      commit((document) => {
+      return commit((document) => {
         const collection = getPath(document, path) || []
         const index = collection.findIndex((existing) => existing.id === item.id)
         const next =
@@ -146,7 +141,7 @@ export function ContentProvider({ children }) {
 
   const removeItem = useCallback(
     (path, id) => {
-      commit((document) => {
+      return commit((document) => {
         const collection = getPath(document, path) || []
         const next = collection.filter((item) => item.id !== id)
         const removed = collection.find((item) => item.id === id)
@@ -160,7 +155,7 @@ export function ContentProvider({ children }) {
   /** Merge a partial update into one item. */
   const patchItem = useCallback(
     (path, id, patch) => {
-      commit((document) => {
+      return commit((document) => {
         const collection = getPath(document, path) || []
         const next = collection.map((item) => (item.id === id ? { ...item, ...patch } : item))
         const nextDocument = setPath(document, path, next)
@@ -174,7 +169,7 @@ export function ContentProvider({ children }) {
   /** Move an item by `delta` positions (-1 up, +1 down). No-op at the boundaries. */
   const moveItem = useCallback(
     (path, id, delta) => {
-      commit((document) => {
+      return commit((document) => {
         const collection = byOrder(getPath(document, path) || [])
         const from = collection.findIndex((item) => item.id === id)
         if (from === -1) return document
@@ -195,7 +190,7 @@ export function ContentProvider({ children }) {
   /** Merge a partial update into a top-level object section (profile, home, settings). */
   const setSection = useCallback(
     (key, patch) => {
-      commit((document) => {
+      return commit((document) => {
         const nextDocument = { ...document, [key]: { ...document[key], ...patch } }
         return recordActivity(nextDocument, 'updated', key, nextDocument[key])
       })
@@ -206,7 +201,7 @@ export function ContentProvider({ children }) {
   /** Replace the whole document — used by JSON import. */
   const replaceDocument = useCallback(
     (document) => {
-      commit(document)
+      return commit(document)
     },
     [commit],
   )
@@ -218,7 +213,6 @@ export function ContentProvider({ children }) {
       toast.error(result.error)
       return false
     }
-    pending.current = null
     setContent(createSeedDocument())
     setIsLocal(false)
     return true
@@ -228,60 +222,7 @@ export function ContentProvider({ children }) {
      Derived views
      ------------------------------------------------------------------------ */
 
-  const settings = content?.settings ?? {}
-
-  const projects = useMemo(() => byOrder(content?.projects ?? []), [content?.projects])
-
-  const publicProjects = useMemo(
-    () => (previewDrafts ? projects : projects.filter((project) => project.published !== false)),
-    [projects, previewDrafts],
-  )
-
-  const featuredProjects = useMemo(
-    () =>
-      publicProjects
-        .filter((project) => project.featured)
-        .slice(0, settings.featuredProjectLimit ?? 3),
-    [publicProjects, settings.featuredProjectLimit],
-  )
-
-  const interests = useMemo(() => byOrder(content?.interests ?? []), [content?.interests])
-  const skills = useMemo(() => byOrder(content?.skills ?? []), [content?.skills])
-  const timeline = useMemo(() => byOrder(content?.timeline ?? []), [content?.timeline])
-  const socialLinks = useMemo(() => byOrder(content?.social ?? []), [content?.social])
-  const blog = useMemo(() => byNewest(content?.blog ?? [], 'published_at'), [content?.blog])
-
-  const publicBlogPosts = useMemo(
-    () => (previewDrafts ? blog : blog.filter((post) => post.status === 'published')),
-    [blog, previewDrafts],
-  )
-
-  /** Social links to show publicly: visible ones, including unconfigured placeholders. */
-  const publicSocialLinks = useMemo(
-    () => socialLinks.filter((link) => link.visible !== false),
-    [socialLinks],
-  )
-
-  /** Skills grouped for display, preserving the ordering within each group. */
-  const skillGroups = useMemo(() => {
-    const groups = new Map()
-    for (const skill of skills) {
-      const key = skill.group || 'Other'
-      if (!groups.has(key)) groups.set(key, [])
-      groups.get(key).push(skill)
-    }
-    return [...groups.entries()].map(([name, items]) => ({ name, items }))
-  }, [skills])
-
-  const findProjectBySlug = useCallback(
-    (slug) => publicProjects.find((project) => project.slug === slug) ?? null,
-    [publicProjects],
-  )
-
-  const findBlogPostBySlug = useCallback(
-    (slug) => publicBlogPosts.find((post) => post.slug === slug) ?? null,
-    [publicBlogPosts],
-  )
+  const derived = useDerivedContent(content, previewDrafts)
 
   const value = useMemo(
     () => ({
@@ -289,27 +230,12 @@ export function ContentProvider({ children }) {
       content,
       profile: content?.profile,
       home: content?.home,
-      settings,
       philosophy: content?.philosophy || {},
       photography: content?.photography || {},
       projectCategories: content?.categories?.project,
 
-      // Admin-facing collections (everything, including drafts).
-      projects,
-      interests,
-      skills,
-      timeline,
-      socialLinks,
-      blog,
-
-      // Public-facing views.
-      publicProjects,
-      featuredProjects,
-      publicSocialLinks,
-      skillGroups,
-      publicBlogPosts,
-      findProjectBySlug,
-      findBlogPostBySlug,
+      // Spread derived content
+      ...derived,
 
       // Mutations.
       upsertItem,
@@ -336,20 +262,7 @@ export function ContentProvider({ children }) {
     }),
     [
       content,
-      settings,
-      projects,
-      interests,
-      skills,
-      timeline,
-      socialLinks,
-      blog,
-      publicProjects,
-      featuredProjects,
-      publicSocialLinks,
-      skillGroups,
-      publicBlogPosts,
-      findProjectBySlug,
-      findBlogPostBySlug,
+      derived,
       upsertItem,
       removeItem,
       patchItem,

@@ -46,6 +46,27 @@ export default function Seo({
       {updatedAt && <meta property="article:modified_time" content={updatedAt} />}
 
       {meta.noindex && <meta name="robots" content="noindex, nofollow" />}
+
+      <script type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": type === 'article' ? "BlogPosting" : "Person",
+          name: "Advaita Chandra",
+          url: meta.canonical,
+          image: meta.image,
+          description: meta.description,
+          ...(type === 'article' && {
+            headline: meta.title,
+            datePublished: publishedAt,
+            dateModified: updatedAt || publishedAt,
+            author: {
+              "@type": "Person",
+              name: "Advaita Chandra",
+              url: "https://advaitachandra.in/"
+            }
+          })
+        })}
+      </script>
     </>
   )
 }

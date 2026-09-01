@@ -12,7 +12,7 @@ export function ThemeProvider({ children }) {
     const root = document.documentElement
     const override = settings.accent
 
-    if (override) {
+    if (override && typeof override === 'string' && override.trim().length > 0) {
       root.style.setProperty('--color-accent', override)
       // Derive the hover shade so it stays in the same hue family as the override.
       root.style.setProperty('--color-accent-strong', `color-mix(in srgb, ${override} 82%, white)`)

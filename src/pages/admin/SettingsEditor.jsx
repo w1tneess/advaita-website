@@ -15,7 +15,7 @@ import { validateSettings } from '../../lib/schema.js'
 export default function SettingsEditor() {
   const { settings } = useContent()
 
-  const { draft, errors, dirty, submit, revert, set, setNested } = useSectionForm(
+  const { draft, errors, dirty, submit, revert, set, setNested, isSubmitting } = useSectionForm(
     'settings',
     settings,
     validateSettings,
@@ -224,10 +224,10 @@ export default function SettingsEditor() {
         </section>
 
         <div className="sticky bottom-0 mt-8 flex flex-wrap items-center gap-3 border-t border-line bg-base/90 py-4 backdrop-blur-sm">
-          <Button type="submit" disabled={!dirty}>
-            Save settings
+          <Button type="submit" disabled={!dirty || isSubmitting}>
+            {isSubmitting ? 'Saving...' : 'Save settings'}
           </Button>
-          <Button type="button" variant="ghost" onClick={revert} disabled={!dirty}>
+          <Button type="button" variant="ghost" onClick={revert} disabled={!dirty || isSubmitting}>
             Discard changes
           </Button>
         </div>

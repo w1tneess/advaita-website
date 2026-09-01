@@ -34,11 +34,13 @@ export function useSectionForm(sectionKey, section, validate) {
     }))
   }, [])
 
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
   // Cheap deep comparison. These sections are small, plain-JSON objects.
   const dirty = useMemo(() => JSON.stringify(draft) !== JSON.stringify(section), [draft, section])
 
   const submit = useCallback(
-    (event) => {
+    async (event) => {
       event?.preventDefault?.()
       const found = validate(draft)
       setErrors(found)
@@ -48,9 +50,18 @@ export function useSectionForm(sectionKey, section, validate) {
         return false
       }
 
-      setSection(sectionKey, draft)
-      toast.success('Saved to this browser. Export and commit to publish.')
-      return true
+      setIsSubmitting(true)
+      try {
+        const result = await setSection(sectionKey, draft)
+        if (result && result.ok) {
+          toast.success('Saved to this browser. Export and commit to publish.')
+          return true
+        } else {
+          return false
+        }
+      } finally {
+        setIsSubmitting(false)
+      }
     },
     [draft, sectionKey, setSection, toast, validate],
   )
@@ -60,5 +71,5 @@ export function useSectionForm(sectionKey, section, validate) {
     setErrors({})
   }, [section])
 
-  return { draft, set, setNested, setDraft, errors, dirty, submit, revert }
+  return { draft, set, setNested, setDraft, errors, dirty, submit, revert, isSubmitting }
 }

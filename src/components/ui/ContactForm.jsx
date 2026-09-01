@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Send, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
 import { submitContactForm } from '@/lib/supabase/api.js'
@@ -13,27 +13,80 @@ const TOPICS = [
 ]
 
 const INITIAL_FORM = { name: '', email: '', topic: '', message: '' }
+const RATE_LIMIT_KEY = 'advaita_contact_last_submit'
+const RATE_LIMIT_MS = 30000 // 30 seconds
 
-function validateEmail(email) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+function validateForm(form) {
+  const errors = {}
+  
+  if (!form.name.trim()) {
+    errors.name = 'Name is required'
+  } else if (form.name.length > 80) {
+    errors.name = 'Name must be 80 characters or fewer'
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
+  if (!form.email.trim()) {
+    errors.email = 'Email is required'
+  } else if (!emailRegex.test(form.email.trim())) {
+    errors.email = 'Please enter a valid email address'
+  }
+
+  if (!form.topic) {
+    errors.topic = 'Please select a topic'
+  }
+
+  if (!form.message.trim()) {
+    errors.message = 'Message is required'
+  } else if (form.message.trim().length < 10) {
+    errors.message = 'Message should be at least 10 characters'
+  } else if (form.message.trim().length > 2000) {
+    errors.message = 'Message must be 2000 characters or fewer'
+  }
+
+  return errors
 }
 
 /**
  * Contact form with client-side validation and Supabase submission.
- * Includes rate-limiting (30s cooldown between submissions).
+ * Includes rate-limiting (30s cooldown between submissions) persisted to localStorage.
  */
 export default function ContactForm() {
   const [form, setForm] = useState(INITIAL_FORM)
   const [errors, setErrors] = useState({})
   const [status, setStatus] = useState('idle') // idle | submitting | success | error
   const [errorMessage, setErrorMessage] = useState('')
-  const [lastSubmitTime, setLastSubmitTime] = useState(0)
+  const [timeRemaining, setTimeRemaining] = useState(0)
+
+  // Initialize and tick rate limiting
+  useEffect(() => {
+    const checkRateLimit = () => {
+      try {
+        const lastSubmit = parseInt(localStorage.getItem(RATE_LIMIT_KEY) || '0', 10)
+        const now = Date.now()
+        const elapsed = now - lastSubmit
+        
+        if (elapsed < RATE_LIMIT_MS) {
+          setTimeRemaining(Math.ceil((RATE_LIMIT_MS - elapsed) / 1000))
+        } else {
+          setTimeRemaining(0)
+        }
+      } catch (_) {
+        // Ignore localStorage errors (e.g. strict privacy modes)
+      }
+    }
+
+    checkRateLimit()
+    const timer = setInterval(checkRateLimit, 1000)
+    return () => clearInterval(timer)
+  }, [])
 
   const handleChange = useCallback(
     (e) => {
       const { name, value } = e.target
       setForm((prev) => ({ ...prev, [name]: value }))
-      // Clear error on change
+      
+      // Clear specific error on change
       if (errors[name]) {
         setErrors((prev) => ({ ...prev, [name]: undefined }))
       }
@@ -41,36 +94,17 @@ export default function ContactForm() {
     [errors],
   )
 
-  const validate = useCallback(() => {
-    const newErrors = {}
-    if (!form.name.trim()) newErrors.name = 'Name is required'
-    if (!form.email.trim()) {
-      newErrors.email = 'Email is required'
-    } else if (!validateEmail(form.email)) {
-      newErrors.email = 'Please enter a valid email address'
-    }
-    if (!form.topic) newErrors.topic = 'Please select a topic'
-    if (!form.message.trim()) {
-      newErrors.message = 'Message is required'
-    } else if (form.message.trim().length < 10) {
-      newErrors.message = 'Message should be at least 10 characters'
-    }
-    return newErrors
-  }, [form])
-
   const handleSubmit = useCallback(
     async (e) => {
       e.preventDefault()
 
-      // Rate limiting
-      const now = Date.now()
-      if (now - lastSubmitTime < 30000) {
+      if (timeRemaining > 0) {
         setStatus('error')
-        setErrorMessage('Please wait 30 seconds before submitting again.')
+        setErrorMessage(`Please wait ${timeRemaining} seconds before submitting again.`)
         return
       }
 
-      const validationErrors = validate()
+      const validationErrors = validateForm(form)
       if (Object.keys(validationErrors).length > 0) {
         setErrors(validationErrors)
         return
@@ -87,18 +121,22 @@ export default function ContactForm() {
           message: form.message.trim(),
         })
 
+        try {
+          localStorage.setItem(RATE_LIMIT_KEY, Date.now().toString())
+        } catch (_) {
+          // Ignore localStorage errors
+        }
+
         setStatus('success')
-        setLastSubmitTime(Date.now())
         setForm(INITIAL_FORM)
-      } catch (err) {
+      } catch (_) {
         setStatus('error')
         setErrorMessage(
-          err?.message ||
-            'Something went wrong. Please try again or use an alternative contact method.',
+          'Something went wrong. Please try again or use an alternative contact method.',
         )
       }
     },
-    [form, validate, lastSubmitTime],
+    [form, timeRemaining],
   )
 
   if (status === 'success') {
@@ -248,13 +286,18 @@ export default function ContactForm() {
       {/* Submit */}
       <button
         type="submit"
-        disabled={status === 'submitting'}
+        disabled={status === 'submitting' || timeRemaining > 0}
         className="inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent shadow-subtle transition-all hover:bg-accent-strong active:scale-[0.97] disabled:opacity-60 disabled:cursor-not-allowed"
       >
         {status === 'submitting' ? (
           <>
             <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
             Sending…
+          </>
+        ) : timeRemaining > 0 ? (
+          <>
+            <Loader2 className="h-4 w-4" aria-hidden="true" />
+            Wait {timeRemaining}s
           </>
         ) : (
           <>
