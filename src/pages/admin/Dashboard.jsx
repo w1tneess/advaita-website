@@ -7,14 +7,21 @@ import {
   Milestone,
   Tags,
   Camera,
+  Plus,
+  MessageSquare,
+  ArrowRight,
+  Clock,
+  FolderGit2
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 
 import AdminPage from '../../components/admin/AdminPage.jsx'
 import PublishChecklist from '../../components/admin/PublishChecklist.jsx'
 import Card from '../../components/Card.jsx'
 import { useContent } from '../../lib/content.jsx'
 import { pluralize } from '../../lib/format.js'
+import { supabase } from '../../lib/supabase/client.js'
 
 function formatActivityDate(value) {
   return new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeStyle: 'short' }).format(
@@ -22,33 +29,35 @@ function formatActivityDate(value) {
   )
 }
 
-/**
- * Admin landing page.
- *
- * Counts only — no charts and no "views" or "visitors", because there is no analytics and
- * inventing a metric here would be exactly the kind of fake functionality this project
- * avoids. What it does show is the publish path, which is the thing people actually get
- * wrong about a static-site admin panel.
- */
-
-function StatCard({ icon: Icon, label, value, detail, to }) {
+function StatItem({ icon: Icon, label, value, to }) {
   return (
-    <Card className="p-5">
-      <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <p className="text-sm text-muted">{label}</p>
-          <p className="mt-1 font-display text-3xl leading-none tabular-nums">{value}</p>
+    <Link to={to} className="flex items-center justify-between p-3 rounded-lg hover:bg-raised transition-colors group">
+      <div className="flex items-center gap-3 text-sm">
+        <div className="p-2 rounded-md bg-accent/10 text-accent group-hover:bg-accent group-hover:text-on-accent transition-colors">
+          <Icon className="h-4 w-4" />
         </div>
-        <Icon className="h-5 w-5 shrink-0 text-accent" aria-hidden="true" />
+        <span className="font-medium text-ink">{label}</span>
       </div>
-      {detail && <p className="mt-3 text-xs text-muted">{detail}</p>}
-      <Link
-        to={to}
-        className="mt-4 inline-block text-sm font-medium text-accent underline underline-offset-4 hover:text-accent-strong"
-      >
-        Manage
-      </Link>
-    </Card>
+      <span className="font-mono text-sm text-muted">{value}</span>
+    </Link>
+  )
+}
+
+function QuickAction({ icon: Icon, label, description, to, colorClass }) {
+  return (
+    <Link 
+      to={to} 
+      className={`relative overflow-hidden flex flex-col p-5 rounded-xl border border-line bg-gradient-to-br from-surface to-raised hover:border-accent hover:shadow-md transition-all group ${colorClass}`}
+    >
+      <div className="flex items-start justify-between mb-4">
+        <div className="p-2.5 rounded-lg bg-surface border border-line group-hover:bg-accent/10 group-hover:border-accent/30 transition-colors z-10">
+          <Icon className="h-5 w-5" />
+        </div>
+        <ArrowRight className="h-4 w-4 text-muted opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all z-10" />
+      </div>
+      <h3 className="font-semibold text-ink z-10">{label}</h3>
+      <p className="text-xs text-muted mt-1 z-10">{description}</p>
+    </Link>
   )
 }
 
@@ -62,128 +71,183 @@ export default function Dashboard() {
     projectCategories,
     activity,
     photography,
+    blog = [],
   } = useContent()
+
+  const [messages, setMessages] = useState([])
+
+  useEffect(() => {
+    async function loadMessages() {
+      const { data } = await supabase
+        .from('contact_submissions')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(3)
+      if (data) setMessages(data)
+    }
+    loadMessages()
+  }, [])
 
   const photos = photography?.photos || []
 
-  const publishedProjects = projects.filter((project) => project.published !== false).length
-  const configuredLinks = socialLinks.filter((link) => link.url).length
-  const totalContent =
-    projects.length + interests.length + skills.length + timeline.length + photos.length
-
   const stats = [
-    {
-      icon: FolderOpen,
-      label: 'Projects',
-      value: projects.length,
-      detail: `${publishedProjects} visible on the public site, ${
-        projects.length - publishedProjects
-      } hidden.`,
-      to: '/admin/projects',
-    },
-    {
-      icon: Tags,
-      label: 'Categories',
-      value: projectCategories.length,
-      detail: `${projectCategories.length} project ${pluralize(
-        projectCategories.length,
-        'category',
-      )}.`,
-      to: '/admin/taxonomy',
-    },
-    {
-      icon: BarChart3,
-      label: 'Research interests',
-      value: interests.length,
-      detail: 'Shown on the home page and the about page.',
-      to: '/admin/profile',
-    },
-    {
-      icon: GraduationCap,
-      label: 'Abilities',
-      value: skills.length,
-      detail: 'Each one is labelled "learning" or "working knowledge".',
-      to: '/admin/skills',
-    },
-    {
-      icon: Milestone,
-      label: 'Timeline entries',
-      value: timeline.length,
-      detail: 'The learning-direction sequence on the about page.',
-      to: '/admin/timeline',
-    },
-    {
-      icon: Link2,
-      label: 'Social links',
-      value: socialLinks.length,
-      detail:
-        configuredLinks === 0
-          ? 'None have a real URL yet, so all of them render as placeholders.'
-          : `${configuredLinks} with a real URL, ${
-              socialLinks.length - configuredLinks
-            } still placeholders.`,
-      to: '/admin/social',
-    },
-    {
-      icon: FileText,
-      label: 'Total content',
-      value: totalContent,
-      detail: 'Editable records across the main content collections.',
-      to: '/admin/data',
-    },
-    {
-      icon: Camera,
-      label: 'Photography',
-      value: photos.length,
-      detail: `${photos.filter((p) => p.featured).length} featured photos.`,
-      to: '/admin/photography',
-    },
+    { icon: FileText, label: 'Blog posts', value: blog.length, to: '/admin/blog' },
+    { icon: FolderOpen, label: 'Projects', value: projects.length, to: '/admin/projects' },
+    { icon: Camera, label: 'Photography', value: photos.length, to: '/admin/photography' },
+    { icon: Tags, label: 'Categories', value: projectCategories.length, to: '/admin/taxonomy' },
+    { icon: BarChart3, label: 'Interests', value: interests.length, to: '/admin/profile' },
+    { icon: GraduationCap, label: 'Abilities', value: skills.length, to: '/admin/skills' },
+    { icon: Milestone, label: 'Timeline', value: timeline.length, to: '/admin/timeline' },
+    { icon: Link2, label: 'Links', value: socialLinks.length, to: '/admin/social' },
   ]
+
+  const drafts = blog.filter((post) => post.status === 'draft')
 
   return (
     <AdminPage
       title="Dashboard"
       description="Manage your website content. Changes are synced directly to Supabase."
     >
-      <ul className="grid gap-4 sm:grid-cols-2">
-        {stats.map((stat) => (
-          <li key={stat.label}>
-            <StatCard {...stat} />
-          </li>
-        ))}
-      </ul>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        {/* Left Column: Primary Actions & Content */}
+        <div className="lg:col-span-8 space-y-8">
+          
+          {/* Quick Actions */}
+          <section>
+            <h2 className="text-sm font-semibold tracking-wide text-muted uppercase mb-4">Quick Actions</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <QuickAction 
+                icon={FileText} 
+                label="Write Post" 
+                description="Draft a new article" 
+                to="/admin/blog/new"
+                colorClass="group-hover:text-accent"
+              />
+              <QuickAction 
+                icon={FolderGit2} 
+                label="Add Project" 
+                description="Showcase your work" 
+                to="/admin/projects/new"
+              />
+              <QuickAction 
+                icon={Camera} 
+                label="Upload Photo" 
+                description="Publish to gallery" 
+                to="/admin/photography/new"
+              />
+            </div>
+          </section>
 
-      <PublishChecklist className="mt-8" />
+          {/* Recent Messages */}
+          <section>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-sm font-semibold tracking-wide text-muted uppercase">Recent Messages</h2>
+              <Link to="/admin/messages" className="text-xs text-accent hover:underline flex items-center gap-1">
+                View all <ArrowRight className="h-3 w-3" />
+              </Link>
+            </div>
+            <Card className="p-0 overflow-hidden border-line">
+              {messages.length > 0 ? (
+                <div className="divide-y divide-line">
+                  {messages.map((msg) => (
+                    <div key={msg.id} className="p-4 hover:bg-raised transition-colors">
+                      <div className="flex items-baseline justify-between mb-1">
+                        <span className="font-medium text-sm">{msg.name}</span>
+                        <span className="text-xs text-muted">
+                          {new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' }).format(new Date(msg.created_at))}
+                        </span>
+                      </div>
+                      <p className="text-xs text-muted mb-2">{msg.email} {msg.topic && `• ${msg.topic}`}</p>
+                      <p className="text-sm text-ink line-clamp-2">{msg.message}</p>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="p-8 text-center text-sm text-muted flex flex-col items-center">
+                  <MessageSquare className="h-8 w-8 mb-3 opacity-20" />
+                  No messages received yet.
+                </div>
+              )}
+            </Card>
+          </section>
 
-      <Card className="mt-8 p-5">
-        <div className="flex items-center justify-between gap-3">
-          <div>
-            <h2 className="font-semibold">Recent activity</h2>
-            <p className="mt-1 text-sm text-muted">Recent changes saved to database.</p>
-          </div>
-          <span className="text-xs text-muted">Website status: Live sync active</span>
+          {/* Activity Feed */}
+          <section>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-sm font-semibold tracking-wide text-muted uppercase">Recent Activity</h2>
+              <span className="text-xs text-muted bg-surface border border-line px-2 py-1 rounded-full flex items-center gap-1.5">
+                <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse"></span>
+                Live sync active
+              </span>
+            </div>
+            <Card className="p-0 overflow-hidden border-line">
+              {activity.length > 0 ? (
+                <ul className="divide-y divide-line">
+                  {activity.slice(0, 5).map((entry) => (
+                    <li key={entry.id} className="p-4 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 text-sm hover:bg-raised transition-colors">
+                      <div className="flex items-center gap-2">
+                        <Clock className="h-4 w-4 text-muted" />
+                        <span>
+                          <strong className="font-medium capitalize">{entry.action}</strong>{' '}
+                          {entry.type.replace('categories.', '')} “{entry.label}”
+                        </span>
+                      </div>
+                      <time className="text-xs text-muted" dateTime={entry.at}>
+                        {formatActivityDate(entry.at)}
+                      </time>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="p-8 text-center text-sm text-muted">No admin changes recorded yet.</p>
+              )}
+            </Card>
+          </section>
+
         </div>
-        {activity.length > 0 ? (
-          <ul className="mt-4 divide-y divide-line">
-            {activity.slice(0, 8).map((entry) => (
-              <li
-                key={entry.id}
-                className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 py-3 text-sm first:pt-0 last:pb-0"
-              >
-                <span>
-                  <strong className="font-medium capitalize">{entry.action}</strong>{' '}
-                  {entry.type.replace('categories.', '')} “{entry.label}”
-                </span>
-                <time className="text-xs text-muted" dateTime={entry.at}>
-                  {formatActivityDate(entry.at)}
-                </time>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="mt-4 text-sm text-muted">No admin changes recorded yet.</p>
-        )}
-      </Card>
+
+        {/* Right Column: Overview & Publishing */}
+        <div className="lg:col-span-4 space-y-8">
+          
+          <PublishChecklist />
+
+          {drafts.length > 0 && (
+            <Card className="p-5 border-opinion/30 bg-opinion/5">
+              <h3 className="text-sm font-semibold text-opinion flex items-center gap-2 mb-3">
+                <FileText className="h-4 w-4" />
+                Drafts in progress
+              </h3>
+              <ul className="space-y-2">
+                {drafts.slice(0, 3).map(draft => (
+                  <li key={draft.id}>
+                    <Link to={`/admin/blog/${draft.id}`} className="text-sm hover:text-accent hover:underline line-clamp-1">
+                      {draft.title || 'Untitled Draft'}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              {drafts.length > 3 && (
+                <Link to="/admin/blog" className="text-xs text-muted hover:text-accent mt-3 inline-block">
+                  + {drafts.length - 3} more drafts
+                </Link>
+              )}
+            </Card>
+          )}
+
+          <section>
+            <h2 className="text-sm font-semibold tracking-wide text-muted uppercase mb-4">Content Overview</h2>
+            <Card className="p-2 border-line bg-surface/50">
+              <div className="flex flex-col space-y-1">
+                {stats.map((stat) => (
+                  <StatItem key={stat.label} {...stat} />
+                ))}
+              </div>
+            </Card>
+          </section>
+
+        </div>
+      </div>
     </AdminPage>
   )
 }

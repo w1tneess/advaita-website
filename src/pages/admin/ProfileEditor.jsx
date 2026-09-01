@@ -1,3 +1,4 @@
+import { useSaveShortcut } from '../../hooks/useSaveShortcut.js'
 import AdminPage from '../../components/admin/AdminPage.jsx'
 import CollectionEditor from '../../components/admin/CollectionEditor.jsx'
 import Field, { ListField } from '../../components/admin/Field.jsx'
@@ -18,6 +19,7 @@ import { createInterest, validateInterest, validateProfile } from '../../lib/sch
  * bio, and editing them in the same place as the bio is how they stay consistent.
  */
 export default function ProfileEditor() {
+  
   const { profile, interests } = useContent()
   const { draft, set, errors, dirty, submit, revert, isSubmitting } = useSectionForm(
     'profile',
@@ -27,6 +29,7 @@ export default function ProfileEditor() {
 
   const iconOptions = ICON_NAMES.map((name) => ({ value: name, label: name }))
 
+  useSaveShortcut(() => { const e = { preventDefault: () => {} }; if(typeof submit !== 'undefined') submit(e); else if(typeof save !== 'undefined') save(e); else if(typeof handleSave !== 'undefined') handleSave(); });
   return (
     <AdminPage
       title="Profile & interests"

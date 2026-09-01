@@ -1,3 +1,4 @@
+import { useSaveShortcut } from '../../hooks/useSaveShortcut.js'
 import AdminPage from '../../components/admin/AdminPage.jsx'
 import Field from '../../components/admin/Field.jsx'
 import { TextList } from '../../components/admin/RepeatableFields.jsx'
@@ -23,6 +24,7 @@ const DESTINATIONS = NAV_ITEMS.map((item) => ({
 }))
 
 function CtaFields({ id, legend, cta, onChange, hint }) {
+  useSaveShortcut(() => { const e = { preventDefault: () => {} }; if(typeof submit !== 'undefined') submit(e); else if(typeof save !== 'undefined') save(e); else if(typeof handleSave !== 'undefined') handleSave(); });
   return (
     <fieldset>
       <legend className="text-sm font-medium">{legend}</legend>
@@ -49,6 +51,7 @@ function CtaFields({ id, legend, cta, onChange, hint }) {
 }
 
 export default function HomeEditor() {
+  
   const { home } = useContent()
   const { draft, set, errors, dirty, submit, revert, isSubmitting } = useSectionForm('home', home, validateHome)
 

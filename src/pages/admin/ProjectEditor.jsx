@@ -1,3 +1,4 @@
+import { useSaveShortcut } from '../../hooks/useSaveShortcut.js'
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -27,6 +28,7 @@ import { useToast } from '../../lib/toast.jsx'
  * than a footnote.
  */
 export default function ProjectEditor() {
+  
   const { id } = useParams()
   const navigate = useNavigate()
   const toast = useToast()
@@ -42,7 +44,8 @@ export default function ProjectEditor() {
   const [slugLocked, setSlugLocked] = useState(!isNew)
 
   if (draft === null) {
-    return (
+    useSaveShortcut(() => { const e = { preventDefault: () => {} }; if(typeof submit !== 'undefined') submit(e); else if(typeof save !== 'undefined') save(e); else if(typeof handleSave !== 'undefined') handleSave(); });
+  return (
       <AdminPage
         title="Project not found"
         description="There is no project with that id in the current content document. It may have been deleted, or the demo data may have been reset."

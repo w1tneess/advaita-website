@@ -1,3 +1,4 @@
+import { useSaveShortcut } from '../../hooks/useSaveShortcut.js'
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -14,6 +15,7 @@ import { createBlogPost, hasErrors, slugify, todayIso, validateBlogPost } from '
 import { useToast } from '@/lib/toast.jsx'
 
 export default function BlogEditor() {
+  
   const { id } = useParams()
   const navigate = useNavigate()
   const toast = useToast()
@@ -32,7 +34,8 @@ export default function BlogEditor() {
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
 
   if (draft === null) {
-    return (
+    useSaveShortcut(() => { const e = { preventDefault: () => {} }; if(typeof submit !== 'undefined') submit(e); else if(typeof save !== 'undefined') save(e); else if(typeof handleSave !== 'undefined') handleSave(); });
+  return (
       <AdminPage
         title="Post not found"
         description="There is no post with that id in the database."
