@@ -3,6 +3,7 @@ import { Outlet, useLocation } from 'react-router-dom'
 
 import AdminHeader from '../components/admin/AdminHeader.jsx'
 import AdminSidebar from '../components/admin/AdminSidebar.jsx'
+import AdminFooter from '../components/admin/AdminFooter.jsx'
 import CommandPalette from '../components/admin/CommandPalette.jsx'
 import Seo from '../components/Seo.jsx'
 import SkipLink from '../components/SkipLink.jsx'
@@ -38,10 +39,12 @@ export default function AdminLayout() {
           <main
             id="main-content"
             tabIndex={-1}
-            className="w-full max-w-[1400px] px-4 py-8 focus:outline-none sm:px-6 sm:py-10"
+            className="w-full max-w-[1400px] px-4 py-8 focus:outline-none sm:px-6 sm:py-10 flex-1"
           >
             <Outlet />
           </main>
+          
+          <AdminFooter />
         </div>
       </div>
     </div>

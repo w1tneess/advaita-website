@@ -3,6 +3,7 @@ import {
   EyeOff,
   Menu,
   Search,
+  ExternalLink,
 } from 'lucide-react'
 import { useLocation } from 'react-router-dom'
 
@@ -61,7 +62,19 @@ export default function AdminHeader({ onOpenSidebar }) {
         </div>
 
         {/* Right Actions */}
-        <div className="flex items-center gap-3 ml-auto">
+        <div className="flex items-center gap-2 sm:gap-3 ml-auto">
+          <a
+            href="/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden sm:inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900 transition-colors"
+          >
+            <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
+            <span>View Site</span>
+          </a>
+          
+          <div className="w-px h-4 bg-zinc-800 hidden sm:block mx-1"></div>
+
           <button
             type="button"
             onClick={() => setPreviewDrafts(!previewDrafts)}

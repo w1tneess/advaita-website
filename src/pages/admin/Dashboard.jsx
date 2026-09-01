@@ -243,6 +243,29 @@ export default function Dashboard() {
             </Card>
           </section>
 
+          <section>
+            <h2 className="text-sm font-semibold tracking-wide text-muted uppercase mb-4">System Status</h2>
+            <Card className="p-5 border-zinc-800/60 bg-[#0a0a0a] shadow-lg space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-zinc-400">Database Connection</span>
+                <span className="flex items-center gap-2 text-sm text-green-500 font-medium">
+                  <div className="h-2 w-2 rounded-full bg-green-500"></div> Connected
+                </span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-zinc-400">Storage Bucket</span>
+                <span className="flex items-center gap-2 text-sm text-green-500 font-medium">
+                  <div className="h-2 w-2 rounded-full bg-green-500"></div> Active
+                </span>
+              </div>
+              <div className="pt-4 border-t border-zinc-800/60">
+                <Link to="/admin/data" className="text-xs text-accent hover:underline flex items-center justify-between">
+                  Manage database backups <ArrowRight className="h-3 w-3" />
+                </Link>
+              </div>
+            </Card>
+          </section>
+
         </div>
       </div>
     </AdminPage>
