@@ -32,13 +32,13 @@ export default function AdminLayout() {
       <div className="flex">
         <AdminSidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-        <div className="min-w-0 flex-1">
+        <div className="min-w-0 flex-1 flex flex-col bg-[#050505]">
           <AdminHeader onOpenSidebar={() => setSidebarOpen(true)} />
 
           <main
             id="main-content"
             tabIndex={-1}
-            className="mx-auto max-w-4xl px-4 py-8 focus:outline-none sm:px-6 sm:py-10"
+            className="w-full max-w-[1400px] px-4 py-8 focus:outline-none sm:px-6 sm:py-10"
           >
             <Outlet />
           </main>

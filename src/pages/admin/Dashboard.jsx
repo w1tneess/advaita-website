@@ -31,14 +31,14 @@ function formatActivityDate(value) {
 
 function StatItem({ icon: Icon, label, value, to }) {
   return (
-    <Link to={to} className="flex items-center justify-between p-3 rounded-lg hover:bg-raised transition-colors group">
+    <Link to={to} className="flex items-center justify-between p-3 rounded-lg hover:bg-zinc-800/60 transition-all group">
       <div className="flex items-center gap-3 text-sm">
-        <div className="p-2 rounded-md bg-accent/10 text-accent group-hover:bg-accent group-hover:text-on-accent transition-colors">
+        <div className="p-2 rounded-md bg-zinc-900 text-zinc-400 group-hover:bg-zinc-100 group-hover:text-zinc-950 transition-colors border border-zinc-800">
           <Icon className="h-4 w-4" />
         </div>
-        <span className="font-medium text-ink">{label}</span>
+        <span className="font-medium text-zinc-300 group-hover:text-zinc-100">{label}</span>
       </div>
-      <span className="font-mono text-sm text-muted">{value}</span>
+      <span className="font-mono text-sm text-zinc-500">{value}</span>
     </Link>
   )
 }
@@ -47,16 +47,16 @@ function QuickAction({ icon: Icon, label, description, to, colorClass }) {
   return (
     <Link 
       to={to} 
-      className={`relative overflow-hidden flex flex-col p-5 rounded-xl border border-line bg-gradient-to-br from-surface to-raised hover:border-accent hover:shadow-md transition-all group ${colorClass}`}
+      className={`relative overflow-hidden flex flex-col p-5 rounded-xl border border-zinc-800 bg-[#0a0a0a] hover:bg-zinc-900 hover:border-zinc-700 hover:shadow-[0_8px_30px_rgb(0,0,0,0.5)] hover:-translate-y-1 transition-all duration-300 group ${colorClass}`}
     >
       <div className="flex items-start justify-between mb-4">
-        <div className="p-2.5 rounded-lg bg-surface border border-line group-hover:bg-accent/10 group-hover:border-accent/30 transition-colors z-10">
+        <div className="p-2.5 rounded-lg bg-zinc-900 border border-zinc-800 group-hover:bg-zinc-100 group-hover:border-zinc-200 group-hover:text-zinc-950 text-zinc-300 transition-colors z-10">
           <Icon className="h-5 w-5" />
         </div>
-        <ArrowRight className="h-4 w-4 text-muted opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all z-10" />
+        <ArrowRight className="h-4 w-4 text-zinc-500 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-zinc-300 transition-all z-10" />
       </div>
-      <h3 className="font-semibold text-ink z-10">{label}</h3>
-      <p className="text-xs text-muted mt-1 z-10">{description}</p>
+      <h3 className="font-semibold text-zinc-100 z-10">{label}</h3>
+      <p className="text-xs text-zinc-500 mt-1 z-10">{description}</p>
     </Link>
   )
 }
@@ -147,24 +147,24 @@ export default function Dashboard() {
                 View all <ArrowRight className="h-3 w-3" />
               </Link>
             </div>
-            <Card className="p-0 overflow-hidden border-line">
+            <Card className="p-0 overflow-hidden border-zinc-800/60 bg-[#0a0a0a] shadow-lg">
               {messages.length > 0 ? (
-                <div className="divide-y divide-line">
+                <div className="divide-y divide-zinc-800/60">
                   {messages.map((msg) => (
-                    <div key={msg.id} className="p-4 hover:bg-raised transition-colors">
+                    <div key={msg.id} className="p-4 hover:bg-zinc-900/50 transition-colors">
                       <div className="flex items-baseline justify-between mb-1">
-                        <span className="font-medium text-sm">{msg.name}</span>
-                        <span className="text-xs text-muted">
+                        <span className="font-medium text-sm text-zinc-200">{msg.name}</span>
+                        <span className="text-xs text-zinc-500">
                           {new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' }).format(new Date(msg.created_at))}
                         </span>
                       </div>
-                      <p className="text-xs text-muted mb-2">{msg.email} {msg.topic && `• ${msg.topic}`}</p>
-                      <p className="text-sm text-ink line-clamp-2">{msg.message}</p>
+                      <p className="text-xs text-zinc-500 mb-2">{msg.email} {msg.topic && `• ${msg.topic}`}</p>
+                      <p className="text-sm text-zinc-300 line-clamp-2">{msg.message}</p>
                     </div>
                   ))}
                 </div>
               ) : (
-                <div className="p-8 text-center text-sm text-muted flex flex-col items-center">
+                <div className="p-8 text-center text-sm text-zinc-500 flex flex-col items-center">
                   <MessageSquare className="h-8 w-8 mb-3 opacity-20" />
                   No messages received yet.
                 </div>
@@ -176,31 +176,31 @@ export default function Dashboard() {
           <section>
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-sm font-semibold tracking-wide text-muted uppercase">Recent Activity</h2>
-              <span className="text-xs text-muted bg-surface border border-line px-2 py-1 rounded-full flex items-center gap-1.5">
+              <span className="text-xs text-zinc-400 bg-zinc-900 border border-zinc-800 px-2 py-1 rounded-full flex items-center gap-1.5 shadow-sm">
                 <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse"></span>
                 Live sync active
               </span>
             </div>
-            <Card className="p-0 overflow-hidden border-line">
+            <Card className="p-0 overflow-hidden border-zinc-800/60 bg-[#0a0a0a] shadow-lg">
               {activity.length > 0 ? (
-                <ul className="divide-y divide-line">
+                <ul className="divide-y divide-zinc-800/60">
                   {activity.slice(0, 5).map((entry) => (
-                    <li key={entry.id} className="p-4 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 text-sm hover:bg-raised transition-colors">
+                    <li key={entry.id} className="p-4 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 text-sm hover:bg-zinc-900/50 transition-colors">
                       <div className="flex items-center gap-2">
-                        <Clock className="h-4 w-4 text-muted" />
-                        <span>
+                        <Clock className="h-4 w-4 text-zinc-500" />
+                        <span className="text-zinc-300">
                           <strong className="font-medium capitalize">{entry.action}</strong>{' '}
                           {entry.type.replace('categories.', '')} “{entry.label}”
                         </span>
                       </div>
-                      <time className="text-xs text-muted" dateTime={entry.at}>
+                      <time className="text-xs text-zinc-500" dateTime={entry.at}>
                         {formatActivityDate(entry.at)}
                       </time>
                     </li>
                   ))}
                 </ul>
               ) : (
-                <p className="p-8 text-center text-sm text-muted">No admin changes recorded yet.</p>
+                <p className="p-8 text-center text-sm text-zinc-500">No admin changes recorded yet.</p>
               )}
             </Card>
           </section>
@@ -237,7 +237,7 @@ export default function Dashboard() {
 
           <section>
             <h2 className="text-sm font-semibold tracking-wide text-muted uppercase mb-4">Content Overview</h2>
-            <Card className="p-2 border-line bg-surface/50">
+            <Card className="p-2 border-zinc-800/60 bg-[#0a0a0a] shadow-lg">
               <div className="flex flex-col space-y-1">
                 {stats.map((stat) => (
                   <StatItem key={stat.label} {...stat} />

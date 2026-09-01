@@ -67,8 +67,10 @@ export const NAV_GROUPS = [
 ]
 
 function itemClasses({ isActive }) {
-  return `flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-    isActive ? 'bg-accent/15 text-accent' : 'text-muted hover:bg-raised hover:text-ink'
+  return `flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-all ${
+    isActive 
+      ? 'bg-zinc-800/80 text-zinc-100 shadow-sm border border-zinc-700/50' 
+      : 'text-zinc-400 hover:bg-zinc-900 hover:text-zinc-200 border border-transparent'
   }`
 }
 
@@ -103,14 +105,14 @@ export default function AdminSidebar({ open, onClose }) {
 
       <div
         id="admin-sidebar"
-        className={`fixed inset-y-0 left-0 z-40 w-64 flex flex-col overflow-hidden border-r border-line bg-surface transition-transform duration-200 lg:static lg:z-auto lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-40 w-64 flex flex-col overflow-hidden border-r border-zinc-800/60 bg-[#0a0a0a] transition-transform duration-200 lg:static lg:z-auto lg:translate-x-0 ${
           open ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <div className="flex items-center justify-between gap-2 border-b border-line px-5 py-4 shrink-0">
+        <div className="flex items-center justify-between gap-2 border-b border-zinc-800/60 px-5 py-4 shrink-0">
           <div>
-            <p className="font-display text-base font-semibold">Content admin</p>
-            <p className="text-xs text-muted">Live · synced</p>
+            <p className="font-display text-base font-semibold text-zinc-100">Content admin</p>
+            <p className="text-xs text-zinc-500 font-medium">Live · synced</p>
           </div>
           <button
             type="button"
@@ -128,7 +130,7 @@ export default function AdminSidebar({ open, onClose }) {
             <button
               type="button"
               onClick={() => setQuickAddOpen(!quickAddOpen)}
-              className="flex w-full items-center justify-between rounded-lg bg-accent px-4 py-2.5 text-sm font-medium text-on-accent shadow-sm transition-colors hover:bg-accent-strong"
+              className="flex w-full items-center justify-between rounded-lg bg-zinc-100 px-4 py-2 text-sm font-medium text-zinc-950 shadow-sm transition-all hover:bg-white hover:shadow focus:outline-none focus:ring-2 focus:ring-zinc-400"
             >
               <div className="flex items-center gap-2">
                 <Plus className="h-4 w-4" />
@@ -138,27 +140,27 @@ export default function AdminSidebar({ open, onClose }) {
             </button>
 
             {quickAddOpen && (
-              <div className="absolute left-0 top-full mt-2 w-full rounded-xl border border-line bg-surface p-1.5 shadow-xl shadow-black/10 animate-rise z-50">
+              <div className="absolute left-0 top-full mt-2 w-full rounded-xl border border-zinc-800/60 bg-[#0a0a0a] p-1.5 shadow-xl shadow-black/40 animate-rise z-50">
                 <Link
                   to="/admin/blog/new"
                   onClick={() => { setQuickAddOpen(false); onClose(); }}
-                  className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-ink hover:bg-raised transition-colors"
+                  className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-zinc-300 hover:bg-zinc-900 hover:text-zinc-100 transition-colors"
                 >
-                  <FileText className="h-4 w-4 text-muted" /> Write Post
+                  <FileText className="h-4 w-4 text-zinc-500" /> Write Post
                 </Link>
                 <Link
                   to="/admin/projects/new"
                   onClick={() => { setQuickAddOpen(false); onClose(); }}
-                  className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-ink hover:bg-raised transition-colors"
+                  className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-zinc-300 hover:bg-zinc-900 hover:text-zinc-100 transition-colors"
                 >
-                  <FolderGit2 className="h-4 w-4 text-muted" /> Add Project
+                  <FolderGit2 className="h-4 w-4 text-zinc-500" /> Add Project
                 </Link>
                 <Link
                   to="/admin/photography/new"
                   onClick={() => { setQuickAddOpen(false); onClose(); }}
-                  className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-ink hover:bg-raised transition-colors"
+                  className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-zinc-300 hover:bg-zinc-900 hover:text-zinc-100 transition-colors"
                 >
-                  <Camera className="h-4 w-4 text-muted" /> Upload Photo
+                  <Camera className="h-4 w-4 text-zinc-500" /> Upload Photo
                 </Link>
               </div>
             )}
@@ -166,11 +168,11 @@ export default function AdminSidebar({ open, onClose }) {
 
           <nav aria-label="Admin sections">
             {NAV_GROUPS.map((group) => (
-              <div key={group.title} className="mb-6 last:mb-0">
-                <h2 className="mb-2 px-3 text-[11px] font-bold tracking-wider text-muted uppercase">
+              <div key={group.title} className="mb-4 last:mb-0">
+                <h2 className="mb-1.5 px-3 text-[10px] font-bold tracking-widest text-muted/80 uppercase">
                   {group.title}
                 </h2>
-                <ul className="space-y-1">
+                <ul className="space-y-0.5">
                   {group.items.map((item) => {
                     const ItemIcon = item.icon
                     return (
@@ -189,27 +191,27 @@ export default function AdminSidebar({ open, onClose }) {
         </div>
 
         {/* Bottom Section: View Site & User Profile */}
-        <div className="border-t border-line shrink-0">
+        <div className="border-t border-zinc-800/60 shrink-0">
           <div className="p-2">
             <Link
               to="/"
-              className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-muted transition-colors hover:bg-raised hover:text-ink"
+              className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-zinc-400 font-medium transition-colors hover:bg-zinc-900 hover:text-zinc-200"
             >
               <ExternalLink className="h-4 w-4 shrink-0" aria-hidden="true" />
               View public site
             </Link>
           </div>
           
-          <div className="flex items-center justify-between border-t border-line/50 p-4 bg-surface/50">
+          <div className="flex items-center justify-between border-t border-zinc-800/60 p-4 bg-[#0a0a0a]">
             <div className="flex items-center gap-3 min-w-0">
-              <div className="h-8 w-8 rounded-full bg-accent/10 flex items-center justify-center shrink-0">
-                <span className="text-sm font-semibold text-accent">
+              <div className="h-8 w-8 rounded-full bg-zinc-800 flex items-center justify-center shrink-0 border border-zinc-700/50">
+                <span className="text-sm font-semibold text-zinc-300">
                   {displayName.charAt(0)}
                 </span>
               </div>
               <div className="min-w-0 flex-1">
-                <p className="text-sm font-medium text-ink truncate">{displayName}</p>
-                <p className="text-xs text-muted truncate">{session?.user?.email}</p>
+                <p className="text-sm font-medium text-zinc-200 truncate">{displayName}</p>
+                <p className="text-xs text-zinc-500 truncate">{session?.user?.email}</p>
               </div>
             </div>
             
@@ -218,7 +220,7 @@ export default function AdminSidebar({ open, onClose }) {
               onClick={logout}
               aria-label="Sign out"
               title="Sign out"
-              className="h-8 w-8 inline-flex items-center justify-center rounded-lg text-muted hover:bg-raised hover:text-ink transition-colors shrink-0"
+              className="h-8 w-8 inline-flex items-center justify-center rounded-lg text-zinc-500 hover:bg-zinc-800 hover:text-zinc-200 transition-colors shrink-0"
             >
               <LogOut className="h-4 w-4" aria-hidden="true" />
             </button>
