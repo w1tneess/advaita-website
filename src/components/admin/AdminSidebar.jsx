@@ -14,8 +14,14 @@ import {
   Wrench,
   X,
   Camera,
+  LogOut,
+  Plus,
+  ChevronDown
 } from 'lucide-react'
 import { NavLink, Link } from 'react-router-dom'
+import { useState, useRef, useEffect } from 'react'
+
+import { useAdminAuth } from './AdminAuth.jsx'
 
 /**
  * Admin navigation.
@@ -61,12 +67,29 @@ export const NAV_GROUPS = [
 ]
 
 function itemClasses({ isActive }) {
-  return `flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm transition-colors ${
-    isActive ? 'bg-accent/12 font-medium text-accent' : 'text-muted hover:bg-raised hover:text-ink'
+  return `flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+    isActive ? 'bg-accent/15 text-accent' : 'text-muted hover:bg-raised hover:text-ink'
   }`
 }
 
 export default function AdminSidebar({ open, onClose }) {
+  const { session, logout } = useAdminAuth()
+  const [quickAddOpen, setQuickAddOpen] = useState(false)
+  const menuRef = useRef(null)
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setQuickAddOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  const userIdentifier = session?.user?.email?.split('@')[0] || 'Admin'
+  const displayName = userIdentifier.charAt(0).toUpperCase() + userIdentifier.slice(1)
+
   return (
     <>
       {/* Mobile backdrop. Hidden from assistive tech: the close button is the labelled control. */}
@@ -80,11 +103,11 @@ export default function AdminSidebar({ open, onClose }) {
 
       <div
         id="admin-sidebar"
-        className={`fixed inset-y-0 left-0 z-40 w-64 overflow-y-auto border-r border-line bg-surface transition-transform duration-200 lg:static lg:z-auto lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-40 w-64 flex flex-col overflow-hidden border-r border-line bg-surface transition-transform duration-200 lg:static lg:z-auto lg:translate-x-0 ${
           open ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <div className="flex items-center justify-between gap-2 border-b border-line px-4 py-4">
+        <div className="flex items-center justify-between gap-2 border-b border-line px-5 py-4 shrink-0">
           <div>
             <p className="font-display text-base font-semibold">Content admin</p>
             <p className="text-xs text-muted">Live · synced</p>
@@ -99,29 +122,75 @@ export default function AdminSidebar({ open, onClose }) {
           </button>
         </div>
 
-        <nav aria-label="Admin sections" className="px-3 py-4">
-          {NAV_GROUPS.map((group) => (
-            <div key={group.title} className="mb-5 last:mb-0">
-              <h2 className="mb-1.5 px-3 text-xs font-semibold tracking-wide text-muted uppercase">
-                {group.title}
-              </h2>
-              <ul className="space-y-0.5">
-                {group.items.map((item) => {
-                  const ItemIcon = item.icon
-                  return (
-                    <li key={item.to}>
-                      <NavLink to={item.to} end={item.end} className={itemClasses}>
-                        <ItemIcon className="h-4 w-4 shrink-0" aria-hidden="true" />
-                        {item.label}
-                      </NavLink>
-                    </li>
-                  )
-                })}
-              </ul>
-            </div>
-          ))}
+        <div className="flex-1 overflow-y-auto px-4 py-6 scrollbar-thin">
+          {/* Quick Add Button */}
+          <div className="relative mb-8" ref={menuRef}>
+            <button
+              type="button"
+              onClick={() => setQuickAddOpen(!quickAddOpen)}
+              className="flex w-full items-center justify-between rounded-lg bg-accent px-4 py-2.5 text-sm font-medium text-on-accent shadow-sm transition-colors hover:bg-accent-strong"
+            >
+              <div className="flex items-center gap-2">
+                <Plus className="h-4 w-4" />
+                <span>Create New...</span>
+              </div>
+              <ChevronDown className={`h-4 w-4 opacity-70 transition-transform ${quickAddOpen ? 'rotate-180' : ''}`} />
+            </button>
 
-          <div className="mt-6 border-t border-line pt-4">
+            {quickAddOpen && (
+              <div className="absolute left-0 top-full mt-2 w-full rounded-xl border border-line bg-surface p-1.5 shadow-xl shadow-black/10 animate-rise z-50">
+                <Link
+                  to="/admin/blog/new"
+                  onClick={() => { setQuickAddOpen(false); onClose(); }}
+                  className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-ink hover:bg-raised transition-colors"
+                >
+                  <FileText className="h-4 w-4 text-muted" /> Write Post
+                </Link>
+                <Link
+                  to="/admin/projects/new"
+                  onClick={() => { setQuickAddOpen(false); onClose(); }}
+                  className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-ink hover:bg-raised transition-colors"
+                >
+                  <FolderGit2 className="h-4 w-4 text-muted" /> Add Project
+                </Link>
+                <Link
+                  to="/admin/photography/new"
+                  onClick={() => { setQuickAddOpen(false); onClose(); }}
+                  className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-ink hover:bg-raised transition-colors"
+                >
+                  <Camera className="h-4 w-4 text-muted" /> Upload Photo
+                </Link>
+              </div>
+            )}
+          </div>
+
+          <nav aria-label="Admin sections">
+            {NAV_GROUPS.map((group) => (
+              <div key={group.title} className="mb-6 last:mb-0">
+                <h2 className="mb-2 px-3 text-[11px] font-bold tracking-wider text-muted uppercase">
+                  {group.title}
+                </h2>
+                <ul className="space-y-1">
+                  {group.items.map((item) => {
+                    const ItemIcon = item.icon
+                    return (
+                      <li key={item.to}>
+                        <NavLink to={item.to} end={item.end} onClick={onClose} className={itemClasses}>
+                          <ItemIcon className="h-4 w-4 shrink-0" aria-hidden="true" />
+                          {item.label}
+                        </NavLink>
+                      </li>
+                    )
+                  })}
+                </ul>
+              </div>
+            ))}
+          </nav>
+        </div>
+
+        {/* Bottom Section: View Site & User Profile */}
+        <div className="border-t border-line shrink-0">
+          <div className="p-2">
             <Link
               to="/"
               className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-muted transition-colors hover:bg-raised hover:text-ink"
@@ -130,7 +199,31 @@ export default function AdminSidebar({ open, onClose }) {
               View public site
             </Link>
           </div>
-        </nav>
+          
+          <div className="flex items-center justify-between border-t border-line/50 p-4 bg-surface/50">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="h-8 w-8 rounded-full bg-accent/10 flex items-center justify-center shrink-0">
+                <span className="text-sm font-semibold text-accent">
+                  {displayName.charAt(0)}
+                </span>
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-medium text-ink truncate">{displayName}</p>
+                <p className="text-xs text-muted truncate">{session?.user?.email}</p>
+              </div>
+            </div>
+            
+            <button
+              type="button"
+              onClick={logout}
+              aria-label="Sign out"
+              title="Sign out"
+              className="h-8 w-8 inline-flex items-center justify-center rounded-lg text-muted hover:bg-raised hover:text-ink transition-colors shrink-0"
+            >
+              <LogOut className="h-4 w-4" aria-hidden="true" />
+            </button>
+          </div>
+        </div>
       </div>
     </>
   )
