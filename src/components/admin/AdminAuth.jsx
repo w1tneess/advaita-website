@@ -172,17 +172,7 @@ export default function AdminAuth({ children }) {
         logout: handleSignOut,
       }}
     >
-      <div>
-        <div className="flex justify-end border-b border-line bg-surface p-4">
-          <div className="flex items-center gap-3">
-            <span className="text-sm text-muted">{session.user?.email}</span>
-            <Button onClick={handleSignOut} variant="secondary" className="text-sm">
-              Sign out
-            </Button>
-          </div>
-        </div>
-        {children}
-      </div>
+      {children}
     </AdminAuthContext.Provider>
   )
 }
