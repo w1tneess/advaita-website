@@ -6,6 +6,8 @@ import AdminPage from '../../components/admin/AdminPage.jsx'
 import Field, { CheckboxGroup, ListField } from '../../components/admin/Field.jsx'
 import { PairList, TextList } from '../../components/admin/RepeatableFields.jsx'
 import Toggle from '../../components/admin/Toggle.jsx'
+import SaveStatus from '../../components/admin/feedback/SaveStatus.jsx'
+import UnsavedChangesDialog from '../../components/admin/feedback/UnsavedChangesDialog.jsx'
 import Button from '../../components/Button.jsx'
 import Callout from '../../components/Callout.jsx'
 import Card from '../../components/Card.jsx'
@@ -43,6 +45,10 @@ export default function ProjectEditor() {
   // Once the slug has been edited by hand, stop deriving it from the title.
   const [slugLocked, setSlugLocked] = useState(!isNew)
 
+  const [isSaving, setIsSaving] = useState(false)
+  const [saveStatus, setSaveStatus] = useState('idle')
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
+
   if (draft === null) {
     useSaveShortcut(() => { const e = { preventDefault: () => {} }; if(typeof submit !== 'undefined') submit(e); else if(typeof save !== 'undefined') save(e); else if(typeof handleSave !== 'undefined') handleSave(); });
   return (
@@ -57,13 +63,20 @@ export default function ProjectEditor() {
     )
   }
 
-  const set = (key, value) => setDraft((current) => ({ ...current, [key]: value }))
+  const set = (key, value) => {
+    setDraft((current) => ({ ...current, [key]: value }))
+    setHasUnsavedChanges(true)
+    setSaveStatus('idle')
+  }
 
-  const setLink = (key, value) =>
+  const setLink = (key, value) => {
     setDraft((current) => ({
       ...current,
       links: { ...current.links, [key]: value.trim() === '' ? null : value.trim() },
     }))
+    setHasUnsavedChanges(true)
+    setSaveStatus('idle')
+  }
 
   const onTitleChange = (value) => {
     setDraft((current) => ({
@@ -71,21 +84,38 @@ export default function ProjectEditor() {
       title: value,
       slug: slugLocked ? current.slug : slugify(value),
     }))
+    setHasUnsavedChanges(true)
+    setSaveStatus('idle')
   }
 
-  const submit = (event) => {
+  const submit = async (event) => {
     event.preventDefault()
     const found = validateProject(draft, projects)
     setErrors(found)
 
     if (hasErrors(found)) {
       toast.error('Nothing was saved — check the highlighted fields.')
+      setSaveStatus('error')
       return
     }
 
-    upsertItem('projects', draft)
-    toast.success(`“${draft.title}” ${isNew ? 'created' : 'saved'} in this browser.`)
-    navigate('/admin/projects')
+    setSaveStatus('saving')
+    setIsSaving(true)
+    try {
+      const result = await upsertItem('projects', draft)
+      if (result.ok) {
+        setSaveStatus('success')
+        setHasUnsavedChanges(false)
+        toast.success(`“${draft.title}” ${isNew ? 'created' : 'saved'}.`)
+        setTimeout(() => navigate('/admin/projects'), 800)
+      } else {
+        setSaveStatus('error')
+      }
+    } catch (_e) {
+      setSaveStatus('error')
+    } finally {
+      setIsSaving(false)
+    }
   }
 
   const categoryOptions = projectCategories.map((category) => ({
@@ -109,6 +139,7 @@ export default function ProjectEditor() {
         </Button>
       }
     >
+      <UnsavedChangesDialog hasUnsavedChanges={hasUnsavedChanges} />
       <form onSubmit={submit} noValidate>
         <Card className="p-6">
           <h2 className="text-base font-semibold">What it is</h2>
@@ -343,11 +374,14 @@ export default function ProjectEditor() {
           </div>
         </Card>
 
-        <div className="sticky bottom-0 mt-6 flex flex-wrap items-center gap-3 border-t border-line bg-canvas/90 py-4 backdrop-blur-sm">
-          <Button type="submit">{isNew ? 'Create project' : 'Save project'}</Button>
-          <Button type="button" variant="ghost" onClick={() => navigate('/admin/projects')}>
-            Cancel
-          </Button>
+        <div className="sticky bottom-0 mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-line bg-canvas/90 py-4 backdrop-blur-sm z-10">
+          <div className="flex items-center gap-3">
+            <Button type="submit" disabled={isSaving}>{isNew ? 'Create project' : 'Save project'}</Button>
+            <Button type="button" variant="ghost" onClick={() => navigate('/admin/projects')} disabled={isSaving}>
+              Cancel
+            </Button>
+          </div>
+          <SaveStatus status={saveStatus} />
         </div>
       </form>
     </AdminPage>

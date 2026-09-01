@@ -100,21 +100,29 @@ export function ContentProvider({ children }) {
   }, [toast])
 
   const commit = useCallback(async (updater) => {
-    let nextDoc
-    setContent((previous) => {
-      nextDoc = typeof updater === 'function' ? updater(previous) : updater
-      return nextDoc
-    })
+    try {
+      // 1. Fetch latest to prevent race conditions and overwriting concurrent edits
+      const state = await loadDocument()
+      const currentDoc = state.doc
 
-    const result = await saveDocument(nextDoc)
-    if (result.ok) {
-      setIsLocal(true)
-      return { ok: true }
-    } else {
-      toast.error(result.error || 'Failed to save changes.')
-      // We don't automatically revert optimistic state here, to avoid losing user's work.
-      // But we inform them it didn't save.
-      return { ok: false, error: result.error }
+      // 2. Apply updates
+      const nextDoc = typeof updater === 'function' ? updater(currentDoc) : updater
+
+      // 3. Save to database
+      const result = await saveDocument(nextDoc)
+      
+      if (result.ok) {
+        // 4. Update local UI only if save was successful
+        setContent(nextDoc)
+        setIsLocal(true)
+        return { ok: true }
+      } else {
+        toast.error(result.error || 'Failed to save changes.')
+        return { ok: false, error: result.error }
+      }
+    } catch (e) {
+      toast.error('An unexpected error occurred while saving.')
+      return { ok: false, error: e.message }
     }
   }, [toast])
 
@@ -206,11 +214,10 @@ export function ContentProvider({ children }) {
     [commit],
   )
 
-  /** Discard local edits and return to the deployed seed content. */
-  const resetDocument = useCallback(() => {
-    const result = clearDocument()
-    if (!result.ok && storageAvailable()) {
-      toast.error(result.error)
+  const resetDocument = useCallback(async () => {
+    const result = await clearDocument()
+    if (result && !result.ok) {
+      toast.error(result.error || 'Failed to clear document from database')
       return false
     }
     setContent(createSeedDocument())

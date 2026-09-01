@@ -21,8 +21,10 @@ export default function PhotographyList() {
   const toggleFeatured = async (photo) => {
     const next = !photo.featured
     try {
-      await upsertPhotography({ ...photo, featured: next })
-      toast.success(next ? 'Added to featured photos.' : 'Removed from featured.')
+      const result = await upsertPhotography({ ...photo, featured: next })
+      if (result && result.ok) {
+        toast.success(next ? 'Added to featured photos.' : 'Removed from featured.')
+      }
     } catch (e) {
       console.error(e)
     }
@@ -41,8 +43,10 @@ export default function PhotographyList() {
       if (photo.storage_path) {
         await removeImage(photo.storage_path)
       }
-      removePhotography(photo.id)
-      toast.success('Photo deleted.')
+      const result = await removePhotography(photo.id)
+      if (result && result.ok) {
+        toast.success('Photo deleted.')
+      }
     } catch (e) {
       console.error(e)
       toast.error('Failed to delete photo.')

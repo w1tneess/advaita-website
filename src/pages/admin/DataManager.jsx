@@ -52,7 +52,7 @@ export default function DataManager() {
     if (!file) return
 
     const reader = new FileReader()
-    reader.onload = (e) => {
+    reader.onload = async (e) => {
       setImportStatus('Validating imported file...')
       const result = parseImportedJson(e.target?.result ?? '')
       if (!result.ok) {
@@ -65,9 +65,15 @@ export default function DataManager() {
         return
       }
 
-      replaceDocument(result.doc)
-      setImportStatus('')
-      toast.success('Content imported. Save to keep it.')
+      setImportStatus('Saving to database...')
+      const saveResult = await replaceDocument(result.doc)
+      if (saveResult && saveResult.ok) {
+        setImportStatus('')
+        toast.success('Content imported and saved to database.')
+      } else {
+        setImportStatus('')
+        // Error toast is handled inside commit/replaceDocument
+      }
     }
     reader.onerror = () => {
       setImportStatus('')
@@ -87,7 +93,7 @@ export default function DataManager() {
     })
     if (!confirmed) return
 
-    const ok = resetDocument()
+    const ok = await resetDocument()
     if (!ok) toast.error('Reset failed — database error.')
     else toast.success('Database cleared. Using fallback seed.')
   }

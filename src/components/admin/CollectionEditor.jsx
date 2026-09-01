@@ -69,7 +69,7 @@ export default function CollectionEditor({
     setErrors({})
   }
 
-  const save = (event) => {
+  const save = async (event) => {
     event.preventDefault()
     const found = validate(draft, items)
     setErrors(found)
@@ -79,23 +79,27 @@ export default function CollectionEditor({
       return
     }
 
-    upsertItem(path, draft)
-    toast.success(`${labelFor(draft) || singular} ${isNew ? 'added' : 'saved'}.`)
-    close()
+    const result = await upsertItem(path, draft)
+    if (result && result.ok) {
+      toast.success(`${labelFor(draft) || singular} ${isNew ? 'added' : 'saved'}.`)
+      close()
+    }
   }
 
   const requestDelete = async (item) => {
     const label = labelFor(item) || `this ${singular}`
     const confirmed = await confirm({
       title: `Delete ${label}?`,
-      message: `This removes the ${singular} from your local copy of the content. It cannot be undone from here — a fresh copy would need to come from an export or from resetting the demo data.`,
+      message: `This removes the ${singular} from your database. It cannot be undone from here.`,
       confirmLabel: 'Delete',
     })
     if (!confirmed) return
 
-    removeItem(path, item.id)
-    if (draft?.id === item.id) close()
-    toast.success(`${label} deleted.`)
+    const result = await removeItem(path, item.id)
+    if (result && result.ok) {
+      if (draft?.id === item.id) close()
+      toast.success(`${label} deleted.`)
+    }
   }
 
   return (

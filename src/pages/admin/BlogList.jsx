@@ -38,16 +38,18 @@ export default function BlogList() {
   const toggleStatus = async (post) => {
     const next = post.status === 'published' ? 'draft' : 'published'
     try {
-      await upsertItem('blog', {
+      const result = await upsertItem('blog', {
         ...post,
         status: next,
         published_at: post.published_at || todayIso(),
       })
-      toast.success(
-        next === 'published'
-          ? `“${post.title}” is now published.`
-          : `“${post.title}” is back to draft and hidden.`,
-      )
+      if (result && result.ok) {
+        toast.success(
+          next === 'published'
+            ? `“${post.title}” is now published.`
+            : `“${post.title}” is back to draft and hidden.`,
+        )
+      }
     } catch (_e) {
       // error handled in content provider
     }
@@ -62,8 +64,10 @@ export default function BlogList() {
     if (!confirmed) return
 
     try {
-      await removeItem('blog', post.id)
-      toast.success('Post deleted.')
+      const result = await removeItem('blog', post.id)
+      if (result && result.ok) {
+        toast.success('Post deleted.')
+      }
     } catch (_e) {
       // error handled in content provider
     }

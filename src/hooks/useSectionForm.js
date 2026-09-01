@@ -54,7 +54,7 @@ export function useSectionForm(sectionKey, section, validate) {
       try {
         const result = await setSection(sectionKey, draft)
         if (result && result.ok) {
-          toast.success('Saved to this browser. Export and commit to publish.')
+          toast.success('Saved to database.')
           return true
         } else {
           return false

@@ -77,11 +77,16 @@ export default function BlogEditor() {
     setSaveStatus('saving')
     setIsSaving(true)
     try {
-      await upsertItem('blog', draft)
-      setSaveStatus('success')
-      setHasUnsavedChanges(false)
-      toast.success(`“${draft.title}” ${isNew ? 'created' : 'saved'}.`)
-      setTimeout(() => navigate('/admin/blog'), 800)
+      const result = await upsertItem('blog', draft)
+      if (result.ok) {
+        setSaveStatus('success')
+        setHasUnsavedChanges(false)
+        toast.success(`“${draft.title}” ${isNew ? 'created' : 'saved'}.`)
+        setTimeout(() => navigate('/admin/blog'), 800)
+      } else {
+        setSaveStatus('error')
+        // toast is already handled by commit, but we keep the UI state accurate
+      }
     } catch (_e) {
       setSaveStatus('error')
     } finally {

@@ -96,11 +96,15 @@ export default function PhotographyEditor() {
     setSaveStatus('saving')
     setIsSaving(true)
     try {
-      await upsertPhotography(finalDraft)
-      setSaveStatus('success')
-      setHasUnsavedChanges(false)
-      toast.success(`“${finalDraft.title}” ${isNew ? 'uploaded' : 'saved'}.`)
-      setTimeout(() => navigate('/admin/photography'), 800)
+      const result = await upsertPhotography(finalDraft)
+      if (result && result.ok) {
+        setSaveStatus('success')
+        setHasUnsavedChanges(false)
+        toast.success(`“${finalDraft.title}” ${isNew ? 'uploaded' : 'saved'}.`)
+        setTimeout(() => navigate('/admin/photography'), 800)
+      } else {
+        setSaveStatus('error')
+      }
     } catch (_e) {
       setSaveStatus('error')
     } finally {

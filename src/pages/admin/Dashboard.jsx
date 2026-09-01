@@ -17,7 +17,6 @@ import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 
 import AdminPage from '../../components/admin/AdminPage.jsx'
-import PublishChecklist from '../../components/admin/PublishChecklist.jsx'
 import Card from '../../components/Card.jsx'
 import { useContent } from '../../lib/content.jsx'
 import { pluralize } from '../../lib/format.js'
@@ -210,8 +209,6 @@ export default function Dashboard() {
         {/* Right Column: Overview & Publishing */}
         <div className="lg:col-span-4 space-y-8">
           
-          <PublishChecklist />
-
           {drafts.length > 0 && (
             <Card className="p-5 border-opinion/30 bg-opinion/5">
               <h3 className="text-sm font-semibold text-opinion flex items-center gap-2 mb-3">
