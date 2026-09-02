@@ -36,9 +36,9 @@ export const PUBLIC_ROUTES = [
     key: 'home',
     label: 'Home',
     nav: true,
-    title: 'Advaita Chandra — student researcher, writer and web builder',
+    title: 'Advaita Chandra',
     description:
-      'A student researching philosophy, Indian politics, technology and data — documenting the process of learning in public.',
+      'Notes on philosophy, Indian politics, technology, and data.',
     priority: '1.0',
     changefreq: 'monthly',
   },
@@ -60,7 +60,7 @@ export const PUBLIC_ROUTES = [
     nav: true,
     title: 'Portfolio',
     description:
-      'Research, writing, data and concept projects — each listed with its role, tools, methodology, status and stated limitations.',
+      'Research, writing, data, and concept projects.',
     priority: '0.9',
     changefreq: 'monthly',
   },

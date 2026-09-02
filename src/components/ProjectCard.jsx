@@ -129,7 +129,7 @@ export default function ProjectCard({ project, variant = 'compact', headingLevel
                     </span>
                     <span>
                       <span className="font-medium">{step.title}</span>
-                      {step.detail && <span className="text-muted"> — {step.detail}</span>}
+                      {step.detail && <span className="text-muted"> - {step.detail}</span>}
                     </span>
                   </li>
                 ))}

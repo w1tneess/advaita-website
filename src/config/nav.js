@@ -30,9 +30,8 @@ export const PUBLIC_ROUTES = [
     key: 'home',
     label: 'Home',
     nav: true,
-    title: 'Advaita Chandra — Thinking. Building. Noticing.',
-    description:
-      "A personal space for things I'm thinking about, making, and noticing — philosophy, photography, and projects.",
+    title: 'Advaita Chandra',
+    description: 'Notes and projects on philosophy, data, technology, and Indian politics.',
     priority: '1.0',
     changefreq: 'monthly',
   },
@@ -43,7 +42,7 @@ export const PUBLIC_ROUTES = [
     nav: true,
     title: 'Philosophy',
     description:
-      "A record of what I'm reading, questioning, and trying to understand more clearly — Krishnamurti, Camus, Dostoevsky, Ramana Maharshi, and Osho.",
+      'Notes on books I am reading and questions I have not solved yet.',
     priority: '0.8',
     changefreq: 'monthly',
   },
@@ -53,8 +52,7 @@ export const PUBLIC_ROUTES = [
     label: 'Photography',
     nav: true,
     title: 'Photography',
-    description:
-      "A visual notebook of things I've noticed through a camera — street, landscape, and everyday moments.",
+    description: 'Street, landscape, and everyday photography.',
     priority: '0.8',
     changefreq: 'monthly',
   },
@@ -74,8 +72,7 @@ export const PUBLIC_ROUTES = [
     label: 'Projects',
     nav: true,
     title: 'Projects',
-    description:
-      "Things I'm building — some finished, most still evolving. School worksheet generator, school website, and this site.",
+    description: 'Projects and source code.',
     priority: '0.9',
     changefreq: 'monthly',
   },
@@ -85,8 +82,7 @@ export const PUBLIC_ROUTES = [
     label: 'About',
     nav: true,
     title: 'About',
-    description:
-      "Who I am, what I'm interested in, and how I approach a question. Student researcher, not an expert.",
+    description: 'Background, learning direction, and how I approach questions.',
     priority: '0.8',
     changefreq: 'monthly',
   },

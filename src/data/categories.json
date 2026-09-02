@@ -4,7 +4,7 @@
       "id": "cat-politics",
       "slug": "politics",
       "name": "Politics",
-      "description": "Indian politics, public policy and current affairs — argument and evidence kept separate."
+      "description": "Indian politics, public policy, and current affairs. Argument and evidence are kept separate."
     },
     {
       "id": "cat-history",
@@ -28,7 +28,7 @@
       "id": "cat-cybersecurity",
       "slug": "cybersecurity",
       "name": "Cybersecurity",
-      "description": "Notes from learning security fundamentals — defensive, conceptual, and clearly labelled as a beginner's."
+      "description": "Notes from learning security fundamentals. Defensive, conceptual, and clearly labelled as beginner notes."
     },
     {
       "id": "cat-data",
@@ -40,7 +40,7 @@
       "id": "cat-research-notes",
       "slug": "research-notes",
       "name": "Research Notes",
-      "description": "Unfinished thinking, published deliberately — open questions and partial findings."
+      "description": "Unfinished notes, open questions, and partial findings."
     }
   ],
   "project": [
