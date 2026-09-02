@@ -55,7 +55,7 @@ export default function Philosophy() {
               variants={sectionReveal}
             >
               <h2 className="text-sm font-semibold tracking-wide text-accent uppercase">
-                What I'm exploring
+                Reading notes
               </h2>
               {thinkers.length > 0 ? (
                 <motion.ul

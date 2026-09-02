@@ -59,11 +59,11 @@ export default function Home() {
           </h1>
           <div className="hero-identity-line">
             <span className="hero-identity-separator" aria-hidden="true"></span>
-            <span>THINKER / BUILDER / OBSERVER</span>
+            <span>STUDENT IN INDIA</span>
           </div>
           <p className="hero-intro-text">
             {home.heroIntro ||
-              "A personal space for things I'm thinking about, making, and noticing."}
+              "Notes and projects on philosophy, data, technology, and Indian politics."}
           </p>
         </motion.div>
 

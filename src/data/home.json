@@ -1,18 +1,18 @@
 {
   "heroKicker": "",
-  "heroHeading": "Hi, I'm Advaita Chandra.",
-  "heroIntro": "Student, Explorer, and Builder, in India.",
+  "heroHeading": "Hi, I am Advaita Chandra.",
+  "heroIntro": "Student based in India.",
   "primaryCta": { "label": "See My Work", "to": "/projects" },
   "featuredHeading": "Selected work",
-  "featuredIntro": "Three projects so far. Each one lists its method, its current status, and what it does not show.",
-  "interestsHeading": "What I'm researching",
-  "interestsIntro": "These are long-running interests rather than areas of expertise. The overlap between them is usually where the questions come from.",
-  "credibilityHeading": "What this site is, and what it isn't",
-  "credibilityStatement": "I'm a student, not an expert, and nothing here is peer-reviewed. What I can point to is the work itself: a matplotlib data-visualisation study of terrorism in India across 1947–2026 that had to reconcile incomplete records and conflicting sources; a documentary-style research document on Osho that records competing accounts instead of settling them; and a four-layer design for a school worksheet generator that is still at concept stage with no working code.",
+  "featuredIntro": "Three projects with methods, status, and limitations listed for each.",
+  "interestsHeading": "What I am researching",
+  "interestsIntro": "Subjects I read about and questions I am working through.",
+  "credibilityHeading": "About this work",
+  "credibilityStatement": "I am a student, not an expert, and nothing here is peer-reviewed. What I can show is the work. A data project on terrorism in India from 1947 to 2026. A research document on Osho that records competing accounts. A four-layer design for a school worksheet generator with no code written yet.",
   "credibilityPoints": [
-    "Every project states its status plainly — including the one that is only a design.",
-    "Where sources disagree, the disagreement is recorded rather than resolved by preference.",
-    "Claims are labelled by type: sourced fact, my analysis, my opinion, or an open limitation.",
-    "Nothing on this site claims a result, a reader, or a publication that doesn't exist."
+    "Every project states its current status, including the one that is only a design.",
+    "When sources disagree, I record the disagreement instead of picking one number.",
+    "Claims are marked as sourced fact, my analysis, my opinion, or a limitation.",
+    "Nothing here claims results or publications that do not exist."
   ]
 }

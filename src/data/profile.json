@@ -1,30 +1,30 @@
 {
   "name": "Advaita Chandra",
   "shortName": "Advaita",
-  "tagline": "Learning in public, one question at a time.",
-  "roles": ["Student researcher", "Developing web builder", "Writer", "Independent learner"],
+  "tagline": "A website by Advaita Chandra.",
+  "roles": ["Student", "Learner"],
   "location": "India",
   "photo": null,
   "photoAlt": "Placeholder illustration standing in for a profile photograph.",
-  "bio": "I'm Advaita — a student with a long-running interest in philosophy, Indian politics, technology, and data. This site is where I share what I'm researching and building. I'm not presenting myself as an expert; I'm documenting the process of learning, questioning, and improving.",
-  "learningDirection": "Right now I'm working on two things: getting more rigorous about how I handle sources that disagree with each other, and getting better at building the tools I want to use. The data-visualisation and writing projects on this site came out of the first; the site itself came out of the second.",
+  "bio": "I am Advaita. I am a student in India interested in philosophy, Indian politics, technology, and data. I am not an expert. This site contains my notes and projects as I work through questions.",
+  "learningDirection": "Right now I am working on two things. First, handling sources that disagree with each other. Second, building my own tools. The data projects come from the first, and this website comes from the second.",
   "approach": [
     {
-      "title": "Ask better questions",
-      "detail": "A vague question produces a vague answer. Most of the work happens before the research starts — narrowing a question until it is specific enough to be answered, and honest enough to admit what it excludes."
+      "title": "Narrow the question",
+      "detail": "Most work happens before research starts. I try to narrow questions until they are specific enough to be answered cleanly."
     },
     {
       "title": "Examine evidence",
-      "detail": "Find out where a number or claim actually came from. When sources disagree, record the disagreement rather than picking whichever figure is most convenient."
+      "detail": "I check where figures originate. When sources disagree, I note the difference instead of picking the easiest number."
     },
     {
-      "title": "Understand context",
-      "detail": "A fact without its context is easy to misuse. Definitions, time periods and methods of counting change what a figure means, so they belong alongside it."
+      "title": "Keep context",
+      "detail": "Definitions, time periods, and counting methods change what numbers mean. They need to stay attached to the data."
     },
     {
       "title": "Explain clearly",
-      "detail": "If I cannot explain something plainly, I probably do not understand it yet. Writing is the test, not the write-up."
+      "detail": "If I cannot explain something plainly, I do not understand it well enough yet."
     }
   ],
-  "epistemicNote": "Across this site I try to keep four things visually distinct: what a source says, what I infer from it, what I simply think, and what I do not know. Where you see a labelled block, that is what it is doing."
+  "epistemicNote": "On this site I try to separate four things: facts from sources, my inferences, my opinions, and things I do not know."
 }

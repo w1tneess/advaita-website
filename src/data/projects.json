@@ -4,36 +4,36 @@
     "slug": "terrorism-in-india-data-visualization",
     "title": "Terrorism in India: Data Visualization, 1947–2026",
     "categories": ["data", "research"],
-    "summary": "A matplotlib-based visualisation of terrorism in India over time, built around the problem that the underlying records are incomplete and the sources disagree.",
-    "description": "A data-visualisation project examining terrorism in India across 1947–2026. The bulk of the work was not plotting but reconciliation: available records for this subject are uneven across decades, and different organisations define and count incidents differently. Rather than flattening that into one authoritative series, the project treats the gaps and the disagreements as findings in their own right.",
-    "role": "Sole researcher — question framing, source comparison, data preparation and visualisation.",
+    "summary": "A matplotlib data visualization of terrorism in India from 1947 to 2026. Built to handle gaps and conflicting numbers across different sources.",
+    "description": "A data project examining terrorism in India across 1947 to 2026. Most of the work was source reconciliation because available records are uneven across decades and organisations count incidents differently. The project marks data gaps instead of smoothing them out.",
+    "role": "Sole researcher. Framed the question, compared sources, prepared data, and built charts.",
     "tools": ["Python", "matplotlib"],
     "status": "completed",
-    "visibility": "Personal project — not publicly released.",
+    "visibility": "Personal project. Not published publicly.",
     "published": true,
     "methodology": [
       {
         "title": "Framed the question narrowly",
-        "detail": "Decided in advance what the visualisation would and would not attempt to show, so that gaps in the data would be visible rather than smoothed over."
+        "detail": "Decided in advance what the charts would show so that gaps in data remain visible."
       },
       {
-        "title": "Compared sources instead of choosing one",
-        "detail": "Where figures conflicted, both were kept and the conflict noted, rather than adopting whichever series was most complete or most convenient."
+        "title": "Compared sources",
+        "detail": "Where numbers conflicted, both were recorded alongside the source difference."
       },
       {
-        "title": "Documented coverage gaps explicitly",
-        "detail": "Periods with sparse or inconsistent records were marked as such, so that an absence of recorded incidents is not read as an absence of incidents."
+        "title": "Marked coverage gaps",
+        "detail": "Periods with sparse records are marked clearly so absence of records is not read as absence of events."
       },
       {
-        "title": "Visualised with matplotlib",
-        "detail": "Built the charts in Python so that every transformation between source data and final figure stayed inspectable."
+        "title": "Built charts in Python",
+        "detail": "Used matplotlib so data transformations remain visible."
       }
     ],
     "limitations": [
-      "Records of this kind are incomplete and inconsistent, particularly for the earlier decades of the period.",
-      "Organisations define and count incidents differently, so figures drawn from different sources are not directly comparable.",
-      "The project maps what the available data shows. It does not establish causes, and no causal claim should be read into it.",
-      "No conclusions are published here. The visualisations are exploratory, not an argument."
+      "Records are incomplete, especially for earlier decades.",
+      "Different organisations count incidents differently, so figures from different sources cannot be directly compared.",
+      "The project maps available data. It does not establish causes.",
+      "The visualisations are exploratory, not a published conclusion."
     ],
     "links": {
       "repository": null,
@@ -48,32 +48,32 @@
     "slug": "osho-documentary-research-document",
     "title": "Osho: Documentary-Style Research Document",
     "categories": ["research", "writing"],
-    "summary": "A long-form, documentary-style research and writing project on Osho, structured to keep documented events separate from contested interpretation.",
-    "description": "A comprehensive research and writing project about Osho, written in a documentary register. The subject is unusually contested — accounts of his life, teaching and organisations differ sharply depending on who is telling the story. The document is organised around that problem: it records competing accounts side by side and marks where the record is disputed, rather than presenting a single settled narrative.",
-    "role": "Researcher and writer — source reading, structuring and drafting.",
-    "tools": ["Source reading and note-taking", "Long-form drafting"],
+    "summary": "A long research document on Osho. It places competing historical accounts side by side instead of picking one narrative.",
+    "description": "A research document about Osho written from published secondary sources. Because accounts of his life and organizations differ sharply, the document records competing accounts side by side and flags disputed claims.",
+    "role": "Researcher and writer. Read sources, structured sections, and drafted text.",
+    "tools": ["Source reading", "Drafting"],
     "status": "completed",
-    "visibility": "Research and writing project — not published as a public article.",
+    "visibility": "Research document. Not published as a public article.",
     "published": true,
     "methodology": [
       {
-        "title": "Compiled from available published sources",
-        "detail": "Worked from material that is publicly available, keeping a note of where each account originates."
+        "title": "Used published sources",
+        "detail": "Compiled from public materials with source notes for each account."
       },
       {
-        "title": "Structured it as documentary narrative",
-        "detail": "Used a chronological documentary form because it makes the sequence of events, and the points where accounts diverge, easier to follow."
+        "title": "Organized chronologically",
+        "detail": "Used a timeline format to make sequence of events and divergence points clear."
       },
       {
-        "title": "Separated record from interpretation",
-        "detail": "Kept documented events distinct from reading and interpretation, and flagged claims that are contested between sources."
+        "title": "Separated facts from interpretation",
+        "detail": "Kept documented events distinct from interpretations and flagged disputed claims."
       }
     ],
     "limitations": [
-      "Accounts of Osho's life and organisations are genuinely contested. This document records the competing versions; it does not adjudicate between them.",
-      "It is a research and writing exercise. It is not peer-reviewed, and it is not published scholarship.",
-      "No public version exists yet, so the document cannot currently be linked or cited.",
-      "Working from published secondary material means inheriting whatever biases those sources carry."
+      "Accounts of Osho are contested. This document records competing versions without adjudicating between them.",
+      "This is a personal research document, not peer-reviewed scholarship.",
+      "No public link exists currently.",
+      "Secondary sources carry their own biases."
     ],
     "links": {
       "repository": null,
@@ -88,36 +88,36 @@
     "slug": "worksheet-generator",
     "title": "Worksheet Generator",
     "categories": ["concepts", "education", "technology"],
-    "summary": "A concept-stage design for a school worksheet and document generation system, separated into four layers. No implementation exists.",
-    "description": "A product design for generating school worksheets and related documents. The central idea is a strict separation of concerns across four layers, so that what a worksheet says, how it is arranged, and how it is styled can each change without disturbing the others — and so that automated generation remains genuinely optional rather than load-bearing. This is a design document and architecture, not software.",
-    "role": "Product design and system architecture — concept only.",
+    "summary": "A concept design for a school worksheet system split into four layers. No code exists for this project yet.",
+    "description": "A design document for generating school worksheets. The core idea is separating content, layout, and styling into independent layers so each can change without breaking the others. This is a design document, not working software.",
+    "role": "Product design and system architecture. Concept stage only.",
     "tools": ["System design", "Written specification"],
     "status": "concept",
-    "visibility": "Concept-stage design. No prototype and no codebase.",
+    "visibility": "Concept stage design. No code or prototype.",
     "published": true,
     "methodology": [
       {
         "title": "Content layer",
-        "detail": "Holds the actual subject matter — questions, prompts, answers and metadata — as structured data, with no assumptions about how it will look on a page."
+        "detail": "Stores questions, prompts, and metadata as structured data without layout assumptions."
       },
       {
-        "title": "Layout Engine",
-        "detail": "Decides how content is arranged into a printable page: ordering, spacing, pagination and how items flow when they do not fit."
+        "title": "Layout engine",
+        "detail": "Calculates page arrangements, item flow, and page breaks for printing."
       },
       {
-        "title": "Template Engine",
-        "detail": "Supplies reusable presentation formats — worksheet styles, headers, question patterns — so a new document is a template choice rather than a rebuild."
+        "title": "Template engine",
+        "detail": "Provides reusable document styles and header patterns."
       },
       {
-        "title": "Optional AI layer",
-        "detail": "An assistive layer that could draft or vary content. Deliberately optional: the design requires the other three layers to work completely without it."
+        "title": "Optional assistance layer",
+        "detail": "An optional layer for drafting content variations. The core three layers work without it."
       }
     ],
     "limitations": [
-      "This is a design, not a product. There is no prototype, no application and no code.",
-      "The four-layer separation is untested. Whether the boundaries survive contact with real requirements is exactly what a prototype would reveal.",
-      "The layout problem is the hardest part and the least specified — real pagination and overflow behaviour are where designs like this usually break.",
-      "No claim is made about usefulness in a classroom, since it has never been used in one."
+      "This is a design document. No prototype or code exists.",
+      "The four layer split is untested against real classroom requirements.",
+      "Page pagination and layout overflow handling are not fully specified.",
+      "It has never been tested in a classroom."
     ],
     "links": {
       "repository": null,
@@ -132,27 +132,26 @@
     "slug": "personal-website",
     "title": "advaitachandra.in",
     "categories": ["technology"],
-    "summary": "This site — a personal space built with React, Vite, Tailwind, and Supabase, deployed on GitHub Pages.",
-    "description": "The website you are looking at right now. Built as a learning project to understand modern front-end development: component architecture, responsive design, data persistence with Supabase, and deployment via GitHub Pages. It is also the container for everything else on this site — the research, the photography, and the writing.",
-    "role": "Design, development, and content — everything on this site is my own work.",
-    "tools": ["React", "Vite", "Tailwind CSS", "Framer Motion", "Supabase", "GitHub Pages"],
+    "summary": "The code for this website. Built with React, Vite, Tailwind CSS, and Supabase to learn frontend web development.",
+    "description": "This website is a project to learn modern web development. It uses React for components, Vite for bundling, Tailwind CSS for styling, and GitHub Pages for hosting. It also holds my research, photography, and writing.",
+    "role": "Design, code, and writing.",
+    "tools": ["React", "Vite", "Tailwind CSS", "Supabase", "GitHub Pages"],
     "status": "in-progress",
-    "visibility": "Public — you are looking at it.",
+    "visibility": "Public website.",
     "published": true,
     "methodology": [
       {
-        "title": "Built incrementally",
-        "detail": "Started with static pages and layered in interactivity, animation, and data persistence as I learned each piece."
+        "title": "Built step by step",
+        "detail": "Started with static pages and added interactive components as I learned them."
       },
       {
-        "title": "Content-first approach",
-        "detail": "The design serves the content — editorial typography, clear hierarchy, and honest labelling of what each piece of work actually is."
+        "title": "Content focused layout",
+        "detail": "Designed to keep typography readable and project statuses honest."
       }
     ],
     "limitations": [
-      "This is a student project, not a professional web application. The code reflects learning in progress.",
-      "The Supabase integration is still being refined — some admin panel features may not yet reliably round-trip to the public site.",
-      "The site is a living document and will change as I learn more."
+      "This is a student learning project, not a commercial web application.",
+      "Some admin integration features are still being updated."
     ],
     "links": {
       "repository": "https://github.com/w1tneess/advaita-website",

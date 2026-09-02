@@ -1,39 +1,39 @@
 {
-  "intro": "A running record of what I'm reading, questioning, and trying to think clearly about. This isn't a set of conclusions — it's a log of an ongoing process. Where something is my own interpretation rather than an established idea, I've tried to say so plainly.",
-  "description": "I'm not trained in philosophy formally — this section is me thinking in public, not lecturing. Disagreement and correction are welcome.",
+  "intro": "Notes on books I am reading and questions I have not solved yet. When an entry is my own opinion rather than a summary of a source, I mark it.",
+  "description": "I have no formal training in philosophy. Disagreements and corrections are welcome.",
   "thinkers": [
     {
       "id": "thinker-krishnamurti",
       "name": "J. Krishnamurti",
-      "description": "I'm exploring Krishnamurti's ideas on choiceless awareness and the limits of self-observation. His insistence that the observer is the observed challenges conventional notions of self-improvement through discipline or practice. I'm particularly interested in how this applies to everyday mental habits and the search for clarity without ideological frameworks.",
+      "description": "I am reading Krishnamurti on self-observation and mental habits, specifically his idea that the observer is the observed.",
       "order": 1
     },
     {
       "id": "thinker-camus",
       "name": "Albert Camus",
-      "description": "Camus' concept of the absurd — the conflict between our search for meaning and the silent universe — resonates with my own questions about purpose. Rather than offering escape through religion or ideology, he proposes embracing the absurd while continuing to live with passion and integrity. I'm examining what it means to 'keep going' without appeal to external meaning.",
+      "description": "I am reading Camus on the conflict between human expectation and an indifferent universe.",
       "order": 2
     },
     {
       "id": "thinker-dostoevsky",
       "name": "Fyodor Dostoevsky",
-      "description": "Through Dostoevsky's novels, I'm exploring questions of free will, moral responsibility, and the psychology of suffering. Works like Crime and Punishment and The Brothers Karamazov present characters grappling with ethical choices in psychologically rich ways that philosophical treatises often miss. I'm interested in how fiction can reveal philosophical truths about human nature that abstract reasoning might overlook.",
+      "description": "I read Dostoevsky for his psychological details on guilt, free will, and moral decisions.",
       "order": 3
     },
     {
       "id": "thinker-ramana",
       "name": "Ramana Maharshi",
-      "description": "Ramana Maharshi's self-inquiry practice — repeatedly asking 'Who am I?' to dismantle false identifications — appeals to me as a method of direct investigation rather than a belief system to adopt. Unlike doctrinal teachings, this approach encourages personal experimentation with awareness. I'm exploring how this simple question can undermine habitual assumptions about identity and consciousness.",
+      "description": "I am interested in Ramana Maharshi's self-inquiry method of asking 'Who am I?' as a practical test rather than a doctrine.",
       "order": 4
     },
     {
       "id": "thinker-osho",
       "name": "Osho",
-      "description": "I find Osho useful primarily as a provocative challenger to conventional thinking, even if many of his specific claims lack credibility. His willingness to question sacred cows — whether religious, political, or psychological — creates intellectual friction that can be valuable for testing one's own assumptions. I engage with him critically, extracting useful challenges while rejecting unfounded doctrines, treating him as a catalyst for inquiry rather than an authority.",
+      "description": "I read Osho to test my own assumptions against strong arguments, even when his historical or factual claims are unreliable.",
       "order": 5
     }
   ],
-  "notesIntro": "Short entries on things I've read, ideas that stayed with me, and questions I haven't resolved yet.",
-  "notesDescription": "I don't expect every note to become an essay. Sometimes one good question is enough.",
+  "notesIntro": "Short entries on books and questions.",
+  "notesDescription": "Not every note becomes an essay.",
   "notes": []
 }

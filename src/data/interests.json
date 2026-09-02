@@ -3,77 +3,77 @@
     "id": "int-philosophy",
     "name": "Philosophy",
     "icon": "BookOpen",
-    "note": "Mostly epistemology and ethics — how a claim earns the right to be believed, and what follows once it does.",
+    "note": "Epistemology and ethics. How a claim earns proof, and what follows after.",
     "order": 1
   },
   {
     "id": "int-psychology",
     "name": "Psychology",
     "icon": "Brain",
-    "note": "Reasoning and bias, particularly the ways a conclusion can feel obvious before the evidence has been read.",
+    "note": "Reasoning and bias. How a conclusion can feel obvious before evidence is checked.",
     "order": 2
   },
   {
     "id": "int-self-improvement",
     "name": "Self-improvement",
     "icon": "TrendingUp",
-    "note": "Treated as a practical question rather than a motivational one: which habits actually hold up over months.",
+    "note": "Practical habits. Checking which daily routines actually hold up over several months.",
     "order": 3
   },
   {
     "id": "int-technology",
     "name": "Technology",
     "icon": "Cpu",
-    "note": "Building things well enough to understand them from the inside instead of only reading about them.",
+    "note": "Building things to understand how they work from the inside.",
     "order": 4
   },
   {
     "id": "int-indian-politics",
     "name": "Indian politics",
     "icon": "Landmark",
-    "note": "Institutions, incentives and how policy actually travels from announcement to implementation.",
+    "note": "Institutions, incentives, and how policy moves from announcement to implementation.",
     "order": 5
   },
   {
     "id": "int-history",
     "name": "History",
     "icon": "ScrollText",
-    "note": "Long time horizons, and how the choice of a start date quietly shapes the conclusion.",
+    "note": "Long time horizons, and how choosing a start date shapes the conclusion.",
     "order": 6
   },
   {
     "id": "int-current-affairs",
     "name": "Current affairs",
     "icon": "Newspaper",
-    "note": "Following events closely enough to notice how the first account differs from the fifth.",
+    "note": "Following news events closely enough to notice how early reports change over time.",
     "order": 7
   },
   {
     "id": "int-public-policy",
     "name": "Public policy",
     "icon": "Scale",
-    "note": "Trade-offs rather than positions — what a policy costs, who bears it, and what it was measured against.",
+    "note": "Trade-offs. What a policy costs, who pays for it, and what it was measured against.",
     "order": 8
   },
   {
     "id": "int-data",
     "name": "Data",
     "icon": "BarChart3",
-    "note": "Imperfect datasets in particular: missing years, changed definitions, and sources that disagree.",
+    "note": "Imperfect datasets with missing years, changed definitions, or conflicting sources.",
     "order": 9
   },
   {
     "id": "int-cybersecurity",
     "name": "Cybersecurity",
     "icon": "ShieldCheck",
-    "note": "An interest I'm currently learning, not one I can claim skill in — fundamentals and defensive thinking.",
+    "note": "Fundamentals and defensive security. I am currently learning this and have no working skills yet.",
     "order": 10
   },
   {
     "id": "int-education",
     "name": "Education and academic learning",
     "icon": "GraduationCap",
-    "note": "How material is structured for learning, which is where the worksheet generator design came from.",
+    "note": "How study material is structured for learning.",
     "order": 11
   }
 ]
