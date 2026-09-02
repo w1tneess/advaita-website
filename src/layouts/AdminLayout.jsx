@@ -24,13 +24,13 @@ export default function AdminLayout() {
   }, [pathname])
 
   return (
-    <div className="min-h-dvh bg-canvas text-ink">
+    <div className="min-h-dvh flex flex-col bg-canvas text-ink w-full">
       <Seo title="Content admin" description="Live content editor." path={pathname} noindex />
 
       <SkipLink />
       <CommandPalette />
 
-      <div className="flex">
+      <div className="flex flex-1 w-full">
         <AdminSidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
         <div className="min-w-0 flex-1 flex flex-col bg-[#050505]">
@@ -39,7 +39,7 @@ export default function AdminLayout() {
           <main
             id="main-content"
             tabIndex={-1}
-            className="w-full max-w-[1400px] px-4 py-8 focus:outline-none sm:px-6 sm:py-10 flex-1"
+            className="w-full flex-1 px-4 py-8 focus:outline-none sm:px-6 sm:py-10"
           >
             <Outlet />
           </main>
