@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { ArrowLeft, Loader2, Sparkles } from 'lucide-react'
+import { ArrowLeft, Loader2, Sparkles, Mail, Lock, Eye, EyeOff } from 'lucide-react'
 
 import { supabase } from '../../lib/supabase/client.js'
 import Button from '../Button.jsx'
@@ -21,26 +21,6 @@ export function useAdminAuth() {
   return context
 }
 
-// Geometric corner pattern component
-const GeometricPattern = ({ className }) => (
-  <svg
-    className={`absolute text-line/40 ${className}`}
-    width="200"
-    height="200"
-    viewBox="0 0 200 200"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path d="M0 200L200 0" stroke="currentColor" strokeWidth="1" />
-    <path d="M0 160L160 0" stroke="currentColor" strokeWidth="1" />
-    <path d="M0 120L120 0" stroke="currentColor" strokeWidth="1" />
-    <path d="M0 80L80 0" stroke="currentColor" strokeWidth="1" />
-    <path d="M40 200L200 40" stroke="currentColor" strokeWidth="1" />
-    <path d="M80 200L200 80" stroke="currentColor" strokeWidth="1" />
-    <path d="M120 200L200 120" stroke="currentColor" strokeWidth="1" />
-  </svg>
-)
-
 export default function AdminAuth({ children }) {
   const _navigate = useNavigate()
   const toast = useToast()
@@ -49,6 +29,7 @@ export default function AdminAuth({ children }) {
   const [loading, setLoading] = useState(true)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [signingIn, setSigningIn] = useState(false)
   const [rememberMe, setRememberMe] = useState(false)
 
@@ -129,93 +110,120 @@ export default function AdminAuth({ children }) {
     return (
       <div className="relative flex min-h-dvh flex-col items-center justify-center bg-canvas p-6 overflow-hidden selection:bg-accent/20">
         
-        {/* Decorative corner patterns to match reference */}
-        <GeometricPattern className="top-[-50px] left-[-50px] rotate-0" />
-        <GeometricPattern className="top-[-50px] right-[-50px] rotate-90" />
-        <GeometricPattern className="bottom-[-50px] left-[-50px] -rotate-90" />
-        <GeometricPattern className="bottom-[-50px] right-[-50px] rotate-180" />
+        {/* Ambient background glow */}
+        <div className="absolute inset-0 pointer-events-none flex justify-center items-center mix-blend-screen opacity-50">
+          <div className="absolute top-[10%] left-[20%] h-[400px] w-[400px] rounded-full bg-accent/20 blur-[120px] animate-pulse" style={{ animationDuration: '4s' }} />
+          <div className="absolute bottom-[10%] right-[20%] h-[400px] w-[400px] rounded-full bg-accent-strong/10 blur-[120px] animate-pulse" style={{ animationDuration: '6s', animationDelay: '1s' }} />
+        </div>
 
-        <div className="relative z-10 w-full max-w-[420px] animate-rise flex flex-col items-center">
+        <div className="relative z-10 w-full max-w-[440px] animate-rise flex flex-col items-center">
           
-          {/* Logo / Branding Area */}
-          <div className="mb-8 flex flex-col items-center">
-            <div className="flex h-12 w-12 items-center justify-center bg-accent text-white mb-3">
-              <Sparkles className="h-6 w-6" />
+          {/* Modernized Logo Area */}
+          <div className="mb-10 flex flex-col items-center">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-surface border border-line shadow-[0_0_15px_rgba(255,255,255,0.05)] text-ink mb-4 relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-50" />
+              <Sparkles className="h-6 w-6 relative z-10" />
             </div>
-            <span className="text-xl font-bold tracking-tight text-ink">Advaita</span>
+            <h1 className="text-3xl font-bold tracking-tight text-ink">Advaita</h1>
+            <p className="mt-2 text-sm text-muted">Sign in to workspace</p>
           </div>
 
-          {/* High Contrast Login Card */}
-          <div className="w-full bg-[#f8f9fa] shadow-2xl p-8 sm:p-10 text-zinc-900 rounded-sm">
-            <h1 className="text-2xl font-semibold mb-2">Admin Log In</h1>
-            <p className="text-sm text-zinc-500 mb-8">Please enter your details</p>
+          {/* Glassmorphic Login Card */}
+          <div className="w-full rounded-3xl border border-white/[0.08] bg-surface/40 p-8 sm:p-10 shadow-2xl backdrop-blur-2xl relative overflow-hidden">
+            {/* Subtle top border highlight */}
+            <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
 
-            <form onSubmit={handleSignIn} className="space-y-6">
+            <form onSubmit={handleSignIn} className="space-y-6 relative z-10">
               
-              {/* Email Field */}
-              <div className="relative">
-                <label htmlFor="email" className="block text-xs font-medium text-zinc-700 mb-1">
+              {/* Modern Email Field */}
+              <div className="space-y-1.5">
+                <label htmlFor="email" className="block text-sm font-medium text-ink">
                   Email
                 </label>
-                <input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="name@example.com"
-                  required
-                  disabled={signingIn}
-                  className="block w-full border-0 border-b-2 border-zinc-300 bg-transparent px-0 py-2 text-sm text-zinc-900 transition-colors focus:border-accent focus:outline-none focus:ring-0 disabled:opacity-50"
-                />
+                <div className="relative group">
+                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-muted group-focus-within:text-accent transition-colors">
+                    <Mail className="h-5 w-5" />
+                  </div>
+                  <input
+                    id="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="name@example.com"
+                    required
+                    disabled={signingIn}
+                    className="block w-full rounded-xl border border-line bg-canvas/50 py-3.5 pl-12 pr-4 text-sm text-ink placeholder:text-muted/40 transition-all hover:border-line/80 focus:border-accent focus:bg-canvas focus:outline-none focus:ring-2 focus:ring-accent/20 disabled:opacity-50 shadow-inner"
+                  />
+                </div>
               </div>
 
-              {/* Password Field */}
-              <div className="relative">
-                <label htmlFor="password" className="block text-xs font-medium text-zinc-700 mb-1">
+              {/* Modern Password Field */}
+              <div className="space-y-1.5">
+                <label htmlFor="password" className="block text-sm font-medium text-ink">
                   Password
                 </label>
-                <input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  required
-                  disabled={signingIn}
-                  className="block w-full border-0 border-b-2 border-zinc-300 bg-transparent px-0 py-2 text-sm text-zinc-900 transition-colors focus:border-accent focus:outline-none focus:ring-0 disabled:opacity-50"
-                />
+                <div className="relative group">
+                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-muted group-focus-within:text-accent transition-colors">
+                    <Lock className="h-5 w-5" />
+                  </div>
+                  <input
+                    id="password"
+                    type={showPassword ? 'text' : 'password'}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    required
+                    disabled={signingIn}
+                    className="block w-full rounded-xl border border-line bg-canvas/50 py-3.5 pl-12 pr-12 text-sm text-ink placeholder:text-muted/40 transition-all hover:border-line/80 focus:border-accent focus:bg-canvas focus:outline-none focus:ring-2 focus:ring-accent/20 disabled:opacity-50 shadow-inner"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    disabled={signingIn}
+                    className="absolute inset-y-0 right-0 flex items-center pr-4 text-muted transition-colors hover:text-ink focus:outline-none disabled:opacity-50"
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                  >
+                    {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                  </button>
+                </div>
               </div>
 
               {/* Extras (Remember me & Forgot Password) */}
-              <div className="flex items-center justify-between pt-2">
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={rememberMe}
-                    onChange={(e) => setRememberMe(e.target.checked)}
-                    className="h-4 w-4 rounded border-zinc-300 text-accent focus:ring-accent accent-accent cursor-pointer"
-                  />
-                  <span className="text-xs text-zinc-600">Remember me</span>
+              <div className="flex items-center justify-between pt-1">
+                <label className="flex items-center gap-2.5 cursor-pointer group">
+                  <div className="relative flex items-center justify-center">
+                    <input
+                      type="checkbox"
+                      checked={rememberMe}
+                      onChange={(e) => setRememberMe(e.target.checked)}
+                      className="peer h-4.5 w-4.5 appearance-none rounded-md border border-line bg-canvas/50 checked:border-accent checked:bg-accent transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-accent/40 focus:ring-offset-2 focus:ring-offset-surface"
+                    />
+                    <svg className="absolute w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M1 5L4.5 8.5L13 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
+                  <span className="text-sm text-muted group-hover:text-ink transition-colors">Remember me</span>
                 </label>
                 
-                <Link to="#" className="text-xs font-medium text-zinc-900 hover:text-accent transition-colors">
+                <Link to="#" className="text-sm font-medium text-muted hover:text-ink transition-colors">
                   Forgot Password?
                 </Link>
               </div>
 
-              <div className="pt-4">
+              <div className="pt-3">
                 <Button
                   type="submit"
                   disabled={signingIn}
-                  className="w-full bg-accent hover:bg-accent-strong text-white rounded-sm py-3 text-sm font-medium shadow-sm transition-all active:scale-[0.98] rounded-none"
+                  className="w-full rounded-xl py-3.5 text-base font-medium shadow-lg transition-all active:scale-[0.98] relative overflow-hidden group border border-white/10"
                 >
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-[100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-out" />
                   {signingIn ? (
-                    <span className="flex items-center justify-center gap-2">
-                      <Loader2 className="h-4 w-4 animate-spin" />
+                    <span className="flex items-center justify-center gap-2 relative z-10">
+                      <Loader2 className="h-5 w-5 animate-spin" />
                       Authenticating...
                     </span>
                   ) : (
-                    'Log In'
+                    <span className="relative z-10">Log In</span>
                   )}
                 </Button>
               </div>
@@ -224,7 +232,7 @@ export default function AdminAuth({ children }) {
 
           <Link
             to="/"
-            className="group mt-8 inline-flex items-center gap-2 text-sm font-medium text-muted transition-colors hover:text-ink"
+            className="group mt-10 inline-flex items-center gap-2 text-sm font-medium text-muted transition-colors hover:text-ink bg-surface/50 px-4 py-2 rounded-full border border-line/50 backdrop-blur-sm"
           >
             <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
             Return to public site
