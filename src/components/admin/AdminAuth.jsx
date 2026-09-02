@@ -118,11 +118,30 @@ export default function AdminAuth({ children }) {
 
         <div className="relative z-10 w-full max-w-[440px] animate-rise flex flex-col items-center">
           
-          {/* Modernized Logo Area */}
+          {/* Modernized Custom Logo Area */}
           <div className="mb-10 flex flex-col items-center">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-surface border border-line shadow-[0_0_15px_rgba(255,255,255,0.05)] text-ink mb-4 relative overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-50" />
-              <Sparkles className="h-6 w-6 relative z-10" />
+            <div className="relative mb-5 flex h-16 w-16 items-center justify-center">
+              {/* Animated outer glow */}
+              <div className="absolute inset-0 rounded-[1.25rem] bg-gradient-to-tr from-accent/40 to-white/20 blur-xl animate-pulse" style={{ animationDuration: '4s' }} />
+              
+              {/* Inner glass surface */}
+              <div className="relative flex h-full w-full items-center justify-center rounded-[1.25rem] border border-white/10 bg-surface shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]">
+                {/* Philosophical 'Advaita' (Non-Duality) Logo - Vesica Piscis */}
+                <svg width="30" height="30" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-white drop-shadow-md">
+                  {/* Left Circle - The Observer */}
+                  <circle cx="12" cy="16" r="8" stroke="url(#logo-grad)" strokeWidth="1.5" />
+                  {/* Right Circle - The Observed */}
+                  <circle cx="20" cy="16" r="8" stroke="url(#logo-grad)" strokeWidth="1.5" />
+                  {/* The Point of Non-Duality / Awareness */}
+                  <circle cx="16" cy="16" r="2" fill="url(#logo-grad)" />
+                  <defs>
+                    <linearGradient id="logo-grad" x1="4" y1="16" x2="28" y2="16" gradientUnits="userSpaceOnUse">
+                      <stop stopColor="#ffffff" />
+                      <stop offset="1" stopColor="var(--color-accent, #64748b)" stopOpacity="0.8" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </div>
             </div>
             <h1 className="text-3xl font-bold tracking-tight text-ink">Advaita</h1>
             <p className="mt-2 text-sm text-muted">Sign in to workspace</p>
