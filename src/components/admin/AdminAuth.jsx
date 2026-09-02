@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { ArrowLeft, Loader2, Sparkles, Mail, Lock, Eye, EyeOff } from 'lucide-react'
+import { ArrowLeft, Loader2, Mail, Lock, Eye, EyeOff } from 'lucide-react'
 
 import { supabase } from '../../lib/supabase/client.js'
 import Button from '../Button.jsx'
