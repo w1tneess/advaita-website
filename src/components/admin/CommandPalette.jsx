@@ -3,7 +3,7 @@ import { Command } from 'cmdk'
 import { useNavigate } from 'react-router-dom'
 import { 
   FileText, FolderGit2, Home, MessageSquare, 
-  Settings, Tags, Search, User, Camera 
+  Settings, Tags, User, Camera 
 } from 'lucide-react'
 
 import { useContent } from '../../lib/content.jsx'

@@ -29,7 +29,7 @@ export default function ProfileEditor() {
 
   const iconOptions = ICON_NAMES.map((name) => ({ value: name, label: name }))
 
-  useSaveShortcut(() => { const e = { preventDefault: () => {} }; if(typeof submit !== 'undefined') submit(e); else if(typeof save !== 'undefined') save(e); else if(typeof handleSave !== 'undefined') handleSave(); });
+  useSaveShortcut(submit)
   return (
     <AdminPage
       title="Profile & interests"

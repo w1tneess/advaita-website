@@ -7,7 +7,6 @@ import {
   Milestone,
   Tags,
   Camera,
-  Plus,
   MessageSquare,
   ArrowRight,
   Clock,
@@ -19,7 +18,6 @@ import { useEffect, useState } from 'react'
 import AdminPage from '../../components/admin/AdminPage.jsx'
 import Card from '../../components/Card.jsx'
 import { useContent } from '../../lib/content.jsx'
-import { pluralize } from '../../lib/format.js'
 import { supabase } from '../../lib/supabase/client.js'
 
 function formatActivityDate(value) {

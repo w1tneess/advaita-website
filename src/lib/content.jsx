@@ -8,7 +8,6 @@ import {
   loadDocument,
   saveDocument,
   seedIsNewerThan,
-  storageAvailable,
 } from './store.js'
 import { useToast } from './toast.jsx'
 

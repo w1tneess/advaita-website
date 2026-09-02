@@ -49,20 +49,6 @@ export default function ProjectEditor() {
   const [saveStatus, setSaveStatus] = useState('idle')
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
 
-  if (draft === null) {
-    useSaveShortcut(() => { const e = { preventDefault: () => {} }; if(typeof submit !== 'undefined') submit(e); else if(typeof save !== 'undefined') save(e); else if(typeof handleSave !== 'undefined') handleSave(); });
-  return (
-      <AdminPage
-        title="Project not found"
-        description="There is no project with that id in the current content document. It may have been deleted, or the demo data may have been reset."
-      >
-        <Button to="/admin/projects" variant="secondary">
-          Back to projects
-        </Button>
-      </AdminPage>
-    )
-  }
-
   const set = (key, value) => {
     setDraft((current) => ({ ...current, [key]: value }))
     setHasUnsavedChanges(true)
@@ -89,7 +75,8 @@ export default function ProjectEditor() {
   }
 
   const submit = async (event) => {
-    event.preventDefault()
+    if (event && event.preventDefault) event.preventDefault()
+    if (!draft) return
     const found = validateProject(draft, projects)
     setErrors(found)
 
@@ -117,6 +104,23 @@ export default function ProjectEditor() {
       setIsSaving(false)
     }
   }
+
+  useSaveShortcut(submit)
+
+  if (draft === null) {
+    return (
+      <AdminPage
+        title="Project not found"
+        description="There is no project with that id in the current content document. It may have been deleted, or the demo data may have been reset."
+      >
+        <Button to="/admin/projects" variant="secondary">
+          Back to projects
+        </Button>
+      </AdminPage>
+    )
+  }
+
+
 
   const categoryOptions = projectCategories.map((category) => ({
     value: category.slug,

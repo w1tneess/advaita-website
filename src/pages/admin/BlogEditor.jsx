@@ -33,20 +33,6 @@ export default function BlogEditor() {
   const [saveStatus, setSaveStatus] = useState('idle')
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
 
-  if (draft === null) {
-    useSaveShortcut(() => { const e = { preventDefault: () => {} }; if(typeof submit !== 'undefined') submit(e); else if(typeof save !== 'undefined') save(e); else if(typeof handleSave !== 'undefined') handleSave(); });
-  return (
-      <AdminPage
-        title="Post not found"
-        description="There is no post with that id in the database."
-      >
-        <Button to="/admin/blog" variant="secondary">
-          Back to writing
-        </Button>
-      </AdminPage>
-    )
-  }
-
   const set = (key, value) => {
     setDraft((current) => ({ ...current, [key]: value }))
     setHasUnsavedChanges(true)
@@ -64,7 +50,8 @@ export default function BlogEditor() {
   }
 
   const submit = async (event) => {
-    event.preventDefault()
+    if (event && event.preventDefault) event.preventDefault()
+    if (!draft) return
     const found = validateBlogPost(draft, blog)
     setErrors(found)
 
@@ -93,6 +80,23 @@ export default function BlogEditor() {
       setIsSaving(false)
     }
   }
+
+  useSaveShortcut(submit)
+
+  if (draft === null) {
+    return (
+      <AdminPage
+        title="Post not found"
+        description="There is no post with that id in the database."
+      >
+        <Button to="/admin/blog" variant="secondary">
+          Back to writing
+        </Button>
+      </AdminPage>
+    )
+  }
+
+
 
   return (
     <AdminPage
