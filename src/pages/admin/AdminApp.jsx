@@ -19,6 +19,8 @@ import TimelineEditor from './TimelineEditor.jsx'
 import MessagesList from './MessagesList.jsx'
 import PhotographyList from './PhotographyList.jsx'
 import PhotographyEditor from './PhotographyEditor.jsx'
+import NotesList from './NotesList.jsx'
+import NoteEditor from './NoteEditor.jsx'
 
 /**
  * The whole admin panel, in one lazily-loaded module.
@@ -56,6 +58,8 @@ export default function AdminApp() {
           <Route path="blog/:id" element={<BlogEditor />} />
           <Route path="photography" element={<PhotographyList />} />
           <Route path="photography/:id" element={<PhotographyEditor />} />
+          <Route path="notes" element={<NotesList />} />
+          <Route path="notes/:id" element={<NoteEditor />} />
           <Route path="taxonomy" element={<Taxonomy />} />
           <Route path="skills" element={<SkillsEditor />} />
           <Route path="timeline" element={<TimelineEditor />} />

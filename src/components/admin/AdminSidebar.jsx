@@ -1,4 +1,5 @@
 import {
+  BookMarked,
   Database,
   ExternalLink,
   FileText,
@@ -45,6 +46,7 @@ export const NAV_GROUPS = [
       { to: '/admin/home', label: 'Home page', icon: Home },
       { to: '/admin/projects', label: 'Projects', icon: FolderGit2 },
       { to: '/admin/blog', label: 'Writing', icon: FileText },
+      { to: '/admin/notes', label: 'Notes', icon: BookMarked },
       { to: '/admin/photography', label: 'Photography', icon: Camera },
     ],
   },
@@ -161,6 +163,13 @@ export default function AdminSidebar({ open, onClose }) {
                   className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-zinc-300 hover:bg-zinc-900 hover:text-zinc-100 transition-colors"
                 >
                   <Camera className="h-4 w-4 text-zinc-500" /> Upload Photo
+                </Link>
+                <Link
+                  to="/admin/notes/new"
+                  onClick={() => { setQuickAddOpen(false); onClose(); }}
+                  className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-zinc-300 hover:bg-zinc-900 hover:text-zinc-100 transition-colors"
+                >
+                  <BookMarked className="h-4 w-4 text-zinc-500" /> Add Note
                 </Link>
               </div>
             )}

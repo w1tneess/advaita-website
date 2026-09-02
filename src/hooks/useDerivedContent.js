@@ -35,6 +35,13 @@ export function useDerivedContent(content, previewDrafts) {
     [blog, previewDrafts],
   )
 
+  const notes = useMemo(() => byNewest(content?.philosophy?.notes ?? [], 'published_at'), [content?.philosophy?.notes])
+
+  const publicNotes = useMemo(
+    () => (previewDrafts ? notes : notes.filter((note) => note.status === 'published')),
+    [notes, previewDrafts],
+  )
+
   /** Social links to show publicly: visible ones, including unconfigured placeholders. */
   const publicSocialLinks = useMemo(
     () => socialLinks.filter((link) => link.visible !== false),
@@ -73,6 +80,8 @@ export function useDerivedContent(content, previewDrafts) {
     socialLinks,
     blog,
     publicBlogPosts,
+    notes,
+    publicNotes,
     publicSocialLinks,
     skillGroups,
     findProjectBySlug,

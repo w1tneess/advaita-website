@@ -43,6 +43,11 @@ export const POST_STATUSES = [
   { value: 'published', label: 'Published', description: 'Visible to everyone.' },
 ]
 
+export const NOTE_STATUSES = [
+  { value: 'draft', label: 'Draft' },
+  { value: 'published', label: 'Published' },
+]
+
 export const SKILL_LEVELS = [
   {
     value: 'learning',
@@ -256,6 +261,20 @@ export function createBlogPost(overrides = {}) {
   }
 }
 
+export function createNote(overrides = {}) {
+  return {
+    id: uid('note'),
+    slug: '',
+    title: '',
+    excerpt: '',
+    content: '',
+    category: '',
+    published_at: '',
+    status: 'draft',
+    ...overrides,
+  }
+}
+
 export function createPhotography(overrides = {}) {
   return {
     id: uid('pht'),
@@ -264,6 +283,8 @@ export function createPhotography(overrides = {}) {
     caption: '',
     alt_text: '',
     featured: false,
+    gallery: [],
+    // Legacy single-image fields (kept for backward compatibility, optionally omitted later)
     image_url: '',
     storage_path: '',
     created_at: new Date().toISOString(),
@@ -471,7 +492,24 @@ export function validateBlogPost(post, allPosts = []) {
         'Status',
       ),
     ],
-    published_at: [rules.isoDate],
+    published_at: [
+      (value) =>
+        post.status === 'published' && isBlank(value) ? 'Date is required for published posts.' : null,
+    ],
+  })
+}
+
+export function validateNote(note, allNotes = []) {
+  return validate(note, {
+    title: [rules.required('Title'), rules.maxLength(140, 'Title')],
+    slug: [rules.required('Slug'), rules.slug, rules.unique(otherSlugs(allNotes, note.id), 'slug')],
+    category: [rules.required('Category'), rules.maxLength(40, 'Category')],
+    excerpt: [rules.maxLength(300, 'Excerpt')],
+    content: [rules.required('Content')],
+    published_at: [
+      (value) =>
+        note.status === 'published' && isBlank(value) ? 'Date is required for published notes.' : null,
+    ],
   })
 }
 

@@ -19,9 +19,9 @@ import {
 const ROUTE = PUBLIC_ROUTES.find((route) => route.key === 'philosophy')
 
 export default function Philosophy() {
-  const { philosophy } = useContent()
+  const { philosophy, publicNotes } = useContent()
   const thinkers = philosophy.thinkers || []
-  const notes = philosophy.notes || []
+  const notes = publicNotes || []
 
   return (
     <>
@@ -115,6 +115,18 @@ export default function Philosophy() {
                   className="rounded-xl border border-line bg-surface p-6 shadow-subtle sm:p-8"
                   variants={staggerItem}
                 >
+                  <div className="mb-4 flex flex-wrap items-center gap-3">
+                    {note.title && (
+                      <h3 className="text-xl font-semibold tracking-tight text-ink">
+                        {note.title}
+                      </h3>
+                    )}
+                    {note.category && (
+                      <span className="inline-flex items-center rounded-full bg-accent/10 px-2.5 py-0.5 text-xs font-medium text-accent">
+                        {note.category}
+                      </span>
+                    )}
+                  </div>
                   <div className="prose-body">
                     {/* Simplified markdown rendering for notes */}
                     {note.content.split('\n\n').map((paragraph, idx) => (
@@ -123,9 +135,9 @@ export default function Philosophy() {
                       </p>
                     ))}
                   </div>
-                  {note.date && (
-                    <p className="mt-4 text-xs font-medium text-muted">
-                      {new Date(note.date).toLocaleDateString('en-US', {
+                  {note.published_at && (
+                    <p className="mt-6 text-xs font-medium text-muted">
+                      {new Date(note.published_at).toLocaleDateString('en-US', {
                         year: 'numeric',
                         month: 'long',
                         day: 'numeric',

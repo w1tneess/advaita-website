@@ -1,4 +1,4 @@
-import { Camera } from 'lucide-react'
+import { Camera, Images } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
 
@@ -47,8 +47,26 @@ export default function Photography() {
     [photos, activeCategory],
   )
 
-  const openLightbox = (photo) => {
-    const idx = filtered.findIndex((p) => p.id === photo.id)
+  const flattenedPhotos = useMemo(() => {
+    return filtered.flatMap((post) => {
+      const gallery = post.gallery?.length > 0 
+        ? post.gallery 
+        : post.image_url 
+          ? [{ id: post.id + '-cover', image_url: post.image_url, variants: post.variants || [] }] 
+          : [];
+      
+      return gallery.map((img) => ({
+        ...img,
+        postId: post.id,
+        alt_text: post.alt_text,
+        caption: post.caption,
+        aspectRatio: post.aspectRatio
+      }))
+    })
+  }, [filtered])
+
+  const openLightbox = (post) => {
+    const idx = flattenedPhotos.findIndex((p) => p.postId === post.id)
     setLightboxIndex(idx >= 0 ? idx : null)
   }
 
@@ -117,10 +135,19 @@ export default function Photography() {
               whileInView="visible"
               viewport={scrollViewport}
             >
-              {filtered.map((photo) => (
+              {filtered.map((photo) => {
+                const images = photo.gallery?.length > 0 
+                  ? photo.gallery 
+                  : photo.image_url 
+                    ? [{ id: photo.id, image_url: photo.image_url, variants: photo.variants || [] }] 
+                    : [];
+                if (images.length === 0) return null;
+                const cover = images[0];
+                
+                return (
                 <motion.figure
                   key={photo.id}
-                  className="mb-4 cursor-pointer break-inside-avoid overflow-hidden rounded-xl border border-line bg-surface shadow-subtle transition-shadow hover:shadow-raised"
+                  className="relative mb-4 cursor-pointer break-inside-avoid overflow-hidden rounded-xl border border-line bg-surface shadow-subtle transition-shadow hover:shadow-raised group"
                   variants={imageReveal}
                   onClick={() => openLightbox(photo)}
                   role="button"
@@ -134,21 +161,26 @@ export default function Photography() {
                   aria-label={`View ${photo.alt_text || photo.title || 'photo'} in full size`}
                 >
                   <img
-                    {...getOptimizedImageProps(photo.image_url, photo.variants)}
+                    {...getOptimizedImageProps(cover.image_url, cover.variants)}
                     alt={photo.alt_text || ''}
                     loading="lazy"
                     decoding="async"
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    className="w-full object-cover transition-transform duration-300 hover:scale-[1.02]"
+                    className="w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
                     style={photo.aspectRatio ? { aspectRatio: photo.aspectRatio } : undefined}
                   />
+                  {images.length > 1 && (
+                    <div className="absolute top-3 right-3 rounded-md bg-black/50 p-1.5 text-white backdrop-blur-md shadow-sm transition-opacity group-hover:bg-black/70">
+                      <Images className="h-4 w-4" />
+                    </div>
+                  )}
                   {photo.caption && (
                     <figcaption className="px-4 py-3 text-sm text-muted">
                       {photo.caption}
                     </figcaption>
                   )}
                 </motion.figure>
-              ))}
+              )})}
             </motion.div>
           ) : (
             <div className="mt-10 rounded-xl border border-dashed border-line bg-raised/50 px-6 py-16 text-center">
@@ -165,7 +197,7 @@ export default function Photography() {
 
       {/* Lightbox overlay */}
       <Lightbox
-        photos={filtered}
+        photos={flattenedPhotos}
         index={lightboxIndex}
         onClose={() => setLightboxIndex(null)}
         onChange={setLightboxIndex}

@@ -238,6 +238,7 @@ export function ContentProvider({ children }) {
       profile: content?.profile,
       home: content?.home,
       philosophy: content?.philosophy || {},
+      notes: content?.philosophy?.notes || [],
       photography: content?.photography || {},
       projectCategories: content?.categories?.project,
 
@@ -256,6 +257,8 @@ export function ContentProvider({ children }) {
 
       upsertPhotography: (photo) => upsertItem('photography.photos', photo),
       removePhotography: (id) => removeItem('photography.photos', id),
+      upsertNote: (note) => upsertItem('philosophy.notes', note),
+      removeNote: (id) => removeItem('philosophy.notes', id),
 
       // Storage state.
       isLocal,
