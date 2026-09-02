@@ -96,7 +96,7 @@ export default function Lightbox({ photos, index, onClose, onChange }) {
 
             {/* Image */}
             <img
-              {...getOptimizedImageProps(photo.image_url)}
+              {...getOptimizedImageProps(photo.image_url, photo.variants)}
               alt={photo.alt_text || ''}
               loading="lazy"
               decoding="async"

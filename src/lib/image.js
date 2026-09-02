@@ -4,31 +4,33 @@
 
 /**
  * Returns optimized image properties including `src` and `srcSet`
- * if the provided URL is a standard Supabase public storage URL.
- * Falls back to just `src` if it's not recognizable.
+ * based on pre-generated image variants stored alongside the original.
+ * Falls back to just `src` if no variants exist (backward compatibility).
  *
- * @param {string} url - The original image URL
+ * @param {string} url - The original base image URL (e.g., https://.../image.jpg)
+ * @param {number[]} variants - Array of widths available (e.g., [400, 800, 1600])
  * @returns {{ src: string, srcSet?: string }} Props to spread onto an <img> tag
  */
-export function getOptimizedImageProps(url) {
+export function getOptimizedImageProps(url, variants = []) {
   if (!url) return { src: '' }
 
-  // Check if it's a Supabase storage URL:
-  // e.g. https://[project].supabase.co/storage/v1/object/public/[bucket]/[file]
-  if (url.includes('/storage/v1/object/public/')) {
-    // Convert to the image transformation endpoint
-    const baseUrl = url.replace('/storage/v1/object/public/', '/storage/v1/render/image/public/')
+  if (variants && variants.length > 0) {
+    const lastDotIdx = url.lastIndexOf('.')
+    if (lastDotIdx !== -1) {
+      const base = url.substring(0, lastDotIdx)
+      const ext = url.substring(lastDotIdx)
+      
+      const srcSet = variants
+        .map((w) => `${base}-${w}w${ext} ${w}w`)
+        .join(', ')
 
-    // Generate standard widths for responsive design
-    const widths = [400, 800, 1200, 1600, 2000]
-    const srcSet = widths.map((w) => `${baseUrl}?width=${w} ${w}w`).join(', ')
-
-    return {
-      src: url, // Fallback original URL
-      srcSet,
+      return {
+        src: url, // Fallback original URL
+        srcSet,
+      }
     }
   }
 
-  // Return as-is if not a Supabase URL
+  // Return as-is if no variants available
   return { src: url }
 }

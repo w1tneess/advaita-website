@@ -134,7 +134,7 @@ export default function Photography() {
                   aria-label={`View ${photo.alt_text || photo.title || 'photo'} in full size`}
                 >
                   <img
-                    {...getOptimizedImageProps(photo.image_url)}
+                    {...getOptimizedImageProps(photo.image_url, photo.variants)}
                     alt={photo.alt_text || ''}
                     loading="lazy"
                     decoding="async"

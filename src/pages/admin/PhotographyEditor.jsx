@@ -12,6 +12,7 @@ import { useContent } from '@/lib/content.jsx'
 import { createPhotography, hasErrors, validatePhotography } from '@/lib/schema.js'
 import { useToast } from '@/lib/toast.jsx'
 import { uploadImage } from '@/lib/supabase/api.js'
+import { generateImageVariants, IMAGE_VARIANTS } from '@/lib/imageProcessor.js'
 
 export default function PhotographyEditor() {
   const { id } = useParams()
@@ -72,10 +73,28 @@ export default function PhotographyEditor() {
       setUploading(true)
       try {
         const ext = file.name.split('.').pop()
+        
+        toast.success('Compressing image variants...')
+        const { original, variants } = await generateImageVariants(file)
+
+        // Upload original
         const path = `${draft.id}.${ext}`
-        const { storagePath, publicUrl } = await uploadImage(file, path)
+        const { storagePath, publicUrl } = await uploadImage(original, path)
         finalDraft.image_url = publicUrl
         finalDraft.storage_path = storagePath
+        
+        // Upload variants
+        const uploadedVariants = []
+        await Promise.all(IMAGE_VARIANTS.map(async (width) => {
+          if (variants[width]) {
+            const variantPath = `${draft.id}-${width}w.${ext}`
+            await uploadImage(variants[width], variantPath)
+            uploadedVariants.push(width)
+          }
+        }))
+        
+        // Save variants array to metadata
+        finalDraft.variants = uploadedVariants
       } catch (_err) {
         setUploading(false)
         toast.error('Image upload failed.')
