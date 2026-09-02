@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
+import { Mail, Lock, Eye, EyeOff, ArrowLeft, Loader2 } from 'lucide-react'
 
 import { supabase } from '../../lib/supabase/client.js'
 import Button from '../Button.jsx'
@@ -29,6 +30,7 @@ export default function AdminAuth({ children }) {
   const [loading, setLoading] = useState(true)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [signingIn, setSigningIn] = useState(false)
 
   // Check auth on mount
@@ -95,7 +97,10 @@ export default function AdminAuth({ children }) {
   if (loading) {
     return (
       <div className="flex min-h-dvh items-center justify-center bg-canvas px-6">
-        <p className="text-sm text-muted">Loading...</p>
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 className="h-8 w-8 animate-spin text-accent" />
+          <p className="text-sm font-medium text-muted">Checking access...</p>
+        </div>
       </div>
     )
   }
@@ -103,60 +108,115 @@ export default function AdminAuth({ children }) {
   // Show login if not authenticated
   if (!session) {
     return (
-      <div className="flex min-h-dvh items-center justify-center bg-canvas px-6 py-12">
-        <Container className="w-full max-w-md">
-          <div className="space-y-6">
-            <div>
-              <h1 className="text-2xl font-bold text-ink">Admin Panel</h1>
-              <p className="mt-2 text-sm text-muted">Sign in to manage content</p>
+      <div className="relative flex min-h-dvh items-center justify-center bg-canvas px-6 py-12 overflow-hidden selection:bg-accent/20">
+        {/* Decorative background elements */}
+        <div className="absolute inset-0 pointer-events-none flex justify-center items-center">
+          <div className="absolute top-[-10%] left-[-10%] h-[600px] w-[600px] rounded-full bg-accent/5 blur-[120px]" />
+          <div className="absolute bottom-[-10%] right-[-10%] h-[600px] w-[600px] rounded-full bg-accent-strong/5 blur-[120px]" />
+        </div>
+
+        <Container className="relative z-10 w-full max-w-md animate-rise">
+          <div className="mb-8 text-center">
+            <Link
+              to="/"
+              className="group mb-8 inline-flex items-center gap-2 text-sm font-medium text-muted transition-colors hover:text-ink"
+            >
+              <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
+              Return to Website
+            </Link>
+            
+            <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl border border-line bg-surface shadow-sm ring-1 ring-white/5">
+              <Lock className="h-7 w-7 text-ink" />
             </div>
+            
+            <h1 className="text-2xl font-bold tracking-tight text-ink sm:text-3xl">
+              Admin Access
+            </h1>
+            <p className="mt-3 text-sm text-muted">
+              Sign in securely to manage your content.
+            </p>
+          </div>
 
-            <form onSubmit={handleSignIn} className="space-y-4">
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-ink">
-                  Email
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="your@email.com"
-                  required
+          <div className="overflow-hidden rounded-3xl border border-line bg-surface/80 p-1 shadow-2xl backdrop-blur-xl">
+            <div className="rounded-[1.375rem] border border-line/50 bg-canvas/30 p-6 sm:p-8">
+              <form onSubmit={handleSignIn} className="space-y-5">
+                <div className="space-y-2">
+                  <label htmlFor="email" className="block text-sm font-medium text-ink">
+                    Email Address
+                  </label>
+                  <div className="relative">
+                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-muted">
+                      <Mail className="h-4.5 w-4.5" />
+                    </div>
+                    <input
+                      id="email"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="name@example.com"
+                      required
+                      disabled={signingIn}
+                      className="block w-full rounded-xl border border-line bg-canvas/50 py-3 pl-11 pr-4 text-sm text-ink placeholder:text-muted/40 transition-all hover:border-line/80 focus:border-accent focus:bg-canvas focus:outline-none focus:ring-2 focus:ring-accent/20 disabled:opacity-50"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label htmlFor="password" className="block text-sm font-medium text-ink">
+                    Password
+                  </label>
+                  <div className="relative">
+                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-muted">
+                      <Lock className="h-4.5 w-4.5" />
+                    </div>
+                    <input
+                      id="password"
+                      type={showPassword ? 'text' : 'password'}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="••••••••"
+                      required
+                      disabled={signingIn}
+                      className="block w-full rounded-xl border border-line bg-canvas/50 py-3 pl-11 pr-12 text-sm text-ink placeholder:text-muted/40 transition-all hover:border-line/80 focus:border-accent focus:bg-canvas focus:outline-none focus:ring-2 focus:ring-accent/20 disabled:opacity-50"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      disabled={signingIn}
+                      className="absolute inset-y-0 right-0 flex items-center px-3.5 text-muted transition-colors hover:text-ink focus:outline-none disabled:opacity-50"
+                      aria-label={showPassword ? "Hide password" : "Show password"}
+                    >
+                      {showPassword ? (
+                        <EyeOff className="h-4.5 w-4.5" />
+                      ) : (
+                        <Eye className="h-4.5 w-4.5" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                <Button
+                  type="submit"
                   disabled={signingIn}
-                  className="mt-1 w-full rounded-lg border border-line bg-surface px-3 py-2 text-sm text-ink placeholder:text-muted focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-canvas"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="password" className="block text-sm font-medium text-ink">
-                  Password
-                </label>
-                <input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  required
-                  disabled={signingIn}
-                  className="mt-1 w-full rounded-lg border border-line bg-surface px-3 py-2 text-sm text-ink placeholder:text-muted focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-canvas"
-                />
-              </div>
-
-              <Button type="submit" disabled={signingIn} className="w-full">
-                {signingIn ? 'Signing in...' : 'Sign in'}
-              </Button>
-            </form>
-
-            <div className="space-y-2 rounded-lg border border-line bg-raised p-4">
-              <p className="text-xs font-medium uppercase tracking-wide text-muted">
-                Authentication
-              </p>
-              <p className="text-sm text-muted">
-                This admin panel requires real Supabase authentication. Only authorized users can
-                access.
-              </p>
+                  className="group relative mt-2 w-full overflow-hidden rounded-xl py-3 text-base font-medium shadow-sm"
+                >
+                  <div className="absolute inset-0 flex items-center justify-center gap-2">
+                    {signingIn ? (
+                      <>
+                        <Loader2 className="h-5 w-5 animate-spin" />
+                        <span>Authenticating...</span>
+                      </>
+                    ) : (
+                      <span>Sign In</span>
+                    )}
+                  </div>
+                  {/* Invisible placeholder to maintain button height */}
+                  <div className="invisible flex items-center gap-2">
+                    <Loader2 className="h-5 w-5" />
+                    <span>Authenticating...</span>
+                  </div>
+                </Button>
+              </form>
             </div>
           </div>
         </Container>
