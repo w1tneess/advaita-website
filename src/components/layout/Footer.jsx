@@ -75,7 +75,7 @@ export default function Footer() {
           <div className="w-16 sm:w-20 border-t border-line/60 my-8 sm:my-10" aria-hidden="true" />
 
           {/* 5. Copyright & Optional Note */}
-          <div className="text-center text-xs font-medium text-muted/75 tracking-normal">
+          <div className="text-center text-sm font-medium text-muted/75 tracking-normal">
             <p>
               Copyright © {year} {profile.name || 'Advaita Chandra'}. All rights reserved.
             </p>

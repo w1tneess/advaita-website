@@ -109,7 +109,7 @@ export default function Prose({ blocks = [], className = '' }) {
   if (!blocks.length) return null
 
   return (
-    <div className={`prose-body ${className}`}>
+    <div className={`prose-body break-words ${className}`}>
       {blocks.map((block, index) => (
         <Block key={block.id ?? index} block={block} />
       ))}

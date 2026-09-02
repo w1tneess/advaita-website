@@ -87,7 +87,7 @@
   align-items: center;
   justify-content: flex-end;
   gap: 1rem;
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   font-weight: 600;
   letter-spacing: 0.1em;
   color: var(--color-muted);
@@ -362,7 +362,7 @@
   }
 
   .hero-identity-line {
-    font-size: clamp(0.725rem, 3.2vw, 0.825rem) !important;
+    font-size: clamp(0.875rem, 3.2vw, 1rem) !important;
     letter-spacing: 0.07em !important;
     gap: 0.5rem !important;
   }

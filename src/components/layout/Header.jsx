@@ -49,15 +49,52 @@ export default function Header() {
     return () => document.removeEventListener('keydown', handleKeyDown)
   }, [menuOpen])
 
-  // Lock body scroll when mobile menu is open
+  // Lock body scroll and trap focus when mobile menu is open
   useEffect(() => {
-    if (menuOpen) {
-      document.body.style.overflow = 'hidden'
-    } else {
+    if (!menuOpen) {
       document.body.style.overflow = ''
+      return
     }
+
+    document.body.style.overflow = 'hidden'
+
+    const timer = setTimeout(() => {
+      const menuElement = document.getElementById('mobile-nav')
+      if (!menuElement) return
+
+      const focusable = menuElement.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      )
+      const first = focusable[0]
+      const last = focusable[focusable.length - 1]
+
+      const handleTab = (e) => {
+        if (e.key !== 'Tab') return
+        if (e.shiftKey) {
+          if (document.activeElement === first) {
+            last.focus()
+            e.preventDefault()
+          }
+        } else {
+          if (document.activeElement === last) {
+            first.focus()
+            e.preventDefault()
+          }
+        }
+      }
+
+      first?.focus()
+      menuElement.addEventListener('keydown', handleTab)
+      menuElement._cleanupTab = () => menuElement.removeEventListener('keydown', handleTab)
+    }, 100)
+
     return () => {
+      clearTimeout(timer)
       document.body.style.overflow = ''
+      const menuElement = document.getElementById('mobile-nav')
+      if (menuElement && menuElement._cleanupTab) {
+        menuElement._cleanupTab()
+      }
     }
   }, [menuOpen])
 
@@ -130,7 +167,7 @@ export default function Header() {
             role="dialog"
             aria-modal="true"
             aria-label="Navigation Menu"
-            className="fixed inset-0 z-50 flex flex-col justify-between overflow-y-auto bg-canvas/98 px-6 py-5 backdrop-blur-2xl sm:px-10 dark:bg-canvas/98 lg:hidden"
+            className="fixed inset-0 z-50 flex flex-col justify-between overflow-y-auto bg-canvas/98 px-6 py-5 backdrop-blur-2xl touch-none sm:px-10 dark:bg-canvas/98 lg:hidden"
             initial={{ opacity: 0, y: -16 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -16 }}

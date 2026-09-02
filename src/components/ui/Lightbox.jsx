@@ -97,6 +97,9 @@ export default function Lightbox({ photos, index, onClose, onChange }) {
             <img
               src={photo.image_url}
               alt={photo.alt_text || ''}
+              loading="lazy"
+              decoding="async"
+              sizes="100vw"
               className="max-h-[80vh] max-w-full rounded-lg object-contain"
             />
 

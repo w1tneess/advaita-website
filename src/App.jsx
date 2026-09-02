@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { motion, MotionConfig } from 'framer-motion'
 
 import ScrollToTop from './components/ui/ScrollToTop.jsx'
 import ToastViewport from './components/ui/ToastViewport.jsx'
@@ -60,7 +60,8 @@ function AdminFallback() {
 export default function App() {
   return (
     <ErrorBoundary>
-      <BrowserRouter basename={import.meta.env.BASE_URL}>
+      <MotionConfig reducedMotion="user">
+        <BrowserRouter basename={import.meta.env.BASE_URL}>
         <ScrollToTop />
 
       <Suspense fallback={<PageFallback />}>
@@ -91,6 +92,7 @@ export default function App() {
 
       <ToastViewport />
       </BrowserRouter>
+      </MotionConfig>
     </ErrorBoundary>
   )
 }

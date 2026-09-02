@@ -136,11 +136,13 @@ export default function Photography() {
                     src={photo.image_url}
                     alt={photo.alt_text || ''}
                     loading="lazy"
+                    decoding="async"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     className="w-full object-cover transition-transform duration-300 hover:scale-[1.02]"
                     style={photo.aspectRatio ? { aspectRatio: photo.aspectRatio } : undefined}
                   />
                   {photo.caption && (
-                    <figcaption className="px-4 py-3 text-xs text-muted">
+                    <figcaption className="px-4 py-3 text-sm text-muted">
                       {photo.caption}
                     </figcaption>
                   )}
