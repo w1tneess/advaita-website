@@ -8,6 +8,7 @@ import Seo from '@/components/meta/Seo.jsx'
 import { useContent } from '@/lib/content.jsx'
 import { PUBLIC_ROUTES } from '@/config/nav.js'
 import { pageLoadVariant, staggerContainer, imageReveal, scrollViewport } from '@/lib/animations.js'
+import { getOptimizedImageProps } from '@/lib/image.js'
 
 const ROUTE = PUBLIC_ROUTES.find((route) => route.key === 'photography')
 
@@ -133,7 +134,7 @@ export default function Photography() {
                   aria-label={`View ${photo.alt_text || photo.title || 'photo'} in full size`}
                 >
                   <img
-                    src={photo.image_url}
+                    {...getOptimizedImageProps(photo.image_url)}
                     alt={photo.alt_text || ''}
                     loading="lazy"
                     decoding="async"

@@ -2,6 +2,7 @@ import { useCallback, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { lightboxOverlay, lightboxContent } from '@/lib/animations.js'
+import { getOptimizedImageProps } from '@/lib/image.js'
 
 /**
  * Full-screen image lightbox with keyboard navigation.
@@ -95,7 +96,7 @@ export default function Lightbox({ photos, index, onClose, onChange }) {
 
             {/* Image */}
             <img
-              src={photo.image_url}
+              {...getOptimizedImageProps(photo.image_url)}
               alt={photo.alt_text || ''}
               loading="lazy"
               decoding="async"
