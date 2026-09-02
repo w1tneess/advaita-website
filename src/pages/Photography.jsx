@@ -80,7 +80,7 @@ export default function Photography() {
                 <button
                   type="button"
                   onClick={() => setActiveCategory('all')}
-                  className={`rounded-lg px-3.5 py-1.5 text-sm font-medium transition-all duration-200 ${
+                  className={`rounded-lg px-4 py-2.5 text-sm font-medium transition-all duration-200 ${
                     activeCategory === 'all'
                       ? 'bg-accent text-on-accent shadow-subtle'
                       : 'border border-line bg-surface text-muted hover:text-ink hover:border-accent/30'
@@ -94,7 +94,7 @@ export default function Photography() {
                   <button
                     type="button"
                     onClick={() => setActiveCategory(cat.slug)}
-                    className={`rounded-lg px-3.5 py-1.5 text-sm font-medium transition-all duration-200 ${
+                    className={`rounded-lg px-4 py-2.5 text-sm font-medium transition-all duration-200 ${
                       activeCategory === cat.slug
                         ? 'bg-accent text-on-accent shadow-subtle'
                         : 'border border-line bg-surface text-muted hover:text-ink hover:border-accent/30'

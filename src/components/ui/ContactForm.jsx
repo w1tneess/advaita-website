@@ -178,7 +178,7 @@ export default function ContactForm() {
           value={form.name}
           onChange={handleChange}
           autoComplete="name"
-          className={`mt-1.5 block w-full rounded-lg border bg-surface px-3.5 py-2.5 text-sm transition-colors placeholder:text-muted/50 focus:border-accent focus:ring-1 focus:ring-accent ${
+          className={`mt-1.5 block w-full rounded-lg border bg-surface px-4 py-3 text-base sm:text-sm transition-colors placeholder:text-muted/50 focus:border-accent focus:ring-1 focus:ring-accent ${
             errors.name ? 'border-limitation' : 'border-line'
           }`}
           placeholder="Your name"
@@ -204,7 +204,7 @@ export default function ContactForm() {
           value={form.email}
           onChange={handleChange}
           autoComplete="email"
-          className={`mt-1.5 block w-full rounded-lg border bg-surface px-3.5 py-2.5 text-sm transition-colors placeholder:text-muted/50 focus:border-accent focus:ring-1 focus:ring-accent ${
+          className={`mt-1.5 block w-full rounded-lg border bg-surface px-4 py-3 text-base sm:text-sm transition-colors placeholder:text-muted/50 focus:border-accent focus:ring-1 focus:ring-accent ${
             errors.email ? 'border-limitation' : 'border-line'
           }`}
           placeholder="you@example.com"
@@ -228,7 +228,7 @@ export default function ContactForm() {
           name="topic"
           value={form.topic}
           onChange={handleChange}
-          className={`mt-1.5 block w-full rounded-lg border bg-surface px-3.5 py-2.5 text-sm transition-colors focus:border-accent focus:ring-1 focus:ring-accent ${
+          className={`mt-1.5 block w-full rounded-lg border bg-surface px-4 py-3 text-base sm:text-sm transition-colors focus:border-accent focus:ring-1 focus:ring-accent ${
             errors.topic ? 'border-limitation' : 'border-line'
           } ${!form.topic ? 'text-muted/50' : ''}`}
           aria-describedby={errors.topic ? 'contact-topic-error' : undefined}
@@ -258,7 +258,7 @@ export default function ContactForm() {
           value={form.message}
           onChange={handleChange}
           rows={5}
-          className={`mt-1.5 block w-full resize-y rounded-lg border bg-surface px-3.5 py-2.5 text-sm leading-relaxed transition-colors placeholder:text-muted/50 focus:border-accent focus:ring-1 focus:ring-accent ${
+          className={`mt-1.5 block w-full resize-y rounded-lg border bg-surface px-4 py-3 text-base sm:text-sm leading-relaxed transition-colors placeholder:text-muted/50 focus:border-accent focus:ring-1 focus:ring-accent ${
             errors.message ? 'border-limitation' : 'border-line'
           }`}
           placeholder="What's on your mind?"
@@ -287,7 +287,7 @@ export default function ContactForm() {
       <button
         type="submit"
         disabled={status === 'submitting' || timeRemaining > 0}
-        className="inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent shadow-subtle transition-all hover:bg-accent-strong active:scale-[0.97] disabled:opacity-60 disabled:cursor-not-allowed"
+        className="inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-3 text-sm font-semibold text-on-accent shadow-subtle transition-all hover:bg-accent-strong active:scale-[0.97] disabled:opacity-60 disabled:cursor-not-allowed"
       >
         {status === 'submitting' ? (
           <>

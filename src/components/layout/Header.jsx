@@ -112,9 +112,9 @@ export default function Header() {
                 aria-expanded={menuOpen}
                 aria-controls="mobile-nav"
                 aria-label="Open menu"
-                className="inline-flex h-9 items-center justify-center gap-1.5 rounded-full border border-line/70 bg-surface/70 px-3.5 text-xs font-semibold tracking-wider text-ink shadow-sm backdrop-blur-md transition-all hover:border-line hover:bg-surface active:scale-95 lg:hidden"
+                className="inline-flex h-11 items-center justify-center gap-1.5 rounded-full border border-line/70 bg-surface/70 px-4 text-xs font-semibold tracking-wider text-ink shadow-sm backdrop-blur-md transition-all hover:border-line hover:bg-surface active:scale-95 lg:hidden"
               >
-                <Menu className="h-3.5 w-3.5" aria-hidden="true" />
+                <Menu className="h-4 w-4" aria-hidden="true" />
                 <span className="uppercase">Menu</span>
               </button>
             </div>
@@ -150,9 +150,9 @@ export default function Header() {
                   type="button"
                   onClick={() => setMenuOpen(false)}
                   aria-label="Close menu"
-                  className="inline-flex h-9 items-center justify-center gap-1.5 rounded-full border border-line/70 bg-surface/80 px-3.5 text-xs font-semibold tracking-wider text-ink shadow-sm backdrop-blur-md transition-all hover:bg-surface active:scale-95"
+                  className="inline-flex h-11 items-center justify-center gap-1.5 rounded-full border border-line/70 bg-surface/80 px-4 text-xs font-semibold tracking-wider text-ink shadow-sm backdrop-blur-md transition-all hover:bg-surface active:scale-95"
                 >
-                  <X className="h-3.5 w-3.5" aria-hidden="true" />
+                  <X className="h-4 w-4" aria-hidden="true" />
                   <span className="uppercase">Close</span>
                 </button>
               </div>

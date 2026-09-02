@@ -87,10 +87,10 @@ export default function Lightbox({ photos, index, onClose, onChange }) {
             <button
               type="button"
               onClick={onClose}
-              className="absolute -top-12 right-0 flex h-10 w-10 items-center justify-center rounded-full bg-surface/20 text-canvas backdrop-blur-sm transition-colors hover:bg-surface/40"
+              className="fixed right-4 top-4 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-surface/20 text-canvas backdrop-blur-sm transition-colors hover:bg-surface/40 md:absolute md:-top-12 md:right-0"
               aria-label="Close lightbox"
             >
-              <X className="h-5 w-5" />
+              <X className="h-6 w-6" />
             </button>
 
             {/* Image */}
