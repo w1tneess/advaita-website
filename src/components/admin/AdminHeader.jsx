@@ -1,11 +1,19 @@
+import { useState, useEffect, useRef } from 'react'
 import {
   Eye,
   EyeOff,
   Menu,
   Search,
   ExternalLink,
+  Plus,
+  FileText,
+  FolderGit2,
+  Camera,
+  Bell,
+  Clock
 } from 'lucide-react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, Link } from 'react-router-dom'
+import { AnimatePresence, motion } from 'framer-motion'
 
 import { NAV_GROUPS } from './AdminSidebar.jsx'
 import { useContent } from '../../lib/content.jsx'
@@ -17,6 +25,84 @@ function sectionLabel(pathname) {
     .filter((item) => pathname === item.to || pathname.startsWith(`${item.to}/`))
     .sort((a, b) => b.to.length - a.to.length)[0]
   return match?.label ?? 'Admin'
+}
+
+function LiveClock() {
+  const [time, setTime] = useState(new Date())
+
+  useEffect(() => {
+    const timer = setInterval(() => setTime(new Date()), 1000)
+    return () => clearInterval(timer)
+  }, [])
+
+  return (
+    <div className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-zinc-800/60 bg-[#0a0a0a] text-xs font-medium text-zinc-400">
+      <Clock className="h-3.5 w-3.5 text-zinc-500" />
+      <span className="font-mono">
+        {time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+      </span>
+    </div>
+  )
+}
+
+function CreateDropdown() {
+  const [isOpen, setIsOpen] = useState(false)
+  const dropdownRef = useRef(null)
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  const actions = [
+    { label: 'New Post', icon: FileText, to: '/admin/blog/new' },
+    { label: 'New Project', icon: FolderGit2, to: '/admin/projects/new' },
+    { label: 'New Photo', icon: Camera, to: '/admin/photography/new' },
+  ]
+
+  return (
+    <div className="relative" ref={dropdownRef}>
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10 text-accent hover:bg-accent/20 hover:scale-105 active:scale-95 transition-all"
+        aria-label="Create new"
+      >
+        <Plus className="h-4 w-4" />
+      </button>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: 10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 10, scale: 0.95 }}
+            transition={{ duration: 0.15, ease: 'easeOut' }}
+            className="absolute right-0 mt-2 w-48 rounded-xl border border-zinc-800 bg-[#0a0a0a] p-1 shadow-xl z-50"
+          >
+            <div className="px-2 py-1.5 text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-1">
+              Create
+            </div>
+            {actions.map((action) => (
+              <Link
+                key={action.to}
+                to={action.to}
+                onClick={() => setIsOpen(false)}
+                className="flex items-center gap-2 rounded-lg px-2 py-2 text-sm text-zinc-300 hover:bg-zinc-900 hover:text-zinc-100 transition-colors"
+              >
+                <action.icon className="h-4 w-4 text-zinc-500" />
+                {action.label}
+              </Link>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  )
 }
 
 export default function AdminHeader({ onOpenSidebar }) {
@@ -63,6 +149,8 @@ export default function AdminHeader({ onOpenSidebar }) {
 
         {/* Right Actions */}
         <div className="flex items-center gap-2 sm:gap-3 ml-auto">
+          <LiveClock />
+
           <a
             href="/"
             target="_blank"
@@ -70,11 +158,9 @@ export default function AdminHeader({ onOpenSidebar }) {
             className="hidden sm:inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900 transition-colors"
           >
             <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
-            <span>View Site</span>
+            <span className="hidden lg:inline">View Site</span>
           </a>
           
-          <div className="w-px h-4 bg-zinc-800 hidden sm:block mx-1"></div>
-
           <button
             type="button"
             onClick={() => setPreviewDrafts(!previewDrafts)}
@@ -90,9 +176,17 @@ export default function AdminHeader({ onOpenSidebar }) {
           ) : (
             <EyeOff className="h-3.5 w-3.5" aria-hidden="true" />
           )}
-          <span className="hidden sm:inline">Preview drafts</span>
-          <span className="sm:hidden">Preview</span>
+          <span className="hidden sm:inline">Preview</span>
           </button>
+
+          <div className="w-px h-4 bg-zinc-800 hidden sm:block mx-1"></div>
+
+          <Link to="/admin/messages" className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-zinc-400 hover:bg-zinc-900 hover:text-zinc-100 transition-colors relative">
+            <Bell className="h-4 w-4" />
+            <span className="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-accent animate-pulse"></span>
+          </Link>
+
+          <CreateDropdown />
         </div>
       </div>
     </header>

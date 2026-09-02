@@ -188,40 +188,40 @@ export default function AdminSidebar({ open, onClose }) {
               </div>
             ))}
           </nav>
+        </div>
 
-          {/* Bottom Section: View Site & User Profile */}
-          <div className="border-t border-zinc-800/60 pt-4 mt-auto">
-            <Link
-              to="/"
-              className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-zinc-400 font-medium transition-colors hover:bg-zinc-900 hover:text-zinc-200 mb-2"
-            >
-              <ExternalLink className="h-4 w-4 shrink-0" aria-hidden="true" />
-              View public site
-            </Link>
-            
-            <div className="flex items-center justify-between rounded-lg border border-zinc-800/60 p-3 bg-zinc-900/50">
-              <div className="flex items-center gap-3 min-w-0">
-                <div className="h-8 w-8 rounded-full bg-zinc-800 flex items-center justify-center shrink-0 border border-zinc-700/50">
-                  <span className="text-sm font-semibold text-zinc-300">
-                    {displayName.charAt(0)}
-                  </span>
-                </div>
-                <div className="min-w-0 flex-1">
-                  <p className="text-sm font-medium text-zinc-200 truncate">{displayName}</p>
-                  <p className="text-xs text-zinc-500 truncate">{session?.user?.email}</p>
-                </div>
+        {/* Bottom Section: View Site & User Profile - Fixed at bottom */}
+        <div className="shrink-0 border-t border-zinc-800/60 p-4 bg-[#0a0a0a]">
+          <Link
+            to="/"
+            className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-zinc-400 font-medium transition-colors hover:bg-zinc-900 hover:text-zinc-200 mb-2"
+          >
+            <ExternalLink className="h-4 w-4 shrink-0" aria-hidden="true" />
+            View public site
+          </Link>
+          
+          <div className="flex items-center justify-between rounded-lg border border-zinc-800/60 p-3 bg-zinc-900/50">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="h-8 w-8 rounded-full bg-zinc-800 flex items-center justify-center shrink-0 border border-zinc-700/50">
+                <span className="text-sm font-semibold text-zinc-300">
+                  {displayName.charAt(0)}
+                </span>
               </div>
-              
-              <button
-                type="button"
-                onClick={logout}
-                aria-label="Sign out"
-                title="Sign out"
-                className="h-8 w-8 inline-flex items-center justify-center rounded-lg text-zinc-500 hover:bg-zinc-800 hover:text-zinc-200 transition-colors shrink-0"
-              >
-                <LogOut className="h-4 w-4" aria-hidden="true" />
-              </button>
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-medium text-zinc-200 truncate">{displayName}</p>
+                <p className="text-xs text-zinc-500 truncate">{session?.user?.email}</p>
+              </div>
             </div>
+            
+            <button
+              type="button"
+              onClick={logout}
+              aria-label="Sign out"
+              title="Sign out"
+              className="h-8 w-8 inline-flex items-center justify-center rounded-lg text-zinc-500 hover:bg-zinc-800 hover:text-zinc-200 transition-colors shrink-0"
+            >
+              <LogOut className="h-4 w-4" aria-hidden="true" />
+            </button>
           </div>
         </div>
       </div>
