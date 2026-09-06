@@ -1,10 +1,10 @@
 /**
  * Post-build pre-render.
  *
- * GitHub Pages has no server, so a request for /about would normally 404: the built app is a
- * single index.html and nothing maps that path to it. This script writes a real index.html
- * for every known route after `vite build`, each with its own <title>, description, canonical
- * URL and Open Graph tags baked in.
+ * On static hosting and modern CDNs, requests for clean URLs like /about benefit from
+ * route-specific pre-rendered HTML. This script writes a real index.html for every known
+ * route after `vite build`, each with its own <title>, description, canonical URL and
+ * Open Graph tags baked in.
  *
  * Two things that matter and are easy to get wrong:
  *
@@ -23,10 +23,15 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { createClient } from '@supabase/supabase-js'
+import dotenv from 'dotenv'
 
 import { allPrerenderRoutes } from '../src/config/nav.js'
 import { SITE_URL } from '../src/config/site.js'
 import { buildMeta, renderMetaTags } from '../src/lib/seo.js'
+
+dotenv.config()
+dotenv.config({ path: '.env.local' })
 
 const here = dirname(fileURLToPath(import.meta.url))
 const root = resolve(here, '..')
@@ -87,46 +92,59 @@ function renderSitemap(routes) {
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`
 }
 
-import { createClient } from '@supabase/supabase-js'
-import dotenv from 'dotenv'
-
-dotenv.config()
-dotenv.config({ path: '.env.local' })
-
 const supabaseUrl = process.env.VITE_SUPABASE_URL
 const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY
-const supabase = supabaseUrl && supabaseAnonKey ? createClient(supabaseUrl, supabaseAnonKey) : null
+const supabase =
+  supabaseUrl && supabaseAnonKey && !supabaseUrl.includes('placeholder')
+    ? createClient(supabaseUrl, supabaseAnonKey)
+    : null
 
-async function getLatestUpdate() {
-  if (!supabase) return null
-  
-  try {
-    const { data: projData } = await supabase.from('projects').select('updated_at').order('updated_at', { ascending: false }).limit(1)
-    const { data: noteData } = await supabase.from('notes').select('updated_at').order('updated_at', { ascending: false }).limit(1)
-    
-    let latest = null
-    if (projData?.[0]?.updated_at) latest = new Date(projData[0].updated_at)
-    
-    if (noteData?.[0]?.updated_at) {
-      const noteDate = new Date(noteData[0].updated_at)
-      if (!latest || noteDate > latest) latest = noteDate
+async function getPrerenderData() {
+  let posts = []
+  let latestUpdate = null
+
+  if (supabase) {
+    try {
+      const { data } = await supabase
+        .from('site_content')
+        .select('data, updated_at')
+        .eq('id', 'main')
+        .single()
+
+      if (data?.data?.blog && Array.isArray(data.data.blog)) {
+        posts = data.data.blog.filter((p) => p.status === 'published')
+      }
+      if (data?.updated_at) {
+        latestUpdate = new Date(data.updated_at).toISOString()
+      }
+    } catch (_e) {
+      // Fallback to local files
     }
-    
-    return latest ? latest.toISOString() : null
-  } catch (_e) {
-    return null
   }
+
+  if (posts.length === 0) {
+    try {
+      const blogSeed = JSON.parse(await readFile(join(root, 'src/data/blog.json'), 'utf8'))
+      if (Array.isArray(blogSeed)) {
+        posts = blogSeed.filter((p) => p.status === 'published')
+      }
+    } catch {
+      // No seed blog
+    }
+  }
+
+  return { posts, latestUpdate }
 }
 
 async function main() {
   const template = await readFile(join(dist, 'index.html'), 'utf8')
-  const routes = allPrerenderRoutes()
-  
-  const latestUpdate = await getLatestUpdate()
+  const { posts, latestUpdate } = await getPrerenderData()
+  const routes = allPrerenderRoutes(posts)
+
   if (latestUpdate) {
-    routes.forEach(route => {
+    routes.forEach((route) => {
       // Set lastmod on dynamic pages if they are updated
-      if (['projects', 'philosophy'].includes(route.key)) {
+      if (['projects', 'philosophy', 'blog'].includes(route.key)) {
         route.lastmod = latestUpdate
       }
     })
@@ -137,7 +155,7 @@ async function main() {
     written.push(await writeRoute(template, route))
   }
 
-  // 404.html doubles as the SPA fallback: GitHub Pages serves it for any unmatched path, and
+  // 404.html doubles as the SPA fallback for static hosts serving unmatched paths, and
   // the app then renders the real NotFound page for whatever URL was requested.
   await writeFile(
     join(dist, '404.html'),

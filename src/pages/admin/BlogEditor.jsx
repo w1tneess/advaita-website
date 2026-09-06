@@ -1,6 +1,6 @@
 import { useSaveShortcut } from '../../hooks/useSaveShortcut.js'
 import { useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router'
 
 import AdminPage from '../../components/admin/AdminPage.jsx'
 import Field from '../../components/admin/Field.jsx'
@@ -179,7 +179,7 @@ export default function BlogEditor() {
             <StatusSelector
               type="post"
               status={draft.status}
-              setStatus={(value) =>
+              setStatus={(value) => {
                 setDraft((current) => ({
                   ...current,
                   status: value,
@@ -188,7 +188,9 @@ export default function BlogEditor() {
                       ? todayIso()
                       : current.published_at,
                 }))
-              }
+                setHasUnsavedChanges(true)
+                setSaveStatus('idle')
+              }}
             />
           </div>
         </FormSection>

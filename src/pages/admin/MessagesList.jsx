@@ -5,7 +5,7 @@ import AdminPage from '../../components/admin/AdminPage.jsx'
 import Button from '../../components/Button.jsx'
 import ConfirmDialog from '../../components/admin/ConfirmDialog.jsx'
 import { useConfirm } from '../../hooks/useConfirm.jsx'
-import { supabase } from '../../lib/supabase/client.js'
+import { supabase, isSupabaseConfigured } from '../../lib/supabase/client.js'
 import { useToast } from '../../lib/toast.jsx'
 
 export default function MessagesList() {
@@ -15,19 +15,29 @@ export default function MessagesList() {
   const { confirm, dialogProps } = useConfirm()
 
   const fetchMessages = async () => {
-    setIsLoading(true)
-    const { data, error } = await supabase
-      .from('contact_submissions')
-      .select('*')
-      .order('created_at', { ascending: false })
-
-    if (error) {
-      toast.error('Failed to load messages')
-      console.error(error)
-    } else {
-      setMessages(data || [])
+    if (!isSupabaseConfigured() || !supabase) {
+      setIsLoading(false)
+      return
     }
-    setIsLoading(false)
+    setIsLoading(true)
+    try {
+      const { data, error } = await supabase
+        .from('contact_submissions')
+        .select('*')
+        .order('created_at', { ascending: false })
+
+      if (error) {
+        toast.error('Failed to load messages')
+        console.error(error)
+      } else {
+        setMessages(data || [])
+      }
+    } catch (err) {
+      toast.error('Failed to load messages')
+      console.error(err)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   useEffect(() => {
@@ -35,6 +45,11 @@ export default function MessagesList() {
   }, [])
 
   const handleDelete = async (msg) => {
+    if (!isSupabaseConfigured() || !supabase) {
+      toast.error('Supabase is not configured')
+      return
+    }
+
     const confirmed = await confirm({
       title: 'Delete this message?',
       message: 'This action cannot be undone.',
@@ -42,19 +57,24 @@ export default function MessagesList() {
     })
     if (!confirmed) return
 
-    const { data, error } = await supabase
-      .from('contact_submissions')
-      .delete()
-      .eq('id', msg.id)
-      .select()
-    if (error) {
+    try {
+      const { data, error } = await supabase
+        .from('contact_submissions')
+        .delete()
+        .eq('id', msg.id)
+        .select()
+      if (error) {
+        toast.error('Failed to delete message')
+        console.error(error)
+      } else if (!data || data.length === 0) {
+        toast.error('Could not delete message. Check database permissions.')
+      } else {
+        toast.success('Message deleted')
+        setMessages((prev) => prev.filter((m) => m.id !== msg.id))
+      }
+    } catch (err) {
       toast.error('Failed to delete message')
-      console.error(error)
-    } else if (!data || data.length === 0) {
-      toast.error('Could not delete message. Check database permissions.')
-    } else {
-      toast.success('Message deleted')
-      setMessages((prev) => prev.filter((m) => m.id !== msg.id))
+      console.error(err)
     }
   }
 

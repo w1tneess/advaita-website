@@ -120,7 +120,11 @@ import {
  * @returns {Promise<{doc: object, source: 'seed'|'remote', warning: string|null}>}
  */
 export async function loadDocument() {
-  const raw = await fetchContentFromSupabase()
+  const { data: raw, error } = await fetchContentFromSupabase()
+
+  if (error) {
+    throw error
+  }
 
   if (!raw) {
     // No remote edits: use the deployed seed and write nothing.
@@ -163,8 +167,9 @@ export async function clearDocument() {
 }
 
 export async function hasLocalDocument() {
-  const raw = await fetchContentFromSupabase()
-  return raw !== null
+  const { data, error } = await fetchContentFromSupabase()
+  if (error) throw error
+  return data !== null
 }
 
 /**

@@ -41,44 +41,30 @@ npm test
 
 ## Architecture
 
-The public React/Vite site and the existing `/admin` editor are deployed as static files
-to GitHub Pages. Content remains human-readable JSON under `src/data/`, and the existing
-React content context keeps public and admin projections stable. The admin panel is a
-local editorial workspace: it stores drafts in this browser and exports a validated
-publish bundle. GitHub Codespaces or GitHub's web editor is the trusted publishing
-boundary; no GitHub token is ever sent to browser JavaScript.
+The site runs on a **Supabase-backed Hybrid SSG/CSR architecture**:
+- **Public Site**: Fast, client-side rendered React application with pre-rendered static HTML routes and `sitemap.xml` generated at build time (`scripts/prerender.js`).
+- **Data Layer**: Live content is loaded from Supabase Postgres (`site_content` table). If the remote database is unreachable or the visitor is offline, the site instantly falls back to bundled static seed data (`src/data/*.json`).
+- **Admin Workspace (`/admin`)**: Content editorial dashboard authenticated via Supabase Auth with Postgres Row-Level Security (RLS). Mutations write directly to Supabase and reflect live without requiring a full site rebuild.
 
-## GitHub Actions deployment
+## Deployment
 
-`.github/workflows/deploy.yml` runs `npm ci`, validates content, builds the site, and
-deploys `dist/` with the official GitHub Pages actions. It needs no repository secrets.
-For a project-page URL, set the repository variable `BASE_PATH` to `/advaita-website/`;
-for the custom domain, leave it as `/`.
+The site is hosted on **Vercel** with custom domain routing (`advaitachandra.in`).
+- Pushes to the `main` branch trigger Vercel's build pipeline (`npm run build`).
+- Build output consists of compiled Vite chunks in `dist/` alongside pre-rendered static HTML entries for each public route.
+- SPA fallback rewrites are configured in `vercel.json`.
 
-## Admin panel
+## Admin Panel
 
-Open `/admin` locally with `npm run dev`. The local unlock screen is only a convenience
-for this browser; it is not authentication for GitHub or the live site. Use **Export
-publish bundle**, apply the listed files in Codespaces, inspect `git diff`, and then run:
-
-```bash
-git status
-git diff
-git add src/data public/assets
-git commit -m "Update website content"
-git push
-```
-
-The public site never calls the GitHub API at runtime. This is deliberate: a static site
-cannot safely hold a repository-write token. GitHub's authenticated Codespace/web editor
-is the secure write boundary.
+Access `/admin` on the live site or locally with `npm run dev`.
+- Authentication is handled securely through Supabase Auth.
+- Form mutations immediately persist to the Supabase database.
+- Drafts and published items are managed with full epistemic labeling and live previews.
 
 ## Media
 
-Small public images may be kept under `public/assets/`. The local editor validates image
-extensions and size before an asset is added to a publish bundle. GitHub is not suitable
-for large media, private uploads, or arbitrary file storage, so the repository workflow
-keeps media intentionally limited.
+- Production images and photography uploads are stored in Supabase Storage (`images` bucket).
+- Images are compressed client-side before upload via `browser-image-compression` to stay well within free-tier quotas.
+- Core site brand assets and icons reside in `public/`.
 
 ## Content
 

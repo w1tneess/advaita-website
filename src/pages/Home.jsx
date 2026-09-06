@@ -99,7 +99,8 @@ export default function Home() {
       >
         <Section
           id="featured"
-          tone="raised"
+          tone="base"
+          className="border-t border-line/40"
           title={home.featuredHeading}
           intro={home.featuredIntro}
           actions={
@@ -117,9 +118,9 @@ export default function Home() {
               whileInView="visible"
               viewport={scrollViewport}
             >
-              {featuredProjects.map((project) => (
+              {featuredProjects.map((project, idx) => (
                 <motion.li key={project.id} className="h-full" variants={staggerItem}>
-                  <ProjectCard project={project} variant="compact" />
+                  <ProjectCard project={project} variant="compact" index={idx} />
                 </motion.li>
               ))}
             </motion.ul>
@@ -146,7 +147,9 @@ export default function Home() {
       >
         <Section
           id="interests"
-          tone="raised"
+          tone="base"
+          className="border-t border-line/40"
+          kicker="Research & Exploration"
           title={home.interestsHeading}
           intro={home.interestsIntro}
         >
@@ -157,9 +160,9 @@ export default function Home() {
             whileInView="visible"
             viewport={scrollViewport}
           >
-            {interests.map((interest) => (
+            {interests.map((interest, idx) => (
               <motion.li key={interest.id} variants={staggerItem}>
-                <InterestCard interest={interest} />
+                <InterestCard interest={interest} index={idx} />
               </motion.li>
             ))}
           </motion.ul>
@@ -174,31 +177,33 @@ export default function Home() {
         variants={sectionReveal}
       >
         <Section id="credibility" width="default" className="border-t border-line/40">
-          <div className="grid gap-10 lg:gap-16 lg:grid-cols-12">
-            <div className="lg:col-span-5">
-              <p className="text-xs font-semibold tracking-wider text-accent uppercase mb-3">
-                Transparency & Approach
-              </p>
-              <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl text-ink leading-tight">
-                {home.credibilityHeading}
-              </h2>
-            </div>
+          <div className="rounded-2xl border border-line/80 bg-surface/50 p-8 sm:p-12 backdrop-blur-md shadow-subtle">
+            <div className="grid gap-10 lg:gap-16 lg:grid-cols-12">
+              <div className="lg:col-span-5">
+                <p className="text-xs font-semibold tracking-wider text-accent uppercase mb-3">
+                  Transparency & Approach
+                </p>
+                <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl text-ink leading-tight">
+                  {home.credibilityHeading}
+                </h2>
+              </div>
 
-            <div className="lg:col-span-7">
-              <p className="text-lg leading-relaxed text-ink border-l-2 border-accent/60 pl-6 py-1">
-                {home.credibilityStatement}
-              </p>
+              <div className="lg:col-span-7">
+                <p className="text-lg leading-relaxed text-ink border-l-2 border-accent/60 pl-6 py-1">
+                  {home.credibilityStatement}
+                </p>
 
-              {(home.credibilityPoints || []).length > 0 && (
-                <ul className="mt-8 grid gap-4 sm:grid-cols-2">
-                  {home.credibilityPoints.map((point, index) => (
-                    <li key={index} className="flex items-start gap-3 text-sm text-muted">
-                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
-                      <span className="leading-snug">{point}</span>
-                    </li>
-                  ))}
-                </ul>
-              )}
+                {(home.credibilityPoints || []).length > 0 && (
+                  <ul className="mt-8 grid gap-4 sm:grid-cols-2">
+                    {home.credibilityPoints.map((point, index) => (
+                      <li key={index} className="flex items-start gap-3 text-sm text-muted">
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
+                        <span className="leading-snug">{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
             </div>
           </div>
         </Section>

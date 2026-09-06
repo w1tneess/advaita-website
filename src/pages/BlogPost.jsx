@@ -1,7 +1,9 @@
-import { useParams, Navigate } from 'react-router-dom'
+import { useParams, Navigate } from 'react-router'
 
 import Breadcrumbs from '@/components/ui/Breadcrumbs.jsx'
 import Container from '@/components/layout/Container.jsx'
+import CopyButton from '@/components/ui/CopyButton.jsx'
+import OpenGraphPreview from '@/components/ui/OpenGraphPreview.jsx'
 import Seo from '@/components/meta/Seo.jsx'
 import { useContent } from '@/lib/content.jsx'
 import { formatDate } from '@/lib/format.js'
@@ -48,6 +50,26 @@ export default function BlogPost() {
 
           <div className="mt-12 sm:mt-16 prose-body whitespace-pre-wrap text-base leading-loose text-ink">
             {post.content}
+          </div>
+
+          <div className="mt-16 border-t border-line/40 pt-8 space-y-6">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold uppercase tracking-wider text-muted font-mono">
+                Share Article
+              </span>
+              <CopyButton
+                getText={() => window.location.href}
+                label="Copy Link"
+                copiedLabel="Link Copied!"
+                showText={true}
+              />
+            </div>
+
+            <OpenGraphPreview
+              title={post.title}
+              description={post.excerpt}
+              url={typeof window !== 'undefined' ? window.location.href : 'https://advaitachandra.in'}
+            />
           </div>
         </Container>
       </article>

@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
+import { EASE_OUT_EXPO } from '@/lib/animations.js'
 
 /**
  * Thinker card for the Philosophy page.
@@ -22,7 +23,8 @@ export default function ThinkerCard({ thinker }) {
 
   return (
     <motion.div
-      className="card-interactive cursor-pointer rounded-xl border border-line bg-surface p-6 shadow-subtle h-full"
+      layout
+      className="card-interactive cursor-pointer rounded-xl border border-line bg-surface p-6 shadow-subtle h-full transition-colors duration-250 hover:border-accent/40"
       onClick={() => isLong && setExpanded((prev) => !prev)}
       onKeyDown={(e) => {
         if (isLong && (e.key === 'Enter' || e.key === ' ')) {
@@ -33,6 +35,7 @@ export default function ThinkerCard({ thinker }) {
       tabIndex={isLong ? 0 : undefined}
       role={isLong ? 'button' : undefined}
       aria-expanded={isLong ? expanded : undefined}
+      transition={{ layout: { duration: 0.28, ease: EASE_OUT_EXPO } }}
     >
       <div className="flex items-start justify-between gap-3">
         <h3 className="font-display text-lg font-semibold tracking-tight">{thinker.name}</h3>
@@ -40,7 +43,7 @@ export default function ThinkerCard({ thinker }) {
           <motion.span
             className="mt-1 shrink-0 text-muted"
             animate={{ rotate: expanded ? 180 : 0 }}
-            transition={{ duration: 0.25 }}
+            transition={{ duration: 0.25, ease: EASE_OUT_EXPO }}
             aria-hidden="true"
           >
             <ChevronDown className="h-4 w-4" />
@@ -48,18 +51,12 @@ export default function ThinkerCard({ thinker }) {
         )}
       </div>
 
-      <AnimatePresence mode="wait" initial={false}>
-        <motion.p
-          key={expanded ? 'full' : 'truncated'}
-          className="mt-2 text-sm leading-relaxed text-muted"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-        >
-          {displayText}
-        </motion.p>
-      </AnimatePresence>
+      <motion.p
+        layout="position"
+        className="mt-2 text-sm leading-relaxed text-muted"
+      >
+        {displayText}
+      </motion.p>
     </motion.div>
   )
 }

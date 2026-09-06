@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
 import { Command } from 'cmdk'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 import { 
   FileText, FolderGit2, Home, MessageSquare, 
-  Settings, Tags, User, Camera 
+  Settings, Tags, User, Camera, BookMarked 
 } from 'lucide-react'
 
 import { useContent } from '../../lib/content.jsx'
@@ -11,7 +11,7 @@ import { useContent } from '../../lib/content.jsx'
 export default function CommandPalette() {
   const [open, setOpen] = useState(false)
   const navigate = useNavigate()
-  const { blog, projects } = useContent()
+  const { blog, projects, notes } = useContent()
 
   // Toggle the menu when ⌘K is pressed
   useEffect(() => {
@@ -123,6 +123,9 @@ export default function CommandPalette() {
             <Command.Item onSelect={() => runCommand(() => navigate('/admin'))}>
               <Home className="h-4 w-4" /> Dashboard
             </Command.Item>
+            <Command.Item onSelect={() => runCommand(() => navigate('/admin/notes'))}>
+              <BookMarked className="h-4 w-4" /> Philosophy Notes
+            </Command.Item>
             <Command.Item onSelect={() => runCommand(() => navigate('/admin/messages'))}>
               <MessageSquare className="h-4 w-4" /> Messages
             </Command.Item>
@@ -141,6 +144,9 @@ export default function CommandPalette() {
             <Command.Item onSelect={() => runCommand(() => navigate('/admin/blog/new'))}>
               <FileText className="h-4 w-4" /> Create New Post
             </Command.Item>
+            <Command.Item onSelect={() => runCommand(() => navigate('/admin/notes/new'))}>
+              <BookMarked className="h-4 w-4" /> Create New Note
+            </Command.Item>
             <Command.Item onSelect={() => runCommand(() => navigate('/admin/projects/new'))}>
               <FolderGit2 className="h-4 w-4" /> Create New Project
             </Command.Item>
@@ -158,6 +164,20 @@ export default function CommandPalette() {
                 >
                   <FileText className="h-4 w-4" />
                   {post.title || 'Untitled Post'}
+                </Command.Item>
+              ))}
+            </Command.Group>
+          )}
+
+          {notes?.length > 0 && (
+            <Command.Group heading="Philosophy Notes">
+              {notes.slice(0, 5).map((note) => (
+                <Command.Item 
+                  key={note.id} 
+                  onSelect={() => runCommand(() => navigate(`/admin/notes/${note.id}`))}
+                >
+                  <BookMarked className="h-4 w-4" />
+                  {note.title || 'Untitled Note'}
                 </Command.Item>
               ))}
             </Command.Group>

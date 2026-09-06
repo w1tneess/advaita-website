@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router'
 
 import AdminAuth from '../../components/admin/AdminAuth.jsx'
 import Button from '../../components/Button.jsx'

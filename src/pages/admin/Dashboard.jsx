@@ -10,15 +10,16 @@ import {
   MessageSquare,
   ArrowRight,
   Clock,
-  FolderGit2
+  FolderGit2,
+  BookMarked
 } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { useEffect, useState } from 'react'
 
 import AdminPage from '../../components/admin/AdminPage.jsx'
 import Card from '../../components/Card.jsx'
 import { useContent } from '../../lib/content.jsx'
-import { supabase } from '../../lib/supabase/client.js'
+import { supabase, isSupabaseConfigured } from '../../lib/supabase/client.js'
 
 function formatActivityDate(value) {
   return new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeStyle: 'short' }).format(
@@ -69,18 +70,24 @@ export default function Dashboard() {
     activity,
     photography,
     blog = [],
+    notes = [],
   } = useContent()
 
   const [messages, setMessages] = useState([])
 
   useEffect(() => {
     async function loadMessages() {
-      const { data } = await supabase
-        .from('contact_submissions')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(3)
-      if (data) setMessages(data)
+      if (!isSupabaseConfigured() || !supabase) return
+      try {
+        const { data, error } = await supabase
+          .from('contact_submissions')
+          .select('*')
+          .order('created_at', { ascending: false })
+          .limit(3)
+        if (!error && data) setMessages(data)
+      } catch (err) {
+        console.warn('Could not load recent messages:', err)
+      }
     }
     loadMessages()
   }, [])
@@ -89,6 +96,7 @@ export default function Dashboard() {
 
   const stats = [
     { icon: FileText, label: 'Blog posts', value: blog.length, to: '/admin/blog' },
+    { icon: BookMarked, label: 'Philosophy notes', value: notes.length, to: '/admin/notes' },
     { icon: FolderOpen, label: 'Projects', value: projects.length, to: '/admin/projects' },
     { icon: Camera, label: 'Photography', value: photos.length, to: '/admin/photography' },
     { icon: Tags, label: 'Categories', value: projectCategories.length, to: '/admin/taxonomy' },

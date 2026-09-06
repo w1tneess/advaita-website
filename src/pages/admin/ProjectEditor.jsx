@@ -1,6 +1,6 @@
 import { useSaveShortcut } from '../../hooks/useSaveShortcut.js'
 import { useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router'
 
 import AdminPage from '../../components/admin/AdminPage.jsx'
 import Field, { CheckboxGroup, ListField } from '../../components/admin/Field.jsx'

@@ -8,6 +8,7 @@ import Seo from '../components/meta/Seo.jsx'
 import ThinkerCard from '../components/features/ThinkerCard.jsx'
 import { useContent } from '../lib/content.jsx'
 import { PUBLIC_ROUTES } from '../config/nav.js'
+import { formatDate } from '../lib/format.js'
 import {
   pageLoadVariant,
   sectionReveal,
@@ -29,7 +30,7 @@ export default function Philosophy() {
 
       <Container>
         <motion.div
-          className="py-12 sm:py-16 md:py-32"
+          className="py-16 sm:py-20 md:py-36"
           initial="hidden"
           animate="visible"
           variants={pageLoadVariant}
@@ -37,7 +38,7 @@ export default function Philosophy() {
           <div className="grid gap-12 lg:gap-24 lg:grid-cols-12">
             <header className="lg:col-span-4">
               <div className="sticky top-24">
-                <h1 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">
+                <h1 className="font-display text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
                   Philosophy
                 </h1>
                 <p className="mt-5 text-lg leading-relaxed text-muted">{philosophy.intro}</p>
@@ -129,7 +130,7 @@ export default function Philosophy() {
                   </div>
                   <div className="prose-body">
                     {/* Simplified markdown rendering for notes */}
-                    {note.content.split('\n\n').map((paragraph, idx) => (
+                    {(note.content || '').split('\n\n').map((paragraph, idx) => (
                       <p key={idx} className={idx > 0 ? 'mt-4' : ''}>
                         {paragraph}
                       </p>
@@ -137,11 +138,7 @@ export default function Philosophy() {
                   </div>
                   {note.published_at && (
                     <p className="mt-6 text-xs font-medium text-muted">
-                      {new Date(note.published_at).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                      })}
+                      {formatDate(note.published_at)}
                     </p>
                   )}
                 </motion.li>

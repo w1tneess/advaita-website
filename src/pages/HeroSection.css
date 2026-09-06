@@ -32,10 +32,11 @@
   object-position: center bottom;
   transform: translateX(-15vw);
   transition:
-    transform 0.4s ease,
-    opacity 0.4s ease;
-  filter: grayscale(1);
-  /* Soft edge fades into dark canvas */
+    transform 0.5s var(--ease-out-expo),
+    opacity 0.4s ease,
+    filter 0.6s ease;
+  filter: grayscale(0.65) contrast(1.05);
+  /* Soft edge fades into canvas */
   mask-image:
     linear-gradient(to bottom, black 85%, transparent 100%),
     linear-gradient(to right, transparent 0%, black 4%, black 96%, transparent 100%);
@@ -44,6 +45,10 @@
     linear-gradient(to right, transparent 0%, black 4%, black 96%, transparent 100%);
   mask-composite: intersect;
   -webkit-mask-composite: source-in;
+}
+
+.hero-cinematic:hover .hero-bg-portrait {
+  filter: grayscale(0.25) contrast(1.08);
 }
 
 /* ── Typography & Content Column ── */
@@ -62,6 +67,7 @@
   align-items: flex-end;
   text-align: right;
   padding-top: 1rem;
+  will-change: transform, opacity;
 }
 
 .hero-name-massive {
@@ -76,6 +82,12 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme='light'] .hero-name-massive,
+html.light .hero-name-massive {
+  text-shadow: none;
 }
 
 .hero-name-massive span {

@@ -1,9 +1,9 @@
 import { ExternalLink, Github, Settings, Database, Server } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 export default function AdminFooter() {
   return (
-    <footer className="w-full mt-auto border-t border-zinc-800/60 bg-[#050505]">
+    <footer className="w-full mt-auto border-t border-line bg-surface/50">
       <div className="mx-auto w-full max-w-[1400px] px-4 py-8 sm:px-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-sm">
           {/* Brand & Copyright */}

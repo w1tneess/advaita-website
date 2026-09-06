@@ -3,8 +3,9 @@
 // All animations respect prefers-reduced-motion via the useReducedMotion hook in components.
 
 // ─── Shared easing curves ──────────────────────────────────────────────────────
-const EASE_OUT_EXPO = [0.16, 1, 0.3, 1]
-const EASE_OUT_QUART = [0.25, 1, 0.5, 1]
+// Exported for use in both variant objects AND inline framer-motion props.
+export const EASE_OUT_EXPO = [0.16, 1, 0.3, 1]
+export const EASE_OUT_QUART = [0.25, 1, 0.5, 1]
 
 // ─── 1. Page Load ──────────────────────────────────────────────────────────────
 export const pageLoadVariant = {
@@ -84,21 +85,19 @@ export const sectionReveal = {
 // Default viewport config for scroll-triggered animations
 export const scrollViewport = {
   once: true,
-  margin: '-80px',
-  amount: 0.15,
+  margin: '0px 0px -40px 0px',
+  amount: 0.08,
 }
 
 // ─── 5. Card hover ─────────────────────────────────────────────────────────────
 export const cardHover = {
   rest: {
     y: 0,
-    scale: 1,
-    transition: { duration: 0.25, ease: 'easeOut' },
+    transition: { duration: 0.25, ease: EASE_OUT_EXPO },
   },
   hover: {
     y: -3,
-    scale: 1.005,
-    transition: { duration: 0.25, ease: 'easeOut' },
+    transition: { duration: 0.25, ease: EASE_OUT_EXPO },
   },
 }
 

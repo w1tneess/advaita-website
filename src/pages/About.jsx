@@ -1,5 +1,5 @@
 import { ArrowRight, Check } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { motion } from 'framer-motion'
 
 import Avatar from '../components/ui/Avatar.jsx'
@@ -8,6 +8,7 @@ import Button from '../components/ui/Button.jsx'
 import Callout from '../components/ui/Callout.jsx'
 import Card from '../components/ui/Card.jsx'
 import Container from '../components/layout/Container.jsx'
+import ExpandableFaq from '../components/ui/ExpandableFaq.jsx'
 
 import InterestCard from '../components/features/InterestCard.jsx'
 import Section from '../components/layout/Section.jsx'
@@ -38,7 +39,7 @@ export default function About() {
 
       <Container>
         <motion.div
-          className="py-12 sm:py-16 md:py-32"
+          className="py-16 sm:py-20 md:py-36"
           initial="hidden"
           animate="visible"
           variants={pageLoadVariant}
@@ -46,7 +47,7 @@ export default function About() {
           <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
             <Avatar profile={profile} size="lg" />
             <header className="max-w-2xl">
-              <h1 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">
+              <h1 className="font-display text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
                 {profile.name}
               </h1>
               <ul className="mt-3 flex flex-wrap gap-2">
@@ -79,7 +80,7 @@ export default function About() {
           id="about-interests"
           tone="raised"
           title="Research interests"
-          intro="Eleven standing interests. They are listed as interests, not as fields I have mastered."
+          intro="Eleven standing interests."
         >
           <motion.ul
             className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
@@ -88,9 +89,9 @@ export default function About() {
             whileInView="visible"
             viewport={scrollViewport}
           >
-            {interests.map((interest) => (
+            {interests.map((interest, idx) => (
               <motion.li key={interest.id} variants={staggerItem}>
-                <InterestCard interest={interest} />
+                <InterestCard interest={interest} index={idx} />
               </motion.li>
             ))}
           </motion.ul>
@@ -107,16 +108,16 @@ export default function About() {
           <Section
             id="about-abilities"
             title="Technical and research abilities"
-            intro="Each is labelled either 'Learning' or 'Working knowledge'. There are no percentage bars, because a number would imply a precision I cannot justify."
+            intro="Each is labelled either 'Learning' or 'Working knowledge'."
           >
-            <div className="space-y-8">
+            <div className="grid gap-6 lg:grid-cols-2">
               {skillGroups.map((group) => (
-                <div key={group.name}>
-                  <h3 className="text-sm font-semibold tracking-wide text-accent uppercase">
+                <Card key={group.name} as="div" className="p-6 sm:p-7">
+                  <h3 className="text-xs font-semibold tracking-wider text-accent uppercase mb-5 pb-3 border-b border-line/40">
                     {group.name}
                   </h3>
                   <motion.ul
-                    className="mt-4 grid gap-4 sm:grid-cols-2"
+                    className="space-y-3"
                     variants={staggerContainer}
                     initial="hidden"
                     whileInView="visible"
@@ -125,29 +126,33 @@ export default function About() {
                     {group.items.map((skill) => {
                       const project = evidenceFor(skill.evidence)
                       return (
-                        <motion.li key={skill.id} variants={staggerItem}>
-                          <Card as="div" className="card-interactive p-5">
+                        <motion.li
+                          key={skill.id}
+                          className="flex items-start justify-between gap-3 py-1"
+                          variants={staggerItem}
+                        >
+                          <div className="min-w-0 flex-1">
                             <div className="flex flex-wrap items-center gap-2">
-                              <h4 className="text-base font-semibold">{skill.name}</h4>
+                              <span className="text-sm font-semibold text-ink">{skill.name}</span>
                               <StatusBadge kind="skill" value={skill.level} />
                             </div>
-                            {skill.note && <p className="mt-2 text-sm text-muted">{skill.note}</p>}
-                            {project && (
-                              <p className="mt-3 text-sm">
-                                <Link
-                                  to={`/projects#project-${project.slug}`}
-                                  className="text-accent underline underline-offset-4 hover:text-accent-strong"
-                                >
-                                  Evidence: {project.title}
-                                </Link>
-                              </p>
+                            {skill.note && (
+                              <p className="mt-1 text-xs leading-relaxed text-muted">{skill.note}</p>
                             )}
-                          </Card>
+                            {project && (
+                              <Link
+                                to={`/projects#project-${project.slug}`}
+                                className="mt-1.5 inline-block text-xs text-accent underline underline-offset-3 hover:text-accent-strong transition-colors"
+                              >
+                                Evidence: {project.title}
+                              </Link>
+                            )}
+                          </div>
                         </motion.li>
                       )
                     })}
                   </motion.ul>
-                </div>
+                </Card>
               ))}
             </div>
           </Section>
@@ -197,7 +202,7 @@ export default function About() {
         <Section
           id="about-approach"
           title="How I approach a question"
-          intro="Four steps, in this order. They are the reason the projects on this site are shaped the way they are."
+          intro="Four steps, in this order."
         >
           <motion.ol
             className="grid gap-6 sm:grid-cols-2"
@@ -240,27 +245,46 @@ export default function About() {
                 <li className="flex gap-2">
                   <Check className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden="true" />
                   <span>
-                    I am a student, not an expert. Nothing here is peer-reviewed or professionally
-                    credentialed.
+                    Nothing here is peer-reviewed or professionally credentialed.
                   </span>
                 </li>
                 <li className="flex gap-2">
                   <Check className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden="true" />
                   <span>
-                    The projects listed are personal work. None of them was commissioned, and none
-                    has been published or externally reviewed.
+                    The projects listed are personal work, built independently and not published or externally reviewed.
                   </span>
                 </li>
                 <li className="flex gap-2">
                   <Check className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden="true" />
                   <span>
-                    Where I have no evidence for something, it is listed as an interest or as
-                    learning — not as a skill.
+                    Where I have no evidence for something, it is listed as an interest or learning rather than a skill.
                   </span>
                 </li>
               </ul>
             </Callout>
           </div>
+
+          <ExpandableFaq
+            items={[
+              {
+                question: 'What technologies do you use for your web applications?',
+                answer: 'I build web applications using React, modern JavaScript (ESNext), Tailwind CSS, Vite, Supabase for database/auth, and Framer Motion for contemporary micro-animations.',
+              },
+              {
+                question: 'Can I collaborate or request a project?',
+                answer: 'Yes! Feel free to reach out via the Contact page or email. I am always open to discussing open-source software, philosophy, photography, and creative technology.',
+              },
+              {
+                question: 'How do you structure your research and writing?',
+                answer: 'Writing on this site follows an epistemic classification model (Facts, Analysis, Opinions, and Limitations) to maintain transparency and rigor.',
+              },
+              {
+                question: 'Is the source code for this site public?',
+                answer: 'Yes, this website is fully open-source and pre-rendered statically with modern web performance standards.',
+              },
+            ]}
+            className="mt-16 sm:mt-24"
+          />
 
           <div className="mt-10 flex flex-wrap gap-3">
             <Button to="/projects">

@@ -5,11 +5,11 @@
 /* ---------------------------------------------------------------------------
    DESIGN SYSTEM
    ---------------------------------------------------------------------------
-  Editorial and contemporary: warm paper surfaces, green-black ink, and a
-  terracotta accent with cool supporting tones.
+  Editorial and contemporary: warm paper surfaces, oxidized-copper ink, and a
+  warm-stone accent with cool supporting tones.
 
-   The accent is a PLACEHOLDER. To rebrand the site, change --color-accent and
-   --color-accent-strong below.
+   The accent is Warm Stone / Oxidized Copper. To rebrand the site, change
+   --color-accent and --color-accent-strong below.
 
    Contrast pairings (all meet WCAG AA for normal text at minimum):
      ink    on canvas    ~15.9:1   AAA
@@ -25,22 +25,23 @@
 --------------------------------------------------------------------------- */
 
 @theme {
-  /* Surfaces and text — dark theme values */
-  --color-canvas: #000000;
-  --color-surface: #0a0a0a;
-  --color-raised: #171717;
-  --color-ink: #ffffff;
-  --color-muted: #a3a3a3;
-  --color-line: #171717;
+  /* Surfaces and text — dark theme values by default */
+  --color-canvas: #050505;
+  --color-surface: #0e0e11;
+  --color-raised: #141418;
+  --color-ink: #f4f4f5;
+  --color-muted: #a1a1aa;
+  --color-line: rgba(255, 255, 255, 0.08);
 
-  --color-accent: #64748b;
-  --color-accent-strong: #94a3b8;
-  --color-on-accent: #09090b;
+  /* Warm Stone / Oxidized Copper accent */
+  --color-accent: #c2956a;
+  --color-accent-strong: #d4a87d;
+  --color-on-accent: #0a0908;
 
   /* Epistemic label hues — used by Callout, SourceList and StatusBadge. */
   --color-fact: #38bdf8;
   --color-analysis: #a78bfa;
-  --color-opinion: #fbbf24;
+  --color-opinion: #d4a87d;
   --color-limitation: #fb7185;
 
   /* Typography */
@@ -59,15 +60,16 @@
   --text-3xl: clamp(1.875rem, 1.65rem + 1.13vw, 2.25rem);
   --text-4xl: clamp(2.25rem, 1.95rem + 1.5vw, 3rem);
   --text-5xl: clamp(3rem, 2.5rem + 2.5vw, 4rem);
+  --text-6xl: clamp(3.75rem, 3rem + 3.75vw, 5rem);
 
   /* A comfortable measure for long-form reading. */
   --container-prose: 68ch;
 
   --radius-card: 1rem;
 
-  --shadow-subtle: none;
-  --shadow-raised: none;
-  --shadow-card-hover: none;
+  --shadow-subtle: 0 1px 3px 0 rgba(0, 0, 0, 0.6), 0 0 0 1px var(--color-line);
+  --shadow-raised: 0 10px 28px -4px rgba(0, 0, 0, 0.8), 0 2px 6px -1px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--color-line);
+  --shadow-card-hover: 0 16px 36px -8px rgba(0, 0, 0, 0.9), 0 0 24px -4px color-mix(in oklch, var(--color-accent) 22%, transparent);
 
   /* Animation timing */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
@@ -75,6 +77,40 @@
   --duration-fast: 150ms;
   --duration-normal: 250ms;
   --duration-slow: 400ms;
+}
+
+:root,
+html.dark,
+[data-theme='dark'] {
+  --color-canvas: #050505;
+  --color-surface: #0e0e11;
+  --color-raised: #141418;
+  --color-ink: #f4f4f5;
+  --color-muted: #a1a1aa;
+  --color-line: rgba(255, 255, 255, 0.08);
+  --color-accent: #c2956a;
+  --color-accent-strong: #d4a87d;
+  --color-on-accent: #0a0908;
+  --shadow-subtle: 0 1px 3px 0 rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  --shadow-raised: 0 10px 28px -4px rgba(0, 0, 0, 0.8), 0 2px 6px -1px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  --shadow-card-hover: 0 16px 36px -8px rgba(0, 0, 0, 0.9), 0 0 24px -4px color-mix(in oklch, var(--color-accent) 22%, transparent);
+}
+
+:root[data-theme='light'],
+html.light,
+[data-theme='light'] {
+  --color-canvas: #fafaf9;
+  --color-surface: #ffffff;
+  --color-raised: #f5f5f4;
+  --color-ink: #18181b;
+  --color-muted: #71717a;
+  --color-line: rgba(0, 0, 0, 0.08);
+  --color-accent: #9a7150;
+  --color-accent-strong: #845f40;
+  --color-on-accent: #fafaf9;
+  --shadow-subtle: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(0, 0, 0, 0.05);
+  --shadow-raised: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 4px 10px -4px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(0, 0, 0, 0.06);
+  --shadow-card-hover: 0 16px 32px -8px rgba(0, 0, 0, 0.12), 0 0 0 1px color-mix(in oklch, var(--color-accent) 40%, rgba(0, 0, 0, 0.1));
 }
 
 @layer base {
@@ -107,10 +143,10 @@
 
   body {
     background-color: var(--color-canvas);
-    background-image: linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--color-accent) 2%, transparent) 0,
-      transparent 35%
+    background-image: radial-gradient(
+      ellipse at top,
+      color-mix(in oklch, var(--color-accent) 3.5%, transparent) 0%,
+      transparent 70%
     );
     color: var(--color-ink);
     font-family: var(--font-sans);
@@ -118,6 +154,7 @@
     min-width: 320px;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+    transition: background-color 0.25s ease, color 0.25s ease;
   }
 
   /* Subtle grain texture overlay */
@@ -127,10 +164,15 @@
     inset: 0;
     z-index: 9999;
     pointer-events: none;
-    opacity: 0.025;
+    opacity: 0.022;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     background-repeat: repeat;
     background-size: 256px 256px;
+  }
+
+  [data-theme='light'] body::before,
+  html.light body::before {
+    opacity: 0.012;
   }
 
   img,
@@ -149,7 +191,7 @@
   h2,
   h3,
   h4 {
-    color: #f4f4f5; /* text-zinc-100 for dark mode headings */
+    color: var(--color-ink);
     font-family: var(--font-display);
     line-height: 1.25;
     text-wrap: balance;
@@ -168,11 +210,11 @@
   :focus-visible {
     outline: 2px solid var(--color-accent);
     outline-offset: 2px;
-    border-radius: 2px;
+    border-radius: 4px;
   }
 
   ::selection {
-    background-color: color-mix(in srgb, var(--color-accent) 26%, transparent);
+    background-color: color-mix(in oklch, var(--color-accent) 26%, transparent);
   }
 
   /* Form controls inherit the theme rather than the OS default. */
@@ -186,6 +228,27 @@
 
   [hidden] {
     display: none !important;
+  }
+
+  /* Custom modern scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-canvas);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: color-mix(in oklch, var(--color-muted) 35%, transparent);
+    border-radius: 9999px;
+    border: 2px solid var(--color-canvas);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-accent);
+  }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in oklch, var(--color-muted) 35%, transparent) var(--color-canvas);
   }
 }
 
@@ -222,7 +285,7 @@
     background-color: var(--color-accent);
     transform: scaleX(0);
     transform-origin: right;
-    transition: transform var(--duration-normal) var(--ease-out-quart);
+    transition: transform var(--duration-normal) var(--ease-out-expo);
   }
 
   .nav-link:hover::after,
@@ -234,13 +297,16 @@
   /* Card with interactive hover state */
   .card-interactive {
     transition:
-      transform var(--duration-normal) var(--ease-out-quart),
-      box-shadow var(--duration-normal) var(--ease-out-quart);
+      transform var(--duration-normal) var(--ease-out-expo),
+      box-shadow var(--duration-normal) var(--ease-out-expo),
+      border-color var(--duration-normal) var(--ease-out-expo),
+      background-color var(--duration-normal) var(--ease-out-expo);
   }
 
   .card-interactive:hover {
-    transform: translateY(-3px);
+    transform: translateY(-3px); /* Consistent lift across all cards */
     box-shadow: var(--shadow-card-hover);
+    border-color: color-mix(in oklch, var(--color-accent) 32%, var(--color-line));
   }
 }
 
@@ -264,6 +330,26 @@
 
   .animate-fade {
     animation: fade 160ms ease-out both;
+  }
+
+  .animate-shimmer {
+    background: linear-gradient(
+      90deg,
+      var(--color-surface) 0%,
+      var(--color-raised) 50%,
+      var(--color-surface) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.6s infinite ease-in-out;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
   }
 }
 

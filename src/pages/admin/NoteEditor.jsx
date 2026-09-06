@@ -1,5 +1,6 @@
+import { useSaveShortcut } from '../../hooks/useSaveShortcut.js'
 import { useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router'
 
 import AdminPage from '../../components/admin/AdminPage.jsx'
 import Field from '../../components/admin/Field.jsx'
@@ -31,19 +32,6 @@ export default function NoteEditor() {
   const [saveStatus, setSaveStatus] = useState('idle') // idle, saving, success, error
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
 
-  if (draft === null) {
-    return (
-      <AdminPage
-        title="Note not found"
-        description="There is no note with that id in the database."
-      >
-        <Button to="/admin/notes" variant="secondary">
-          Back to notes
-        </Button>
-      </AdminPage>
-    )
-  }
-
   const set = (key, value) => {
     setDraft((current) => ({ ...current, [key]: value }))
     setHasUnsavedChanges(true)
@@ -61,7 +49,8 @@ export default function NoteEditor() {
   }
 
   const submit = async (event) => {
-    event.preventDefault()
+    if (event?.preventDefault) event.preventDefault()
+    if (!draft) return
     const found = validateNote(draft, notes)
     setErrors(found)
 
@@ -84,6 +73,21 @@ export default function NoteEditor() {
     } finally {
       setIsSaving(false)
     }
+  }
+
+  useSaveShortcut(submit)
+
+  if (draft === null) {
+    return (
+      <AdminPage
+        title="Note not found"
+        description="There is no note with that id in the database."
+      >
+        <Button to="/admin/notes" variant="secondary">
+          Back to notes
+        </Button>
+      </AdminPage>
+    )
   }
 
   return (
@@ -167,7 +171,7 @@ export default function NoteEditor() {
             <StatusSelector
               type="post"
               status={draft.status}
-              setStatus={(value) =>
+              setStatus={(value) => {
                 setDraft((current) => ({
                   ...current,
                   status: value,
@@ -176,7 +180,9 @@ export default function NoteEditor() {
                       ? todayIso()
                       : current.published_at,
                 }))
-              }
+                setHasUnsavedChanges(true)
+                setSaveStatus('idle')
+              }}
             />
           </div>
         </FormSection>

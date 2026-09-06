@@ -7,7 +7,7 @@ import Lightbox from '@/components/ui/Lightbox.jsx'
 import Seo from '@/components/meta/Seo.jsx'
 import { useContent } from '@/lib/content.jsx'
 import { PUBLIC_ROUTES } from '@/config/nav.js'
-import { pageLoadVariant, staggerContainer, imageReveal, scrollViewport } from '@/lib/animations.js'
+import { pageLoadVariant, staggerContainer, imageReveal, scrollViewport, EASE_OUT_EXPO } from '@/lib/animations.js'
 import { getOptimizedImageProps } from '@/lib/image.js'
 
 const ROUTE = PUBLIC_ROUTES.find((route) => route.key === 'photography')
@@ -76,14 +76,14 @@ export default function Photography() {
 
       <Container>
         <motion.div
-          className="py-12 sm:py-16 md:py-32"
+          className="py-16 sm:py-20 md:py-36"
           initial="hidden"
           animate="visible"
           variants={pageLoadVariant}
         >
           {/* Page header */}
           <header className="max-w-2xl">
-            <h1 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">
+            <h1 className="font-display text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
               Photography
             </h1>
             <p className="mt-5 text-lg leading-relaxed text-muted">{photography.intro}</p>
@@ -99,13 +99,20 @@ export default function Photography() {
                 <button
                   type="button"
                   onClick={() => setActiveCategory('all')}
-                  className={`rounded-lg px-4 py-2.5 text-sm font-medium transition-all duration-200 ${
+                  className={`relative rounded-lg px-4 py-2 text-sm font-medium transition-colors duration-200 ${
                     activeCategory === 'all'
-                      ? 'bg-accent text-on-accent shadow-subtle'
-                      : 'border border-line bg-surface text-muted hover:text-ink hover:border-accent/30'
+                      ? 'text-on-accent'
+                      : 'border border-line bg-surface text-muted hover:text-ink hover:border-accent/40'
                   }`}
                 >
-                  All
+                  {activeCategory === 'all' && (
+                    <motion.span
+                      layoutId="photoFilterActive"
+                      className="absolute inset-0 rounded-lg bg-accent shadow-subtle"
+                      transition={{ duration: 0.25, ease: EASE_OUT_EXPO }}
+                    />
+                  )}
+                  <span className="relative z-10">All</span>
                 </button>
               </li>
               {dynamicCategories.map((cat) => (
@@ -113,13 +120,20 @@ export default function Photography() {
                   <button
                     type="button"
                     onClick={() => setActiveCategory(cat.slug)}
-                    className={`rounded-lg px-4 py-2.5 text-sm font-medium transition-all duration-200 ${
+                    className={`relative rounded-lg px-4 py-2 text-sm font-medium transition-colors duration-200 ${
                       activeCategory === cat.slug
-                        ? 'bg-accent text-on-accent shadow-subtle'
-                        : 'border border-line bg-surface text-muted hover:text-ink hover:border-accent/30'
+                        ? 'text-on-accent'
+                        : 'border border-line bg-surface text-muted hover:text-ink hover:border-accent/40'
                     }`}
                   >
-                    {cat.name}
+                    {activeCategory === cat.slug && (
+                      <motion.span
+                        layoutId="photoFilterActive"
+                        className="absolute inset-0 rounded-lg bg-accent shadow-subtle"
+                        transition={{ duration: 0.25, ease: EASE_OUT_EXPO }}
+                      />
+                    )}
+                    <span className="relative z-10">{cat.name}</span>
                   </button>
                 </li>
               ))}
@@ -147,7 +161,7 @@ export default function Photography() {
                 return (
                 <motion.figure
                   key={photo.id}
-                  className="relative mb-4 cursor-pointer break-inside-avoid overflow-hidden rounded-xl border border-line bg-surface shadow-subtle transition-shadow hover:shadow-raised group"
+                  className="relative mb-4 cursor-pointer break-inside-avoid overflow-hidden rounded-xl border border-line bg-surface shadow-subtle transition-all duration-300 hover:shadow-card-hover hover:border-accent/40 group"
                   variants={imageReveal}
                   onClick={() => openLightbox(photo)}
                   role="button"
@@ -166,7 +180,7 @@ export default function Photography() {
                     loading="lazy"
                     decoding="async"
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    className="w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                    className="w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
                     style={photo.aspectRatio ? { aspectRatio: photo.aspectRatio } : undefined}
                   />
                   {images.length > 1 && (
@@ -185,11 +199,7 @@ export default function Photography() {
           ) : (
             <div className="mt-10 rounded-xl border border-dashed border-line bg-raised/50 px-6 py-16 text-center">
               <Camera className="mx-auto h-10 w-10 text-muted/40" aria-hidden="true" />
-              <p className="mt-4 text-sm font-medium text-muted">No photographs yet.</p>
-              <p className="mt-2 max-w-md mx-auto text-xs text-muted">
-                This gallery is where photographs will appear. The architecture is ready — images
-                just haven't been added yet.
-              </p>
+              <p className="mt-4 text-sm font-medium text-muted">No photographs published yet.</p>
             </div>
           )}
         </motion.div>

@@ -129,10 +129,11 @@ export default function ContactForm() {
 
         setStatus('success')
         setForm(INITIAL_FORM)
-      } catch (_) {
+      } catch (err) {
         setStatus('error')
         setErrorMessage(
-          'Something went wrong. Please try again or use an alternative contact method.',
+          err?.message ||
+            'Something went wrong. Please try again or use an alternative contact method.',
         )
       }
     },

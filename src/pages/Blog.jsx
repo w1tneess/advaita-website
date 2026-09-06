@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import Container from '@/components/layout/Container.jsx'
+import EmptyState from '@/components/ui/EmptyState.jsx'
 import Seo from '@/components/meta/Seo.jsx'
 import { useContent } from '@/lib/content.jsx'
 import { PUBLIC_ROUTES } from '@/config/nav.js'
@@ -10,7 +11,7 @@ import { formatDate } from '@/lib/format.js'
 const ROUTE = PUBLIC_ROUTES.find((route) => route.key === 'blog')
 
 export default function Blog() {
-  const { publicBlogPosts } = useContent()
+  const { publicBlogPosts, settings } = useContent()
 
   return (
     <>
@@ -40,7 +41,12 @@ export default function Blog() {
             viewport={scrollViewport}
           >
             {publicBlogPosts.length === 0 ? (
-              <p className="py-8 text-muted">No posts published yet.</p>
+              <div className="py-12">
+                <EmptyState
+                  title="No articles yet"
+                  message={settings?.blogEmptyState || 'No public articles published yet.'}
+                />
+              </div>
             ) : (
               <ul className="divide-y divide-line">
                 {publicBlogPosts.map((post) => (
@@ -66,7 +72,9 @@ export default function Blog() {
                         </p>
                       </div>
                       <div className="relative mt-4 flex items-center gap-x-4">
-                        <span className="text-sm font-semibold text-accent">Read more →</span>
+                        <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent transition-colors">
+                          Read more <span className="transition-transform duration-200 group-hover:translate-x-1">→</span>
+                        </span>
                       </div>
                     </article>
                   </motion.li>

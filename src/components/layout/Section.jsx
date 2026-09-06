@@ -21,19 +21,19 @@ export default function Section({
   const Heading = `h${headingLevel}`
   const tones = {
     base: '',
-    raised: 'bg-surface-elevated border-y border-border',
-    surface: 'bg-surface border-y border-border',
+    raised: 'border-t border-line/40',
+    surface: 'border-t border-line/40',
   }
 
   return (
     <section
       id={id}
       aria-labelledby={title ? `${id}-heading` : undefined}
-      className={`py-16 md:py-24 ${tones[tone]} ${className}`}
+      className={`py-20 md:py-28 ${tones[tone] || ''} ${className}`}
     >
       <Container width={width}>
         {(title || intro || kicker) && (
-          <header className="mb-8 sm:mb-12">
+          <header className="mb-10 sm:mb-14">
             <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div className="min-w-0 max-w-2xl">
                 {kicker && (
@@ -44,12 +44,12 @@ export default function Section({
                 {title && (
                   <Heading
                     id={id ? `${id}-heading` : undefined}
-                    className="text-2xl font-semibold sm:text-3xl"
+                    className="font-display text-3xl font-semibold tracking-tight sm:text-4xl"
                   >
                     {title}
                   </Heading>
                 )}
-                {intro && <p className="mt-3 text-foreground-muted">{intro}</p>}
+                {intro && <p className="mt-3 text-muted">{intro}</p>}
               </div>
               {actions && <div className="w-full shrink-0 sm:w-auto">{actions}</div>}
             </div>

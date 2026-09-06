@@ -6,13 +6,11 @@
   "featuredHeading": "Selected work",
   "featuredIntro": "Three projects with methods, status, and limitations listed for each.",
   "interestsHeading": "What I am researching",
-  "interestsIntro": "Subjects I read about and questions I am working through.",
+  "interestsIntro": "",
   "credibilityHeading": "About this work",
-  "credibilityStatement": "I am a student, not an expert, and nothing here is peer-reviewed. What I can show is the work. A data project on terrorism in India from 1947 to 2026. A research document on Osho that records competing accounts. A four-layer design for a school worksheet generator with no code written yet.",
+  "credibilityStatement": "A data project on terrorism in India from 1947 to 2026. A research document on Osho that records competing accounts. A four-layer design for a school worksheet generator with no code written yet.",
   "credibilityPoints": [
-    "Every project states its current status, including the one that is only a design.",
     "When sources disagree, I record the disagreement instead of picking one number.",
-    "Claims are marked as sourced fact, my analysis, my opinion, or a limitation.",
-    "Nothing here claims results or publications that do not exist."
+    "Claims are marked as sourced fact, my analysis, my opinion, or a limitation."
   ]
 }

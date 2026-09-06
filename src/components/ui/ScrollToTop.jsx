@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router'
 
 /**
  * Route-change behaviour that a multi-page site gets from the browser for free but a
@@ -13,6 +13,8 @@ import { useLocation } from 'react-router-dom'
  * hash, the target element is scrolled into view instead — a browser does this natively
  * for a real page load, but not for a client-side navigation.
  */
+import { scrollToTop } from '../../lib/smooth-scroll.js'
+
 export default function ScrollToTop() {
   const { pathname, hash } = useLocation()
   const isFirstRender = useRef(true)
@@ -24,14 +26,22 @@ export default function ScrollToTop() {
     }
 
     if (hash) {
-      const target = document.getElementById(decodeURIComponent(hash.slice(1)))
+      const id = decodeURIComponent(hash.slice(1))
+      const target = document.getElementById(id)
       if (target) {
         target.scrollIntoView({ block: 'start' })
         return
       }
+      const timer = setTimeout(() => {
+        const delayedTarget = document.getElementById(id)
+        if (delayedTarget) {
+          delayedTarget.scrollIntoView({ block: 'start' })
+        }
+      }, 100)
+      return () => clearTimeout(timer)
     }
 
-    window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+    scrollToTop()
 
     const main = document.getElementById('main-content')
     if (main) main.focus({ preventScroll: true })

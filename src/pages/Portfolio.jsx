@@ -1,5 +1,6 @@
 import { FolderOpen } from 'lucide-react'
 import { useMemo } from 'react'
+import { motion } from 'framer-motion'
 
 import Button from '../components/Button.jsx'
 import Container from '../components/Container.jsx'
@@ -11,6 +12,7 @@ import { useContent } from '../lib/content.jsx'
 import { PUBLIC_ROUTES } from '../lib/routes.js'
 import { pluralize } from '../lib/format.js'
 import { useFilters } from '../hooks/useFilters.js'
+import { pageLoadVariant } from '../lib/animations.js'
 
 const ROUTE = PUBLIC_ROUTES.find((route) => route.key === 'portfolio')
 
@@ -44,14 +46,17 @@ export default function Portfolio() {
       <Seo title={ROUTE.title} description={ROUTE.description} path="/portfolio" />
 
       <Container>
-        <div className="py-12 sm:py-16 md:py-32">
-          <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">
+        <motion.div
+          className="py-12 sm:py-16 md:py-32"
+          initial="hidden"
+          animate="visible"
+          variants={pageLoadVariant}
+        >
+          <h1 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">
             Portfolio
           </h1>
           <p className="mt-5 max-w-prose text-lg leading-relaxed text-muted">
-            Three projects. Each entry states its role, tools, method and current status, and ends
-            with what it does not show — including the one that is a design rather than a working
-            product.
+            Selected projects across research, data, and design.
           </p>
 
           <FilterBar
@@ -73,10 +78,10 @@ export default function Portfolio() {
 
           {visible.length > 0 ? (
             <ul className="mt-8 space-y-8">
-              {visible.map((project) => (
+              {visible.map((project, index) => (
                 /* The id is the anchor target used by the evidence links on the About page. */
                 <li key={project.id} id={`project-${project.slug}`} className="scroll-mt-24">
-                  <ProjectCard project={project} variant="full" headingLevel={2} />
+                  <ProjectCard project={project} variant="full" headingLevel={2} index={index} />
                 </li>
               ))}
             </ul>
@@ -95,7 +100,7 @@ export default function Portfolio() {
               }
             />
           )}
-        </div>
+        </motion.div>
       </Container>
     </>
   )

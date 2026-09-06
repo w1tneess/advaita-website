@@ -14,8 +14,7 @@
  * This is the one place the site URL is defined. It is intentionally NOT stored in
  * src/data/settings.json: the pre-rendered <link rel="canonical"> tags are baked at
  * build time, so a runtime-editable copy could silently disagree with them.
- *
- * Change this if you deploy somewhere else, e.g. 'https://username.github.io'.
+ * Defined in site.js (SITE_URL).
  */
 
 /**

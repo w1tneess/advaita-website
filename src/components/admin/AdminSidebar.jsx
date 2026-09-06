@@ -19,7 +19,7 @@ import {
   Plus,
   ChevronDown
 } from 'lucide-react'
-import { NavLink, Link } from 'react-router-dom'
+import { NavLink, Link } from 'react-router'
 import { useState, useRef, useEffect } from 'react'
 
 import { useAdminAuth } from './AdminAuth.jsx'

@@ -12,9 +12,9 @@ export default function Card({
   return (
     <Tag
       className={[
-        'rounded-card border border-zinc-200 dark:border-zinc-800 bg-surface shadow-sm sm:shadow-subtle',
+        'rounded-card border border-line/80 bg-surface/85 backdrop-blur-md shadow-subtle transition-[background-color,border-color,box-shadow,transform] duration-250',
         interactive
-          ? 'transition-[background-color,box-shadow,border-color,transform] duration-200 active:scale-[0.98] active:bg-surface-hover active:border-accent/40 sm:hover:-translate-y-0.5 sm:hover:border-accent/40 sm:hover:bg-surface-hover sm:hover:shadow-raised motion-reduce:sm:hover:translate-y-0'
+          ? 'card-interactive cursor-pointer hover:border-accent/40 active:scale-[0.99] motion-reduce:hover:translate-y-0'
           : '',
         className,
       ]

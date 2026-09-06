@@ -72,6 +72,7 @@ export function ContentProvider({ children }) {
   const initial = useRef(null)
 
   const [content, setContent] = useState(null)
+  const contentRef = useRef(null)
   const [isLocal, setIsLocal] = useState(false) // represents if we are using remote DB
   const [previewDrafts, setPreviewDrafts] = useState(false)
 
@@ -82,6 +83,7 @@ export function ContentProvider({ children }) {
       try {
         const state = await loadDocument()
         initial.current = state
+        contentRef.current = state.doc
         setContent(state.doc)
         setIsLocal(state.source === 'remote')
         setIsLoaded(true)
@@ -100,18 +102,21 @@ export function ContentProvider({ children }) {
 
   const commit = useCallback(async (updater) => {
     try {
-      // 1. Fetch latest to prevent race conditions and overwriting concurrent edits
-      const state = await loadDocument()
-      const currentDoc = state.doc
+      const currentDoc = contentRef.current
+      if (!currentDoc) {
+        toast.error('Cannot save: content not loaded.')
+        return { ok: false, error: 'Not loaded' }
+      }
 
-      // 2. Apply updates
+      // 1. Apply updates to the local state first
       const nextDoc = typeof updater === 'function' ? updater(currentDoc) : updater
 
-      // 3. Save to database
+      // 2. Save to database
       const result = await saveDocument(nextDoc)
       
       if (result.ok) {
-        // 4. Update local UI only if save was successful
+        // 3. Update local UI only if save was successful
+        contentRef.current = nextDoc
         setContent(nextDoc)
         setIsLocal(true)
         return { ok: true }
@@ -120,7 +125,7 @@ export function ContentProvider({ children }) {
         return { ok: false, error: result.error }
       }
     } catch (e) {
-      toast.error('An unexpected error occurred while saving.')
+      toast.error('An unexpected error occurred while saving: ' + e.message)
       return { ok: false, error: e.message }
     }
   }, [toast])
@@ -219,7 +224,9 @@ export function ContentProvider({ children }) {
       toast.error(result.error || 'Failed to clear document from database')
       return false
     }
-    setContent(createSeedDocument())
+    const seed = createSeedDocument()
+    contentRef.current = seed
+    setContent(seed)
     setIsLocal(false)
     return true
   }, [toast])

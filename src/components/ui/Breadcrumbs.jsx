@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router'
 import { ChevronRight, Home } from 'lucide-react'
 
 export default function Breadcrumbs() {
@@ -23,7 +23,7 @@ export default function Breadcrumbs() {
 
         return (
           <div key={to} className="flex items-center">
-            <ChevronRight className="w-4 h-4 mx-2 text-line" aria-hidden="true" />
+            <ChevronRight className="w-4 h-4 mx-2 text-muted/60" aria-hidden="true" />
             {last ? (
               <span className="font-medium text-ink" aria-current="page">
                 {title}

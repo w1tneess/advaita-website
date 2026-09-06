@@ -1,11 +1,17 @@
+import { Suspense } from 'react'
 import { Eye } from 'lucide-react'
-import { Link, Outlet, useLocation } from 'react-router-dom'
+import { Link, Outlet, useLocation } from 'react-router'
 import { AnimatePresence, motion } from 'framer-motion'
 
 import Container from '../components/layout/Container.jsx'
 import Footer from '../components/layout/Footer.jsx'
 import Header from '../components/layout/Header.jsx'
 import SkipLink from '../components/layout/SkipLink.jsx'
+import BackToTopButton from '../components/ui/BackToTopButton.jsx'
+import CookieBanner from '../components/ui/CookieBanner.jsx'
+import ShortcutsModal from '../components/ui/ShortcutsModal.jsx'
+import PageFallback from '../components/ui/PageFallback.jsx'
+import { useShortcuts } from '../hooks/useShortcuts.js'
 import { useContent } from '../lib/content.jsx'
 import { useSmoothScroll } from '../lib/smooth-scroll.js'
 
@@ -18,6 +24,7 @@ import { useSmoothScroll } from '../lib/smooth-scroll.js'
 export default function PublicLayout() {
   const { previewDrafts, setPreviewDrafts } = useContent()
   const location = useLocation()
+  const { isOpen: shortcutsOpen, close: closeShortcuts } = useShortcuts()
 
   // Initialize smooth scrolling
   useSmoothScroll()
@@ -63,16 +70,23 @@ export default function PublicLayout() {
           id="main-content"
           tabIndex={-1}
           className="flex-1 focus:outline-none"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
+          initial={{ opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -6 }}
+          transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
         >
-          <Outlet />
+          <Suspense fallback={<PageFallback />}>
+            <Outlet />
+          </Suspense>
         </motion.main>
       </AnimatePresence>
 
       <Footer />
+
+      {/* Global Interactive Aids */}
+      <BackToTopButton />
+      <ShortcutsModal isOpen={shortcutsOpen} onClose={closeShortcuts} />
+      <CookieBanner />
     </div>
   )
 }

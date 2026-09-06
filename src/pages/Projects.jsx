@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import Container from '@/components/layout/Container.jsx'
+import EmptyState from '@/components/ui/EmptyState.jsx'
 import ProjectCard from '@/components/features/ProjectCard.jsx'
 import Seo from '@/components/meta/Seo.jsx'
 import { useContent } from '@/lib/content.jsx'
@@ -17,38 +18,47 @@ export default function Projects() {
 
       <Container>
         <motion.div
-          className="py-12 sm:py-16 md:py-32"
+          className="py-16 sm:py-20 md:py-36"
           initial="hidden"
           animate="visible"
           variants={pageLoadVariant}
         >
           <header className="max-w-2xl">
-            <h1 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">
+            <h1 className="font-display text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
               Projects
             </h1>
             <p className="mt-5 text-lg leading-relaxed text-muted">
-              Things I'm building — some finished, most still evolving.
-            </p>
-            <p className="mt-4 max-w-prose text-base leading-relaxed text-muted">
-              I prefer showing the actual process over waiting until everything looks perfect. Some
-              projects may change direction, some may remain unfinished, and that's part of building
-              things.
+              Projects and source code across research, data, and software design.
             </p>
           </header>
 
-          <motion.ul
-            className="mt-12 space-y-6"
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={scrollViewport}
-          >
-            {publicProjects.map((project) => (
-              <motion.li key={project.id} variants={staggerItem}>
-                <ProjectCard project={project} headingLevel={2} />
-              </motion.li>
-            ))}
-          </motion.ul>
+          {publicProjects.length === 0 ? (
+            <div className="mt-12 py-8 border-t border-line">
+              <EmptyState
+                title="No projects yet"
+                message="Projects will appear here once published."
+              />
+            </div>
+          ) : (
+            <motion.ul
+              className="mt-12 space-y-6"
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={scrollViewport}
+            >
+              {publicProjects.map((project) => (
+                <motion.li
+                  key={project.id}
+                  id={`project-${project.slug}`}
+                  className="scroll-mt-24"
+                  variants={staggerItem}
+                >
+                  <ProjectCard project={project} headingLevel={2} />
+                </motion.li>
+              ))}
+            </motion.ul>
+          )}
         </motion.div>
       </Container>
     </>

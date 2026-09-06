@@ -12,7 +12,3 @@ Disallow: /admin
 Disallow: /admin/
 
 Sitemap: https://advaitachandra.in/sitemap.xml
-
-# If this site is ever deployed to a GitHub project page instead of the custom
-# domain, the Sitemap line above must be updated to point at the real origin and
-# base path: https://<username>.github.io/<repo>/sitemap.xml

@@ -22,7 +22,7 @@ const ROUTE = PUBLIC_ROUTES.find((route) => route.key === 'contact')
  */
 export default function Contact() {
   const { profile, settings, publicSocialLinks } = useContent()
-  const contact = settings.contact
+  const contact = settings?.contact || {}
 
   const socialLinks = publicSocialLinks.filter((link) => link.kind !== 'email' && link.url)
 
@@ -32,12 +32,12 @@ export default function Contact() {
 
       <Container>
         <motion.div
-          className="py-12 sm:py-20 md:py-32"
+          className="py-16 sm:py-20 md:py-36"
           initial="hidden"
           animate="visible"
           variants={pageLoadVariant}
         >
-          <h1 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">
+          <h1 className="font-display text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
             {contact.heading}
           </h1>
           <p className="mt-5 max-w-prose text-lg leading-relaxed text-muted">{contact.intro}</p>

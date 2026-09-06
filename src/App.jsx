@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router'
 import { motion, MotionConfig } from 'framer-motion'
 
 import ScrollToTop from './components/ui/ScrollToTop.jsx'
@@ -23,24 +23,13 @@ const BlogPost = lazy(() => import('./pages/BlogPost.jsx'))
  * Public pages are lazy-loaded to reduce initial bundle size as requested by the user.
  * The admin panel is lazy — no visitor should download an editor they will never open.
  *
- * `basename` comes from Vite's BASE_URL so the same build works at the domain root and
- * at /repository-name/ on GitHub Pages. See vite.config.js.
+ * `basename` comes from Vite's BASE_URL so the build works cleanly at the domain root.
+ * See vite.config.js.
  */
 
 const AdminApp = lazy(() => import('./pages/admin/AdminApp.jsx'))
 
-function PageFallback() {
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="flex min-h-[50vh] items-center justify-center px-6 text-ink"
-    >
-      <div className="h-6 w-6 animate-spin rounded-full border-2 border-line border-t-accent" role="status" aria-label="Loading" />
-    </motion.div>
-  )
-}
+
 
 function AdminFallback() {
   return (
@@ -64,7 +53,6 @@ export default function App() {
         <BrowserRouter basename={import.meta.env.BASE_URL}>
         <ScrollToTop />
 
-      <Suspense fallback={<PageFallback />}>
         <Routes>
           <Route element={<PublicLayout />}>
             <Route index element={<Home />} />
@@ -88,7 +76,6 @@ export default function App() {
           }
         />
       </Routes>
-      </Suspense>
 
       <ToastViewport />
       </BrowserRouter>

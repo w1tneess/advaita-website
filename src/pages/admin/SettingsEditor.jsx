@@ -4,6 +4,7 @@ import Button from '../../components/Button.jsx'
 import Callout from '../../components/Callout.jsx'
 import { useContent } from '../../lib/content.jsx'
 import { useSectionForm } from '../../hooks/useSectionForm.js'
+import { useSaveShortcut } from '../../hooks/useSaveShortcut.js'
 import { validateSettings } from '../../lib/schema.js'
 
 /**
@@ -20,6 +21,8 @@ export default function SettingsEditor() {
     settings,
     validateSettings,
   )
+
+  useSaveShortcut(submit)
 
   return (
     <AdminPage

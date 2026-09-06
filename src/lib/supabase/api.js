@@ -1,7 +1,9 @@
-import { supabase } from './client.js'
+import { supabase, isSupabaseConfigured } from './client.js'
 
 export async function submitContactForm({ name, email, topic, message }) {
-  if (!supabase) throw new Error('Supabase client not initialized')
+  if (!isSupabaseConfigured() || !supabase) {
+    throw new Error('Supabase is not configured. Unable to submit contact form.')
+  }
 
   const { error } = await supabase.from('contact_submissions').insert({
     name,
@@ -15,7 +17,9 @@ export async function submitContactForm({ name, email, topic, message }) {
 }
 
 export async function uploadImage(file, path) {
-  if (!supabase) throw new Error('Supabase client not initialized')
+  if (!isSupabaseConfigured() || !supabase) {
+    throw new Error('Supabase is not configured. Unable to upload images.')
+  }
 
   const { data, error } = await supabase.storage.from('images').upload(path, file, {
     cacheControl: '3600',
@@ -32,7 +36,9 @@ export async function uploadImage(file, path) {
 }
 
 export async function removeImage(path) {
-  if (!supabase) throw new Error('Supabase client not initialized')
+  if (!isSupabaseConfigured() || !supabase) {
+    throw new Error('Supabase is not configured. Unable to remove image.')
+  }
 
   const { error } = await supabase.storage.from('images').remove([path])
   if (error) throw error

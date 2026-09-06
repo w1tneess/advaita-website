@@ -1,38 +1,30 @@
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 /**
- * The site's only button component.
+ * Unified Button component adhering to site design tokens.
  *
- * Renders a react-router <Link> when given `to`, a plain <a> when given `href`, and a
- * <button> otherwise — so a link is always a real link and stays keyboard- and
- * middle-click-friendly.
- *
- * Variants:
- * - primary: Accent color, for primary actions
- * - secondary: Surface variant, for secondary actions
- * - ghost: Transparent with border, for tertiary actions
- * - danger: Red for destructive actions
- * - link: Unstyled link with underline
- *
- * Sizes: sm, md, lg
+ * Renders:
+ * - <Link> when `to` is provided
+ * - <a> when `href` is provided (auto-detects external links)
+ * - <button> otherwise
  */
 
 const VARIANTS = {
   primary:
-    'bg-accent text-on-accent border border-transparent hover:bg-accent-hover shadow-subtle hover:shadow-raised hover:-translate-y-px active:translate-y-0',
+    'bg-accent text-on-accent border border-transparent hover:bg-accent-strong shadow-subtle hover:shadow-[0_0_22px_-4px_var(--color-accent)]/30 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]',
   secondary:
-    'bg-surface-elevated text-foreground border border-border hover:bg-accent-soft hover:border-accent shadow-subtle hover:shadow-raised hover:-translate-y-px active:translate-y-0',
+    'bg-raised text-ink border border-line hover:border-accent/60 hover:bg-surface shadow-subtle hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]',
   ghost:
-    'bg-transparent text-foreground border border-border hover:bg-surface-elevated hover:border-accent hover:text-accent shadow-none hover:shadow-subtle hover:-translate-y-px active:translate-y-0',
+    'bg-transparent text-ink border border-transparent hover:bg-raised hover:text-accent active:scale-[0.98]',
   danger:
-    'bg-transparent text-danger border border-danger/40 hover:bg-danger/8 hover:border-danger shadow-none hover:-translate-y-px active:translate-y-0',
-  link: 'bg-transparent text-accent border-0 p-0 underline underline-offset-4 hover:text-accent-hover',
+    'bg-transparent text-limitation border border-limitation/40 hover:bg-limitation/10 hover:border-limitation active:scale-[0.98]',
+  link: 'bg-transparent text-accent border-0 p-0 underline underline-offset-4 hover:text-accent-strong',
 }
 
 const SIZES = {
-  sm: 'px-3 py-1.5 text-sm gap-1.5 rounded-md',
-  md: 'px-4 py-2.5 text-sm gap-2 rounded-md',
-  lg: 'px-5 py-3 text-base gap-2 rounded-lg',
+  sm: 'px-3 py-1.5 text-sm gap-1.5 rounded-lg',
+  md: 'px-4 py-2.5 text-sm gap-2 rounded-lg',
+  lg: 'px-5 py-3 text-base gap-2 rounded-xl',
 }
 
 export default function Button({
@@ -46,14 +38,16 @@ export default function Button({
   children,
   ...rest
 }) {
-  const sizeClasses = variant === 'link' ? '' : SIZES[size]
+  const sizeClasses = variant === 'link' ? '' : SIZES[size] || SIZES.md
+  const variantClasses = VARIANTS[variant] || VARIANTS.primary
+
   const classes = [
     'inline-flex max-w-full items-center justify-center font-semibold break-words text-center transition-[background-color,border-color,color,box-shadow,transform] duration-200 ease-out',
     'disabled:cursor-not-allowed disabled:opacity-50 disabled:transform-none',
     'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
     variant === 'link' ? 'motion-reduce:hover:text-accent' : 'motion-reduce:hover:-translate-y-0',
     sizeClasses,
-    VARIANTS[variant],
+    variantClasses,
     className,
   ]
     .filter(Boolean)

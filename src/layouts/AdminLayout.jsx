@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Outlet, useLocation } from 'react-router-dom'
+import { Outlet, useLocation } from 'react-router'
 
 import AdminHeader from '../components/admin/AdminHeader.jsx'
 import AdminSidebar from '../components/admin/AdminSidebar.jsx'
@@ -33,7 +33,7 @@ export default function AdminLayout() {
       <div className="flex flex-1 w-full">
         <AdminSidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-        <div className="min-w-0 flex-1 flex flex-col bg-[#050505]">
+        <div className="min-w-0 flex-1 flex flex-col bg-canvas">
           <AdminHeader onOpenSidebar={() => setSidebarOpen(true)} />
 
           <main

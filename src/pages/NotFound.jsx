@@ -1,17 +1,19 @@
 import { ArrowRight } from 'lucide-react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router'
+import { motion } from 'framer-motion'
 
 import Button from '../components/ui/Button.jsx'
 import Container from '../components/layout/Container.jsx'
 import Seo from '../components/meta/Seo.jsx'
 import { NAV_ITEMS } from '../config/nav.js'
+import { pageLoadVariant } from '../lib/animations.js'
 
 /**
  * 404 page.
  *
- * Also what `dist/404.html` renders, which is how GitHub Pages serves any path that has
- * no pre-rendered file. React Router then matches the real URL client-side, so a valid
- * deep link that was missed by the pre-render list still resolves to its page.
+ * Also what `dist/404.html` renders when a static host serves an unmatched route.
+ * React Router then matches the real URL client-side, so a valid deep link that was
+ * missed by the pre-render list still resolves cleanly to its page.
  */
 export default function NotFound() {
   const { pathname } = useLocation()
@@ -26,13 +28,18 @@ export default function NotFound() {
       />
 
       <Container>
-        <div className="max-w-xl py-16 sm:py-24 md:py-32">
-          <p className="font-mono text-sm text-muted">404</p>
-          <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">
+        <motion.div
+          className="max-w-xl py-16 sm:py-24 md:py-32"
+          initial="hidden"
+          animate="visible"
+          variants={pageLoadVariant}
+        >
+          <p className="font-mono text-sm text-accent">404</p>
+          <h1 className="mt-3 font-display text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">
             This page doesn&rsquo;t exist
           </h1>
           <p className="mt-5 text-lg text-muted">
-            The address <code className="font-mono text-base break-words">{pathname}</code>{' '}
+            The address <code className="font-mono text-base break-words text-ink">{pathname}</code>{' '}
             doesn&rsquo;t match anything here. It may have been mistyped, or it may be something I
             have not written yet.
           </p>
@@ -44,7 +51,7 @@ export default function NotFound() {
                 <li key={item.path}>
                   <Link
                     to={item.path}
-                    className="inline-flex items-center gap-1.5 text-accent underline underline-offset-4 hover:text-accent-strong"
+                    className="inline-flex items-center gap-1.5 text-accent underline underline-offset-4 hover:text-accent-strong transition-colors"
                   >
                     {item.label}
                     <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
@@ -57,7 +64,7 @@ export default function NotFound() {
           <Button to="/" className="mt-9">
             Back to the home page
           </Button>
-        </div>
+        </motion.div>
       </Container>
     </>
   )

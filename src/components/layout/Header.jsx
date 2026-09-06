@@ -1,10 +1,11 @@
-import { ArrowUpRight, Menu, X } from 'lucide-react'
+import { ArrowUpRight, Menu, Moon, Sun, X } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
-import { Link, NavLink, useLocation } from 'react-router-dom'
+import { Link, NavLink, useLocation } from 'react-router'
 import { AnimatePresence, motion } from 'framer-motion'
 
 import Container from '@/components/layout/Container.jsx'
 import { useContent } from '@/lib/content.jsx'
+import { useTheme } from '@/lib/theme.jsx'
 import { NAV_ITEMS } from '@/config/nav.js'
 
 /**
@@ -12,6 +13,7 @@ import { NAV_ITEMS } from '@/config/nav.js'
  */
 export default function Header() {
   const { profile, social } = useContent()
+  const { isDark, toggleTheme } = useTheme()
   const { pathname } = useLocation()
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
@@ -104,7 +106,7 @@ export default function Header() {
         className={`sticky top-0 z-40 transition-all duration-300 ${
           isTransparent
             ? 'bg-transparent border-b border-transparent shadow-none'
-            : 'border-b border-line/60 bg-canvas/85 shadow-[0_1px_0_rgb(255_255_255/0.35)] dark:shadow-none backdrop-blur-xl'
+            : 'border-b border-line/60 bg-canvas/80 shadow-subtle backdrop-blur-xl'
         }`}
       >
         <Container width="wide" className="lg:px-12 xl:px-16">
@@ -140,7 +142,33 @@ export default function Header() {
             </nav>
 
             {/* Header Right Controls */}
-            <div className="flex items-center gap-3 sm:gap-4">
+            <div className="flex items-center gap-2 sm:gap-3">
+              {/* Desktop Theme Toggle Button */}
+              <button
+                type="button"
+                onClick={toggleTheme}
+                aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
+                title={isDark ? 'Switch to light theme (or press T)' : 'Switch to dark theme (or press T)'}
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-line/70 bg-surface/70 text-ink shadow-sm backdrop-blur-md transition-all hover:border-accent/40 hover:bg-surface active:scale-95"
+              >
+                <AnimatePresence mode="wait" initial={false}>
+                  <motion.span
+                    key={isDark ? 'dark' : 'light'}
+                    initial={{ opacity: 0, rotate: -45, scale: 0.8 }}
+                    animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                    exit={{ opacity: 0, rotate: 45, scale: 0.8 }}
+                    transition={{ duration: 0.2 }}
+                    className="flex items-center justify-center"
+                  >
+                    {isDark ? (
+                      <Sun className="h-4 w-4 text-accent" aria-hidden="true" />
+                    ) : (
+                      <Moon className="h-4 w-4 text-accent" aria-hidden="true" />
+                    )}
+                  </motion.span>
+                </AnimatePresence>
+              </button>
+
               {/* Mobile Menu Trigger Button */}
               <button
                 ref={toggleRef}
@@ -167,13 +195,13 @@ export default function Header() {
             role="dialog"
             aria-modal="true"
             aria-label="Navigation Menu"
-            className="fixed inset-0 z-50 flex flex-col justify-between overflow-y-auto bg-canvas/98 px-6 py-5 backdrop-blur-2xl touch-none sm:px-10 dark:bg-canvas/98 lg:hidden"
+            className="fixed inset-0 z-50 flex flex-col justify-between overflow-y-auto bg-canvas/98 px-6 py-5 backdrop-blur-2xl sm:px-10 lg:hidden"
             initial={{ opacity: 0, y: -16 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -16 }}
             transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
           >
-            {/* Top Row: Logo & Close Button */}
+            {/* Top Row: Logo & Controls */}
             <div className="flex h-12 items-center justify-between border-b border-line/40 pb-4">
               <Link
                 to="/"
@@ -182,12 +210,24 @@ export default function Header() {
               >
                 {profile.name}
               </Link>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2.5">
+                <button
+                  type="button"
+                  onClick={toggleTheme}
+                  aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-line/70 bg-surface/80 text-ink shadow-sm backdrop-blur-md transition-all hover:bg-surface active:scale-95"
+                >
+                  {isDark ? (
+                    <Sun className="h-4 w-4 text-accent" aria-hidden="true" />
+                  ) : (
+                    <Moon className="h-4 w-4 text-accent" aria-hidden="true" />
+                  )}
+                </button>
                 <button
                   type="button"
                   onClick={() => setMenuOpen(false)}
                   aria-label="Close menu"
-                  className="inline-flex h-11 items-center justify-center gap-1.5 rounded-full border border-line/70 bg-surface/80 px-4 text-xs font-semibold tracking-wider text-ink shadow-sm backdrop-blur-md transition-all hover:bg-surface active:scale-95"
+                  className="inline-flex h-10 items-center justify-center gap-1.5 rounded-full border border-line/70 bg-surface/80 px-3.5 text-xs font-semibold tracking-wider text-ink shadow-sm backdrop-blur-md transition-all hover:bg-surface active:scale-95"
                 >
                   <X className="h-4 w-4" aria-hidden="true" />
                   <span className="uppercase">Close</span>

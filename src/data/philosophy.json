@@ -1,6 +1,6 @@
 {
   "intro": "Notes on books I am reading and questions I have not solved yet. When an entry is my own opinion rather than a summary of a source, I mark it.",
-  "description": "I have no formal training in philosophy. Disagreements and corrections are welcome.",
+  "description": "Disagreements and corrections are welcome.",
   "thinkers": [
     {
       "id": "thinker-krishnamurti",
@@ -34,6 +34,6 @@
     }
   ],
   "notesIntro": "Short entries on books and questions.",
-  "notesDescription": "Not every note becomes an essay.",
+  "notesDescription": "",
   "notes": []
 }

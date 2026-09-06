@@ -1,14 +1,15 @@
-import { createContext, useContext, useEffect, useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
-import { ArrowLeft, Loader2, Mail, Lock, Eye, EyeOff } from 'lucide-react'
+import { createContext, useContext, useEffect, useState, useMemo, useCallback } from 'react'
+import { Link } from 'react-router'
+import { ArrowLeft, Loader2, Mail, AlertTriangle } from 'lucide-react'
 
-import { supabase } from '../../lib/supabase/client.js'
+import { supabase, isSupabaseConfigured } from '../../lib/supabase/client.js'
 import Button from '../Button.jsx'
+import PasswordInput from '../ui/PasswordInput.jsx'
 import { useToast } from '../../lib/toast.jsx'
 
 /**
  * Real Supabase authentication for admin panel.
- * Requires email/password login. No demo access.
+ * Requires email/password login.
  */
 
 const AdminAuthContext = createContext(null)
@@ -22,19 +23,24 @@ export function useAdminAuth() {
 }
 
 export default function AdminAuth({ children }) {
-  const _navigate = useNavigate()
   const toast = useToast()
 
   const [session, setSession] = useState(null)
   const [loading, setLoading] = useState(true)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [showPassword, setShowPassword] = useState(false)
   const [signingIn, setSigningIn] = useState(false)
   const [rememberMe, setRememberMe] = useState(false)
 
+  const isConfigured = isSupabaseConfigured()
+
   // Check auth on mount
   useEffect(() => {
+    if (!isConfigured) {
+      setLoading(false)
+      return
+    }
+
     async function checkAuth() {
       try {
         const {
@@ -53,15 +59,21 @@ export default function AdminAuth({ children }) {
     // Listen for auth changes
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
+    } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session)
     })
 
     return () => subscription?.unsubscribe()
-  }, [])
+  }, [isConfigured])
 
   const handleSignIn = async (e) => {
     e.preventDefault()
+
+    if (!isConfigured) {
+      toast.error('Supabase is not configured. Please set your credentials in .env.local.')
+      return
+    }
+
     setSigningIn(true)
 
     try {
@@ -85,13 +97,28 @@ export default function AdminAuth({ children }) {
     }
   }
 
-  const handleSignOut = async () => {
+  const handleSignOut = useCallback(async () => {
     try {
-      await supabase.auth.signOut()
+      if (isConfigured) {
+        await supabase.auth.signOut()
+      }
+      setSession(null)
       toast.success('Logged out')
     } catch (_error) {
       toast.error('Logout failed')
     }
+  }, [isConfigured, toast])
+
+  const contextValue = useMemo(
+    () => ({
+      session,
+      logout: handleSignOut,
+    }),
+    [session, handleSignOut],
+  )
+
+  const handleForgotPassword = () => {
+    toast.info('To reset your admin password, use your Supabase project dashboard.')
   }
 
   if (loading) {
@@ -109,33 +136,48 @@ export default function AdminAuth({ children }) {
   if (!session) {
     return (
       <div className="relative flex min-h-dvh flex-col items-center justify-center bg-canvas p-6 overflow-hidden selection:bg-accent/20">
-        
         {/* Ambient background glow */}
         <div className="absolute inset-0 pointer-events-none flex justify-center items-center mix-blend-screen opacity-50">
-          <div className="absolute top-[10%] left-[20%] h-[400px] w-[400px] rounded-full bg-accent/20 blur-[120px] animate-pulse" style={{ animationDuration: '4s' }} />
-          <div className="absolute bottom-[10%] right-[20%] h-[400px] w-[400px] rounded-full bg-accent-strong/10 blur-[120px] animate-pulse" style={{ animationDuration: '6s', animationDelay: '1s' }} />
+          <div
+            className="absolute top-[10%] left-[20%] h-[400px] w-[400px] rounded-full bg-accent/20 blur-[120px] animate-pulse"
+            style={{ animationDuration: '4s' }}
+          />
+          <div
+            className="absolute bottom-[10%] right-[20%] h-[400px] w-[400px] rounded-full bg-accent-strong/10 blur-[120px] animate-pulse"
+            style={{ animationDuration: '6s', animationDelay: '1s' }}
+          />
         </div>
 
         <div className="relative z-10 w-full max-w-[440px] animate-rise flex flex-col items-center">
-          
-          {/* Modernized Custom Logo Area */}
+          {/* Logo Area */}
           <div className="mb-10 flex flex-col items-center">
             <div className="relative mb-5 flex h-16 w-16 items-center justify-center">
-              {/* Animated outer glow */}
-              <div className="absolute inset-0 rounded-[1.25rem] bg-gradient-to-tr from-accent/40 to-white/20 blur-xl animate-pulse" style={{ animationDuration: '4s' }} />
-              
-              {/* Inner glass surface */}
+              <div
+                className="absolute inset-0 rounded-[1.25rem] bg-gradient-to-tr from-accent/40 to-white/20 blur-xl animate-pulse"
+                style={{ animationDuration: '4s' }}
+              />
+
               <div className="relative flex h-full w-full items-center justify-center rounded-[1.25rem] border border-white/10 bg-surface shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]">
-                {/* Philosophical 'Advaita' (Non-Duality) Logo - Vesica Piscis */}
-                <svg width="30" height="30" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-white drop-shadow-md">
-                  {/* Left Circle - The Observer */}
+                <svg
+                  width="30"
+                  height="30"
+                  viewBox="0 0 32 32"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="text-white drop-shadow-md"
+                >
                   <circle cx="12" cy="16" r="8" stroke="url(#logo-grad)" strokeWidth="1.5" />
-                  {/* Right Circle - The Observed */}
                   <circle cx="20" cy="16" r="8" stroke="url(#logo-grad)" strokeWidth="1.5" />
-                  {/* The Point of Non-Duality / Awareness */}
                   <circle cx="16" cy="16" r="2" fill="url(#logo-grad)" />
                   <defs>
-                    <linearGradient id="logo-grad" x1="4" y1="16" x2="28" y2="16" gradientUnits="userSpaceOnUse">
+                    <linearGradient
+                      id="logo-grad"
+                      x1="4"
+                      y1="16"
+                      x2="28"
+                      y2="16"
+                      gradientUnits="userSpaceOnUse"
+                    >
                       <stop stopColor="#ffffff" />
                       <stop offset="1" stopColor="var(--color-accent, #64748b)" stopOpacity="0.8" />
                     </linearGradient>
@@ -147,14 +189,27 @@ export default function AdminAuth({ children }) {
             <p className="mt-2 text-sm text-muted">Sign in to workspace</p>
           </div>
 
+          {/* Configuration Warning Notice if Supabase is unconfigured */}
+          {!isConfigured && (
+            <div className="mb-6 w-full rounded-2xl border border-opinion/30 bg-opinion/10 p-4 text-xs text-opinion flex items-start gap-3 backdrop-blur-md">
+              <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
+              <div>
+                <p className="font-semibold text-ink">Supabase unconfigured</p>
+                <p className="mt-1 text-muted">
+                  Set <code className="font-mono text-opinion">VITE_SUPABASE_URL</code> and{' '}
+                  <code className="font-mono text-opinion">VITE_SUPABASE_ANON_KEY</code> in{' '}
+                  <code className="font-mono text-opinion">.env.local</code> to connect authentication.
+                </p>
+              </div>
+            </div>
+          )}
+
           {/* Glassmorphic Login Card */}
           <div className="w-full rounded-3xl border border-white/[0.08] bg-surface/40 p-8 sm:p-10 shadow-2xl backdrop-blur-2xl relative overflow-hidden">
-            {/* Subtle top border highlight */}
             <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
 
             <form onSubmit={handleSignIn} className="space-y-6 relative z-10">
-              
-              {/* Modern Email Field */}
+              {/* Email Field */}
               <div className="space-y-1.5">
                 <label htmlFor="email" className="block text-sm font-medium text-ink">
                   Email
@@ -176,38 +231,17 @@ export default function AdminAuth({ children }) {
                 </div>
               </div>
 
-              {/* Modern Password Field */}
-              <div className="space-y-1.5">
-                <label htmlFor="password" className="block text-sm font-medium text-ink">
-                  Password
-                </label>
-                <div className="relative group">
-                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-muted group-focus-within:text-accent transition-colors">
-                    <Lock className="h-5 w-5" />
-                  </div>
-                  <input
-                    id="password"
-                    type={showPassword ? 'text' : 'password'}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="••••••••"
-                    required
-                    disabled={signingIn}
-                    className="block w-full rounded-xl border border-line bg-canvas/50 py-3.5 pl-12 pr-12 text-sm text-ink placeholder:text-muted/40 transition-all hover:border-line/80 focus:border-accent focus:bg-canvas focus:outline-none focus:ring-2 focus:ring-accent/20 disabled:opacity-50 shadow-inner"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    disabled={signingIn}
-                    className="absolute inset-y-0 right-0 flex items-center pr-4 text-muted transition-colors hover:text-ink focus:outline-none disabled:opacity-50"
-                    aria-label={showPassword ? "Hide password" : "Show password"}
-                  >
-                    {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                  </button>
-                </div>
-              </div>
+              {/* Password Field */}
+              <PasswordInput
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                required
+                disabled={signingIn}
+              />
 
-              {/* Extras (Remember me & Forgot Password) */}
+              {/* Extras */}
               <div className="flex items-center justify-between pt-1">
                 <label className="flex items-center gap-2.5 cursor-pointer group">
                   <div className="relative flex items-center justify-center">
@@ -217,16 +251,33 @@ export default function AdminAuth({ children }) {
                       onChange={(e) => setRememberMe(e.target.checked)}
                       className="peer h-4.5 w-4.5 appearance-none rounded-md border border-line bg-canvas/50 checked:border-accent checked:bg-accent transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-accent/40 focus:ring-offset-2 focus:ring-offset-surface"
                     />
-                    <svg className="absolute w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M1 5L4.5 8.5L13 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <svg
+                      className="absolute w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity"
+                      viewBox="0 0 14 10"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M1 5L4.5 8.5L13 1"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
                     </svg>
                   </div>
-                  <span className="text-sm text-muted group-hover:text-ink transition-colors">Remember me</span>
+                  <span className="text-sm text-muted group-hover:text-ink transition-colors">
+                    Remember me
+                  </span>
                 </label>
-                
-                <Link to="#" className="text-sm font-medium text-muted hover:text-ink transition-colors">
+
+                <button
+                  type="button"
+                  onClick={handleForgotPassword}
+                  className="text-sm font-medium text-muted hover:text-ink transition-colors"
+                >
                   Forgot Password?
-                </Link>
+                </button>
               </div>
 
               <div className="pt-3">
@@ -261,14 +312,8 @@ export default function AdminAuth({ children }) {
     )
   }
 
-  // Show admin panel with logout button
   return (
-    <AdminAuthContext.Provider
-      value={{
-        session,
-        logout: handleSignOut,
-      }}
-    >
+    <AdminAuthContext.Provider value={contextValue}>
       {children}
     </AdminAuthContext.Provider>
   )

@@ -1,7 +1,8 @@
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import Container from '@/components/layout/Container.jsx'
 import Icon from '@/components/meta/Icon.jsx'
+import CopyButton from '@/components/ui/CopyButton.jsx'
 import { useContent } from '@/lib/content.jsx'
 import { NAV_ITEMS } from '@/config/nav.js'
 
@@ -59,7 +60,7 @@ export default function Footer() {
                   key={link.id}
                   href={hrefFor(link)}
                   aria-label={link.label}
-                  className="inline-flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full bg-ink text-canvas shadow-sm transition-all duration-200 hover:scale-105 active:scale-95 hover:opacity-90 dark:bg-white dark:text-black"
+                  className="inline-flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full border border-line bg-surface text-ink shadow-subtle transition-all duration-200 hover:scale-[1.06] hover:border-accent hover:text-accent hover:bg-accent/5 active:scale-95"
                   {...(link.kind === 'email'
                     ? {}
                     : { target: '_blank', rel: 'me noopener noreferrer' })}
@@ -71,9 +72,18 @@ export default function Footer() {
           )}
 
           {/* 4. Copyright & Optional Note */}
-          <div className="mt-6 sm:mt-8 text-center text-xs sm:text-sm font-medium text-muted/75 tracking-normal">
-            <p>
-              Copyright © {year} {profile.name || 'Advaita Chandra'}. All rights reserved.
+          <div className="mt-6 sm:mt-8 flex flex-col items-center gap-2 text-center text-xs sm:text-sm font-medium text-muted/75 tracking-normal">
+            <p className="flex flex-wrap items-center justify-center gap-2">
+              <span>Copyright © {year} {profile.name || 'Advaita Chandra'}. All rights reserved.</span>
+              {profile.email && (
+                <CopyButton
+                  text={profile.email}
+                  label="Copy Email"
+                  showText={true}
+                  notify={true}
+                  className="py-1 px-2.5 text-[11px]"
+                />
+              )}
             </p>
             {settings.footerNote && <p className="mt-1 text-muted/60">{settings.footerNote}</p>}
           </div>

@@ -7,7 +7,7 @@ import Callout from '../../components/Callout.jsx'
 import Card from '../../components/Card.jsx'
 import { useSectionForm } from '../../hooks/useSectionForm.js'
 import { useContent } from '../../lib/content.jsx'
-import { NAV_ITEMS } from '../../lib/routes.js'
+import { NAV_ITEMS } from '../../config/nav.js'
 import { validateHome } from '../../lib/schema.js'
 
 /**

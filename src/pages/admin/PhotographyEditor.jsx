@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router'
 import { ChevronLeft, ChevronRight, X as XIcon } from 'lucide-react'
 
 import AdminPage from '../../components/admin/AdminPage.jsx'
@@ -33,21 +33,25 @@ export default function PhotographyEditor() {
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
 
   // multi-image support
-  const [items, setItems] = useState([])
+  const [items, setItems] = useState(() => {
+    if (!existing) return []
+    const initialGallery = existing.gallery?.length > 0 
+      ? existing.gallery 
+      : existing.image_url 
+        ? [{ id: uid('img'), image_url: existing.image_url, storage_path: existing.storage_path, variants: existing.variants || [] }]
+        : []
+    return initialGallery.map(img => ({ type: 'existing', ...img }))
+  })
   const [uploading, setUploading] = useState(false)
 
-  // Initialize items from draft
+  // Clean up object URLs on unmount
   useEffect(() => {
-    if (draft) {
-      const initialGallery = draft.gallery?.length > 0 
-        ? draft.gallery 
-        : draft.image_url 
-          ? [{ id: uid('img'), image_url: draft.image_url, storage_path: draft.storage_path, variants: draft.variants || [] }]
-          : [];
-          
-      setItems(initialGallery.map(img => ({ type: 'existing', ...img })))
+    return () => {
+      items.forEach((item) => {
+        if (item.previewUrl) URL.revokeObjectURL(item.previewUrl)
+      })
     }
-  }, [draft])
+  }, [items])
 
   if (draft === null) {
     return (
@@ -90,9 +94,15 @@ export default function PhotographyEditor() {
   };
   
   const removeItem = (id) => {
-    setItems(prev => prev.filter(item => item.id !== id));
-    setHasUnsavedChanges(true);
-  };
+    setItems((prev) => {
+      const target = prev.find((item) => item.id === id)
+      if (target?.previewUrl) {
+        URL.revokeObjectURL(target.previewUrl)
+      }
+      return prev.filter((item) => item.id !== id)
+    })
+    setHasUnsavedChanges(true)
+  }
 
   const submit = async (event) => {
     event.preventDefault()
@@ -138,6 +148,7 @@ export default function PhotographyEditor() {
                 uploadedVariants.push(width)
               }
             }))
+            uploadedVariants.sort((a, b) => a - b)
             
             return {
               id: item.id,
