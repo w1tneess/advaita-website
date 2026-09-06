@@ -116,8 +116,13 @@ export function allPrerenderRoutes(publishedPosts = []) {
     ...PUBLIC_ROUTES,
     ...publishedPosts.map((post) => ({
       path: `/blog/${post.slug}`,
+      key: `post:${post.slug}`,
+      title: post.title,
+      description: post.excerpt || 'An article by Advaita Chandra.',
       changefreq: 'monthly',
       priority: '0.7',
+      lastmod: post.updated_at || post.updatedAt || post.published_at || post.publishedAt || undefined,
+      type: 'article',
     })),
   ]
 }

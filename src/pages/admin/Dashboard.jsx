@@ -17,7 +17,7 @@ import { Link } from 'react-router'
 import { useEffect, useState } from 'react'
 
 import AdminPage from '../../components/admin/AdminPage.jsx'
-import Card from '../../components/Card.jsx'
+import Card from '@/components/ui/Card.jsx'
 import { useContent } from '../../lib/content.jsx'
 import { supabase, isSupabaseConfigured } from '../../lib/supabase/client.js'
 

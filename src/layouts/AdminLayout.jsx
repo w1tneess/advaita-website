@@ -5,8 +5,8 @@ import AdminHeader from '../components/admin/AdminHeader.jsx'
 import AdminSidebar from '../components/admin/AdminSidebar.jsx'
 import AdminFooter from '../components/admin/AdminFooter.jsx'
 import CommandPalette from '../components/admin/CommandPalette.jsx'
-import Seo from '../components/Seo.jsx'
-import SkipLink from '../components/SkipLink.jsx'
+import Seo from '@/components/meta/Seo.jsx'
+import SkipLink from '@/components/layout/SkipLink.jsx'
 
 /**
  * Shell for the demo admin panel.

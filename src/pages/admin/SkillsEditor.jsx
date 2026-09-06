@@ -1,7 +1,7 @@
 import AdminPage from '../../components/admin/AdminPage.jsx'
 import CollectionEditor from '../../components/admin/CollectionEditor.jsx'
 import Field from '../../components/admin/Field.jsx'
-import Callout from '../../components/Callout.jsx'
+import Callout from '@/components/ui/Callout.jsx'
 import { useContent } from '../../lib/content.jsx'
 import { SKILL_LEVELS, createSkill, validateSkill } from '../../lib/schema.js'
 

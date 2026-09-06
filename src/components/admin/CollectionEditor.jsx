@@ -1,8 +1,8 @@
 import { Pencil, Plus, Trash2, X } from 'lucide-react'
 import { useCallback, useState } from 'react'
 
-import Button from '../Button.jsx'
-import Card from '../Card.jsx'
+import Button from '../ui/Button.jsx'
+import Card from '../ui/Card.jsx'
 import ConfirmDialog from './ConfirmDialog.jsx'
 import ReorderList from './ReorderList.jsx'
 import { useConfirm } from '../../hooks/useConfirm.jsx'

@@ -1,7 +1,7 @@
 import { AlertTriangle } from 'lucide-react'
 import { useEffect, useRef } from 'react'
 
-import Button from '../Button.jsx'
+import Button from '../ui/Button.jsx'
 
 /**
  * Modal confirmation for destructive actions.

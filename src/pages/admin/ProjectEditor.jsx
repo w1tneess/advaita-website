@@ -8,9 +8,9 @@ import { PairList, TextList } from '../../components/admin/RepeatableFields.jsx'
 import Toggle from '../../components/admin/Toggle.jsx'
 import SaveStatus from '../../components/admin/feedback/SaveStatus.jsx'
 import UnsavedChangesDialog from '../../components/admin/feedback/UnsavedChangesDialog.jsx'
-import Button from '../../components/Button.jsx'
-import Callout from '../../components/Callout.jsx'
-import Card from '../../components/Card.jsx'
+import Button from '@/components/ui/Button.jsx'
+import Callout from '@/components/ui/Callout.jsx'
+import Card from '@/components/ui/Card.jsx'
 import { useContent } from '../../lib/content.jsx'
 import {
   PROJECT_STATUSES,

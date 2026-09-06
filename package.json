@@ -12,7 +12,7 @@
     "preview": "vite preview",
     "content:validate": "node scripts/validate-content.js",
     "test": "node --test",
-    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "lint": "eslint . --max-warnings 0",
     "format": "prettier --write \"src/**/*.{js,jsx,json,css}\""
   },
   "dependencies": {
@@ -24,14 +24,12 @@
     "lucide-react": "^0.469.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-router": "^7.1.1",
-    "react-router-dom": "^7.1.1"
+    "react-router": "^7.1.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",
     "@tailwindcss/vite": "^4.0.0",
     "@vitejs/plugin-react": "^4.3.4",
-    "@vitejs/plugin-react-swc": "^4.3.3",
     "dotenv": "^17.4.2",
     "eslint": "^9.39.5",
     "eslint-plugin-react": "^7.37.5",

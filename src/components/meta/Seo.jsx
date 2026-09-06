@@ -48,15 +48,25 @@ export default function Seo({
       {meta.noindex && <meta name="robots" content="noindex, nofollow" />}
 
       <script type="application/ld+json">
-        {JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": type === 'article' ? "BlogPosting" : "Person",
-          name: "Advaita Chandra",
-          url: meta.canonical,
-          image: meta.image,
-          description: meta.description,
-          ...(type === 'article' && {
+        {JSON.stringify([
+          {
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            name: meta.title,
+            description: meta.description,
+            url: meta.canonical,
+          },
+          path === '/' && {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            name: "Advaita Chandra",
+            url: "https://advaitachandra.in/",
+          },
+          type === 'article' ? {
+            "@context": "https://schema.org",
+            "@type": "BlogPosting",
             headline: meta.title,
+            image: [meta.image],
             datePublished: publishedAt,
             dateModified: updatedAt || publishedAt,
             author: {
@@ -64,8 +74,14 @@ export default function Seo({
               name: "Advaita Chandra",
               url: "https://advaitachandra.in/"
             }
-          })
-        })}
+          } : {
+            "@context": "https://schema.org",
+            "@type": "Person",
+            name: "Advaita Chandra",
+            url: "https://advaitachandra.in/",
+            image: meta.image,
+          }
+        ].filter(Boolean))}
       </script>
     </>
   )

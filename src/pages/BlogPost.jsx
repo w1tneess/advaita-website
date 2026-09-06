@@ -1,5 +1,5 @@
-import { useParams, Navigate } from 'react-router'
-
+import { useParams } from 'react-router'
+import NotFound from '@/pages/NotFound.jsx'
 import Breadcrumbs from '@/components/ui/Breadcrumbs.jsx'
 import Container from '@/components/layout/Container.jsx'
 import CopyButton from '@/components/ui/CopyButton.jsx'
@@ -15,7 +15,7 @@ export default function BlogPost() {
   const post = findBlogPostBySlug(slug)
 
   if (!post) {
-    return <Navigate to="/404" replace />
+    return <NotFound />
   }
 
   return (
@@ -25,6 +25,8 @@ export default function BlogPost() {
         description={post.excerpt}
         path={`/blog/${post.slug}`}
         type="article"
+        publishedAt={post.published_at}
+        updatedAt={post.updated_at}
       />
 
       <article className="py-12 sm:py-16 md:py-32">

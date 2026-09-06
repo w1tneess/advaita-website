@@ -36,6 +36,26 @@ export default function Breadcrumbs() {
           </div>
         )
       })}
+      <script type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://advaitachandra.in/"
+            },
+            ...pathnames.map((value, index) => ({
+              "@type": "ListItem",
+              "position": index + 2,
+              "name": value.charAt(0).toUpperCase() + value.slice(1).replace(/-/g, ' '),
+              "item": `https://advaitachandra.in/${pathnames.slice(0, index + 1).join('/')}`
+            }))
+          ]
+        })}
+      </script>
     </nav>
   )
 }

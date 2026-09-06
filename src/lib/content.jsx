@@ -10,6 +10,7 @@ import {
   seedIsNewerThan,
 } from './store.js'
 import { useToast } from './toast.jsx'
+import PageFallback from '../components/ui/PageFallback.jsx'
 
 /**
  * The content store shared by the public site and the local admin editor.
@@ -73,7 +74,7 @@ export function ContentProvider({ children }) {
 
   const [content, setContent] = useState(null)
   const contentRef = useRef(null)
-  const [isLocal, setIsLocal] = useState(false) // represents if we are using remote DB
+  const [isRemote, setIsRemote] = useState(false) // represents if we are using remote DB
   const [previewDrafts, setPreviewDrafts] = useState(false)
 
   const warningShown = useRef(false)
@@ -85,7 +86,7 @@ export function ContentProvider({ children }) {
         initial.current = state
         contentRef.current = state.doc
         setContent(state.doc)
-        setIsLocal(state.source === 'remote')
+        setIsRemote(state.source === 'remote')
         setIsLoaded(true)
 
         if (!warningShown.current && state.warning) {
@@ -94,7 +95,25 @@ export function ContentProvider({ children }) {
         }
       } catch (error) {
         console.error('Failed to load content', error)
-        toast.error('Failed to load content from database')
+        
+        let errorMessage = 'Failed to connect to database. Using fallback content.'
+        if (error.isTimeout) {
+          errorMessage = 'Database connection timed out. Using fallback content.'
+        } else if (error.isAuth) {
+          errorMessage = 'Database authentication failed. Check credentials.'
+        } else if (error.message) {
+          errorMessage = `Database error: ${error.message}`
+        }
+        
+        toast.error(errorMessage)
+        
+        // Fallback to local seed content so the app doesn't hang
+        const seed = createSeedDocument()
+        initial.current = { doc: seed, source: 'seed', warning: errorMessage }
+        contentRef.current = seed
+        setContent(seed)
+        setIsRemote(false)
+        setIsLoaded(true)
       }
     }
     init()
@@ -118,7 +137,7 @@ export function ContentProvider({ children }) {
         // 3. Update local UI only if save was successful
         contentRef.current = nextDoc
         setContent(nextDoc)
-        setIsLocal(true)
+        setIsRemote(true)
         return { ok: true }
       } else {
         toast.error(result.error || 'Failed to save changes.')
@@ -227,7 +246,7 @@ export function ContentProvider({ children }) {
     const seed = createSeedDocument()
     contentRef.current = seed
     setContent(seed)
-    setIsLocal(false)
+    setIsRemote(false)
     return true
   }, [toast])
 
@@ -267,9 +286,9 @@ export function ContentProvider({ children }) {
       removeNote: (id) => removeItem('philosophy.notes', id),
 
       // Storage state.
-      isLocal,
+      isRemote,
       storageAvailable: true, // Supabase is always available over network
-      hasLocalDocument: isLocal, // If source is remote, we have a document
+      hasLocalDocument: isRemote, // If source is remote, we have a document
       seedIsNewer: content ? seedIsNewerThan(content) : false,
 
       // Preview mode.
@@ -286,17 +305,13 @@ export function ContentProvider({ children }) {
       setSection,
       replaceDocument,
       resetDocument,
-      isLocal,
+      isRemote,
       previewDrafts,
     ],
   )
 
   if (!isLoaded) {
-    return (
-      <div className="flex min-h-dvh items-center justify-center bg-canvas">
-        <p className="text-sm text-muted animate-pulse">Loading...</p>
-      </div>
-    )
+    return <PageFallback />
   }
 
   return <ContentContext.Provider value={value}>{children}</ContentContext.Provider>

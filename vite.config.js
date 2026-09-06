@@ -17,6 +17,14 @@ export default defineConfig({
     sourcemap: false,
     // Keep the shell small; the admin panel is lazy-loaded in src/App.jsx.
     chunkSizeWarningLimit: 700,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'framer-motion': ['framer-motion'],
+          'supabase': ['@supabase/supabase-js'],
+        },
+      },
+    },
   },
   optimizeDeps: {
     include: ['react-router-dom', 'react-router', 'framer-motion', 'lucide-react', '@supabase/supabase-js'],

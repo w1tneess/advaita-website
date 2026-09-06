@@ -46,6 +46,8 @@ export default function Home() {
             src="/pfp.png"
             alt={`Portrait of ${profile.name}`}
             className="hero-bg-portrait"
+            width={819}
+            height={1024}
             loading="eager"
             fetchPriority="high"
           />

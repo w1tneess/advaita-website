@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router'
 
 import AdminAuth from '../../components/admin/AdminAuth.jsx'
-import Button from '../../components/Button.jsx'
+import Button from '@/components/ui/Button.jsx'
 import AdminLayout from '../../layouts/AdminLayout.jsx'
 import Dashboard from './Dashboard.jsx'
 import DataManager from './DataManager.jsx'

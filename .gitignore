@@ -27,3 +27,6 @@ Thumbs.db
 
 # Exported content backups from the demo admin panel
 *.content-export.json
+
+# Python venv
+rembg_env/

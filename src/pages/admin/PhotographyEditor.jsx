@@ -69,13 +69,33 @@ export default function PhotographyEditor() {
     setSaveStatus('idle')
   }
 
-  const handleFileChange = (e) => {
-    const newFiles = Array.from(e.target.files).map(f => ({
-      type: 'file',
-      id: uid('file'),
-      file: f,
-      previewUrl: URL.createObjectURL(f)
-    }));
+  const handleFileChange = async (e) => {
+    const files = Array.from(e.target.files)
+    
+    // Process files sequentially to extract dimensions
+    const newFiles = []
+    for (const f of files) {
+      const url = URL.createObjectURL(f)
+      
+      let aspectRatio = null
+      try {
+        const img = new Image()
+        img.src = url
+        await img.decode()
+        aspectRatio = `${img.width}/${img.height}`
+      } catch (_err) {
+        console.warn('Could not extract dimensions for', f.name)
+      }
+
+      newFiles.push({
+        type: 'file',
+        id: uid('file'),
+        file: f,
+        previewUrl: url,
+        aspectRatio
+      })
+    }
+    
     setItems(prev => [...prev, ...newFiles]);
     setHasUnsavedChanges(true);
     setSaveStatus('idle');
@@ -150,11 +170,12 @@ export default function PhotographyEditor() {
             }))
             uploadedVariants.sort((a, b) => a - b)
             
-            return {
+              return {
               id: item.id,
               image_url: publicUrl,
               storage_path: storagePath,
-              variants: uploadedVariants
+              variants: uploadedVariants,
+              aspectRatio: item.aspectRatio
             }
           }
         }))
@@ -165,6 +186,7 @@ export default function PhotographyEditor() {
           finalDraft.image_url = processedItems[0].image_url;
           finalDraft.storage_path = processedItems[0].storage_path;
           finalDraft.variants = processedItems[0].variants;
+          finalDraft.aspectRatio = processedItems[0].aspectRatio;
         }
       } catch (_err) {
         setUploading(false)
@@ -178,12 +200,14 @@ export default function PhotographyEditor() {
         id: item.id,
         image_url: item.image_url,
         storage_path: item.storage_path,
-        variants: item.variants || []
+        variants: item.variants || [],
+        aspectRatio: item.aspectRatio
       }))
       if (finalDraft.gallery.length > 0) {
         finalDraft.image_url = finalDraft.gallery[0].image_url;
         finalDraft.storage_path = finalDraft.gallery[0].storage_path;
         finalDraft.variants = finalDraft.gallery[0].variants;
+        finalDraft.aspectRatio = finalDraft.gallery[0].aspectRatio;
       }
     }
 

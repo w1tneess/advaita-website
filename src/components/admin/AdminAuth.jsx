@@ -3,7 +3,7 @@ import { Link } from 'react-router'
 import { ArrowLeft, Loader2, Mail, AlertTriangle } from 'lucide-react'
 
 import { supabase, isSupabaseConfigured } from '../../lib/supabase/client.js'
-import Button from '../Button.jsx'
+import Button from '../ui/Button.jsx'
 import PasswordInput from '../ui/PasswordInput.jsx'
 import { useToast } from '../../lib/toast.jsx'
 

@@ -12,7 +12,6 @@ const Home = lazy(() => import('./pages/Home.jsx'))
 const NotFound = lazy(() => import('./pages/NotFound.jsx'))
 const Philosophy = lazy(() => import('./pages/Philosophy.jsx'))
 const Photography = lazy(() => import('./pages/Photography.jsx'))
-const Portfolio = lazy(() => import('./pages/Portfolio.jsx'))
 const Projects = lazy(() => import('./pages/Projects.jsx'))
 const Blog = lazy(() => import('./pages/Blog.jsx'))
 const BlogPost = lazy(() => import('./pages/BlogPost.jsx'))
@@ -60,7 +59,6 @@ export default function App() {
             <Route path="philosophy" element={<Philosophy />} />
             <Route path="photography" element={<Photography />} />
             <Route path="projects" element={<Projects />} />
-            <Route path="portfolio" element={<Portfolio />} />
             <Route path="blog" element={<Blog />} />
             <Route path="blog/:slug" element={<BlogPost />} />
             <Route path="contact" element={<Contact />} />

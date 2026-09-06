@@ -11,6 +11,7 @@ import { SITE_NAME, SITE_URL, DEFAULT_OG_IMAGE } from './routes.js'
 
 /** Join the site origin, the deploy base path and a route into one absolute URL. */
 export function absoluteUrl(path = '/', basePath = '/') {
+  if (path.startsWith('http://') || path.startsWith('https://')) return path
   const base = basePath.endsWith('/') ? basePath : `${basePath}/`
   const cleanPath = path.startsWith('/') ? path.slice(1) : path
   return `${SITE_URL}${base}${cleanPath}`
