@@ -1,7 +1,7 @@
-import { Suspense } from 'react'
+import { useEffect, Suspense } from 'react'
 import { Eye } from 'lucide-react'
 import { Link, Outlet, useLocation } from 'react-router'
-import { AnimatePresence, motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 
 import Container from '../components/layout/Container.jsx'
 import Footer from '../components/layout/Footer.jsx'
@@ -14,6 +14,7 @@ import PageFallback from '../components/ui/PageFallback.jsx'
 import { useShortcuts } from '../hooks/useShortcuts.js'
 import { useContent } from '../lib/content.jsx'
 import { useSmoothScroll } from '../lib/smooth-scroll.js'
+import { preloadRoute } from '../lib/preload.js'
 
 /**
  * Shell for every public page.
@@ -28,6 +29,26 @@ export default function PublicLayout() {
 
   // Initialize smooth scrolling
   useSmoothScroll()
+
+  // Eagerly preload public route bundles in browser idle time so first clicks are 100% instant
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const preloadAll = () => {
+      preloadRoute('/philosophy')
+      preloadRoute('/about')
+      preloadRoute('/projects')
+      preloadRoute('/blog')
+      preloadRoute('/photography')
+      preloadRoute('/contact')
+    }
+    if ('requestIdleCallback' in window) {
+      const id = window.requestIdleCallback(preloadAll, { timeout: 1500 })
+      return () => window.cancelIdleCallback(id)
+    } else {
+      const timer = setTimeout(preloadAll, 400)
+      return () => clearTimeout(timer)
+    }
+  }, [])
 
   return (
     <div className="flex min-h-dvh flex-col bg-canvas text-ink">
@@ -64,22 +85,19 @@ export default function PublicLayout() {
 
       <Header />
 
-      <AnimatePresence mode="wait">
-        <motion.main
-          key={location.pathname}
-          id="main-content"
-          tabIndex={-1}
-          className="flex-1 focus:outline-none"
-          initial={{ opacity: 0, y: 4 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -4 }}
-          transition={{ duration: 0.14, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <Suspense fallback={<PageFallback />}>
-            <Outlet />
-          </Suspense>
-        </motion.main>
-      </AnimatePresence>
+      <motion.main
+        key={location.pathname}
+        id="main-content"
+        tabIndex={-1}
+        className="flex-1 focus:outline-none"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
+      >
+        <Suspense fallback={<PageFallback />}>
+          <Outlet />
+        </Suspense>
+      </motion.main>
 
       <Footer />
 
