@@ -43,8 +43,12 @@ export default function ScrollToTop() {
 
     scrollToTop()
 
-    const main = document.getElementById('main-content')
-    if (main) main.focus({ preventScroll: true })
+    const focusTimer = setTimeout(() => {
+      const main = document.getElementById('main-content')
+      if (main) main.focus({ preventScroll: true })
+    }, 60)
+
+    return () => clearTimeout(focusTimer)
   }, [pathname, hash])
 
   return null

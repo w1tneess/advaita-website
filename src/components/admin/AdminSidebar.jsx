@@ -23,6 +23,7 @@ import { NavLink, Link } from 'react-router'
 import { useState, useRef, useEffect } from 'react'
 
 import { useAdminAuth } from './AdminAuth.jsx'
+import { preloadRoute } from '@/lib/preload.js'
 
 /**
  * Admin navigation.
@@ -203,6 +204,9 @@ export default function AdminSidebar({ open, onClose }) {
         <div className="shrink-0 border-t border-zinc-800/60 p-4 bg-[#0a0a0a]">
           <Link
             to="/"
+            onPointerEnter={() => preloadRoute('/')}
+            onFocus={() => preloadRoute('/')}
+            onTouchStart={() => preloadRoute('/')}
             className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-zinc-400 font-medium transition-colors hover:bg-zinc-900 hover:text-zinc-200 mb-2"
           >
             <ExternalLink className="h-4 w-4 shrink-0" aria-hidden="true" />

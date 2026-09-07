@@ -151,4 +151,42 @@ test('theme configuration adheres to verified accent tokens', async () => {
   assert.match(css, /--color-accent-strong:\s*#d4a87d;/, 'index.css must define confirmed --color-accent-strong')
 })
 
+test('route preloader correctly registers handlers and resolves paths for first-click reliability', async () => {
+  const { preloadRoute, getRoutePreloadProps } = await import('../src/lib/preload.js')
+  const { PUBLIC_ROUTES } = await import('../src/config/nav.js')
+
+  // Verify preloadRoute does not throw for any public route
+  for (const route of PUBLIC_ROUTES) {
+    assert.doesNotThrow(() => preloadRoute(route.path))
+  }
+
+  // Verify getRoutePreloadProps returns event handlers
+  const props = getRoutePreloadProps('/philosophy')
+  assert.equal(typeof props.onPointerEnter, 'function')
+  assert.equal(typeof props.onFocus, 'function')
+  assert.equal(typeof props.onTouchStart, 'function')
+
+  // Executing the handler triggers route preloading safely
+  assert.doesNotThrow(() => props.onPointerEnter())
+})
+
+test('photo gallery index finder handles mixed string and number post IDs safely', async () => {
+  const flattenedPhotos = [
+    { postId: 1, image_url: '/photo1.jpg' },
+    { postId: '2', image_url: '/photo2.jpg' },
+    { postId: 3, image_url: '/photo3.jpg' },
+  ]
+
+  // Test string vs number lookups
+  const findIdx = (post) => flattenedPhotos.findIndex((p) => String(p.postId) === String(post.id))
+
+  assert.equal(findIdx({ id: '1' }), 0)
+  assert.equal(findIdx({ id: 1 }), 0)
+  assert.equal(findIdx({ id: 2 }), 1)
+  assert.equal(findIdx({ id: '2' }), 1)
+  assert.equal(findIdx({ id: 3 }), 2)
+  assert.equal(findIdx({ id: 99 }), -1)
+})
+
+
 

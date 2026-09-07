@@ -1,4 +1,5 @@
 import { Link } from 'react-router'
+import { preloadRoute } from '@/lib/preload.js'
 
 /**
  * Unified Button component adhering to site design tokens.
@@ -36,6 +37,9 @@ export default function Button({
   disabled = false,
   className = '',
   children,
+  onPointerEnter,
+  onFocus,
+  onTouchStart,
   ...rest
 }) {
   const sizeClasses = variant === 'link' ? '' : SIZES[size] || SIZES.md
@@ -55,7 +59,23 @@ export default function Button({
 
   if (to && !disabled) {
     return (
-      <Link to={to} className={classes} {...rest}>
+      <Link
+        to={to}
+        className={classes}
+        onPointerEnter={(e) => {
+          preloadRoute(to)
+          onPointerEnter?.(e)
+        }}
+        onFocus={(e) => {
+          preloadRoute(to)
+          onFocus?.(e)
+        }}
+        onTouchStart={(e) => {
+          preloadRoute(to)
+          onTouchStart?.(e)
+        }}
+        {...rest}
+      >
         {children}
       </Link>
     )

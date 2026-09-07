@@ -3,6 +3,7 @@ import { Command, X } from 'lucide-react'
 import { useNavigate } from 'react-router'
 import { useTheme } from '@/lib/theme.jsx'
 import { scrollToTop } from '@/lib/smooth-scroll.js'
+import { preloadRoute } from '@/lib/preload.js'
 
 /**
  * Keyboard Shortcuts Modal Dialog.
@@ -16,10 +17,10 @@ export default function ShortcutsModal({ isOpen, onClose }) {
     {
       category: 'Navigation',
       items: [
-        { keys: ['G', 'H'], label: 'Go to Home', action: () => navigate('/') },
-        { keys: ['G', 'A'], label: 'Go to About', action: () => navigate('/about') },
-        { keys: ['G', 'P'], label: 'Go to Projects', action: () => navigate('/projects') },
-        { keys: ['G', 'B'], label: 'Go to Blog', action: () => navigate('/blog') },
+        { keys: ['G', 'H'], label: 'Go to Home', path: '/', action: () => navigate('/') },
+        { keys: ['G', 'A'], label: 'Go to About', path: '/about', action: () => navigate('/about') },
+        { keys: ['G', 'P'], label: 'Go to Projects', path: '/projects', action: () => navigate('/projects') },
+        { keys: ['G', 'B'], label: 'Go to Blog', path: '/blog', action: () => navigate('/blog') },
       ],
     },
     {
@@ -92,6 +93,7 @@ export default function ShortcutsModal({ isOpen, onClose }) {
                     {group.items.map((item) => (
                       <div
                         key={item.label}
+                        onPointerEnter={() => item.path && preloadRoute(item.path)}
                         onClick={() => {
                           item.action()
                           onClose()

@@ -66,7 +66,7 @@ export default function Photography() {
   }, [filtered])
 
   const openLightbox = (post) => {
-    const idx = flattenedPhotos.findIndex((p) => p.postId === post.id)
+    const idx = flattenedPhotos.findIndex((p) => String(p.postId) === String(post.id))
     setLightboxIndex(idx >= 0 ? idx : null)
   }
 

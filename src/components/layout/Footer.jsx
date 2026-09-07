@@ -5,6 +5,7 @@ import Icon from '@/components/meta/Icon.jsx'
 import CopyButton from '@/components/ui/CopyButton.jsx'
 import { useContent } from '@/lib/content.jsx'
 import { NAV_ITEMS } from '@/config/nav.js'
+import { preloadRoute } from '@/lib/preload.js'
 
 /**
  * Editorial Centered Minimal Footer.
@@ -30,6 +31,9 @@ export default function Footer() {
           {/* 1. Brand Logo / Wordmark */}
           <Link
             to="/"
+            onPointerEnter={() => preloadRoute('/')}
+            onFocus={() => preloadRoute('/')}
+            onTouchStart={() => preloadRoute('/')}
             className="group font-display text-xl sm:text-2xl font-bold tracking-tight text-ink transition-colors hover:text-accent"
           >
             <span>{profile.name}</span>
@@ -43,6 +47,9 @@ export default function Footer() {
                 <li key={item.path}>
                   <Link
                     to={item.path}
+                    onPointerEnter={() => preloadRoute(item.path)}
+                    onFocus={() => preloadRoute(item.path)}
+                    onTouchStart={() => preloadRoute(item.path)}
                     className="text-xs sm:text-sm font-medium tracking-wide text-muted transition-colors hover:text-ink"
                   >
                     {item.label}

@@ -7,6 +7,7 @@ import Container from '@/components/layout/Container.jsx'
 import { useContent } from '@/lib/content.jsx'
 import { useTheme } from '@/lib/theme.jsx'
 import { NAV_ITEMS } from '@/config/nav.js'
+import { preloadRoute } from '@/lib/preload.js'
 
 /**
  * Site header with high-end editorial mobile menu.
@@ -114,6 +115,9 @@ export default function Header() {
             <div className="flex items-center gap-6">
               <Link
                 to="/"
+                onPointerEnter={() => preloadRoute('/')}
+                onFocus={() => preloadRoute('/')}
+                onTouchStart={() => preloadRoute('/')}
                 className="group shrink-0 py-2 font-display text-lg font-semibold tracking-tight transition-colors hover:text-accent"
               >
                 {profile.name}
@@ -128,6 +132,9 @@ export default function Header() {
                     <NavLink
                       to={item.path}
                       end={item.path === '/'}
+                      onPointerEnter={() => preloadRoute(item.path)}
+                      onFocus={() => preloadRoute(item.path)}
+                      onTouchStart={() => preloadRoute(item.path)}
                       className={({ isActive }) =>
                         `nav-link rounded-md px-1 py-1 text-sm font-semibold transition-colors ${
                           isActive ? 'text-ink' : 'text-muted hover:text-ink'
@@ -252,6 +259,9 @@ export default function Header() {
                     <NavLink
                       to={item.path}
                       end={item.path === '/'}
+                      onPointerEnter={() => preloadRoute(item.path)}
+                      onFocus={() => preloadRoute(item.path)}
+                      onTouchStart={() => preloadRoute(item.path)}
                       onClick={() => setMenuOpen(false)}
                       className={({ isActive }) =>
                         `group flex items-center justify-between rounded-xl px-3 py-3 transition-colors ${

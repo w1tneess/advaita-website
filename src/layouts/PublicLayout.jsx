@@ -70,10 +70,10 @@ export default function PublicLayout() {
           id="main-content"
           tabIndex={-1}
           className="flex-1 focus:outline-none"
-          initial={{ opacity: 0, y: 6 }}
+          initial={{ opacity: 0, y: 4 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -6 }}
-          transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+          exit={{ opacity: 0, y: -4 }}
+          transition={{ duration: 0.14, ease: [0.16, 1, 0.3, 1] }}
         >
           <Suspense fallback={<PageFallback />}>
             <Outlet />

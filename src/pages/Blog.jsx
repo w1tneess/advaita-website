@@ -7,6 +7,7 @@ import { useContent } from '@/lib/content.jsx'
 import { PUBLIC_ROUTES } from '@/config/nav.js'
 import { pageLoadVariant, staggerContainer, staggerItem, scrollViewport } from '@/lib/animations.js'
 import { formatDate } from '@/lib/format.js'
+import { preloadRoute } from '@/lib/preload.js'
 
 const ROUTE = PUBLIC_ROUTES.find((route) => route.key === 'blog')
 
@@ -56,13 +57,18 @@ export default function Blog() {
                         <time dateTime={post.published_at} className="text-muted">
                           {formatDate(post.published_at)}
                         </time>
-                        <span className="relative z-10 rounded-full bg-raised px-3 py-1.5 font-medium text-ink">
+                        <span className="rounded-full bg-raised px-3 py-1.5 font-medium text-ink">
                           {post.category}
                         </span>
                       </div>
                       <div className="group relative">
                         <h2 className="mt-3 font-display text-2xl font-semibold tracking-tight text-ink group-hover:text-accent transition-colors">
-                          <Link to={`/blog/${post.slug}`}>
+                          <Link
+                            to={`/blog/${post.slug}`}
+                            onPointerEnter={() => preloadRoute(`/blog/${post.slug}`)}
+                            onFocus={() => preloadRoute(`/blog/${post.slug}`)}
+                            onTouchStart={() => preloadRoute(`/blog/${post.slug}`)}
+                          >
                             <span className="absolute inset-0" />
                             {post.title}
                           </Link>
