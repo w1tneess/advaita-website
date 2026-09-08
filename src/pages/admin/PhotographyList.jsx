@@ -3,10 +3,14 @@ import { Eye, EyeOff, Pencil, Plus, Trash2 } from 'lucide-react'
 import AdminPage from '../../components/admin/AdminPage.jsx'
 import ConfirmDialog from '../../components/admin/ConfirmDialog.jsx'
 import DataTable from '../../components/admin/DataTable.jsx'
+import Field from '../../components/admin/Field.jsx'
 import Button from '@/components/ui/Button.jsx'
+import Card from '@/components/ui/Card.jsx'
 import EmptyState from '@/components/ui/EmptyState.jsx'
 import { useConfirm } from '@/hooks/useConfirm.jsx'
 import { useContent } from '@/lib/content.jsx'
+import { useSectionForm } from '@/hooks/useSectionForm.js'
+import { validatePhotographyConfig } from '@/lib/schema.js'
 import { useToast } from '@/lib/toast.jsx'
 import { formatDateShort } from '@/lib/format.js'
 import { removeImage } from '@/lib/supabase/api.js'
@@ -17,6 +21,15 @@ export default function PhotographyList() {
   const { confirm, dialogProps } = useConfirm()
 
   const photos = photography.photos || []
+  
+  const { 
+    draft: configDraft, 
+    set: setConfig, 
+    errors: configErrors, 
+    dirty: configDirty, 
+    submit: submitConfig, 
+    isSubmitting: isConfigSubmitting 
+  } = useSectionForm('photography', photography, validatePhotographyConfig)
 
   const toggleFeatured = async (photo) => {
     const next = !photo.featured
@@ -128,6 +141,47 @@ export default function PhotographyList() {
         </Button>
       }
     >
+      <form onSubmit={submitConfig} noValidate className="mb-8">
+        <Card className="p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h2 className="text-base font-semibold">Page Intro</h2>
+              <p className="mt-1 text-sm text-muted">The text shown at the top of the photography page.</p>
+            </div>
+            {configDirty && (
+              <Button type="submit" size="sm" disabled={isConfigSubmitting}>
+                {isConfigSubmitting ? 'Saving...' : 'Save config'}
+              </Button>
+            )}
+          </div>
+          
+          <div className="space-y-4">
+            <Field
+              id="photography-intro"
+              label="Intro text"
+              type="textarea"
+              rows={2}
+              value={configDraft.intro ?? ''}
+              onChange={(value) => setConfig('intro', value)}
+              error={configErrors.intro}
+              required
+              limit={300}
+            />
+            <Field
+              id="photography-description"
+              label="Description"
+              type="textarea"
+              rows={3}
+              value={configDraft.description ?? ''}
+              onChange={(value) => setConfig('description', value)}
+              error={configErrors.description}
+              required
+              limit={500}
+            />
+          </div>
+        </Card>
+      </form>
+
       <div className="mt-4">
         <DataTable
           caption="Photography, with their category and uploaded date"

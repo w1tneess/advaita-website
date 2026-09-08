@@ -524,12 +524,28 @@ export function validateHome(home) {
   })
 }
 
+export function validatePhilosophy(philosophy) {
+  return validate(philosophy, {
+    intro: [rules.required('Intro'), rules.maxLength(300, 'Intro')],
+    description: [rules.required('Description'), rules.maxLength(500, 'Description')],
+    notesIntro: [rules.maxLength(300, 'Notes intro')],
+    notesDescription: [rules.maxLength(500, 'Notes description')],
+  })
+}
+
 export function validatePhotography(photo) {
   return validate(photo, {
     title: [rules.required('Title'), rules.maxLength(140, 'Title')],
     category: [rules.maxLength(60, 'Category')],
     alt_text: [rules.required('Alt text')],
     caption: [rules.maxLength(300, 'Caption')],
+  })
+}
+
+export function validatePhotographyConfig(config) {
+  return validate(config, {
+    intro: [rules.required('Intro'), rules.maxLength(300, 'Intro')],
+    description: [rules.required('Description'), rules.maxLength(500, 'Description')],
   })
 }
 
@@ -547,6 +563,16 @@ export function validateSettings(settings) {
     if (!Number.isInteger(value) || value < 1 || value > 50) {
       errors[key] = 'Enter a whole number between 1 and 50.'
     }
+  }
+
+  if (settings.contact) {
+    Object.assign(errors, validate(settings.contact, {
+      heading: [rules.maxLength(120, 'Heading')],
+      intro: [rules.maxLength(300, 'Intro')],
+      responseNote: [rules.maxLength(300, 'Response note')],
+      corrections: [rules.maxLength(300, 'Corrections')],
+      privacyNote: [rules.maxLength(300, 'Privacy note')],
+    }))
   }
 
   return errors

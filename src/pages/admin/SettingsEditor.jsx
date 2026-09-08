@@ -151,6 +151,67 @@ export default function SettingsEditor() {
           </div>
         </section>
 
+        {/* Contact Page Text */}
+        <section aria-labelledby="settings-contact-text-heading" className="mt-12">
+          <h2 id="settings-contact-text-heading" className="text-xl font-semibold tracking-tight">
+            Contact Page Text
+          </h2>
+          <p className="mt-2 text-sm text-muted">
+            The text shown on the public Contact page.
+          </p>
+          <div className="mt-5 space-y-5">
+            <Field
+              id="settings-contact-heading"
+              label="Heading"
+              value={draft.contact?.heading ?? ''}
+              onChange={(value) => setNested('contact', 'heading', value)}
+              error={errors['contact.heading']}
+              limit={120}
+              hint="Main heading for the contact section."
+            />
+            <Field
+              id="settings-contact-intro"
+              label="Intro"
+              type="textarea"
+              rows={2}
+              value={draft.contact?.intro ?? ''}
+              onChange={(value) => setNested('contact', 'intro', value)}
+              error={errors['contact.intro']}
+              limit={300}
+            />
+            <Field
+              id="settings-contact-responseNote"
+              label="Response Note"
+              type="textarea"
+              rows={2}
+              value={draft.contact?.responseNote ?? ''}
+              onChange={(value) => setNested('contact', 'responseNote', value)}
+              error={errors['contact.responseNote']}
+              limit={300}
+            />
+            <Field
+              id="settings-contact-corrections"
+              label="Corrections Text"
+              type="textarea"
+              rows={2}
+              value={draft.contact?.corrections ?? ''}
+              onChange={(value) => setNested('contact', 'corrections', value)}
+              error={errors['contact.corrections']}
+              limit={300}
+            />
+            <Field
+              id="settings-contact-privacyNote"
+              label="Privacy Note"
+              type="textarea"
+              rows={2}
+              value={draft.contact?.privacyNote ?? ''}
+              onChange={(value) => setNested('contact', 'privacyNote', value)}
+              error={errors['contact.privacyNote']}
+              limit={300}
+            />
+          </div>
+        </section>
+
         {/* Messages */}
         <section aria-labelledby="settings-messages-heading" className="mt-12">
           <h2 id="settings-messages-heading" className="text-xl font-semibold tracking-tight">

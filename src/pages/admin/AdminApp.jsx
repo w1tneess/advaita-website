@@ -9,6 +9,7 @@ import HomeEditor from './HomeEditor.jsx'
 import BlogList from './BlogList.jsx'
 import BlogEditor from './BlogEditor.jsx'
 import ProfileEditor from './ProfileEditor.jsx'
+import PhilosophyEditor from './PhilosophyEditor.jsx'
 import ProjectEditor from './ProjectEditor.jsx'
 import ProjectsList from './ProjectsList.jsx'
 import SettingsEditor from './SettingsEditor.jsx'
@@ -56,6 +57,7 @@ export default function AdminApp() {
           <Route path="projects/:id" element={<ProjectEditor />} />
           <Route path="blog" element={<BlogList />} />
           <Route path="blog/:id" element={<BlogEditor />} />
+          <Route path="philosophy" element={<PhilosophyEditor />} />
           <Route path="photography" element={<PhotographyList />} />
           <Route path="photography/:id" element={<PhotographyEditor />} />
           <Route path="notes" element={<NotesList />} />
