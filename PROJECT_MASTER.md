@@ -86,16 +86,15 @@ templated, AI-sounding copy. Do not repeat that.
 This project's docs have drifted from reality multiple times. Before making any 
 claim about the current architecture, check the actual code, not a doc file.
 
-- **Stack**: React 19 + Vite 6, React Router v7, Tailwind CSS v4, Framer Motion, 
-  Lenis, Lucide icons.
+- **Canonical Architecture Specification**: For complete, current technical 
+  implementation details, rendering strategy, crawler limitations, and data flow, 
+  consult [`ARCHITECTURE.md`](file:///d:/Website/advaita-website/ARCHITECTURE.md). Detailed architecture belongs there, 
+  not in this governance document.
+- **Stack**: React 19 + Vite 6, React Router v7 (SPA mode), Tailwind CSS v4, 
+  Framer Motion, Lenis, Lucide icons.
 - **Hosting**: Vercel (migrated from GitHub Pages — confirm this is still 
   current, and that no doc still claims GitHub Pages).
-- **Backend**: Supabase (Postgres + Auth + Storage), free tier. **Confirm 
-  whether content is currently live-writing to Supabase and reflecting on the 
-  public site without a manual rebuild, or whether it is still (or partially) 
-  a flat-JSON-export + git-push model.** These are two different architectures 
-  and the codebase has contained inconsistent signals of both — resolve this 
-  for real before building anything that assumes one or the other.
+- **Backend**: Supabase (Postgres + Auth + Storage), free tier.
 - **Cost constraint: ₹0/month.** No paid tier, no billing enabled. Before using 
   any platform feature (e.g. Supabase Image Transformations, which is paid-tier 
   only), verify it's actually available on the free tier — don't assume.
@@ -151,10 +150,17 @@ scope creep into features/aesthetics never actually approved.
 
 ## 6. Known open items (update as resolved)
 
-- [x] Confirm final content architecture: live Supabase writes vs. JSON+git-push 
-      model — RESOLVED: Live Supabase Postgres (`site_content` table) writes via 
-      `/admin`, client-side dynamic fetching with bundled JSON seed fallback, 
-      and static route pre-rendering at build time on Vercel (`scripts/prerender.js`).
+- [ ] Confirm final content architecture: live Supabase writes vs. JSON+git-push 
+      model — Architecture implemented; live round-trip not yet independently verified. 
+      (Code implemented: Supabase Postgres `site_content` table row `main` writes via 
+      `/admin`, client-side dynamic fetching with bundled JSON seed fallback, and static 
+      head-only route prerendering at build time on Vercel via `scripts/prerender.js`. 
+      Live round-trip mutation and read verification pending per Section 5 standards).
+- [ ] Navigation from Home to another tab first-click reliability — Architecture 
+      implemented; live interaction not yet independently verified. (Code implemented: 
+      removed Framer Motion `mode="wait"` stall in `PublicLayout.jsx`, added eager 
+      bundle preloading on idle/pointer/focus in `src/lib/preload.js`; unit tests pass; 
+      interactive multi-page navigation test pending).
 - [ ] Philosophy section reading notes (Krishnamurti, Camus, Dostoevsky, Ramana 
       Maharshi, Osho) — `notes: []` preserved empty in `src/data/philosophy.json` 
       until owner supplies real personal reading notes; auto-generated fake 

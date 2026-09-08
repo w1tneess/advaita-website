@@ -7,38 +7,15 @@ const ThemeContext = createContext(null)
 const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect
 
 function getInitialTheme() {
-  if (typeof window === 'undefined') return 'dark'
-  try {
-    const saved = window.localStorage?.getItem(THEME_STORAGE_KEY)
-    if (saved === 'dark' || saved === 'light') return saved
-    if (window.matchMedia?.('(prefers-color-scheme: light)').matches) {
-      return 'light'
-    }
-  } catch {
-    // Fallback if storage access is restricted
-  }
   return 'dark'
 }
 
 export function ThemeProvider({ children }) {
   const { settings } = useContent()
-  const [theme, setThemeState] = useState(getInitialTheme)
+  const theme = 'dark' // Force dark theme
 
-  const setTheme = useCallback((newTheme) => {
-    const resolved = typeof newTheme === 'function' ? newTheme(theme) : newTheme
-    if (resolved === 'dark' || resolved === 'light') {
-      setThemeState(resolved)
-      try {
-        window.localStorage?.setItem(THEME_STORAGE_KEY, resolved)
-      } catch {
-        // Ignore storage errors in restricted browsing
-      }
-    }
-  }, [theme])
-
-  const toggleTheme = useCallback(() => {
-    setTheme((current) => (current === 'dark' ? 'light' : 'dark'))
-  }, [setTheme])
+  const setTheme = useCallback(() => {}, [])
+  const toggleTheme = useCallback(() => {}, [])
 
   // Sync theme classes and attributes on root element
   useIsomorphicLayoutEffect(() => {

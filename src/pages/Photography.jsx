@@ -1,20 +1,24 @@
-import { Camera, Images } from 'lucide-react'
+import { ArrowUpRight, Camera, Images } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
 
 import Container from '@/components/layout/Container.jsx'
+import EmptyState from '@/components/ui/EmptyState.jsx'
 import Lightbox from '@/components/ui/Lightbox.jsx'
 import Seo from '@/components/meta/Seo.jsx'
+import { useFilters } from '@/hooks/useFilters.js'
 import { useContent } from '@/lib/content.jsx'
 import { PUBLIC_ROUTES } from '@/config/nav.js'
-import { pageLoadVariant, staggerContainer, imageReveal, scrollViewport, EASE_OUT_EXPO } from '@/lib/animations.js'
+import { pageLoadVariant, staggerContainer, imageReveal, scrollViewport } from '@/lib/animations.js'
 import { getOptimizedImageProps } from '@/lib/image.js'
 
 const ROUTE = PUBLIC_ROUTES.find((route) => route.key === 'photography')
+const INITIAL_FILTERS = { category: [] }
 
 export default function Photography() {
   const { photography } = useContent()
-  const [activeCategory, setActiveCategory] = useState('all')
+  const { values, setValue, toggleValue } = useFilters(INITIAL_FILTERS)
+  const activeCategories = values.category
   const [lightboxIndex, setLightboxIndex] = useState(null)
 
   const photos = photography.photos || []
@@ -41,10 +45,10 @@ export default function Photography() {
 
   const filtered = useMemo(
     () =>
-      activeCategory === 'all'
+      activeCategories.length === 0
         ? photos
-        : photos.filter((photo) => photo.category === activeCategory),
-    [photos, activeCategory],
+        : photos.filter((photo) => activeCategories.includes(photo.category?.toLowerCase())),
+    [photos, activeCategories],
   )
 
   const flattenedPhotos = useMemo(() => {
@@ -76,69 +80,61 @@ export default function Photography() {
 
       <Container>
         <motion.div
-          className="py-16 sm:py-20 md:py-36"
+          className="py-12 sm:py-16 md:py-20"
           initial="hidden"
           animate="visible"
           variants={pageLoadVariant}
         >
           {/* Page header */}
-          <header className="max-w-2xl">
-            <h1 className="font-display text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
-              Photography
-            </h1>
-            <p className="mt-5 text-lg leading-relaxed text-muted">{photography.intro}</p>
-            <p className="mt-4 max-w-prose text-base leading-relaxed text-muted">
-              {photography.description}
-            </p>
-          </header>
+          <div className="border-b border-line/40 pb-8 sm:pb-10">
+            <div className="flex items-center gap-2 text-[11px] font-mono tracking-widest text-accent uppercase mb-3">
+              <span>⟐</span>
+              <span>VISUAL NOTES & OBSERVATION</span>
+            </div>
 
-          {/* Category filters */}
-          <nav aria-label="Photo categories" className="mt-10">
-            <ul className="flex flex-wrap gap-2">
-              <li>
-                <button
-                  type="button"
-                  onClick={() => setActiveCategory('all')}
-                  className={`relative rounded-lg px-4 py-2 text-sm font-medium transition-colors duration-200 ${
-                    activeCategory === 'all'
-                      ? 'text-on-accent'
-                      : 'border border-line bg-surface text-muted hover:text-ink hover:border-accent/40'
-                  }`}
-                >
-                  {activeCategory === 'all' && (
-                    <motion.span
-                      layoutId="photoFilterActive"
-                      className="absolute inset-0 rounded-lg bg-accent shadow-subtle"
-                      transition={{ duration: 0.25, ease: EASE_OUT_EXPO }}
-                    />
-                  )}
-                  <span className="relative z-10">All</span>
-                </button>
-              </li>
-              {dynamicCategories.map((cat) => (
-                <li key={cat.id}>
-                  <button
-                    type="button"
-                    onClick={() => setActiveCategory(cat.slug)}
-                    className={`relative rounded-lg px-4 py-2 text-sm font-medium transition-colors duration-200 ${
-                      activeCategory === cat.slug
-                        ? 'text-on-accent'
-                        : 'border border-line bg-surface text-muted hover:text-ink hover:border-accent/40'
-                    }`}
-                  >
-                    {activeCategory === cat.slug && (
-                      <motion.span
-                        layoutId="photoFilterActive"
-                        className="absolute inset-0 rounded-lg bg-accent shadow-subtle"
-                        transition={{ duration: 0.25, ease: EASE_OUT_EXPO }}
-                      />
-                    )}
-                    <span className="relative z-10">{cat.name}</span>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </nav>
+            <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
+              <div className="max-w-xl">
+                <h1 className="font-display text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl text-ink">
+                  Photography
+                </h1>
+                <p className="mt-3 text-base sm:text-lg leading-relaxed text-muted">
+                  {photography.intro}
+                </p>
+                {photography.description && (
+                  <p className="mt-2 text-sm leading-relaxed text-muted/80">
+                    {photography.description}
+                  </p>
+                )}
+              </div>
+
+              {/* Category filters — only shown when multiple categories exist */}
+              {dynamicCategories.length > 0 && (
+                <div className="sm:self-start sm:pt-1">
+                  <div className="flex flex-wrap items-center gap-1.5" role="group" aria-label="Photo categories">
+                    <button
+                      type="button"
+                      onClick={() => setValue('category', [])}
+                      aria-pressed={activeCategories.length === 0}
+                      className={`filter-pill ${activeCategories.length === 0 ? 'filter-pill-active' : ''}`}
+                    >
+                      All ({photos.length})
+                    </button>
+                    {dynamicCategories.map((cat) => (
+                      <button
+                        key={cat.id}
+                        type="button"
+                        onClick={() => toggleValue('category', cat.slug)}
+                        aria-pressed={activeCategories.includes(cat.slug)}
+                        className={`filter-pill ${activeCategories.includes(cat.slug) ? 'filter-pill-active' : ''}`}
+                      >
+                        {cat.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
 
           {/* Gallery or empty state */}
           {filtered.length > 0 ? (
@@ -159,47 +155,68 @@ export default function Photography() {
                 const cover = images[0];
                 
                 return (
-                <motion.figure
-                  key={photo.id}
-                  className="relative mb-4 cursor-pointer break-inside-avoid overflow-hidden rounded-xl border border-line bg-surface shadow-subtle transition-all duration-300 hover:shadow-card-hover hover:border-accent/40 group"
-                  variants={imageReveal}
-                  onClick={() => openLightbox(photo)}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault()
-                      openLightbox(photo)
-                    }
-                  }}
-                  aria-label={`View ${photo.alt_text || photo.title || 'photo'} in full size`}
-                >
-                  <img
-                    {...getOptimizedImageProps(cover.image_url, cover.variants)}
-                    alt={photo.alt_text || ''}
-                    loading="lazy"
-                    decoding="async"
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    className="w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-                    style={photo.aspectRatio ? { aspectRatio: photo.aspectRatio } : undefined}
-                  />
-                  {images.length > 1 && (
-                    <div className="absolute top-3 right-3 rounded-md bg-black/50 p-1.5 text-white backdrop-blur-md shadow-sm transition-opacity group-hover:bg-black/70">
-                      <Images className="h-4 w-4" />
+                  <motion.figure
+                    key={photo.id}
+                    className="relative mb-6 cursor-pointer break-inside-avoid overflow-hidden rounded-2xl border border-line/70 bg-surface shadow-subtle transition-all duration-300 hover:border-ink/30 hover:shadow-card-hover group"
+                    variants={imageReveal}
+                    onClick={() => openLightbox(photo)}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault()
+                        openLightbox(photo)
+                      }
+                    }}
+                    aria-label={`View ${photo.alt_text || photo.title || 'photo'} in full size`}
+                  >
+                    <div className="relative overflow-hidden">
+                      <img
+                        {...getOptimizedImageProps(cover.image_url, cover.variants)}
+                        alt={photo.alt_text || ''}
+                        loading="lazy"
+                        decoding="async"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        className="w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+                        style={photo.aspectRatio ? { aspectRatio: photo.aspectRatio } : undefined}
+                      />
+
+                      {/* Floating Category Pill (Top-Left) */}
+                      {photo.category && (
+                        <div className="absolute top-3 left-3 rounded-full bg-black/60 backdrop-blur-md px-2.5 py-1 text-[10px] font-mono uppercase tracking-wider text-white/90 shadow-sm">
+                          {photo.category}
+                        </div>
+                      )}
+
+                      {/* Floating Slide Counter (Top-Right) */}
+                      {images.length > 1 && (
+                        <div className="absolute top-3 right-3 flex items-center gap-1.5 rounded-full bg-black/60 backdrop-blur-md px-2.5 py-1 text-xs text-white/90 shadow-sm">
+                          <Images className="h-3 w-3" />
+                          <span className="font-mono text-[11px] font-medium">{images.length}</span>
+                        </div>
+                      )}
+
+                      {/* Floating Action Button (Bottom-Right) */}
+                      <div className="absolute bottom-3 right-3 flex h-7 w-7 items-center justify-center rounded-full bg-black/60 backdrop-blur-md text-white/80 shadow-md transition-all duration-200 group-hover:bg-white group-hover:text-black group-hover:scale-105">
+                        <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
+                      </div>
                     </div>
-                  )}
-                  {photo.caption && (
-                    <figcaption className="px-4 py-3 text-sm text-muted">
-                      {photo.caption}
-                    </figcaption>
-                  )}
-                </motion.figure>
-              )})}
+
+                    {photo.caption && (
+                      <figcaption className="px-4 py-3 text-xs sm:text-sm text-muted border-t border-line/40">
+                        {photo.caption}
+                      </figcaption>
+                    )}
+                  </motion.figure>
+                )})}
             </motion.div>
           ) : (
-            <div className="mt-10 rounded-xl border border-dashed border-line bg-raised/50 px-6 py-16 text-center">
-              <Camera className="mx-auto h-10 w-10 text-muted/40" aria-hidden="true" />
-              <p className="mt-4 text-sm font-medium text-muted">No photographs published yet.</p>
+            <div className="mt-12">
+              <EmptyState
+                icon={Camera}
+                title="No photographs published yet"
+                message="Film scans, darkroom prints, and digital studies will appear here once archived."
+              />
             </div>
           )}
         </motion.div>

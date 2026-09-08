@@ -33,7 +33,32 @@
       "order": 5
     }
   ],
-  "notesIntro": "Short entries on books and questions.",
-  "notesDescription": "",
-  "notes": []
+  "notesIntro": "Short entries on books, epistemological inquiries, and questions under active examination.",
+  "notesDescription": "Each note records a specific tension between a philosophical premise and practical observation. Corrections and alternative readings are welcome.",
+  "notes": [
+    {
+      "id": "note-krishnamurti-observer",
+      "title": "On Krishnamurti and the Mechanics of the Observer",
+      "category": "Epistemology",
+      "status": "published",
+      "published_at": "2025-11-14",
+      "content": "Krishnamurti argues that psychological conflict begins when the observer separates themselves from what is observed—treating fear, envy, or restlessness as an external object to be managed or suppressed.\n\nWhen reading this alongside contemporary cognitive psychology, the central question is whether direct observation without internal verbal commentary is neurologically sustainable, or if the 'silent observer' is simply another sub-network of narrative metacognition.\n\nMy working hypothesis: non-verbal attention does not eliminate mental constructs, but slows the recursive loop of reactive self-justification, allowing one to notice automatic habits before acting on them."
+    },
+    {
+      "id": "note-camus-absurd",
+      "title": "Camus: The Absurd as an Epistemic Baseline",
+      "category": "Existentialism",
+      "status": "published",
+      "published_at": "2025-10-02",
+      "content": "In The Myth of Sisyphus, the absurd is not a property of the universe alone; it is the friction produced when the human longing for clarity collides with an unanswering world. Rather than leaping into metaphysical certainty or cynicism, Camus demands maintaining the tension without illusion.\n\nFor scientific and data work, this serves as a useful discipline: accept the presence of unresolvable ambiguity and missing data without losing the appetite for rigorous, sustained inquiry."
+    },
+    {
+      "id": "note-dostoevsky-underground",
+      "title": "Dostoevsky on Rational Egoism and Irrational Will",
+      "category": "Psychology & Ethics",
+      "status": "published",
+      "published_at": "2025-08-19",
+      "content": "Reading Notes from Underground against modern behavioral economics: utilitarian and rational choice models often assume that individuals will act in their enlightened self-interest once adequately informed. Dostoevsky's underground narrator directly attacks this assumption—humans will deliberately choose irrationality, suffering, and spite if that is what preserves their sense of autonomy.\n\nAny computational or institutional system that assumes pure utility maximization consistently misjudges human behavior because it underestimates the human refusal to be treated as a predictable equation."
+    }
+  ]
 }

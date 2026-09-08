@@ -41,10 +41,11 @@ npm test
 
 ## Architecture
 
-The site runs on a **Supabase-backed Hybrid SSG/CSR architecture**:
-- **Public Site**: Fast, client-side rendered React application with pre-rendered static HTML routes and `sitemap.xml` generated at build time (`scripts/prerender.js`).
-- **Data Layer**: Live content is loaded from Supabase Postgres (`site_content` table). If the remote database is unreachable or the visitor is offline, the site instantly falls back to bundled static seed data (`src/data/*.json`).
-- **Admin Workspace (`/admin`)**: Content editorial dashboard authenticated via Supabase Auth with Postgres Row-Level Security (RLS). Mutations write directly to Supabase and reflect live without requiring a full site rebuild.
+The site runs on a **Single Page Application (SPA) architecture with build-time Head-Only Prerendering and runtime CSR**:
+- **Public Site**: Fast, client-side rendered React 19 application with static route `<head>` metadata shells and `sitemap.xml` generated at build time (`scripts/prerender.js`).
+- **Data Layer**: Live content is loaded dynamically from Supabase Postgres (`site_content` table) with automatic fallback to bundled seed JSON files (`src/data/*.json`).
+- **Admin Workspace (`/admin`)**: Lazy-loaded editorial dashboard authenticated via Supabase Auth with Postgres Row-Level Security (RLS). Updates write directly to Supabase.
+- **Canonical Specification**: For complete architecture documentation, see [`ARCHITECTURE.md`](file:///d:/Website/advaita-website/ARCHITECTURE.md).
 
 ## Deployment
 

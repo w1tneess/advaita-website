@@ -20,19 +20,26 @@ export default function Blog() {
 
       <Container>
         <motion.div
-          className="py-12 sm:py-16 md:py-32"
+          className="py-12 sm:py-16 md:py-20"
           initial="hidden"
           animate="visible"
           variants={pageLoadVariant}
         >
-          <header className="max-w-2xl">
-            <h1 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl">
-              Writing
-            </h1>
-            <p className="mt-5 text-lg leading-relaxed text-muted">
-              Notes, research, and ideas as they develop.
-            </p>
-          </header>
+          <div className="border-b border-line/40 pb-8 sm:pb-10">
+            <div className="flex items-center gap-2 text-[11px] font-mono tracking-widest text-accent uppercase mb-3">
+              <span>⟐</span>
+              <span>ESSAYS & WORKING PAPERS</span>
+            </div>
+
+            <div className="max-w-2xl">
+              <h1 className="font-display text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl text-ink">
+                Writing
+              </h1>
+              <p className="mt-3 text-base sm:text-lg leading-relaxed text-muted">
+                Notes, research, and ideas as they develop.
+              </p>
+            </div>
+          </div>
 
           <motion.div
             className="mt-12 sm:mt-16 border-t border-line"
@@ -53,35 +60,28 @@ export default function Blog() {
                 {publicBlogPosts.map((post) => (
                   <motion.li key={post.id} variants={staggerItem} className="py-8 sm:py-10">
                     <article className="group relative max-w-3xl flex flex-col items-start justify-between">
-                      <div className="flex items-center gap-x-4 text-xs">
-                        <time dateTime={post.published_at} className="text-muted">
+                      <div className="flex items-center gap-x-3 text-xs">
+                        <time dateTime={post.published_at} className="font-mono text-muted">
                           {formatDate(post.published_at)}
                         </time>
-                        <span className="rounded-full bg-raised px-3 py-1.5 font-medium text-ink">
+                        <span className="text-line">/</span>
+                        <span className="rounded-full border border-line bg-surface px-2.5 py-0.5 text-xs font-medium text-muted">
                           {post.category}
                         </span>
                       </div>
-                      <div className="group relative">
-                        <h2 className="mt-3 font-display text-2xl font-semibold tracking-tight text-ink group-hover:text-accent transition-colors">
-                          <Link
-                            to={`/blog/${post.slug}`}
-                            onPointerEnter={() => preloadRoute(`/blog/${post.slug}`)}
-                            onFocus={() => preloadRoute(`/blog/${post.slug}`)}
-                            onTouchStart={() => preloadRoute(`/blog/${post.slug}`)}
-                          >
-                            <span className="absolute inset-0" />
-                            {post.title}
-                          </Link>
-                        </h2>
-                        <p className="mt-4 line-clamp-3 text-base leading-relaxed text-muted">
-                          {post.excerpt}
-                        </p>
-                      </div>
-                      <div className="relative mt-4 flex items-center gap-x-4">
-                        <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent transition-colors">
-                          Read more <span className="transition-transform duration-200 group-hover:translate-x-1">→</span>
-                        </span>
-                      </div>
+                      <h2 className="mt-3 font-display text-xl sm:text-2xl font-semibold tracking-tight text-ink group-hover:text-accent transition-colors">
+                        <Link
+                          to={`/blog/${post.slug}`}
+                          onPointerEnter={() => preloadRoute(`/blog/${post.slug}`)}
+                          onFocus={() => preloadRoute(`/blog/${post.slug}`)}
+                          onTouchStart={() => preloadRoute(`/blog/${post.slug}`)}
+                        >
+                          {post.title}
+                        </Link>
+                      </h2>
+                      <p className="mt-2.5 line-clamp-3 text-sm sm:text-base leading-relaxed text-muted">
+                        {post.excerpt}
+                      </p>
                     </article>
                   </motion.li>
                 ))}

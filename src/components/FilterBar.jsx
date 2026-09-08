@@ -13,15 +13,32 @@ export default function FilterBar({
   allValue = 'all',
   counts,
   className = '',
+  showLabel = false,
 }) {
-  const items = [{ value: allValue, label: allLabel }, ...options]
+  const isArray = Array.isArray(value)
+  const isAllActive = isArray ? value.length === 0 : value === allValue
 
   return (
     <div className={className} role="group" aria-label={label}>
-      <p className="mb-2 text-sm font-medium">{label}</p>
-      <div className="flex flex-wrap gap-2">
-        {items.map((option) => {
-          const isActive = value === option.value
+      {showLabel ? (
+        <p className="mb-2 text-sm font-medium text-muted">{label}</p>
+      ) : (
+        <span className="sr-only">{label}</span>
+      )}
+      <div className="flex flex-wrap items-center gap-1.5">
+        <button
+          type="button"
+          onClick={() => onChange(allValue)}
+          aria-pressed={isAllActive}
+          className={`filter-pill ${isAllActive ? 'filter-pill-active' : ''}`}
+        >
+          <span>{allLabel}</span>
+          {typeof counts?.[allValue] === 'number' && (
+            <span className="text-[11px] opacity-75 tabular-nums">({counts[allValue]})</span>
+          )}
+        </button>
+        {options.map((option) => {
+          const isActive = isArray ? value.includes(option.value) : value === option.value
           const count = counts?.[option.value]
 
           return (
@@ -30,15 +47,11 @@ export default function FilterBar({
               type="button"
               onClick={() => onChange(option.value)}
               aria-pressed={isActive}
-              className={`inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-sm font-medium transition-colors ${
-                isActive
-                  ? 'border-accent bg-accent/12 text-accent'
-                  : 'border-line bg-surface text-muted hover:border-accent hover:text-accent'
-              }`}
+              className={`filter-pill ${isActive ? 'filter-pill-active' : ''}`}
             >
-              {option.label}
+              <span>{option.label}</span>
               {typeof count === 'number' && (
-                <span className="text-xs tabular-nums opacity-70">{count}</span>
+                <span className="text-[11px] opacity-75 tabular-nums">({count})</span>
               )}
             </button>
           )

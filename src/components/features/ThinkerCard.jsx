@@ -1,62 +1,86 @@
-import { useState } from 'react'
-import { motion } from 'framer-motion'
-import { ChevronDown } from 'lucide-react'
-import { EASE_OUT_EXPO } from '@/lib/animations.js'
+import { BookOpen, Sparkles, ArrowRight } from 'lucide-react'
 
 /**
  * Thinker card for the Philosophy page.
  *
- * Designed to feel like a small intellectual note — name and a truncated description
- * that expands on click. No Wikipedia biography, no external links, no pretence of expertise.
+ * Implements the reference composition:
+ * - Top row: Monospace index ('01') on left, subtle 'Inquiry' badge on right
+ * - Title: High-contrast Playfair Display serif
+ * - Body: Disciplined, comfortable line-height for reading
+ * - Bottom row: Pinned 'Primary source →' on left, 'Explore note →' on right
+ * - Consistent internal padding and crisp hairline geometry.
  */
+export default function ThinkerCard({
+  thinker,
+  isSelected = false,
+  onClick,
+  index,
+}) {
+  const isClickable = Boolean(onClick)
 
-const TRUNCATE_LENGTH = 120
-
-export default function ThinkerCard({ thinker }) {
-  const [expanded, setExpanded] = useState(false)
-  const isLong = thinker.description && thinker.description.length > TRUNCATE_LENGTH
-
-  const displayText =
-    !isLong || expanded
-      ? thinker.description
-      : thinker.description.slice(0, TRUNCATE_LENGTH).trim() + '…'
+  const handleKeyDown = (e) => {
+    if (isClickable && (e.key === 'Enter' || e.key === ' ')) {
+      e.preventDefault()
+      onClick()
+    }
+  }
 
   return (
-    <motion.div
-      layout
-      className="card-interactive cursor-pointer rounded-xl border border-line bg-surface p-6 shadow-subtle h-full transition-colors duration-250 hover:border-accent/40"
-      onClick={() => isLong && setExpanded((prev) => !prev)}
-      onKeyDown={(e) => {
-        if (isLong && (e.key === 'Enter' || e.key === ' ')) {
-          e.preventDefault()
-          setExpanded((prev) => !prev)
-        }
-      }}
-      tabIndex={isLong ? 0 : undefined}
-      role={isLong ? 'button' : undefined}
-      aria-expanded={isLong ? expanded : undefined}
-      transition={{ layout: { duration: 0.28, ease: EASE_OUT_EXPO } }}
+    <article
+      role={isClickable ? 'button' : undefined}
+      tabIndex={isClickable ? 0 : undefined}
+      onClick={onClick}
+      onKeyDown={handleKeyDown}
+      className={`group relative rounded-card border p-6 sm:p-7 transition-all duration-200 text-left h-full flex flex-col justify-between ${
+        isClickable ? 'cursor-pointer select-none' : ''
+      } ${
+        isSelected
+          ? 'border-accent bg-raised/90 shadow-md ring-1 ring-accent/30'
+          : 'border-line bg-surface hover:border-ink/25 hover:bg-raised/30 shadow-subtle'
+      }`}
     >
-      <div className="flex items-start justify-between gap-3">
-        <h3 className="font-display text-lg font-semibold tracking-tight">{thinker.name}</h3>
-        {isLong && (
-          <motion.span
-            className="mt-1 shrink-0 text-muted"
-            animate={{ rotate: expanded ? 180 : 0 }}
-            transition={{ duration: 0.25, ease: EASE_OUT_EXPO }}
-            aria-hidden="true"
-          >
-            <ChevronDown className="h-4 w-4" />
-          </motion.span>
-        )}
+      <div>
+        {/* Top meta row: Index on left, badge on right */}
+        <div className="flex items-center justify-between gap-3 border-b border-line/30 pb-3">
+          <span className="font-mono text-xs tracking-widest text-muted/60 group-hover:text-accent transition-colors font-medium">
+            {index !== undefined ? String(index + 1).padStart(2, '0') : 'NOTE'}
+          </span>
+          {isSelected ? (
+            <span className="inline-flex items-center gap-1 font-mono text-[11px] font-semibold text-accent">
+              <Sparkles className="h-3 w-3" aria-hidden="true" />
+              Active
+            </span>
+          ) : (
+            <span className="inline-flex items-center gap-1 font-mono text-[11px] text-muted/60 group-hover:text-muted transition-colors">
+              <BookOpen className="h-3 w-3 text-muted/50" aria-hidden="true" />
+              Inquiry
+            </span>
+          )}
+        </div>
+
+        {/* Thinker Name */}
+        <h3 className="mt-4 font-display text-xl font-semibold tracking-tight text-ink group-hover:text-accent transition-colors">
+          {thinker.name}
+        </h3>
+
+        {/* Thought / Description */}
+        <p className="mt-3 text-sm leading-relaxed text-muted/90">
+          {thinker.description}
+        </p>
       </div>
 
-      <motion.p
-        layout="position"
-        className="mt-2 text-sm leading-relaxed text-muted"
-      >
-        {displayText}
-      </motion.p>
-    </motion.div>
+      {/* Pinned Bottom Row: Actions */}
+      <div className="mt-6 pt-4 border-t border-line/40 flex items-center justify-between text-xs font-mono text-muted/70">
+        <span className="text-[11px] flex items-center gap-1">
+          Primary source
+          <ArrowRight className="h-3 w-3 text-muted/40 group-hover:text-accent group-hover:translate-x-0.5 transition-all" />
+        </span>
+        <span className={`text-[11px] font-medium flex items-center gap-1 transition-colors ${
+          isSelected ? 'text-accent' : 'text-muted/80 group-hover:text-ink'
+        }`}>
+          {isSelected ? 'Viewing note ↓' : 'Explore note →'}
+        </span>
+      </div>
+    </article>
   )
 }

@@ -71,22 +71,22 @@ export const staggerItem = {
 
 // ─── 4. Scroll-driven section reveal ───────────────────────────────────────────
 export const sectionReveal = {
-  hidden: { opacity: 0, y: 40 },
+  hidden: { opacity: 0, y: 16 },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.7,
-      ease: EASE_OUT_EXPO,
+      duration: 0.5,
+      ease: EASE_OUT_QUART,
     },
   },
 }
 
-// Default viewport config for scroll-triggered animations
+// Viewport config for scroll-triggered animations: triggers reliably with generous margin
 export const scrollViewport = {
   once: true,
-  margin: '0px 0px -40px 0px',
-  amount: 0.08,
+  margin: '0px 0px 60px 0px',
+  amount: 0.01,
 }
 
 // ─── 5. Card hover ─────────────────────────────────────────────────────────────

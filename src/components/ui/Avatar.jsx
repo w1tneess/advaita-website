@@ -17,11 +17,13 @@ export default function Avatar({ profile, size = 'md', className = '' }) {
     .map((part) => part[0]?.toUpperCase())
     .join('')
 
-  if (profile?.photo) {
+  const photoSrc = profile?.photo || '/pfp.png'
+
+  if (photoSrc) {
     return (
       <img
-        src={profile.photo}
-        alt={profile.photoAlt || `Photograph of ${profile.name}.`}
+        src={photoSrc}
+        alt={profile?.photoAlt || `Photograph of ${profile?.name || 'Advaita'}.`}
         width={112}
         height={112}
         loading="lazy"

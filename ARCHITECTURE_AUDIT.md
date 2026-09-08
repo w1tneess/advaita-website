@@ -2,11 +2,12 @@
 
 > Audit date: 2026-09-06  
 > Auditor: Antigravity IDE (Claude Opus 4.6)  
-> Scope: Full repository inspection per the 48-point specification
+> Scope: Full repository inspection per the 48-point specification  
+> **Documentation Note**: Sections 1–16 preserve the historical audit findings and initial recommendations as recorded on September 6, 2026. For the canonical, current technical architecture specification, see [`ARCHITECTURE.md`](file:///d:/Website/advaita-website/ARCHITECTURE.md). For current verification status, remediation details, and the evidence matrix, see [Section 17](#17-post-audit-status-remediation--verification-record).
 
 ---
 
-## 1. Current Architecture
+## 1. Historical Architecture (As Audited 2026-09-06)
 
 ### High-Level Overview
 
@@ -403,3 +404,80 @@ src/
 8. **Skip link and focus indicators** — proper accessibility foundations
 9. **Mobile menu** — focus trapping, Escape handler, body scroll lock
 10. **Supabase timeout** — prevents app hangs on network issues
+
+---
+
+## 17. Post-Audit Status, Remediation & Verification Record
+
+> Updated: 2026-09-07  
+> This section records the verification status of claims, subsequent code fixes following the 2026-09-06 audit, and the current evidence base.
+
+### 17.1 Explicit Verification-Status Model
+
+All technical claims across project documentation adhere to these four defined statuses:
+
+- **VERIFIED**: Directly tested and reproducible evidence exists in the repository/build artifacts.
+- **IMPLEMENTED — NOT INDEPENDENTLY VERIFIED**: Code and configuration exist to support the behavior, but the end-to-end operation was not directly observed in the current verification environment.
+- **REQUIRES DEPLOYMENT VERIFICATION**: Cannot be reliably verified from the local development workspace; requires live production environment or third-party crawler data.
+- **NOT IMPLEMENTED**: The implementation does not support the claim.
+
+### 17.2 Evidence Matrix
+
+| System / Claim | Implementation | Verification | Status |
+| :--- | :--- | :--- | :--- |
+| **Supabase runtime content** | `src/lib/content.jsx` (`loadDocument()`) fetches row `main` from table `site_content` on mount. | Source code verified; schema defined in `supabase/schema.sql`; seed fallback tested. Live network read from remote DB not observed. | **IMPLEMENTED — NOT INDEPENDENTLY VERIFIED** |
+| **Admin → Supabase write** | `src/lib/supabase/sync.js` (`saveContentToSupabase()`) upserts row `main` into `site_content` via authenticated Supabase client. | Code and RLS policies in `supabase/schema.sql` verified. Interactive write with active credentials not executed. | **IMPLEMENTED — NOT INDEPENDENTLY VERIFIED** |
+| **Admin → public fresh content** | Runtime dynamic fetch on client mount avoids CI/CD rebuilds; public view re-renders with fresh database state. | Dynamic read/write architecture confirmed in code. Full end-to-end live write-to-read round trip not independently executed. | **IMPLEMENTED — LIVE ROUND-TRIP NOT INDEPENDENTLY VERIFIED** |
+| **JSON fallback** | `src/lib/content.jsx` catches DB errors/timeouts (3.5s limit) and initializes from `createSeedDocument()` (`src/data/seed.js`). | Verified in `test/core.test.js` (`seed content document is structurally valid with zero problems`). App successfully renders with seed data offline. | **VERIFIED** |
+| **Head-only prerender** | `scripts/prerender.js` injects route `<head>` tags into static HTML shells; leaves `<div id="root"></div>` empty for CSR. | Verified in `dist/` build output (`npm run build`). Route files contain distinct `<head>` tags and empty root div. | **VERIFIED** |
+| **Route metadata** | `src/lib/seo.js` (`buildMeta()`) generates route-specific title, description, canonical, OG/Twitter tags, and JSON-LD. | Verified in build output across all 7 routes + 404.html; inspected injected metadata blocks. | **VERIFIED** |
+| **Sitemap** | `scripts/prerender.js` generates `dist/sitemap.xml` with canonical URLs; updates `robots.txt` reference. | Verified file `dist/sitemap.xml` generated with 7 canonical URLs; `robots.txt` contains valid Sitemap directive. | **VERIFIED** |
+| **Admin code splitting** | `src/App.jsx` lazy-loads `AdminApp` via `React.lazy()`; `vite.config.js` chunks vendor dependencies. | Verified in Vite build output: `AdminApp-*.js` (244 kB) is completely isolated from public bundles (`index-*.js`). | **VERIFIED** |
+| **First-click navigation** | Removed `mode="wait"` transition blocker in `PublicLayout.jsx`; added eager preloader in `src/lib/preload.js`. | Unit test in `test/core.test.js` passes. Real-user interactive multi-page navigation session not independently verified. | **IMPLEMENTED — NOT INDEPENDENTLY VERIFIED** |
+| **Responsive behavior** | Fluid type scale (`clamp()`), Tailwind v4 responsive breakpoints, mobile menu focus trap. | Code inspection and layout primitives verified. Comprehensive multi-viewport visual test across real mobile devices not completed. | **IMPLEMENTED — NOT INDEPENDENTLY VERIFIED** |
+| **Core Web Vitals** | Chunk optimization, preloading, CSS-driven layout, image dimension handling. | Requires real production deployment measurement with live traffic (Field data) or deployed preview Lighthouse run. | **REQUIRES DEPLOYMENT VERIFICATION** |
+| **Google indexing** | Prerendered `<head>` metadata, sitemap.xml, robots.txt, semantic HTML tags. | Google search indexing requires live crawling. Google JS rendering occurs in a deferred stage and is not immediate or guaranteed. | **REQUIRES DEPLOYMENT VERIFICATION** |
+
+### 17.3 Deep Dive: Critical Claims & Remediations
+
+#### 1. Admin Data-Freshness Claim
+- **Claim**: Content published in `/admin` is immediately visible on the public site without requiring a Git commit or CI/CD rebuild.
+- **Implementation Mechanism**: The public site does not read from static HTML body files; it renders client-side and initiates an asynchronous query to Supabase (`fetchContentFromSupabase()`) inside `ContentProvider` on initial page load. When the admin publishes an edit, `saveContentToSupabase()` upserts `site_content` where `id = 'main'`. Subsequent visitor page mounts fetch this latest JSONB payload.
+- **Verification Reality**: While the code cleanly implements this architecture, an independent live round-trip test (logging in as admin, modifying content, confirming remote DB mutation, and verifying the updated content in a completely separate, uncached browser session without a build trigger) could not be executed locally because active Supabase administrative credentials are not stored in the repository.
+- **Documented Status**: **IMPLEMENTED — LIVE ROUND-TRIP NOT INDEPENDENTLY VERIFIED**.
+
+#### 2. First-Click Navigation Issue
+- **Reported Issue**: "Navigation from Home to another tab sometimes requires two clicks."
+- **Root Cause**: Two contributing factors were identified in the navigation architecture:
+  1. `PublicLayout.jsx` previously wrapped `<Outlet />` in Framer Motion's `<AnimatePresence mode="wait">`. In `mode="wait"`, the incoming route component cannot mount until the exiting route's exit animation finishes. If the user clicked while another transition was settling, or clicked a lazy route whose JS chunk had not finished loading, the initial click appeared dropped or delayed.
+  2. Public route components were defined as `React.lazy()` imports in `src/App.jsx` without prefetching, meaning the network request for the route chunk only began upon the user's first click.
+- **Remediation Changes**:
+  - `src/layouts/PublicLayout.jsx`: Removed `mode="wait"` and exit transition delays on `<motion.main>`, allowing instantaneous route mounting with an unobtrusive opacity fade (`duration: 0.15s`). Added idle-time preloading via `requestIdleCallback` for all primary public routes (`/about`, `/philosophy`, `/projects`, `/blog`, `/photography`, `/contact`).
+  - `src/lib/preload.js`: Implemented `preloadRoute()` and `getRoutePreloadProps()` to trigger dynamic bundle imports on pointer hover, focus, and touch-start events.
+  - `src/pages/Blog.jsx` & `src/components/ui/ShortcutsModal.jsx`: Attached route preload handlers to blog links and shortcut navigation items.
+- **Regression Test**: Added unit test in `test/core.test.js` (`route preloader correctly registers handlers and resolves paths for first-click reliability`), verifying loaders execute safely for all public routes.
+- **Verification Reality**: Unit tests pass (12/12 passing). However, live interactive user navigation across multiple browser tabs has not been independently verified in an interactive session.
+- **Documented Status**: **IMPLEMENTED — NOT INDEPENDENTLY VERIFIED**.
+
+#### 3. Head-Only Prerendering vs. Client-Side Body Rendering
+- **Implementation**: `scripts/prerender.js` runs after Vite compiles the client bundle. It injects route-specific `<title>`, `<meta name="description">`, canonical links, Open Graph tags, Twitter card tags, and JSON-LD structured data into the `<head>` of individual route HTML files (e.g., `dist/about/index.html`).
+- **Body Rendering**: The prerenderer leaves `<div id="root"></div>` empty. The entire page body is rendered at runtime by client-side React.
+- **Tradeoff & Limitation**: 
+  - Social media unfurling works reliably because social scrapers (Twitter/X, LinkedIn, Discord, Slack) only inspect `<head>` Open Graph tags.
+  - Search crawlers that do not execute JavaScript (or lightweight indexing bots) receive only `<head>` metadata; they do not index dynamically rendered text in the body (such as blog posts, philosophy notes, project case studies, or photo captions).
+  - Googlebot has JavaScript rendering capability, but JavaScript execution is a deferred processing stage (Web Rendering Service) and is not instantaneous or guaranteed.
+- **Documented Status**: **VERIFIED** as the current architectural tradeoff.
+
+### 17.4 Summary of Remediation for Historical Audit Items
+
+| Audit ID | Issue Description | Remediation Status | Verification |
+| :--- | :--- | :--- | :--- |
+| **C1** | `.env.example` contained real Supabase credentials | **Remediated**: Placeholder values configured in `.env.example`. | Inspected `.env.example`. |
+| **C2** | Duplicate `<title>` tag in prerendered HTML | **Remediated**: Removed static `<title>` from `index.html` template. Single title injected by prerender script. | Verified in `dist/` HTML files. |
+| **C3** | Orphan `/portfolio` route | **Remediated**: Consolidated into `/projects` with filter categories; `/portfolio` removed from routing. | Verified in `src/App.jsx` and `src/config/nav.js`. |
+| **H3** | ESLint `react.version` mismatched | **Remediated**: Set `react: { version: 'detect' }` in `eslint.config.js`. | ESLint passes (0 errors, 0 warnings). |
+| **H6** | Blog post prerender lacked title/description | **Remediated**: `allPrerenderRoutes()` in `src/config/nav.js` passes blog metadata to prerenderer. | Inspected `src/config/nav.js` and `scripts/prerender.js`. |
+| **H7** | Large main JS bundle size | **Remediated**: Configured manual chunks in `vite.config.js` (`framer-motion`, `supabase`, lazy `AdminApp`). | Verified in `npm run build` chunk table. |
+| **M4** | Re-export shim files at `components/` root | **Remediated**: Re-export shims cleaned up; canonical imports used across codebase. | Verified directory contents and imports. |
+| **M5** | `isLocal` boolean inverted | **Remediated**: Renamed to `isRemote` in `src/lib/content.jsx`. | Inspected `src/lib/content.jsx`. |
+| **L3, L4, L7** | Legacy hosting artifacts (`CNAME`, `.nojekyll`, `_redirects`) | **Remediated**: Removed from `public/` and repo root; verified no remaining GitHub Pages references. | Verified in `test/core.test.js`. |

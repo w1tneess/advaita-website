@@ -8,7 +8,6 @@ import Footer from '../components/layout/Footer.jsx'
 import Header from '../components/layout/Header.jsx'
 import SkipLink from '../components/layout/SkipLink.jsx'
 import BackToTopButton from '../components/ui/BackToTopButton.jsx'
-import CookieBanner from '../components/ui/CookieBanner.jsx'
 import ShortcutsModal from '../components/ui/ShortcutsModal.jsx'
 import PageFallback from '../components/ui/PageFallback.jsx'
 import { useShortcuts } from '../hooks/useShortcuts.js'
@@ -104,7 +103,6 @@ export default function PublicLayout() {
       {/* Global Interactive Aids */}
       <BackToTopButton />
       <ShortcutsModal isOpen={shortcutsOpen} onClose={closeShortcuts} />
-      <CookieBanner />
     </div>
   )
 }

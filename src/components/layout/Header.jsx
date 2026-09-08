@@ -124,9 +124,9 @@ export default function Header() {
               </Link>
             </div>
 
-            {/* Desktop Navigation */}
+            {/* Desktop Navigation with Modernist Active Beacon */}
             <nav aria-label="Main" className="hidden min-w-0 lg:block">
-              <ul className="flex items-center gap-5 lg:gap-7">
+              <ul className="flex items-center gap-4 lg:gap-6">
                 {NAV_ITEMS.map((item) => (
                   <li key={item.path}>
                     <NavLink
@@ -136,12 +136,26 @@ export default function Header() {
                       onFocus={() => preloadRoute(item.path)}
                       onTouchStart={() => preloadRoute(item.path)}
                       className={({ isActive }) =>
-                        `nav-link rounded-md px-1 py-1 text-sm font-semibold transition-colors ${
-                          isActive ? 'text-ink' : 'text-muted hover:text-ink'
+                        `nav-link group relative inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm transition-all duration-200 ${
+                          isActive
+                            ? 'font-semibold text-ink'
+                            : 'font-medium text-muted hover:text-ink hover:bg-raised/40'
                         }`
                       }
                     >
-                      {item.label}
+                      {({ isActive }) => (
+                        <>
+                          <span>{item.label}</span>
+                          {isActive && (
+                            <motion.span
+                              layoutId="nav-active-dot"
+                              className="h-1.5 w-1.5 rounded-full bg-accent"
+                              transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                              aria-hidden="true"
+                            />
+                          )}
+                        </>
+                      )}
                     </NavLink>
                   </li>
                 ))}
@@ -150,31 +164,7 @@ export default function Header() {
 
             {/* Header Right Controls */}
             <div className="flex items-center gap-2 sm:gap-3">
-              {/* Desktop Theme Toggle Button */}
-              <button
-                type="button"
-                onClick={toggleTheme}
-                aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
-                title={isDark ? 'Switch to light theme (or press T)' : 'Switch to dark theme (or press T)'}
-                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-line/70 bg-surface/70 text-ink shadow-sm backdrop-blur-md transition-all hover:border-accent/40 hover:bg-surface active:scale-95"
-              >
-                <AnimatePresence mode="wait" initial={false}>
-                  <motion.span
-                    key={isDark ? 'dark' : 'light'}
-                    initial={{ opacity: 0, rotate: -45, scale: 0.8 }}
-                    animate={{ opacity: 1, rotate: 0, scale: 1 }}
-                    exit={{ opacity: 0, rotate: 45, scale: 0.8 }}
-                    transition={{ duration: 0.2 }}
-                    className="flex items-center justify-center"
-                  >
-                    {isDark ? (
-                      <Sun className="h-4 w-4 text-accent" aria-hidden="true" />
-                    ) : (
-                      <Moon className="h-4 w-4 text-accent" aria-hidden="true" />
-                    )}
-                  </motion.span>
-                </AnimatePresence>
-              </button>
+              {/* Desktop Theme Toggle Button Removed (Forced Dark Mode) */}
 
               {/* Mobile Menu Trigger Button */}
               <button
@@ -184,7 +174,7 @@ export default function Header() {
                 aria-expanded={menuOpen}
                 aria-controls="mobile-nav"
                 aria-label="Open menu"
-                className="inline-flex h-11 items-center justify-center gap-1.5 rounded-full border border-line/70 bg-surface/70 px-4 text-xs font-semibold tracking-wider text-ink shadow-sm backdrop-blur-md transition-all hover:border-line hover:bg-surface active:scale-95 lg:hidden"
+                className="inline-flex h-10 shrink-0 whitespace-nowrap items-center justify-center gap-1.5 rounded-full border border-line bg-surface px-3.5 text-xs font-semibold tracking-wider text-ink shadow-sm transition-all hover:border-ink/25 hover:bg-raised active:scale-95 lg:hidden"
               >
                 <Menu className="h-4 w-4" aria-hidden="true" />
                 <span className="uppercase">Menu</span>
@@ -218,23 +208,12 @@ export default function Header() {
                 {profile.name}
               </Link>
               <div className="flex items-center gap-2.5">
-                <button
-                  type="button"
-                  onClick={toggleTheme}
-                  aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
-                  className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-line/70 bg-surface/80 text-ink shadow-sm backdrop-blur-md transition-all hover:bg-surface active:scale-95"
-                >
-                  {isDark ? (
-                    <Sun className="h-4 w-4 text-accent" aria-hidden="true" />
-                  ) : (
-                    <Moon className="h-4 w-4 text-accent" aria-hidden="true" />
-                  )}
-                </button>
+                {/* Mobile Theme Toggle Button Removed (Forced Dark Mode) */}
                 <button
                   type="button"
                   onClick={() => setMenuOpen(false)}
                   aria-label="Close menu"
-                  className="inline-flex h-10 items-center justify-center gap-1.5 rounded-full border border-line/70 bg-surface/80 px-3.5 text-xs font-semibold tracking-wider text-ink shadow-sm backdrop-blur-md transition-all hover:bg-surface active:scale-95"
+                  className="inline-flex h-10 shrink-0 whitespace-nowrap items-center justify-center gap-1.5 rounded-full border border-line bg-surface px-3.5 text-xs font-semibold tracking-wider text-ink shadow-sm transition-all hover:bg-raised active:scale-95"
                 >
                   <X className="h-4 w-4" aria-hidden="true" />
                   <span className="uppercase">Close</span>
@@ -264,25 +243,33 @@ export default function Header() {
                       onTouchStart={() => preloadRoute(item.path)}
                       onClick={() => setMenuOpen(false)}
                       className={({ isActive }) =>
-                        `group flex items-center justify-between rounded-xl px-3 py-3 transition-colors ${
+                        `group flex items-center justify-between rounded-xl px-3.5 py-3 transition-all ${
                           isActive
-                            ? 'bg-surface/80 text-ink font-bold shadow-sm'
+                            ? 'bg-surface text-ink font-bold shadow-sm'
                             : 'text-muted hover:bg-surface/40 hover:text-ink font-medium'
                         }`
                       }
                     >
-                      <div className="flex items-baseline gap-4">
-                        <span className="font-mono text-xs opacity-50">
-                          {String(index + 1).padStart(2, '0')}
-                        </span>
-                        <span className="font-display text-2xl tracking-tight sm:text-3xl">
-                          {item.label}
-                        </span>
-                      </div>
-                      <ArrowUpRight
-                        className="h-4 w-4 opacity-0 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100"
-                        aria-hidden="true"
-                      />
+                      {({ isActive }) => (
+                        <>
+                          <div className="flex items-baseline gap-4">
+                            <span className="font-mono text-xs opacity-50">
+                              {String(index + 1).padStart(2, '0')}
+                            </span>
+                            <span className="font-display text-2xl tracking-tight sm:text-3xl">
+                              {item.label}
+                            </span>
+                          </div>
+                          {isActive ? (
+                            <span className="h-2 w-2 rounded-full bg-accent shadow-sm" aria-hidden="true" />
+                          ) : (
+                            <ArrowUpRight
+                              className="h-4 w-4 opacity-0 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100"
+                              aria-hidden="true"
+                            />
+                          )}
+                        </>
+                      )}
                     </NavLink>
                   </motion.li>
                 ))}

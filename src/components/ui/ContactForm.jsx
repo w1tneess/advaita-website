@@ -4,11 +4,10 @@ import { Send, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
 import { submitContactForm } from '@/lib/supabase/api.js'
 
 const TOPICS = [
-  { value: '', label: 'Select a topic…' },
   { value: 'general', label: 'General' },
+  { value: 'collaboration', label: 'Research & Collaboration' },
   { value: 'project-feedback', label: 'Project Feedback' },
-  { value: 'collaboration', label: 'Collaboration' },
-  { value: 'correction', label: 'Correction' },
+  { value: 'correction', label: 'Correction / Source' },
   { value: 'other', label: 'Other' },
 ]
 
@@ -18,7 +17,7 @@ const RATE_LIMIT_MS = 30000 // 30 seconds
 
 function validateForm(form) {
   const errors = {}
-  
+
   if (!form.name.trim()) {
     errors.name = 'Name is required'
   } else if (form.name.length > 80) {
@@ -33,7 +32,7 @@ function validateForm(form) {
   }
 
   if (!form.topic) {
-    errors.topic = 'Please select a topic'
+    errors.topic = 'Please select an inquiry topic'
   }
 
   if (!form.message.trim()) {
@@ -48,8 +47,8 @@ function validateForm(form) {
 }
 
 /**
- * Contact form with client-side validation and Supabase submission.
- * Includes rate-limiting (30s cooldown between submissions) persisted to localStorage.
+ * Modernized contact form with interactive topic chips, responsive grid,
+ * real-time character counter, client validation, and Supabase submission.
  */
 export default function ContactForm() {
   const [form, setForm] = useState(INITIAL_FORM)
@@ -65,7 +64,7 @@ export default function ContactForm() {
         const lastSubmit = parseInt(localStorage.getItem(RATE_LIMIT_KEY) || '0', 10)
         const now = Date.now()
         const elapsed = now - lastSubmit
-        
+
         if (elapsed < RATE_LIMIT_MS) {
           setTimeRemaining(Math.ceil((RATE_LIMIT_MS - elapsed) / 1000))
         } else {
@@ -85,13 +84,23 @@ export default function ContactForm() {
     (e) => {
       const { name, value } = e.target
       setForm((prev) => ({ ...prev, [name]: value }))
-      
+
       // Clear specific error on change
       if (errors[name]) {
         setErrors((prev) => ({ ...prev, [name]: undefined }))
       }
     },
     [errors],
+  )
+
+  const handleTopicSelect = useCallback(
+    (topicValue) => {
+      setForm((prev) => ({ ...prev, topic: topicValue }))
+      if (errors.topic) {
+        setErrors((prev) => ({ ...prev, topic: undefined }))
+      }
+    },
+    [errors.topic],
   )
 
   const handleSubmit = useCallback(
@@ -143,132 +152,162 @@ export default function ContactForm() {
   if (status === 'success') {
     return (
       <motion.div
-        className="rounded-xl border border-line bg-surface p-8 text-center shadow-subtle"
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
+        className="rounded-xl border border-accent/40 bg-accent/5 p-8 text-center"
+        initial={{ opacity: 0, scale: 0.98 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.3 }}
       >
-        <CheckCircle className="mx-auto h-10 w-10 text-accent" aria-hidden="true" />
-        <h3 className="mt-4 text-lg font-semibold">Message sent</h3>
-        <p className="mt-2 text-sm text-muted">
-          Thank you for reaching out. I'll get back to you when I can — replies may be slow since
-          I'm a student.
+        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-accent/15 text-accent">
+          <CheckCircle className="h-6 w-6" aria-hidden="true" />
+        </div>
+        <h3 className="mt-4 font-display text-xl font-semibold text-ink">Message dispatched</h3>
+        <p className="mt-2 text-sm leading-relaxed text-muted max-w-md mx-auto">
+          Thank you for writing. Your note has been logged directly into my correspondence record. I reply to every thoughtful inquiry as time allows.
         </p>
-        <button
-          type="button"
-          onClick={() => setStatus('idle')}
-          className="mt-6 text-sm font-medium text-accent underline underline-offset-4 hover:text-accent-strong"
-        >
-          Send another message
-        </button>
+        <div className="mt-6 pt-5 border-t border-line/40 flex justify-center">
+          <button
+            type="button"
+            onClick={() => setStatus('idle')}
+            className="filter-pill filter-pill-active"
+          >
+            Send another note
+          </button>
+        </div>
       </motion.div>
     )
   }
 
   return (
-    <form onSubmit={handleSubmit} noValidate className="space-y-5">
-      {/* Name */}
-      <div>
-        <label htmlFor="contact-name" className="block text-sm font-medium">
-          Name
-        </label>
-        <input
-          id="contact-name"
-          name="name"
-          type="text"
-          value={form.name}
-          onChange={handleChange}
-          autoComplete="name"
-          className={`mt-1.5 block w-full rounded-lg border bg-surface px-4 py-3 text-base sm:text-sm transition-colors placeholder:text-muted/50 focus:border-accent focus:ring-1 focus:ring-accent ${
-            errors.name ? 'border-limitation' : 'border-line'
-          }`}
-          placeholder="Your name"
-          aria-describedby={errors.name ? 'contact-name-error' : undefined}
-          aria-invalid={errors.name ? 'true' : undefined}
-        />
-        {errors.name && (
-          <p id="contact-name-error" className="mt-1.5 text-xs text-limitation" role="alert">
-            {errors.name}
-          </p>
-        )}
+    <form onSubmit={handleSubmit} noValidate className="space-y-6">
+      {/* Name and Email side-by-side on sm+ */}
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+        {/* Name */}
+        <div>
+          <label htmlFor="contact-name" className="block font-mono text-[11px] uppercase tracking-wider text-muted font-medium mb-1.5">
+            Your Name <span className="text-accent">*</span>
+          </label>
+          <input
+            id="contact-name"
+            name="name"
+            type="text"
+            value={form.name}
+            onChange={handleChange}
+            autoComplete="name"
+            className={`block w-full rounded-lg border bg-surface/60 px-3.5 py-2.5 text-sm text-ink transition-all placeholder:text-muted/40 focus:border-accent focus:bg-surface focus:ring-2 focus:ring-accent/15 focus:outline-none ${
+              errors.name ? 'border-limitation bg-limitation/5' : 'border-line hover:border-ink/20'
+            }`}
+            placeholder="Advaita Chandra"
+            aria-describedby={errors.name ? 'contact-name-error' : undefined}
+            aria-invalid={errors.name ? 'true' : undefined}
+          />
+          {errors.name && (
+            <p id="contact-name-error" className="mt-1 text-xs text-limitation flex items-center gap-1" role="alert">
+              <span aria-hidden="true">›</span> {errors.name}
+            </p>
+          )}
+        </div>
+
+        {/* Email */}
+        <div>
+          <label htmlFor="contact-email" className="block font-mono text-[11px] uppercase tracking-wider text-muted font-medium mb-1.5">
+            Email Address <span className="text-accent">*</span>
+          </label>
+          <input
+            id="contact-email"
+            name="email"
+            type="email"
+            value={form.email}
+            onChange={handleChange}
+            autoComplete="email"
+            className={`block w-full rounded-lg border bg-surface/60 px-3.5 py-2.5 text-sm text-ink transition-all placeholder:text-muted/40 focus:border-accent focus:bg-surface focus:ring-2 focus:ring-accent/15 focus:outline-none ${
+              errors.email ? 'border-limitation bg-limitation/5' : 'border-line hover:border-ink/20'
+            }`}
+            placeholder="name@institution.edu"
+            aria-describedby={errors.email ? 'contact-email-error' : undefined}
+            aria-invalid={errors.email ? 'true' : undefined}
+          />
+          {errors.email && (
+            <p id="contact-email-error" className="mt-1 text-xs text-limitation flex items-center gap-1" role="alert">
+              <span aria-hidden="true">›</span> {errors.email}
+            </p>
+          )}
+        </div>
       </div>
 
-      {/* Email */}
+      {/* Modern Interactive Topic Selector */}
       <div>
-        <label htmlFor="contact-email" className="block text-sm font-medium">
-          Email
-        </label>
-        <input
-          id="contact-email"
-          name="email"
-          type="email"
-          value={form.email}
-          onChange={handleChange}
-          autoComplete="email"
-          className={`mt-1.5 block w-full rounded-lg border bg-surface px-4 py-3 text-base sm:text-sm transition-colors placeholder:text-muted/50 focus:border-accent focus:ring-1 focus:ring-accent ${
-            errors.email ? 'border-limitation' : 'border-line'
-          }`}
-          placeholder="you@example.com"
-          aria-describedby={errors.email ? 'contact-email-error' : undefined}
-          aria-invalid={errors.email ? 'true' : undefined}
-        />
-        {errors.email && (
-          <p id="contact-email-error" className="mt-1.5 text-xs text-limitation" role="alert">
-            {errors.email}
-          </p>
-        )}
-      </div>
+        <div className="flex items-center justify-between mb-2">
+          <label id="contact-topic-label" className="block font-mono text-[11px] uppercase tracking-wider text-muted font-medium">
+            Inquiry Topic <span className="text-accent">*</span>
+          </label>
+          {form.topic && (
+            <span className="font-mono text-[10px] text-accent uppercase tracking-widest">
+              Selected
+            </span>
+          )}
+        </div>
 
-      {/* Topic */}
-      <div>
-        <label htmlFor="contact-topic" className="block text-sm font-medium">
-          Topic
-        </label>
-        <select
-          id="contact-topic"
-          name="topic"
-          value={form.topic}
-          onChange={handleChange}
-          className={`mt-1.5 block w-full rounded-lg border bg-surface px-4 py-3 text-base sm:text-sm transition-colors focus:border-accent focus:ring-1 focus:ring-accent ${
-            errors.topic ? 'border-limitation' : 'border-line'
-          } ${!form.topic ? 'text-muted/50' : ''}`}
-          aria-describedby={errors.topic ? 'contact-topic-error' : undefined}
-          aria-invalid={errors.topic ? 'true' : undefined}
+        <div
+          role="radiogroup"
+          aria-labelledby="contact-topic-label"
+          className="flex flex-wrap gap-2"
         >
-          {TOPICS.map((t) => (
-            <option key={t.value} value={t.value} disabled={!t.value}>
-              {t.label}
-            </option>
-          ))}
-        </select>
+          {TOPICS.map((t) => {
+            const isSelected = form.topic === t.value
+            return (
+              <button
+                key={t.value}
+                type="button"
+                role="radio"
+                aria-checked={isSelected}
+                onClick={() => handleTopicSelect(t.value)}
+                className={`filter-pill text-xs transition-all duration-150 ${
+                  isSelected ? 'filter-pill-active scale-[1.02]' : 'hover:border-accent/40'
+                }`}
+              >
+                {isSelected && <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden="true" />}
+                <span>{t.label}</span>
+              </button>
+            )
+          })}
+        </div>
+
         {errors.topic && (
-          <p id="contact-topic-error" className="mt-1.5 text-xs text-limitation" role="alert">
-            {errors.topic}
+          <p id="contact-topic-error" className="mt-1.5 text-xs text-limitation flex items-center gap-1" role="alert">
+            <span aria-hidden="true">›</span> {errors.topic}
           </p>
         )}
       </div>
 
       {/* Message */}
       <div>
-        <label htmlFor="contact-message" className="block text-sm font-medium">
-          Message
-        </label>
+        <div className="flex items-center justify-between mb-1.5">
+          <label htmlFor="contact-message" className="block font-mono text-[11px] uppercase tracking-wider text-muted font-medium">
+            Message <span className="text-accent">*</span>
+          </label>
+          <span className={`font-mono text-[11px] tabular-nums ${
+            form.message.length > 1900 ? 'text-limitation' : 'text-muted/60'
+          }`}>
+            {form.message.length} / 2000
+          </span>
+        </div>
+
         <textarea
           id="contact-message"
           name="message"
           value={form.message}
           onChange={handleChange}
           rows={5}
-          className={`mt-1.5 block w-full resize-y rounded-lg border bg-surface px-4 py-3 text-base sm:text-sm leading-relaxed transition-colors placeholder:text-muted/50 focus:border-accent focus:ring-1 focus:ring-accent ${
-            errors.message ? 'border-limitation' : 'border-line'
+          className={`block w-full resize-y rounded-lg border bg-surface/60 px-3.5 py-3 text-sm leading-relaxed text-ink transition-all placeholder:text-muted/40 focus:border-accent focus:bg-surface focus:ring-2 focus:ring-accent/15 focus:outline-none ${
+            errors.message ? 'border-limitation bg-limitation/5' : 'border-line hover:border-ink/20'
           }`}
-          placeholder="What's on your mind?"
+          placeholder="Share your thoughts, recommended readings, or constructive critique..."
           aria-describedby={errors.message ? 'contact-message-error' : undefined}
           aria-invalid={errors.message ? 'true' : undefined}
         />
         {errors.message && (
-          <p id="contact-message-error" className="mt-1.5 text-xs text-limitation" role="alert">
-            {errors.message}
+          <p id="contact-message-error" className="mt-1 text-xs text-limitation flex items-center gap-1" role="alert">
+            <span aria-hidden="true">›</span> {errors.message}
           </p>
         )}
       </div>
@@ -276,37 +315,44 @@ export default function ContactForm() {
       {/* Error banner */}
       {status === 'error' && errorMessage && (
         <div
-          className="flex items-start gap-3 rounded-lg border border-limitation/30 bg-limitation/5 p-4"
+          className="flex items-start gap-3 rounded-lg border border-limitation/40 bg-limitation/10 p-3.5"
           role="alert"
         >
           <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-limitation" aria-hidden="true" />
-          <p className="text-sm text-limitation">{errorMessage}</p>
+          <p className="text-xs sm:text-sm text-limitation leading-relaxed">{errorMessage}</p>
         </div>
       )}
 
-      {/* Submit */}
-      <button
-        type="submit"
-        disabled={status === 'submitting' || timeRemaining > 0}
-        className="inline-flex items-center gap-2 rounded-lg bg-accent px-5 py-3 text-sm font-semibold text-on-accent shadow-subtle transition-all hover:bg-accent-strong active:scale-[0.97] disabled:opacity-60 disabled:cursor-not-allowed"
-      >
-        {status === 'submitting' ? (
-          <>
-            <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
-            Sending…
-          </>
-        ) : timeRemaining > 0 ? (
-          <>
-            <Loader2 className="h-4 w-4" aria-hidden="true" />
-            Wait {timeRemaining}s
-          </>
-        ) : (
-          <>
-            <Send className="h-4 w-4" aria-hidden="true" />
-            Send message
-          </>
-        )}
-      </button>
+      {/* Submit footer */}
+      <div className="pt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-t border-line/40">
+        <button
+          type="submit"
+          disabled={status === 'submitting' || timeRemaining > 0}
+          className="group inline-flex items-center justify-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent shadow-subtle transition-all duration-200 hover:bg-accent-strong hover:shadow active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+        >
+          {status === 'submitting' ? (
+            <>
+              <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+              <span>Transmitting…</span>
+            </>
+          ) : timeRemaining > 0 ? (
+            <>
+              <Loader2 className="h-4 w-4" aria-hidden="true" />
+              <span>Cooldown ({timeRemaining}s)</span>
+            </>
+          ) : (
+            <>
+              <span>Send message</span>
+              <Send className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+            </>
+          )}
+        </button>
+
+        <p className="font-mono text-[11px] text-muted/70 flex items-center gap-1.5">
+          <span className="text-accent">🔒</span>
+          <span>Logged to private correspondence log</span>
+        </p>
+      </div>
     </form>
   )
 }

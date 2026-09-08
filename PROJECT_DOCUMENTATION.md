@@ -1,59 +1,66 @@
 # Advaita Chandra - Comprehensive Project Documentation
 
 ## 1. Project Overview
-This repository contains the source code for a complete personal portfolio, public profile, and blog for Advaita Chandra. It is designed to be highly performant, visually engaging, and easily maintainable. 
+This repository contains the source code for the personal website, portfolio, and public thinking space of Advaita Chandra. It is built as a fast, accessible, and responsive personal web property.
 
-A standout feature of this project is its built-in **local editorial workspace (Admin Panel)**. Rather than relying on a third-party Headless CMS, content is managed locally in the browser through a visual interface, stored in JSON files, and deployed statically.
+The site includes an integrated **Admin Panel (`/admin`)** powered by Supabase (Auth, Postgres, and Storage). Content is managed through this visual interface and stored remotely in a single JSONB document (`site_content`), with bundled static JSON files serving as fallback and seed data.
 
 ## 2. Technology Stack
 - **Core Framework**: React 19 + Vite 6
-- **Routing**: React Router v7
-- **Styling**: Tailwind CSS v4
+- **Routing**: React Router v7 (SPA mode)
+- **Styling**: Tailwind CSS v4 (`src/index.css`)
 - **Animations & Interactions**: Framer Motion
 - **Smooth Scrolling**: Lenis
 - **Icons**: Lucide React
-- **Content Database**: Supabase Postgres (`site_content` table) with fallback to bundled flat JSON files (`src/data/*.json`)
+- **Content Database**: Supabase Postgres (`site_content` table, row `main`) with fallback to bundled flat JSON files (`src/data/*.json`)
 - **Backend / Storage / Auth**: Supabase (`@supabase/supabase-js`)
-- **Deployment**: Vercel (custom domain `advaitachandra.in`)
+- **Deployment**: Vercel (`advaitachandra.in`)
 
-## 3. System Architecture
-The application is bifurcated into two main experiences:
+> For the canonical technical architecture specification, rendering model, crawler limitations, and data flow details, see [`ARCHITECTURE.md`](file:///d:/Website/advaita-website/ARCHITECTURE.md).
+
+## 3. System Architecture Summary
+
+The codebase provides two primary user-facing areas:
 
 ### 3.1 Public Site
-The public-facing application is a highly optimized Static Site Generation (SSG) / Client-Side Rendered (CSR) hybrid:
-- Data is dynamically loaded from Supabase Postgres on mount, with immediate fallback to bundled `src/data/*.json` seed files if offline or unreachable.
-- At build time, `scripts/prerender.js` queries Supabase and pre-renders static HTML for all public routes alongside `sitemap.xml` for optimal SEO and crawler discovery.
+- Built as a React 19 Single Page Application (SPA).
+- **Build time**: `scripts/prerender.js` generates route-specific static HTML shells injecting only `<head>` metadata (title, description, OG/Twitter tags, JSON-LD) and generates `sitemap.xml`.
+- **Runtime**: Rendered client-side (CSR) into `<div id="root"></div>`. Dynamic content loads from Supabase Postgres on mount with immediate fallback to bundled `src/data/*.json` seed files if unreachable or offline.
 
 ### 3.2 Admin Panel (`/admin`)
-The admin panel is an integrated editorial dashboard:
-- **Authentication**: Secured with Supabase Auth.
-- **Persistence**: Content updates write directly to Supabase (`site_content` table) via Row-Level Security (RLS) policies, reflecting immediately on the live public site without requiring manual code rebuilds.
-- **Media**: Uploads are compressed client-side via `browser-image-compression` and stored in Supabase Storage (`images` bucket).
+- Lazy-loaded via `React.lazy()` so public visitors never download admin bundles.
+- Secured by Supabase Auth (email/password).
+- Content updates persist to Supabase Postgres (`site_content` table, row `main`) via Row-Level Security (RLS) policies.
+- Media uploads are compressed client-side via `browser-image-compression` and stored directly in the Supabase Storage `images` bucket.
+- *Verification Status*: `IMPLEMENTED — LIVE ROUND-TRIP NOT INDEPENDENTLY VERIFIED`.
 
 ## 4. Directory Structure
 
 ```text
 advaita-website/
-├── public/                   # Static media, icons, and assets (served at root)
+├── public/                   # Static media, icons, robots.txt
 ├── scripts/                  # Build scripts (prerender.js, validate-content.js)
 ├── supabase/                 # Supabase schema definitions (schema.sql)
 ├── src/                      # Source code
-│   ├── components/           # Reusable UI components (Buttons, Cards, Badges)
-│   │   ├── admin/            # Admin-specific components
-│   │   ├── ui/               # Core UI primitive components
+│   ├── components/           # Reusable UI components
+│   │   ├── admin/            # Admin-specific components & forms
+│   │   ├── layout/           # Container, Header, Footer, Section, SkipLink
+│   │   ├── meta/             # Seo, Icon
+│   │   ├── ui/               # Core UI primitives (Button, Card, Modal, etc.)
 │   │   └── ...
-│   ├── config/               # App-wide configuration values
-│   ├── data/                 # Seed database: JSON files (blog, projects, skills)
-│   ├── hooks/                # Custom React hooks (useFilters, useShortcuts)
-│   ├── layouts/              # Layout wrappers (PublicLayout vs AdminLayout)
-│   ├── lib/                  # Utilities (animations, seo, format, supabase sync)
-│   ├── pages/                # Route entry components (Home, About, Blog, etc.)
-│   ├── App.jsx               # App shell and routing configuration
+│   ├── config/               # App configuration (nav.js, site.js)
+│   ├── data/                 # Seed database: JSON files (blog, projects, philosophy)
+│   ├── hooks/                # Custom React hooks (useDerivedContent, useFilters)
+│   ├── layouts/              # Layout wrappers (PublicLayout, AdminLayout)
+│   ├── lib/                  # Utilities (animations, format, seo, store, supabase)
+│   ├── pages/                # Route components (Home, About, Blog, etc.)
+│   │   └── admin/            # AdminApp and 18 editor views
+│   ├── App.jsx               # App shell and route configuration
 │   ├── main.jsx              # React mounting entry point
-│   └── index.css             # Global styles and Tailwind imports
+│   └── index.css             # Design tokens and Tailwind directives
 ├── package.json              # Dependencies and scripts
 ├── vercel.json               # Vercel deployment rewrites
-└── vite.config.js            # Vite configuration
+└── vite.config.js            # Vite build configuration
 ```
 
 ## 5. Development Workflow
@@ -63,72 +70,54 @@ advaita-website/
 - npm (Node Package Manager)
 
 ### Commands
-- `npm run dev`: Starts the Vite development server (usually at `http://localhost:5173`).
-- `npm run build`: Compiles the application and runs the custom prerenderer.
+- `npm run dev`: Starts the Vite development server (`http://localhost:5173`).
+- `npm run build`: Compiles the application and runs the head-only prerenderer (`scripts/prerender.js`).
 - `npm run preview`: Previews the production build locally.
-- `npm run content:validate`: Checks the JSON files in `src/data/` for schema correctness.
+- `npm run content:validate`: Validates seed JSON files against schema rules.
 - `npm run lint`: Lints the codebase using ESLint.
-- `npm run format`: Formats code via Prettier.
-- `npm test`: Runs the automated test suite.
+- `npm test`: Runs automated test suite (`test/core.test.js`).
 
 ## 6. Content Management & Publishing
 
-1. **Live Admin Updates**: Navigate to `/admin` on the live site or locally. Authenticate and make edits to pages, blog posts, or projects. Changes save immediately to Supabase and reflect live.
-2. **Media Uploads**: Add photos in the photography or project editors. Images are automatically resized and compressed on the client before uploading to Supabase Storage.
-3. **Code & Seed Updates**: When modifying site components, layouts, or baseline seed JSON:
+1. **Admin Updates (`/admin`)**: Authenticate and modify profile details, blog posts, philosophy notes, projects, or photography metadata. Changes save to Supabase Postgres. Because public visitors fetch content dynamically on client mount, updates are architected to appear without triggering a static code rebuild. (*Status: IMPLEMENTED — LIVE ROUND-TRIP NOT INDEPENDENTLY VERIFIED*).
+2. **Media Uploads**: Images are compressed client-side via `browser-image-compression` and uploaded to the public Supabase Storage bucket (`images`).
+3. **Seed / Code Changes**: When updating site components, design tokens, or bundled fallback seed data:
    ```bash
    git add .
-   git commit -m "Your descriptive commit message"
+   git commit -m "Descriptive commit message"
    git push origin main
    ```
-4. **Automated Deployment**: Pushes to the `main` branch automatically trigger Vercel to build the project, pre-render all routes, and deploy to production at `advaitachandra.in`.
+4. **Automated Deployment**: Pushes to `main` trigger automated builds on Vercel (`npm run build`), producing static assets, route-specific `<head>` metadata, and updated sitemaps.
 
 ## 7. Key Features & Integrations
 
-- **Seo.jsx & Prerendering**: Ensures meta tags, descriptions, and page titles are injected statically into the DOM so web crawlers index the site effectively.
-- **useFilters / FilterBar**: Robust filtering system implemented in the portfolio and blog pages.
-- **Lenis Smooth Scroll**: Found in `src/lib/smooth-scroll.js`, applies butter-smooth native-feeling scrolling across the application.
-- **Framer Motion**: Complex page transitions, hover states, and revealing elements are implemented in `src/lib/animations.js` and wrapped within components.
-- **Supabase Integration (Experimental/Sync)**: Found in `src/lib/supabase`, this provides potential remote synchronization of state or schema enforcement.
+- **Seo Component & Head-Only Prerender**: Injects route-specific `<head>` metadata for social unfurling and crawler discovery. See [`ARCHITECTURE.md`](file:///d:/Website/advaita-website/ARCHITECTURE.md) for limitations regarding dynamic body content.
+- **Supabase Data Layer**: Primary backend integration (`src/lib/supabase/`) providing Postgres JSONB content persistence, Auth session management, and image storage, with automatic fallback to bundled JSON if offline.
+- **Lenis Smooth Scroll**: Found in `src/lib/smooth-scroll.js`, handles smooth vertical page scrolling.
+- **Framer Motion Centralization**: Centralized easing and animation variants (`src/lib/animations.js`) with OS `prefers-reduced-motion` compliance.
+- **Route Preloading**: Found in `src/lib/preload.js`, preloads route bundles on idle and pointer/focus events for responsive navigation.
 
 ## 8. Extensibility
-To add a new section to the site:
-1. Define the schema and create a new JSON file in `src/data/`.
-2. Map the data via a new page component in `src/pages/`.
-3. Add the route in `App.jsx`.
-4. (Optional) Create admin form fields to manage the new JSON file via the `/admin` interface.
+To add or modify data models:
+1. Update schema definitions in `src/lib/schema.js` and document migrations in `src/lib/store.js` if the document shape changes.
+2. Update seed defaults in `src/data/seed.js` or the corresponding JSON file in `src/data/`.
+3. Wire page components in `src/pages/` and register routes in `src/config/nav.js` and `src/App.jsx`.
+4. Update the corresponding editor in `src/pages/admin/` to allow editing the new fields.
 
 ## 9. Design System & Styling
 
-The site employs an **"editorial and contemporary"** visual identity, combining classic typography with modern layout primitives.
+- **Tailwind CSS v4**: Utility-driven styling configured in `src/index.css` via the `@theme` directive.
+- **Color Palette**: Dark mode default with light mode toggle.
+  - Base neutrals: `--color-canvas`, `--color-surface`, `--color-raised`.
+  - Accent color: **Warm Stone / Copper** (`--color-accent: #c2956a`, `--color-accent-strong: #d4a87d`).
+  - Epistemic markers: `--color-fact`, `--color-analysis`, `--color-opinion`, `--color-limitation`.
+- **Typography**: Responsive typography powered by `clamp()` fluid type scaling.
+  - Headings: Playfair Display (Serif)
+  - Body: Inter (Sans)
+- **Reduced Motion Support**: `src/index.css` and Framer Motion's `MotionConfig` strictly respect `prefers-reduced-motion: reduce`.
 
-- **Tailwind CSS v4**: Styling is strictly utility-driven using the newest version of Tailwind CSS, configured in `src/index.css` via the `@theme` directive.
-- **Color Palette**: The site features distinct Dark (default) and Light mode themes.
-  - Base surfaces use tailored neutral tokens (`--color-canvas`, `--color-surface`).
-  - The accent identity is branded as **"Warm Stone / Oxidized Copper"** (`--color-accent` / `--color-accent-strong`).
-  - The system also exposes "epistemic labels" (`--color-fact`, `--color-analysis`, `--color-opinion`, `--color-limitation`) for callouts and blog categorization.
-- **Fluid Typography**: Responsive typography is powered by `clamp()` functions spanning from `--text-base` to `--text-6xl`, scaling smoothly between screen sizes without discrete breakpoints.
-  - **Headings**: Playfair Display (Serif)
-  - **Body**: Inter (Sans)
+## 10. Code Conventions
 
-## 10. Animations & Interactions
-
-Visual polish is a first-class feature of the project, built thoughtfully to maintain accessibility.
-
-- **Framer Motion Centralization**: Common animation variants and easings (e.g., `EASE_OUT_EXPO`) are centrally maintained in `src/lib/animations.js`. This guarantees that transitions (like `pageLoadVariant`, `heroLine`, or `cardHover`) feel unified across all pages.
-- **Scroll Effects**: Intersection observers tied to Framer Motion reveal sections fluidly as the user scrolls (`sectionReveal`, `imageReveal`).
-- **Reduced Motion Support**: `index.css` actively respects the user's OS `prefers-reduced-motion` settings.
-- **Lenis Integration**: The application bypasses harsh native scroll jumps in favor of Lenis, creating a highly tactile, continuous vertical scroll experience.
-
-## 11. Code Conventions & Organization
-
-- **Alias Imports**: The `vite.config.js` declares `@/` as an alias mapped to `src/`. For example, `import Button from '@/components/ui/Button'`.
-- **Component Hierarchy**: Components are deliberately scoped into:
-  - `@/components/ui`: Dumb/primitive visual components (Cards, Buttons).
-  - `@/components/admin`: CMS-specific visual boundaries.
-  - `@/pages`: High-level route entries.
-- **Custom React Hooks**: Complex logic is extracted into pure hooks found in `src/hooks/`.
-  - `useFilters.js`: Reusable sorting/filtering logic used for the Portfolio and Blog.
-  - `useShortcuts.js`: Event listener wrappers for Admin keyboard commands.
-  - `useDerivedContent.js`: Normalizing raw JSON into safely renderable structures.
-- **Performance Profiling**: The Admin panel is code-split and lazy-loaded via `React.lazy()` to ensure that the heavy editorial interfaces are never pushed onto public end-users visiting the static site, conforming to the strict Vite chunk limits set in the build config.
+- **Alias Imports**: `vite.config.js` configures `@/` mapped to `src/`.
+- **Admin Code Splitting**: The admin panel is code-split and lazy-loaded via `React.lazy()` to ensure editorial dependencies never impact public bundle sizes.
+- **Pure Helpers**: Formatting and schema validation routines are kept pure and independently testable in `src/lib/format.js` and `src/lib/schema.js`.

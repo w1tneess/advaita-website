@@ -15,13 +15,24 @@ export function useFilters(initial = {}) {
     setValues((current) => ({ ...current, [key]: value }))
   }, [])
 
-  /** Set a value, or clear it back to the default if it is already selected. */
+  /** Set a value, or clear it back to the default if it is already selected. Supports arrays for multi-select. */
   const toggleValue = useCallback(
     (key, value) => {
-      setValues((current) => ({
-        ...current,
-        [key]: current[key] === value ? initial[key] : value,
-      }))
+      setValues((current) => {
+        const currentVal = current[key]
+        if (Array.isArray(currentVal)) {
+          return {
+            ...current,
+            [key]: currentVal.includes(value)
+              ? currentVal.filter((v) => v !== value)
+              : [...currentVal, value],
+          }
+        }
+        return {
+          ...current,
+          [key]: currentVal === value ? initial[key] : value,
+        }
+      })
     },
     [initial],
   )
@@ -32,6 +43,11 @@ export function useFilters(initial = {}) {
     () =>
       Object.entries(values).filter(([key, value]) => {
         const base = initial[key]
+        if (Array.isArray(value)) {
+          if (!Array.isArray(base)) return value.length > 0
+          if (value.length !== base.length) return true
+          return value.some((v) => !base.includes(v))
+        }
         if (typeof value === 'string') return value.trim() !== String(base ?? '').trim()
         return value !== base
       }).length,

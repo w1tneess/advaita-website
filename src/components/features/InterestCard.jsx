@@ -1,45 +1,70 @@
-import Card from '@/components/ui/Card.jsx'
-import Icon from '@/components/meta/Icon.jsx'
+import {
+  BarChart3,
+  BookOpen,
+  Brain,
+  Cpu,
+  GraduationCap,
+  Landmark,
+  Newspaper,
+  Scale,
+  ScrollText,
+  ShieldCheck,
+  TrendingUp,
+} from 'lucide-react'
 
-import { motion } from 'framer-motion'
-import { EASE_OUT_EXPO } from '@/lib/animations.js'
+const ICON_MAP = {
+  BookOpen,
+  Brain,
+  TrendingUp,
+  Cpu,
+  Landmark,
+  ScrollText,
+  Newspaper,
+  Scale,
+  BarChart3,
+  ShieldCheck,
+  GraduationCap,
+}
 
 /**
  * Research-interest card.
  *
- * The note under each interest deliberately frames it as an interest rather than an
- * area of expertise.
+ * Designed as a quiet, authoritative editorial index entry — balancing clean
+ * typography with bespoke hairline iconography.
  */
 export default function InterestCard({ interest, headingLevel = 3, index }) {
   const Heading = `h${headingLevel}`
+  const IconComponent = interest.icon ? ICON_MAP[interest.icon] : null
 
   return (
-    <Card
-      as={motion.div}
-      className="group relative flex gap-4 p-5 sm:p-6 h-full overflow-hidden transform-gpu border border-line/80 hover:border-accent/40 transition-all duration-300 hover:shadow-card-hover"
-      whileHover={{ y: -3 }}
-      transition={{ duration: 0.25, ease: EASE_OUT_EXPO }}
+    <div
+      className="group relative flex flex-col justify-between p-5 sm:p-6 rounded-card border border-line/60 bg-surface/50 transition-all duration-200 hover:border-accent/40 hover:bg-surface shadow-subtle"
     >
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/30 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-      <span
-        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-accent/20 bg-accent/10 text-accent transition-all duration-300 group-hover:scale-105 group-hover:bg-accent/20 group-hover:border-accent/40 shadow-sm"
-        aria-hidden="true"
-      >
-        <Icon name={interest.icon} className="h-4.5 w-4.5" />
-      </span>
-      <div className="min-w-0 flex-1">
-        <div className="flex items-center justify-between gap-2">
-          <Heading className="text-base font-semibold text-ink group-hover:text-accent transition-colors duration-200">
-            {interest.name}
-          </Heading>
+      <div>
+        <div className="flex items-center justify-between gap-3 pb-3 mb-3 border-b border-line/30">
+          <div className="flex items-center gap-2.5 min-w-0">
+            {IconComponent && (
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded border border-line/50 bg-raised/60 text-accent/90 transition-colors group-hover:border-accent/40 group-hover:text-accent">
+                <IconComponent className="h-3.5 w-3.5" strokeWidth={1.75} aria-hidden="true" />
+              </span>
+            )}
+            <Heading className="font-display text-base font-semibold tracking-tight text-ink group-hover:text-accent transition-colors duration-200 truncate">
+              {interest.name}
+            </Heading>
+          </div>
           {index !== undefined && (
-            <span className="font-mono text-[11px] font-medium text-muted/40 group-hover:text-accent/70 transition-colors">
+            <span className="font-mono text-[11px] font-medium text-muted/40 group-hover:text-accent/80 transition-colors shrink-0">
               {String(index + 1).padStart(2, '0')}
             </span>
           )}
         </div>
-        {interest.note && <p className="mt-1.5 text-sm leading-relaxed text-muted/90">{interest.note}</p>}
+        {interest.note && (
+          <p className="text-sm leading-relaxed text-muted/90">
+            {interest.note}
+          </p>
+        )}
       </div>
-    </Card>
+    </div>
   )
 }
+

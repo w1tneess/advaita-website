@@ -10,17 +10,16 @@ import ProjectCard from '@/components/features/ProjectCard.jsx'
 import Seo from '@/components/meta/Seo.jsx'
 import { useContent } from '@/lib/content.jsx'
 import { PUBLIC_ROUTES } from '@/config/nav.js'
-import { pluralize } from '@/lib/format.js'
 import { useFilters } from '@/hooks/useFilters.js'
 import { pageLoadVariant, staggerContainer, staggerItem, scrollViewport } from '@/lib/animations.js'
 
 const ROUTE = PUBLIC_ROUTES.find((route) => route.key === 'projects')
 
-const INITIAL_FILTERS = { category: 'all' }
+const INITIAL_FILTERS = { category: [] }
 
 export default function Projects() {
   const { publicProjects, projectCategories } = useContent()
-  const { values, setValue, reset, hasActiveFilters } = useFilters(INITIAL_FILTERS)
+  const { values, setValue, toggleValue, reset, hasActiveFilters } = useFilters(INITIAL_FILTERS)
 
   const counts = useMemo(() => {
     const result = { all: publicProjects.length }
@@ -34,9 +33,11 @@ export default function Projects() {
 
   const visible = useMemo(
     () =>
-      values.category === 'all'
+      values.category.length === 0
         ? publicProjects
-        : publicProjects.filter((project) => (project.categories || []).includes(values.category)),
+        : publicProjects.filter((project) =>
+            values.category.some((c) => (project.categories || []).includes(c)),
+          ),
     [publicProjects, values.category],
   )
 
@@ -46,43 +47,53 @@ export default function Projects() {
 
       <Container>
         <motion.div
-          className="py-16 sm:py-20 md:py-36"
+          className="py-12 sm:py-16 md:py-20"
           initial="hidden"
           animate="visible"
           variants={pageLoadVariant}
         >
-          <header className="max-w-2xl">
-            <h1 className="font-display text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
-              Projects
-            </h1>
-            <p className="mt-5 text-lg leading-relaxed text-muted">
-              Projects and source code across research, data, and software design.
-            </p>
-          </header>
+          {/* Header section with baseline-aligned filters */}
+          <div className="border-b border-line/40 pb-8 sm:pb-10">
+            <div className="flex items-center gap-2 text-[11px] font-mono tracking-widest text-accent uppercase mb-3">
+              <span>⟐</span>
+              <span>PORTFOLIO & APPLIED RESEARCH</span>
+            </div>
 
-          {publicProjects.length > 0 && (
-            <FilterBar
-              label="Filter by category"
-              className="mt-10"
-              options={(projectCategories || []).map((category) => ({
-                value: category.slug,
-                label: category.name,
-              }))}
-              value={values.category}
-              onChange={(value) => setValue('category', value)}
-              counts={counts}
-            />
-          )}
+            <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
+              <div className="max-w-xl">
+                <h1 className="font-display text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl text-ink">
+                  Projects
+                </h1>
+                <p className="mt-3 text-base sm:text-lg leading-relaxed text-muted">
+                  Applied work and systems across philosophy, machine intelligence, and Indian governance.
+                </p>
+              </div>
 
-          {publicProjects.length > 0 && (
-            <p className="mt-6 text-sm text-muted" role="status">
-              Showing {visible.length} {pluralize(visible.length, 'project')}
-              {values.category !== 'all' && ` of ${publicProjects.length}`}.
-            </p>
-          )}
+              {publicProjects.length > 0 && (
+                <div className="sm:self-start sm:pt-1">
+                  <FilterBar
+                    label="Filter by category"
+                    options={(projectCategories || []).map((category) => ({
+                      value: category.slug,
+                      label: category.name,
+                    }))}
+                    value={values.category}
+                    onChange={(value) => {
+                      if (value === 'all') {
+                        setValue('category', [])
+                      } else {
+                        toggleValue('category', value)
+                      }
+                    }}
+                    counts={counts}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
 
           {visible.length === 0 ? (
-            <div className="mt-12 py-8 border-t border-line">
+            <div className="py-12">
               <EmptyState
                 icon={FolderOpen}
                 title={publicProjects.length === 0 ? "No projects yet" : "No projects in this category"}
@@ -98,7 +109,7 @@ export default function Projects() {
             </div>
           ) : (
             <motion.ul
-              className="mt-12 space-y-8"
+              className="mt-8 sm:mt-10 space-y-8"
               variants={staggerContainer}
               initial="hidden"
               whileInView="visible"

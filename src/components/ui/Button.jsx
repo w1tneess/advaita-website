@@ -12,13 +12,13 @@ import { preloadRoute } from '@/lib/preload.js'
 
 const VARIANTS = {
   primary:
-    'bg-accent text-on-accent border border-transparent hover:bg-accent-strong shadow-subtle hover:shadow-[0_0_22px_-4px_var(--color-accent)]/30 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]',
+    'bg-accent text-on-accent border border-accent hover:bg-accent-strong hover:border-accent-strong shadow-subtle hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.99]',
   secondary:
-    'bg-raised text-ink border border-line hover:border-accent/60 hover:bg-surface shadow-subtle hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]',
+    'bg-surface text-ink border border-line hover:border-ink/25 hover:bg-raised shadow-subtle hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.99]',
   ghost:
-    'bg-transparent text-ink border border-transparent hover:bg-raised hover:text-accent active:scale-[0.98]',
+    'bg-transparent text-muted border border-transparent hover:bg-surface hover:text-ink active:scale-[0.99]',
   danger:
-    'bg-transparent text-limitation border border-limitation/40 hover:bg-limitation/10 hover:border-limitation active:scale-[0.98]',
+    'bg-transparent text-limitation border border-limitation/30 hover:bg-limitation/10 hover:border-limitation active:scale-[0.99]',
   link: 'bg-transparent text-accent border-0 p-0 underline underline-offset-4 hover:text-accent-strong',
 }
 

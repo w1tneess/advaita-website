@@ -29,8 +29,8 @@ export default function BlogPost() {
         updatedAt={post.updated_at}
       />
 
-      <article className="py-12 sm:py-16 md:py-32">
-        <Container className="max-w-3xl">
+      <article className="py-12 sm:py-16 md:py-20">
+        <Container width="prose">
           <Breadcrumbs />
 
           <header>
