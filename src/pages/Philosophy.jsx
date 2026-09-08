@@ -11,6 +11,7 @@ import { useFilters } from '@/hooks/useFilters.js'
 import { useContent } from '@/lib/content.jsx'
 import { PUBLIC_ROUTES } from '@/config/nav.js'
 import { formatDate, readingMinutes, byNewest } from '../lib/format.js'
+import { Link } from 'react-router'
 import {
   pageLoadVariant,
   sectionReveal,
@@ -61,45 +62,10 @@ const THINKER_DOSSIERS = {
   },
 }
 
-const DEFAULT_NOTES = [
-  {
-    id: 'note-krishnamurti-observer',
-    title: 'On Krishnamurti and the Mechanics of the Observer',
-    category: 'Epistemology',
-    status: 'published',
-    published_at: '2025-11-14',
-    content:
-      "Krishnamurti argues that psychological conflict begins when the observer separates themselves from what is observed—treating fear, envy, or restlessness as an external object to be managed or suppressed.\n\nWhen reading this alongside contemporary cognitive psychology, the central question is whether direct observation without internal verbal commentary is neurologically sustainable, or if the 'silent observer' is simply another sub-network of narrative metacognition.\n\nMy working hypothesis: non-verbal attention does not eliminate mental constructs, but slows the recursive loop of reactive self-justification, allowing one to notice automatic habits before acting on them.",
-  },
-  {
-    id: 'note-camus-absurd',
-    title: 'Camus: The Absurd as an Epistemic Baseline',
-    category: 'Existentialism',
-    status: 'published',
-    published_at: '2025-10-02',
-    content:
-      'In The Myth of Sisyphus, the absurd is not a property of the universe alone; it is the friction produced when the human longing for clarity collides with an unanswering world. Rather than leaping into metaphysical certainty or cynicism, Camus demands maintaining the tension without illusion.\n\nFor scientific and data work, this serves as a useful discipline: accept the presence of unresolvable ambiguity and missing data without losing the appetite for rigorous, sustained inquiry.',
-  },
-  {
-    id: 'note-dostoevsky-underground',
-    title: 'Dostoevsky on Rational Egoism and Irrational Will',
-    category: 'Psychology & Ethics',
-    status: 'published',
-    published_at: '2025-08-19',
-    content:
-      "Reading Notes from Underground against modern behavioral economics: utilitarian and rational choice models often assume that individuals will act in their enlightened self-interest once adequately informed. Dostoevsky's underground narrator directly attacks this assumption—humans will deliberately choose irrationality, suffering, and spite if that is what preserves their sense of autonomy.\n\nAny computational or institutional system that assumes pure utility maximization consistently misjudges human behavior because it underestimates the human refusal to be treated as a predictable equation.",
-  },
-]
-
 export default function Philosophy() {
   const { philosophy, publicNotes } = useContent()
   const thinkers = philosophy.thinkers || []
-  const notes =
-    publicNotes && publicNotes.length > 0
-      ? publicNotes
-      : philosophy.notes && philosophy.notes.length > 0
-        ? philosophy.notes
-        : DEFAULT_NOTES
+  const notes = publicNotes || []
 
   const { values, setValue, toggleValue } = useFilters(INITIAL_FILTERS)
   const activeCategories = values.category
@@ -388,9 +354,11 @@ export default function Philosophy() {
                       <div className="min-w-0 flex-1 w-full">
                         {/* Title Row + Category Badge */}
                         <div className="flex flex-wrap items-baseline justify-between gap-3 border-b border-line/30 pb-3">
-                          <h3 className="font-display text-lg sm:text-xl font-semibold tracking-tight text-ink group-hover:text-accent transition-colors">
-                            {note.title}
-                          </h3>
+                          <Link to={`/philosophy/${note.slug}`} className="group-hover:text-accent transition-colors">
+                            <h3 className="font-display text-lg sm:text-xl font-semibold tracking-tight text-ink">
+                              {note.title}
+                            </h3>
+                          </Link>
                           {note.category && (
                             <span className="inline-flex items-center rounded-full border border-line bg-raised px-2.5 py-0.5 text-xs font-medium text-accent">
                               {note.category}
@@ -413,11 +381,15 @@ export default function Philosophy() {
 
                         {/* Body paragraphs */}
                         <div className="mt-4 prose-body text-ink/90 text-sm sm:text-base leading-relaxed max-w-prose">
-                          {(note.content || '').split('\n\n').map((paragraph, pIdx) => (
-                            <p key={pIdx} className={pIdx > 0 ? 'mt-3.5' : ''}>
-                              {paragraph}
-                            </p>
-                          ))}
+                          <p>
+                            {note.excerpt || (note.content?.length > 150 ? note.content.slice(0, 150) + '...' : note.content)}
+                          </p>
+                        </div>
+                        
+                        <div className="mt-4">
+                          <Link to={`/philosophy/${note.slug}`} className="text-sm font-medium text-accent hover:underline">
+                            Read full note &rarr;
+                          </Link>
                         </div>
                       </div>
                     </div>

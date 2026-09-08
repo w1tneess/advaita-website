@@ -15,6 +15,7 @@ const Photography = lazy(() => import('./pages/Photography.jsx'))
 const Projects = lazy(() => import('./pages/Projects.jsx'))
 const Blog = lazy(() => import('./pages/Blog.jsx'))
 const BlogPost = lazy(() => import('./pages/BlogPost.jsx'))
+const NotePost = lazy(() => import('./pages/NotePost.jsx'))
 
 /**
  * Route table.
@@ -57,6 +58,7 @@ export default function App() {
             <Route index element={<Home />} />
             <Route path="about" element={<About />} />
             <Route path="philosophy" element={<Philosophy />} />
+            <Route path="philosophy/:slug" element={<NotePost />} />
             <Route path="photography" element={<Photography />} />
             <Route path="projects" element={<Projects />} />
             <Route path="blog" element={<Blog />} />

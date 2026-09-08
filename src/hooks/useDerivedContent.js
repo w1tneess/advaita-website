@@ -69,6 +69,11 @@ export function useDerivedContent(content, previewDrafts) {
     [publicBlogPosts],
   )
 
+  const findNoteBySlug = useCallback(
+    (slug) => publicNotes.find((note) => note.slug === slug) ?? null,
+    [publicNotes],
+  )
+
   return {
     settings,
     projects,
@@ -86,5 +91,6 @@ export function useDerivedContent(content, previewDrafts) {
     skillGroups,
     findProjectBySlug,
     findBlogPostBySlug,
+    findNoteBySlug,
   }
 }
