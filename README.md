@@ -44,7 +44,7 @@ npm test
 The site runs on a **Single Page Application (SPA) architecture with build-time Head-Only Prerendering and runtime CSR**:
 - **Public Site**: Fast, client-side rendered React 19 application with static route `<head>` metadata shells and `sitemap.xml` generated at build time (`scripts/prerender.js`).
 - **Data Layer**: Live content is loaded dynamically from Supabase Postgres (`site_content` table) with automatic fallback to bundled seed JSON files (`src/data/*.json`).
-- **Admin Workspace (`/admin`)**: Lazy-loaded editorial dashboard authenticated via Supabase Auth with Postgres Row-Level Security (RLS). Updates write directly to Supabase.
+- **Editorial Workspace**: Lazy-loaded editorial dashboard authenticated via Supabase Auth with Postgres Row-Level Security (RLS). Updates write directly to Supabase.
 
 ## Deployment
 
@@ -52,13 +52,6 @@ The site is hosted on **Vercel** with custom domain routing (`advaitachandra.in`
 - Pushes to the `main` branch trigger Vercel's build pipeline (`npm run build`).
 - Build output consists of compiled Vite chunks in `dist/` alongside pre-rendered static HTML entries for each public route.
 - SPA fallback rewrites are configured in `vercel.json`.
-
-## Admin Panel
-
-Access `/admin` on the live site or locally with `npm run dev`.
-- Authentication is handled securely through Supabase Auth.
-- Form mutations immediately persist to the Supabase database.
-- Drafts and published items are managed with full epistemic labeling and live previews.
 
 ## Media
 

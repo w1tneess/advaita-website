@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, useMemo, useCallback } from 'react'
 import { Link } from 'react-router'
-import { ArrowLeft, Loader2, Mail, Shield, AlertTriangle, UserPlus, LogIn, Laptop } from 'lucide-react'
+import { ArrowLeft, Loader2, Mail, Shield, AlertTriangle, LogIn, Laptop } from 'lucide-react'
 
 import { supabase, isSupabaseConfigured } from '../../lib/supabase/client.js'
 import PasswordInput from '../ui/PasswordInput.jsx'
@@ -22,7 +22,6 @@ export default function AdminAuth({ children }) {
 
   const [session, setSession] = useState(null)
   const [loading, setLoading] = useState(true)
-  const [authMode, setAuthMode] = useState('signin') // 'signin' | 'signup'
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [submitting, setSubmitting] = useState(false)
@@ -32,19 +31,21 @@ export default function AdminAuth({ children }) {
 
   // Check auth on mount (both Supabase session and Local session)
   useEffect(() => {
-    // 1. Check local offline mode session
-    try {
-      const localStored = localStorage.getItem(LOCAL_AUTH_KEY) || sessionStorage.getItem(LOCAL_AUTH_KEY)
-      if (localStored) {
-        const parsed = JSON.parse(localStored)
-        if (parsed?.user) {
-          setSession(parsed)
-          setLoading(false)
-          return
+    // 1. Check local offline mode session (development only)
+    if (import.meta.env.DEV) {
+      try {
+        const localStored = localStorage.getItem(LOCAL_AUTH_KEY) || sessionStorage.getItem(LOCAL_AUTH_KEY)
+        if (localStored) {
+          const parsed = JSON.parse(localStored)
+          if (parsed?.user) {
+            setSession(parsed)
+            setLoading(false)
+            return
+          }
         }
+      } catch (_) {
+        // Ignore storage access error
       }
-    } catch (_) {
-      // Ignore storage access error
     }
 
     // 2. If Supabase is unconfigured, finish loading
@@ -86,49 +87,26 @@ export default function AdminAuth({ children }) {
     e.preventDefault()
 
     if (!isConfigured) {
-      toast.error('Supabase is not configured. You can use Local Mode to manage content.')
+      toast.error('Supabase is not configured.')
       return
     }
 
     setSubmitting(true)
 
     try {
-      if (authMode === 'signin') {
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        })
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
 
-        if (error) {
-          toast.error(error.message || 'Login failed')
-          return
-        }
+      if (error) {
+        toast.error(error.message || 'Login failed')
+        return
+      }
 
-        if (data?.session) {
-          setSession(data.session)
-          toast.success('Signed in to workspace!')
-          setEmail('')
-          setPassword('')
-        }
-      } else {
-        // Sign up new admin user
-        const { data, error } = await supabase.auth.signUp({
-          email,
-          password,
-        })
-
-        if (error) {
-          toast.error(error.message || 'Sign up failed')
-          return
-        }
-
-        if (data?.session) {
-          setSession(data.session)
-          toast.success('Admin account created and signed in!')
-        } else {
-          toast.success('Account created! Please check your email to verify.')
-          setAuthMode('signin')
-        }
+      if (data?.session) {
+        setSession(data.session)
+        toast.success('Signed in to workspace!')
         setEmail('')
         setPassword('')
       }
@@ -224,8 +202,8 @@ export default function AdminAuth({ children }) {
             </p>
           </div>
 
-          {/* Unconfigured Alert */}
-          {!isConfigured && (
+          {/* Unconfigured Alert (Development only) */}
+          {!isConfigured && import.meta.env.DEV && (
             <div className="mb-6 w-full rounded-xl border border-[#D1B18A]/30 bg-[#D1B18A]/5 p-4 text-xs text-neutral-300 flex items-start gap-3">
               <AlertTriangle className="h-4 w-4 shrink-0 text-[#D1B18A] mt-0.5" />
               <div>
@@ -239,36 +217,6 @@ export default function AdminAuth({ children }) {
 
           {/* Auth Card */}
           <div className="w-full rounded-2xl border border-[#242626] bg-[#121414] p-7 sm:p-9 shadow-2xl relative">
-            {/* Tab switch between Sign In and Sign Up */}
-            {isConfigured && (
-              <div className="flex border-b border-[#242626] pb-4 mb-6">
-                <button
-                  type="button"
-                  onClick={() => setAuthMode('signin')}
-                  className={`flex-1 pb-2 text-xs font-mono tracking-wider uppercase transition-colors flex items-center justify-center gap-1.5 ${
-                    authMode === 'signin'
-                      ? 'border-b-2 border-[#D1B18A] text-[#E8E6E1] font-semibold'
-                      : 'text-neutral-500 hover:text-neutral-300'
-                  }`}
-                >
-                  <LogIn className="h-3.5 w-3.5" />
-                  Sign In
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setAuthMode('signup')}
-                  className={`flex-1 pb-2 text-xs font-mono tracking-wider uppercase transition-colors flex items-center justify-center gap-1.5 ${
-                    authMode === 'signup'
-                      ? 'border-b-2 border-[#D1B18A] text-[#E8E6E1] font-semibold'
-                      : 'text-neutral-500 hover:text-neutral-300'
-                  }`}
-                >
-                  <UserPlus className="h-3.5 w-3.5" />
-                  Create Admin
-                </button>
-              </div>
-            )}
-
             <form onSubmit={handleAuthSubmit} className="space-y-5">
               <div className="space-y-1.5">
                 <label htmlFor="auth-email" className="block font-mono text-[11px] uppercase tracking-wider text-neutral-400">
@@ -338,11 +286,6 @@ export default function AdminAuth({ children }) {
                       <Loader2 className="h-4 w-4 animate-spin" />
                       <span>Authenticating...</span>
                     </>
-                  ) : authMode === 'signup' ? (
-                    <>
-                      <UserPlus className="h-4 w-4" />
-                      <span>Register Admin Account</span>
-                    </>
                   ) : (
                     <>
                       <LogIn className="h-4 w-4" />
@@ -351,15 +294,17 @@ export default function AdminAuth({ children }) {
                   )}
                 </button>
 
-                {/* Local Mode Alternative */}
-                <button
-                  type="button"
-                  onClick={handleEnterLocalMode}
-                  className="w-full flex items-center justify-center gap-2 rounded-lg border border-[#292a2a] bg-[#191b1b] py-2.5 text-xs font-mono uppercase tracking-wider text-neutral-300 hover:border-[#D1B18A] hover:text-[#E8E6E1] transition-all cursor-pointer"
-                >
-                  <Laptop className="h-3.5 w-3.5 text-[#D1B18A]" />
-                  <span>Continue in Local Mode</span>
-                </button>
+                {/* Local Mode Alternative (Development only) */}
+                {import.meta.env.DEV && (
+                  <button
+                    type="button"
+                    onClick={handleEnterLocalMode}
+                    className="w-full flex items-center justify-center gap-2 rounded-lg border border-[#292a2a] bg-[#191b1b] py-2.5 text-xs font-mono uppercase tracking-wider text-neutral-300 hover:border-[#D1B18A] hover:text-[#E8E6E1] transition-all cursor-pointer"
+                  >
+                    <Laptop className="h-3.5 w-3.5 text-[#D1B18A]" />
+                    <span>Continue in Local Mode (Dev Only)</span>
+                  </button>
+                )}
               </div>
             </form>
           </div>
