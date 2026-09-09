@@ -27,14 +27,11 @@ export default function SkillsEditor() {
 
   return (
     <AdminPage
-      title="Abilities"
-      description="What Advaita can currently do, grouped, with the project that shows it where one exists."
+      title="Skills &amp; Tools"
+      description="Technical and research tools you work with, organized by domain and linked to projects."
     >
-      <Callout variant="limitation" title="Two levels, on purpose">
-        “Learning” means exactly that, and is not a claim of competence. “Working knowledge” means
-        the ability has been used in at least one real project. There is no third level and no
-        percentage, because neither was ever measured — and an unmeasured number on a portfolio is
-        just decoration.
+      <Callout variant="limitation" title="Honest Skill Levels">
+        Skills are marked as either “Learning” (currently exploring or studying) or “Working knowledge” (applied in at least one project).
       </Callout>
 
       <CollectionEditor
@@ -43,10 +40,10 @@ export default function SkillsEditor() {
         items={skills}
         create={createSkill}
         validate={validateSkill}
-        singular="ability"
-        addLabel="Add ability"
+        singular="skill"
+        addLabel="Add skill or tool"
         labelFor={(item) => item.name}
-        emptyMessage="No abilities listed yet. The abilities section of the About page will be empty."
+        emptyMessage="No skills listed yet. The skills section on the About page will be empty."
         summary={(item) => (
           <div className="min-w-0">
             <p className="text-xs tracking-wide text-muted uppercase">{item.group}</p>

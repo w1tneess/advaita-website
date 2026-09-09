@@ -30,3 +30,13 @@ Thumbs.db
 
 # Python venv
 rembg_env/
+
+# Supabase CLI local cache & branches (contain connection strings)
+supabase/.temp/
+supabase/.branches/
+
+# Local tools & audit artifacts
+.audit/
+.claude/
+.vite/
+.vercel/

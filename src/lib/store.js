@@ -113,63 +113,164 @@ import {
   saveContentToSupabase,
   clearContentInSupabase,
 } from './supabase/sync.js'
+import { isSupabaseConfigured } from './supabase/client.js'
 
 /**
- * Load the active content document asynchronously from Supabase.
+ * Load the active content document asynchronously.
+ * Tries Supabase first; falls back gracefully to localStorage or seed.
  *
- * @returns {Promise<{doc: object, source: 'seed'|'remote', warning: string|null}>}
+ * @returns {Promise<{doc: object, source: 'seed'|'local'|'remote', warning: string|null}>}
  */
 export async function loadDocument() {
-  const { data: raw, error } = await fetchContentFromSupabase()
+  const storage = getStorage()
 
-  if (error) {
-    throw error
-  }
+  // 1. If Supabase is configured, attempt remote fetch
+  if (isSupabaseConfigured()) {
+    try {
+      const { data: raw, error } = await fetchContentFromSupabase(2)
 
-  if (!raw) {
-    // No remote edits: use the deployed seed and write nothing.
-    return { doc: createSeedDocument(), source: 'seed', warning: null }
-  }
-
-  const { doc: migrated, blockedAt } = migrate(raw)
-
-  if (blockedAt !== null) {
-    return {
-      doc: createSeedDocument(),
-      source: 'seed',
-      warning: `Saved remote content uses an older format (v${blockedAt}) that cannot be upgraded automatically, so it was ignored. Export it from another browser if you need it, or reset the demo data.`,
+      if (!error && raw) {
+        const { doc: migrated, blockedAt } = migrate(raw)
+        if (blockedAt === null) {
+          const { ok } = validateDocument(migrated)
+          if (ok) {
+            // Mirror to localStorage for offline resilience
+            if (storage) {
+              try {
+                storage.setItem(STORAGE_KEY, JSON.stringify(migrated))
+              } catch (_) {
+                // Ignore storage quota error
+              }
+            }
+            return { doc: migrated, source: 'remote', warning: null }
+          }
+        }
+      }
+    } catch (err) {
+      console.warn('Supabase remote load failed, checking local backup:', err)
     }
   }
 
-  const { ok, problems } = validateDocument(migrated)
-  if (!ok) {
-    return {
-      doc: createSeedDocument(),
-      source: 'seed',
-      warning: `Saved remote content is not valid (${problems[0]}) and was ignored. The site is showing its published content instead.`,
+  // 2. Check localStorage for previous edits
+  if (storage) {
+    try {
+      const localRaw = storage.getItem(STORAGE_KEY)
+      if (localRaw) {
+        const parsed = JSON.parse(localRaw)
+        const { doc: migrated, blockedAt } = migrate(parsed)
+        if (blockedAt === null) {
+          const { ok } = validateDocument(migrated)
+          if (ok) {
+            return {
+              doc: migrated,
+              source: 'local',
+              warning: isSupabaseConfigured()
+                ? 'Using cached local edits (offline mode).'
+                : null,
+            }
+          }
+        }
+      }
+    } catch (err) {
+      console.warn('LocalStorage load error:', err)
     }
   }
 
-  return { doc: migrated, source: 'remote', warning: null }
+  // 3. Fallback to freshly generated seed document
+  return { doc: createSeedDocument(), source: 'seed', warning: null }
 }
 
 /**
- * Persist the whole document asynchronously.
- * @returns {Promise<{ok: boolean, error: string|null}>}
+ * Persist the whole document with hybrid resilience:
+ * - Always saves to local storage to prevent data loss.
+ * - Attempts to sync to Supabase if configured.
+ *
+ * @returns {Promise<{ok: boolean, synced: boolean, source: 'remote'|'local', error: string|null, warning?: string}>}
  */
 export async function saveDocument(doc) {
+  const storage = getStorage()
+  let localSaved = false
+
+  // 1. Always save to local browser storage
+  if (storage) {
+    try {
+      storage.setItem(STORAGE_KEY, JSON.stringify(doc))
+      localSaved = true
+    } catch (e) {
+      console.warn('Could not cache to localStorage:', e)
+    }
+  }
+
+  // 2. If Supabase is configured, attempt remote sync
+  if (isSupabaseConfigured()) {
+    try {
+      const remoteRes = await saveContentToSupabase(doc)
+      if (remoteRes && remoteRes.ok) {
+        return { ok: true, synced: true, source: 'remote', error: null }
+      }
+      return {
+        ok: localSaved,
+        synced: false,
+        source: 'local',
+        error: localSaved ? null : (remoteRes?.error || 'Failed to save to Supabase.'),
+        warning: localSaved ? 'Saved locally. Supabase sync pending.' : null,
+      }
+    } catch (err) {
+      return {
+        ok: localSaved,
+        synced: false,
+        source: 'local',
+        error: localSaved ? null : err.message,
+        warning: localSaved ? 'Saved locally. Supabase connection offline.' : null,
+      }
+    }
+  }
+
+  // 3. Unconfigured Supabase: safe local save
+  return {
+    ok: localSaved,
+    synced: false,
+    source: 'local',
+    error: localSaved ? null : 'Storage is full or unavailable.',
+    warning: 'Saved locally in browser. Supabase not connected.',
+  }
+}
+
+/**
+ * Push local changes to Supabase manually
+ */
+export async function syncLocalToSupabase(doc) {
+  if (!isSupabaseConfigured()) {
+    return { ok: false, error: 'Supabase is not configured in .env.local.' }
+  }
   return await saveContentToSupabase(doc)
 }
 
-/** Discard remote edits so the deployed seed is used again. */
+/** Discard both local and remote edits so the deployed seed is used again. */
 export async function clearDocument() {
-  return await clearContentInSupabase()
+  const storage = getStorage()
+  if (storage) {
+    try {
+      storage.removeItem(STORAGE_KEY)
+    } catch (_) {
+      // Ignore storage removal error
+    }
+  }
+
+  if (isSupabaseConfigured()) {
+    return await clearContentInSupabase()
+  }
+  return { ok: true, error: null }
 }
 
 export async function hasLocalDocument() {
-  const { data, error } = await fetchContentFromSupabase()
-  if (error) throw error
-  return data !== null
+  const storage = getStorage()
+  if (storage && storage.getItem(STORAGE_KEY)) return true
+  if (isSupabaseConfigured()) {
+    const { data } = await fetchContentFromSupabase()
+    return data !== null
+  }
+  return false
 }
 
 /**

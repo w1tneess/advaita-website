@@ -95,6 +95,26 @@ export const PUBLIC_ROUTES = [
     priority: '0.6',
     changefreq: 'yearly',
   },
+  {
+    path: '/privacy',
+    key: 'privacy',
+    label: 'Privacy Policy',
+    nav: false,
+    title: 'Privacy Policy',
+    description: 'Privacy notice, data practices, and correspondence handling policy.',
+    priority: '0.3',
+    changefreq: 'yearly',
+  },
+  {
+    path: '/terms',
+    key: 'terms',
+    label: 'Terms of Use',
+    nav: false,
+    title: 'Terms of Use',
+    description: 'Terms and conditions, scholarly attribution, and licensing of materials.',
+    priority: '0.3',
+    changefreq: 'yearly',
+  },
 ]
 
 /** Routes that must never be indexed or listed in the sitemap. */

@@ -1,0 +1,21 @@
+# Production Security & HTTPS Enforcement Headers
+# (Copied verbatim to dist/ by Vite build)
+
+/*
+  # Force HTTPS and preloaded HSTS (Strict-Transport-Security) for 1 year
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  
+  # Prevent MIME type sniffing
+  X-Content-Type-Options: nosniff
+  
+  # Prevent clickjacking
+  X-Frame-Options: SAMEORIGIN
+  
+  # Protect referrer data
+  Referrer-Policy: strict-origin-when-cross-origin
+  
+  # Restrict browser APIs not used on this research site
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
+  
+  # Content Security Policy: self-contained assets, Google Fonts, Supabase endpoints
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https: blob:; connect-src 'self' https://*.supabase.co; frame-ancestors 'none'; base-uri 'self'; form-action 'self';

@@ -18,20 +18,16 @@ import {
   Camera,
   LogOut,
   Plus,
-  ChevronDown
+  ChevronDown,
+  Cloud,
+  HardDrive
 } from 'lucide-react'
 import { NavLink, Link } from 'react-router'
 import { useState, useRef, useEffect } from 'react'
 
 import { useAdminAuth } from './AdminAuth.jsx'
+import { useContent } from '@/lib/content.jsx'
 import { preloadRoute } from '@/lib/preload.js'
-
-/**
- * Admin navigation.
- *
- * A fixed drawer on large screens, an overlay drawer on small ones. The overlay closes on
- * navigation, which is handled by AdminLayout listening for route changes.
- */
 
 export const NAV_GROUPS = [
   {
@@ -44,43 +40,44 @@ export const NAV_GROUPS = [
   {
     title: 'Content',
     items: [
-      { to: '/admin/profile', label: 'Profile & interests', icon: User },
-      { to: '/admin/home', label: 'Home page', icon: Home },
+      { to: '/admin/profile', label: 'Profile & Bio', icon: User },
+      { to: '/admin/home', label: 'Home Page', icon: Home },
       { to: '/admin/projects', label: 'Projects', icon: FolderGit2 },
-      { to: '/admin/blog', label: 'Writing', icon: FileText },
+      { to: '/admin/blog', label: 'Blog & Articles', icon: FileText },
       { to: '/admin/philosophy', label: 'Philosophy', icon: Compass },
-      { to: '/admin/notes', label: 'Notes', icon: BookMarked },
+      { to: '/admin/notes', label: 'Reading Notes', icon: BookMarked },
       { to: '/admin/photography', label: 'Photography', icon: Camera },
     ],
   },
   {
-    title: 'Lists',
+    title: 'Organization',
     items: [
-      { to: '/admin/taxonomy', label: 'Categories & tags', icon: Tags },
-      { to: '/admin/skills', label: 'Skills', icon: Wrench },
+      { to: '/admin/taxonomy', label: 'Categories', icon: Tags },
+      { to: '/admin/skills', label: 'Skills & Tools', icon: Wrench },
       { to: '/admin/timeline', label: 'Timeline', icon: Milestone },
-      { to: '/admin/social', label: 'Social links', icon: Link2 },
+      { to: '/admin/social', label: 'Social Links', icon: Link2 },
     ],
   },
   {
-    title: 'Site',
+    title: 'System',
     items: [
-      { to: '/admin/settings', label: 'Settings', icon: Settings },
-      { to: '/admin/data', label: 'Data', icon: Database },
+      { to: '/admin/settings', label: 'Site Settings', icon: Settings },
+      { to: '/admin/data', label: 'Database & Sync', icon: Database },
     ],
   },
 ]
 
 function itemClasses({ isActive }) {
-  return `flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-all ${
+  return `flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-mono tracking-wider uppercase transition-all ${
     isActive 
-      ? 'bg-zinc-800/80 text-zinc-100 shadow-sm border border-zinc-700/50' 
-      : 'text-zinc-400 hover:bg-zinc-900 hover:text-zinc-200 border border-transparent'
+      ? 'bg-[#181a1a] text-[#E8E6E1] font-semibold border-l-2 border-[#D1B18A] shadow-sm' 
+      : 'text-neutral-400 hover:bg-[#141616] hover:text-[#E8E6E1] border-l-2 border-transparent'
   }`
 }
 
 export default function AdminSidebar({ open, onClose }) {
-  const { session, logout } = useAdminAuth()
+  const { session, isLocalMode, logout } = useAdminAuth()
+  const { isRemote } = useContent()
   const [quickAddOpen, setQuickAddOpen] = useState(false)
   const menuRef = useRef(null)
 
@@ -94,15 +91,15 @@ export default function AdminSidebar({ open, onClose }) {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
-  const userIdentifier = session?.user?.email?.split('@')[0] || 'Admin'
+  const userIdentifier = session?.user?.email?.split('@')[0] || (isLocalMode ? 'Local Admin' : 'Admin')
   const displayName = userIdentifier.charAt(0).toUpperCase() + userIdentifier.slice(1)
 
   return (
     <>
-      {/* Mobile backdrop. Hidden from assistive tech: the close button is the labelled control. */}
+      {/* Mobile backdrop */}
       {open && (
         <div
-          className="fixed inset-0 z-30 bg-ink/40 lg:hidden"
+          className="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden"
           onClick={onClose}
           aria-hidden="true"
         />
@@ -110,78 +107,89 @@ export default function AdminSidebar({ open, onClose }) {
 
       <div
         id="admin-sidebar"
-        className={`fixed inset-y-0 left-0 z-40 w-64 flex flex-col overflow-hidden border-r border-zinc-800/60 bg-[#0a0a0a] transition-transform duration-200 lg:static lg:z-auto lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-40 w-64 h-screen shrink-0 flex flex-col overflow-hidden border-r border-[#242626] bg-[#0F0F0F] transition-transform duration-200 lg:static lg:translate-x-0 ${
           open ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <div className="flex items-center justify-between gap-2 border-b border-zinc-800/60 px-5 py-4 shrink-0">
+        {/* Brand & Sync State Header */}
+        <div className="flex items-center justify-between gap-2 border-b border-[#242626] px-5 py-4 shrink-0 bg-[#121414]">
           <div>
-            <p className="font-display text-base font-semibold text-zinc-100">Content admin</p>
-            <p className="text-xs text-zinc-500 font-medium">Live · synced</p>
+            <p className="font-display text-base font-medium text-[#E8E6E1] tracking-tight">Advaita Studio</p>
+            <div className="flex items-center gap-1.5 mt-0.5">
+              {isRemote && !isLocalMode ? (
+                <span className="flex items-center gap-1 text-[10px] font-mono text-emerald-400">
+                  <Cloud className="h-2.5 w-2.5" /> Supabase Synced
+                </span>
+              ) : (
+                <span className="flex items-center gap-1 text-[10px] font-mono text-[#D1B18A]">
+                  <HardDrive className="h-2.5 w-2.5" /> Local Mode
+                </span>
+              )}
+            </div>
           </div>
           <button
             type="button"
             onClick={onClose}
             aria-label="Close navigation"
-            className="rounded-lg border border-line p-1.5 text-muted hover:text-ink lg:hidden"
+            className="rounded-lg border border-[#242626] p-1.5 text-neutral-400 hover:text-[#E8E6E1] lg:hidden"
           >
             <X className="h-4 w-4" aria-hidden="true" />
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-4 py-6 scrollbar-thin">
-          {/* Quick Add Button */}
-          <div className="relative mb-8" ref={menuRef}>
+        <div className="flex-1 overflow-y-auto px-4 py-5 scrollbar-thin">
+          {/* Quick Create Action */}
+          <div className="relative mb-6" ref={menuRef}>
             <button
               type="button"
               onClick={() => setQuickAddOpen(!quickAddOpen)}
-              className="flex w-full items-center justify-between rounded-lg bg-zinc-100 px-4 py-2 text-sm font-medium text-zinc-950 shadow-sm transition-all hover:bg-white hover:shadow focus:outline-none focus:ring-2 focus:ring-zinc-400"
+              className="flex w-full items-center justify-between rounded-lg border border-[#D1B18A] bg-[#D1B18A]/10 px-3.5 py-2 text-xs font-mono tracking-wider uppercase text-[#D1B18A] font-semibold transition-all hover:bg-[#D1B18A]/20"
             >
               <div className="flex items-center gap-2">
-                <Plus className="h-4 w-4" />
-                <span>Create New...</span>
+                <Plus className="h-3.5 w-3.5" />
+                <span>Create New</span>
               </div>
-              <ChevronDown className={`h-4 w-4 opacity-70 transition-transform ${quickAddOpen ? 'rotate-180' : ''}`} />
+              <ChevronDown className={`h-3.5 w-3.5 transition-transform ${quickAddOpen ? 'rotate-180' : ''}`} />
             </button>
 
             {quickAddOpen && (
-              <div className="absolute left-0 top-full mt-2 w-full rounded-xl border border-zinc-800/60 bg-[#0a0a0a] p-1.5 shadow-xl shadow-black/40 animate-rise z-50">
+              <div className="absolute left-0 top-full mt-2 w-full rounded-xl border border-[#242626] bg-[#121414] p-1.5 shadow-2xl z-50">
                 <Link
                   to="/admin/blog/new"
                   onClick={() => { setQuickAddOpen(false); onClose(); }}
-                  className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-zinc-300 hover:bg-zinc-900 hover:text-zinc-100 transition-colors"
+                  className="flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-mono text-neutral-300 hover:bg-[#1b1c1c] hover:text-[#E8E6E1] transition-colors"
                 >
-                  <FileText className="h-4 w-4 text-zinc-500" /> Write Post
+                  <FileText className="h-3.5 w-3.5 text-[#D1B18A]" /> New Article
                 </Link>
                 <Link
                   to="/admin/projects/new"
                   onClick={() => { setQuickAddOpen(false); onClose(); }}
-                  className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-zinc-300 hover:bg-zinc-900 hover:text-zinc-100 transition-colors"
+                  className="flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-mono text-neutral-300 hover:bg-[#1b1c1c] hover:text-[#E8E6E1] transition-colors"
                 >
-                  <FolderGit2 className="h-4 w-4 text-zinc-500" /> Add Project
+                  <FolderGit2 className="h-3.5 w-3.5 text-[#D1B18A]" /> New Project
                 </Link>
                 <Link
                   to="/admin/photography/new"
                   onClick={() => { setQuickAddOpen(false); onClose(); }}
-                  className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-zinc-300 hover:bg-zinc-900 hover:text-zinc-100 transition-colors"
+                  className="flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-mono text-neutral-300 hover:bg-[#1b1c1c] hover:text-[#E8E6E1] transition-colors"
                 >
-                  <Camera className="h-4 w-4 text-zinc-500" /> Upload Photo
+                  <Camera className="h-3.5 w-3.5 text-[#D1B18A]" /> New Photo
                 </Link>
                 <Link
                   to="/admin/notes/new"
                   onClick={() => { setQuickAddOpen(false); onClose(); }}
-                  className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-zinc-300 hover:bg-zinc-900 hover:text-zinc-100 transition-colors"
+                  className="flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-mono text-neutral-300 hover:bg-[#1b1c1c] hover:text-[#E8E6E1] transition-colors"
                 >
-                  <BookMarked className="h-4 w-4 text-zinc-500" /> Add Note
+                  <BookMarked className="h-3.5 w-3.5 text-[#D1B18A]" /> New Reading Note
                 </Link>
               </div>
             )}
           </div>
 
-          <nav aria-label="Admin sections" className="mb-6">
+          <nav aria-label="Admin sections" className="space-y-5">
             {NAV_GROUPS.map((group) => (
-              <div key={group.title} className="mb-4 last:mb-0">
-                <h2 className="mb-1.5 px-3 text-[10px] font-bold tracking-widest text-muted/80 uppercase">
+              <div key={group.title}>
+                <h2 className="mb-2 px-3 text-[10px] font-mono font-bold tracking-widest text-neutral-500 uppercase">
                   {group.title}
                 </h2>
                 <ul className="space-y-0.5">
@@ -190,8 +198,8 @@ export default function AdminSidebar({ open, onClose }) {
                     return (
                       <li key={item.to}>
                         <NavLink to={item.to} end={item.end} onClick={onClose} className={itemClasses}>
-                          <ItemIcon className="h-4 w-4 shrink-0" aria-hidden="true" />
-                          {item.label}
+                          <ItemIcon className="h-3.5 w-3.5 shrink-0 text-[#D1B18A]/80" aria-hidden="true" />
+                          <span>{item.label}</span>
                         </NavLink>
                       </li>
                     )
@@ -202,29 +210,29 @@ export default function AdminSidebar({ open, onClose }) {
           </nav>
         </div>
 
-        {/* Bottom Section: View Site & User Profile - Fixed at bottom */}
-        <div className="shrink-0 border-t border-zinc-800/60 p-4 bg-[#0a0a0a]">
+        {/* Footer Profile Box */}
+        <div className="shrink-0 border-t border-[#242626] p-4 bg-[#121414]">
           <Link
             to="/"
             onPointerEnter={() => preloadRoute('/')}
-            onFocus={() => preloadRoute('/')}
-            onTouchStart={() => preloadRoute('/')}
-            className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-zinc-400 font-medium transition-colors hover:bg-zinc-900 hover:text-zinc-200 mb-2"
+            className="flex items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs font-mono text-neutral-400 hover:text-[#E8E6E1] transition-colors mb-2.5"
           >
-            <ExternalLink className="h-4 w-4 shrink-0" aria-hidden="true" />
-            View public site
+            <ExternalLink className="h-3.5 w-3.5 shrink-0 text-[#D1B18A]" aria-hidden="true" />
+            <span>View Public Site</span>
           </Link>
           
-          <div className="flex items-center justify-between rounded-lg border border-zinc-800/60 p-3 bg-zinc-900/50">
-            <div className="flex items-center gap-3 min-w-0">
-              <div className="h-8 w-8 rounded-full bg-zinc-800 flex items-center justify-center shrink-0 border border-zinc-700/50">
-                <span className="text-sm font-semibold text-zinc-300">
+          <div className="flex items-center justify-between rounded-xl border border-[#242626] p-2.5 bg-[#171919]">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="h-7 w-7 rounded-lg bg-[#202222] border border-[#292a2a] flex items-center justify-center shrink-0">
+                <span className="text-xs font-mono font-semibold text-[#D1B18A]">
                   {displayName.charAt(0)}
                 </span>
               </div>
               <div className="min-w-0 flex-1">
-                <p className="text-sm font-medium text-zinc-200 truncate">{displayName}</p>
-                <p className="text-xs text-zinc-500 truncate">{session?.user?.email}</p>
+                <p className="text-xs font-mono font-medium text-[#E8E6E1] truncate">{displayName}</p>
+                <p className="text-[10px] font-mono text-neutral-500 truncate">
+                  {isLocalMode ? 'Local storage' : session?.user?.email}
+                </p>
               </div>
             </div>
             
@@ -233,9 +241,9 @@ export default function AdminSidebar({ open, onClose }) {
               onClick={logout}
               aria-label="Sign out"
               title="Sign out"
-              className="h-8 w-8 inline-flex items-center justify-center rounded-lg text-zinc-500 hover:bg-zinc-800 hover:text-zinc-200 transition-colors shrink-0"
+              className="h-7 w-7 inline-flex items-center justify-center rounded-lg text-neutral-400 hover:bg-[#202222] hover:text-[#E8E6E1] transition-colors shrink-0 cursor-pointer"
             >
-              <LogOut className="h-4 w-4" aria-hidden="true" />
+              <LogOut className="h-3.5 w-3.5" aria-hidden="true" />
             </button>
           </div>
         </div>

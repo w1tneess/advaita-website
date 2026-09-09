@@ -123,41 +123,53 @@ export default function CommandPalette() {
             <Command.Item onSelect={() => runCommand(() => navigate('/admin'))}>
               <Home className="h-4 w-4" /> Dashboard
             </Command.Item>
+            <Command.Item onSelect={() => runCommand(() => navigate('/admin/blog'))}>
+              <FileText className="h-4 w-4" /> Blog &amp; Articles
+            </Command.Item>
+            <Command.Item onSelect={() => runCommand(() => navigate('/admin/projects'))}>
+              <FolderGit2 className="h-4 w-4" /> Projects
+            </Command.Item>
+            <Command.Item onSelect={() => runCommand(() => navigate('/admin/photography'))}>
+              <Camera className="h-4 w-4" /> Photography
+            </Command.Item>
             <Command.Item onSelect={() => runCommand(() => navigate('/admin/notes'))}>
-              <BookMarked className="h-4 w-4" /> Philosophy Notes
+              <BookMarked className="h-4 w-4" /> Reading Notes
             </Command.Item>
             <Command.Item onSelect={() => runCommand(() => navigate('/admin/messages'))}>
               <MessageSquare className="h-4 w-4" /> Messages
             </Command.Item>
-            <Command.Item onSelect={() => runCommand(() => navigate('/admin/settings'))}>
-              <Settings className="h-4 w-4" /> Settings
-            </Command.Item>
             <Command.Item onSelect={() => runCommand(() => navigate('/admin/profile'))}>
-              <User className="h-4 w-4" /> Profile & Interests
+              <User className="h-4 w-4" /> Profile &amp; Bio
             </Command.Item>
             <Command.Item onSelect={() => runCommand(() => navigate('/admin/taxonomy'))}>
-              <Tags className="h-4 w-4" /> Categories & Tags
+              <Tags className="h-4 w-4" /> Categories
+            </Command.Item>
+            <Command.Item onSelect={() => runCommand(() => navigate('/admin/data'))}>
+              <Settings className="h-4 w-4" /> Database &amp; Sync
+            </Command.Item>
+            <Command.Item onSelect={() => runCommand(() => navigate('/admin/settings'))}>
+              <Settings className="h-4 w-4" /> Site Settings
             </Command.Item>
           </Command.Group>
 
           <Command.Group heading="Quick Actions">
             <Command.Item onSelect={() => runCommand(() => navigate('/admin/blog/new'))}>
-              <FileText className="h-4 w-4" /> Create New Post
-            </Command.Item>
-            <Command.Item onSelect={() => runCommand(() => navigate('/admin/notes/new'))}>
-              <BookMarked className="h-4 w-4" /> Create New Note
+              <FileText className="h-4 w-4" /> Write New Article
             </Command.Item>
             <Command.Item onSelect={() => runCommand(() => navigate('/admin/projects/new'))}>
-              <FolderGit2 className="h-4 w-4" /> Create New Project
+              <FolderGit2 className="h-4 w-4" /> Add New Project
             </Command.Item>
             <Command.Item onSelect={() => runCommand(() => navigate('/admin/photography/new'))}>
               <Camera className="h-4 w-4" /> Upload Photo
             </Command.Item>
+            <Command.Item onSelect={() => runCommand(() => navigate('/admin/notes/new'))}>
+              <BookMarked className="h-4 w-4" /> Write Reading Note
+            </Command.Item>
           </Command.Group>
 
           {blog?.length > 0 && (
-            <Command.Group heading="Blog Posts">
-              {blog.slice(0, 5).map((post) => (
+            <Command.Group heading="Articles &amp; Blog">
+              {blog.slice(0, 6).map((post) => (
                 <Command.Item 
                   key={post.id} 
                   onSelect={() => runCommand(() => navigate(`/admin/blog/${post.id}`))}
@@ -169,29 +181,29 @@ export default function CommandPalette() {
             </Command.Group>
           )}
 
-          {notes?.length > 0 && (
-            <Command.Group heading="Philosophy Notes">
-              {notes.slice(0, 5).map((note) => (
-                <Command.Item 
-                  key={note.id} 
-                  onSelect={() => runCommand(() => navigate(`/admin/notes/${note.id}`))}
-                >
-                  <BookMarked className="h-4 w-4" />
-                  {note.title || 'Untitled Note'}
-                </Command.Item>
-              ))}
-            </Command.Group>
-          )}
-
           {projects?.length > 0 && (
             <Command.Group heading="Projects">
-              {projects.slice(0, 5).map((project) => (
+              {projects.slice(0, 6).map((project) => (
                 <Command.Item 
                   key={project.id} 
                   onSelect={() => runCommand(() => navigate(`/admin/projects/${project.id}`))}
                 >
                   <FolderGit2 className="h-4 w-4" />
                   {project.title || 'Untitled Project'}
+                </Command.Item>
+              ))}
+            </Command.Group>
+          )}
+
+          {notes?.length > 0 && (
+            <Command.Group heading="Reading Notes">
+              {notes.slice(0, 6).map((note) => (
+                <Command.Item 
+                  key={note.id} 
+                  onSelect={() => runCommand(() => navigate(`/admin/notes/${note.id}`))}
+                >
+                  <BookMarked className="h-4 w-4" />
+                  {note.title || 'Untitled Note'}
                 </Command.Item>
               ))}
             </Command.Group>

@@ -16,14 +16,11 @@ export default function SocialEditor() {
 
   return (
     <AdminPage
-      title="Social links"
-      description="Placeholder URLs and handles — the privacy rules apply. No real credentials here."
+      title="Social Links"
+      description="Public profiles and channels displayed in your site footer and contact section."
     >
-      <Callout variant="limitation" title="No real handles">
-        These are demonstration links only. Do not enter real email addresses, GitHub tokens, or any
-        private information. All social fields are placeholders meant to show the pattern, not to be
-        used for actual outreach or identification. The privacy rules on the Profile page apply here
-        as well.
+      <Callout variant="limitation" title="Public Profiles &amp; Channels">
+        Add links to your public profiles (such as GitHub, LinkedIn, or contact email). Only include accounts and addresses you want to share publicly.
       </Callout>
 
       <CollectionEditor

@@ -9,11 +9,13 @@ import Seo from '@/components/meta/Seo.jsx'
 import SkipLink from '@/components/layout/SkipLink.jsx'
 
 /**
- * Shell for the demo admin panel.
+ * Shell for the Admin Panel.
  *
- * `noindex, nofollow` on every admin page, and the route is excluded from sitemap.xml and
- * disallowed in robots.txt. That is not access control — there is none — it just keeps a
- * local editing tool out of search results.
+ * Fixed Layout Architecture:
+ * - Admin Sidebar: Fixed on the left (height: 100vh)
+ * - Admin Header: Fixed at the top
+ * - Admin Footer: Fixed at the bottom as an application dock/status bar
+ * - Main content area (<main>): Independently scrollable viewport ("let the rest move")
  */
 export default function AdminLayout() {
   const { pathname } = useLocation()
@@ -24,28 +26,33 @@ export default function AdminLayout() {
   }, [pathname])
 
   return (
-    <div className="min-h-dvh flex flex-col bg-canvas text-ink w-full">
+    <div className="h-screen w-full flex overflow-hidden bg-[#0F0F0F] text-[#E8E6E1] font-sans">
       <Seo title="Content admin" description="Live content editor." path={pathname} noindex />
 
       <SkipLink />
       <CommandPalette />
 
-      <div className="flex flex-1 w-full">
-        <AdminSidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      {/* Fixed Sidebar */}
+      <AdminSidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-        <div className="min-w-0 flex-1 flex flex-col bg-canvas">
-          <AdminHeader onOpenSidebar={() => setSidebarOpen(true)} />
+      {/* Main Viewport Container */}
+      <div className="min-w-0 flex-1 flex flex-col h-screen overflow-hidden bg-[#0F0F0F] relative">
+        {/* Fixed Header */}
+        <AdminHeader onOpenSidebar={() => setSidebarOpen(true)} />
 
-          <main
-            id="main-content"
-            tabIndex={-1}
-            className="w-full flex-1 px-4 py-8 focus:outline-none sm:px-6 sm:py-10"
-          >
+        {/* Scrollable Content Pane ("let the rest move") */}
+        <main
+          id="main-content"
+          tabIndex={-1}
+          className="w-full flex-1 overflow-y-auto px-4 py-6 focus:outline-none sm:px-8 sm:py-8 scrollbar-thin"
+        >
+          <div className="max-w-[1400px] mx-auto pb-10">
             <Outlet />
-          </main>
-          
-          <AdminFooter />
-        </div>
+          </div>
+        </main>
+        
+        {/* Fixed Footer Status Bar */}
+        <AdminFooter />
       </div>
     </div>
   )

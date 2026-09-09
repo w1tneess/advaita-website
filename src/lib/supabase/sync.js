@@ -99,3 +99,80 @@ export async function clearContentInSupabase() {
     return { ok: false, error: 'Failed to clear content in Supabase: ' + error.message }
   }
 }
+
+/**
+ * Perform a real-time diagnostic health check on Supabase connection,
+ * tables, and storage buckets.
+ */
+export async function checkSupabaseHealth() {
+  if (!isSupabaseConfigured() || !supabase) {
+    return {
+      configured: false,
+      connected: false,
+      latencyMs: 0,
+      tables: { siteContent: false, contactSubmissions: false, imagesBucket: false },
+      message: 'Supabase credentials missing or invalid in environment.',
+    }
+  }
+
+  const startTime = performance.now()
+  let siteContentOk = false
+  let contactSubmissionsOk = false
+  let imagesBucketOk = false
+  let errorMessage = null
+
+  try {
+    // 1. Test site_content table
+    const { error: contentErr } = await supabase
+      .from('site_content')
+      .select('id')
+      .limit(1)
+    if (!contentErr) {
+      siteContentOk = true
+    } else {
+      errorMessage = contentErr.message
+    }
+
+    // 2. Test contact_submissions table
+    const { error: contactErr } = await supabase
+      .from('contact_submissions')
+      .select('id')
+      .limit(1)
+    if (!contactErr) {
+      contactSubmissionsOk = true
+    }
+
+    // 3. Test storage bucket
+    try {
+      const { error: bucketErr } = await supabase.storage.from('images').list('', { limit: 1 })
+      if (!bucketErr) {
+        imagesBucketOk = true
+      }
+    } catch (_bErr) {
+      imagesBucketOk = false
+    }
+
+    const latencyMs = Math.round(performance.now() - startTime)
+
+    return {
+      configured: true,
+      connected: siteContentOk || contactSubmissionsOk,
+      latencyMs,
+      tables: {
+        siteContent: siteContentOk,
+        contactSubmissions: contactSubmissionsOk,
+        imagesBucket: imagesBucketOk,
+      },
+      message: siteContentOk ? 'Supabase connection operational.' : errorMessage || 'Could not query site_content table.',
+    }
+  } catch (err) {
+    return {
+      configured: true,
+      connected: false,
+      latencyMs: Math.round(performance.now() - startTime),
+      tables: { siteContent: false, contactSubmissions: false, imagesBucket: false },
+      message: err.message || 'Network connection to Supabase failed.',
+    }
+  }
+}
+

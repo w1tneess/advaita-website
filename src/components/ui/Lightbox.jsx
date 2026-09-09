@@ -148,10 +148,10 @@ export default function Lightbox({ photos, index, onClose, onChange }) {
             onClick={onClose}
             variants={controlsVariants}
             animate={showControls ? 'visible' : 'hidden'}
-            className="absolute right-4 top-4 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-md transition-all hover:scale-105 hover:bg-white/20 md:right-8 md:top-8"
+            className="absolute right-3 top-3 z-50 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-md transition-all hover:scale-105 hover:bg-white/20 md:right-8 md:top-8"
             aria-label="Close lightbox"
           >
-            <X className="h-6 w-6" />
+            <X className="h-5 w-5 sm:h-6 sm:w-6" />
           </motion.button>
 
           {/* Slider Container */}
@@ -160,7 +160,7 @@ export default function Lightbox({ photos, index, onClose, onChange }) {
               <motion.img
                 key={page}
                 {...getOptimizedImageProps(photo.image_url, photo.variants)}
-                alt={photo.alt_text || ''}
+                alt={photo.alt_text || photo.title || 'Photograph by Advaita Chandra'}
                 custom={direction}
                 variants={variants}
                 initial="enter"
@@ -212,10 +212,10 @@ export default function Lightbox({ photos, index, onClose, onChange }) {
               onClick={goPrev}
               variants={controlsVariants}
               animate={showControls ? 'visible' : 'hidden'}
-              className="absolute left-4 top-1/2 z-40 flex h-14 w-14 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-md transition-all hover:scale-105 hover:bg-white/20 md:left-8"
+              className="absolute left-2 sm:left-4 md:left-8 top-1/2 z-40 flex h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-md transition-all hover:scale-105 hover:bg-white/20"
               aria-label="Previous photo"
             >
-              <ChevronLeft className="h-8 w-8" />
+              <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6 md:h-8 md:w-8" />
             </motion.button>
           )}
           
@@ -225,10 +225,10 @@ export default function Lightbox({ photos, index, onClose, onChange }) {
               onClick={goNext}
               variants={controlsVariants}
               animate={showControls ? 'visible' : 'hidden'}
-              className="absolute right-4 top-1/2 z-40 flex h-14 w-14 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-md transition-all hover:scale-105 hover:bg-white/20 md:right-8"
+              className="absolute right-2 sm:right-4 md:right-8 top-1/2 z-40 flex h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-md transition-all hover:scale-105 hover:bg-white/20"
               aria-label="Next photo"
             >
-              <ChevronRight className="h-8 w-8" />
+              <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6 md:h-8 md:w-8" />
             </motion.button>
           )}
         </motion.div>

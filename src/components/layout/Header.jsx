@@ -1,312 +1,256 @@
-import { ArrowUpRight, Menu, Moon, Sun, X } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
-import { Link, NavLink, useLocation } from 'react-router'
-import { AnimatePresence, motion } from 'framer-motion'
-
-import Container from '@/components/layout/Container.jsx'
-import { useContent } from '@/lib/content.jsx'
-import { useTheme } from '@/lib/theme.jsx'
+import { useEffect, useState } from "react"
+import { Link, NavLink, useLocation } from "react-router"
+import { ArrowUpRight } from "lucide-react"
 import { NAV_ITEMS } from '@/config/nav.js'
+import { useContent } from '@/lib/content.jsx'
 import { preloadRoute } from '@/lib/preload.js'
 
-/**
- * Site header with high-end editorial mobile menu.
- */
 export default function Header() {
-  const { profile, social } = useContent()
-  const { isDark, toggleTheme } = useTheme()
-  const { pathname } = useLocation()
-  const [menuOpen, setMenuOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
-  const toggleRef = useRef(null)
+	const [open, setOpen] = useState(false)
+	const location = useLocation()
+	const { profile, publicSocialLinks } = useContent()
 
-  // On the homepage, the header floats transparently only at the top of the hero.
-  const isHome = pathname === '/' || pathname === ''
-  const isTransparent = isHome && !scrolled && !menuOpen
+	useEffect(() => {
+		setOpen(false)
+	}, [location.pathname])
 
-  // Track page scroll to toggle header background and prevent content overlap
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20)
-    }
-    handleScroll()
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [pathname])
+	useEffect(() => {
+		if (open) {
+			document.body.style.overflow = 'hidden'
+		} else {
+			document.body.style.overflow = ''
+		}
+		return () => {
+			document.body.style.overflow = ''
+		}
+	}, [open])
 
-  // Close the mobile menu whenever the route changes.
-  useEffect(() => {
-    setMenuOpen(false)
-  }, [pathname])
+	useEffect(() => {
+		const onKey = (event) => {
+			if (event.key === "Escape") setOpen(false)
+		}
+		window.addEventListener("keydown", onKey)
+		return () => window.removeEventListener("keydown", onKey)
+	}, [])
 
-  // Escape closes the menu and returns focus to the button that opened it.
-  useEffect(() => {
-    if (!menuOpen) return undefined
-    const handleKeyDown = (event) => {
-      if (event.key === 'Escape') {
-        setMenuOpen(false)
-        toggleRef.current?.focus()
-      }
-    }
-    document.addEventListener('keydown', handleKeyDown)
-    return () => document.removeEventListener('keydown', handleKeyDown)
-  }, [menuOpen])
+	// Filter out Home from horizontal desktop nav for clean elegance (handled by brand logo)
+	// and keep Contact separated as a sharp CTA button on desktop
+	const desktopLinks = NAV_ITEMS.filter((route) => route.path !== "/" && route.path !== "/contact")
+	const configuredSocials = (publicSocialLinks || []).filter((link) => link.url)
 
-  // Lock body scroll and trap focus when mobile menu is open
-  useEffect(() => {
-    if (!menuOpen) {
-      document.body.style.overflow = ''
-      return
-    }
+	return (
+		<header className="sticky top-0 z-50">
+			{/* 1. Header Bar with backdrop blur (kept on this child div so it doesn't constrain fixed descendants) */}
+			<div className="border-b border-white/[0.08] bg-canvas/85 backdrop-blur-xl transition-colors duration-300">
+				<div className="shell flex h-16 items-center justify-between gap-6 md:h-[4.5rem]">
+					{/* Brand Wordmark */}
+					<Link
+						to="/"
+						onPointerEnter={() => preloadRoute('/')}
+						onFocus={() => preloadRoute('/')}
+						onTouchStart={() => preloadRoute('/')}
+						className="group flex items-center gap-3 text-text"
+						aria-label={`${profile?.name || 'Advaita Chandra'}, home`}
+					>
+						<span className="font-display text-lg sm:text-xl font-normal tracking-tight transition-colors duration-300 group-hover:text-copper">
+							{profile?.name || 'Advaita Chandra'}
+						</span>
+						<span
+							aria-hidden="true"
+							className="h-1.5 w-1.5 rounded-full bg-copper shadow-[0_0_8px_rgba(194,149,106,0.6)]"
+						/>
+						<span
+							aria-hidden="true"
+							className="hidden h-px w-4 bg-copper/50 transition-all duration-300 group-hover:w-8 sm:block"
+						/>
+					</Link>
 
-    document.body.style.overflow = 'hidden'
+					{/* Desktop Navigation */}
+					<nav className="hidden items-center gap-8 md:flex" aria-label="Primary">
+						{desktopLinks.map((route) => (
+							<NavLink
+								key={route.path}
+								to={route.path}
+								onPointerEnter={() => preloadRoute(route.path)}
+								onFocus={() => preloadRoute(route.path)}
+								onTouchStart={() => preloadRoute(route.path)}
+								className={({ isActive }) =>
+									`relative text-[0.82rem] font-mono tracking-wider uppercase transition-colors duration-300 py-1 ${
+										isActive
+											? "text-copper font-medium after:absolute after:bottom-[-2px] after:left-0 after:right-0 after:h-[1.5px] after:bg-copper"
+											: "text-text-3 hover:text-text"
+									}`
+								}
+							>
+								{route.label}
+							</NavLink>
+						))}
+					</nav>
 
-    const timer = setTimeout(() => {
-      const menuElement = document.getElementById('mobile-nav')
-      if (!menuElement) return
+					{/* Desktop Contact Action */}
+					<div className="hidden sm:flex items-center gap-3.5">
+						<NavLink
+							to="/contact"
+							onPointerEnter={() => preloadRoute('/contact')}
+							onFocus={() => preloadRoute('/contact')}
+							onTouchStart={() => preloadRoute('/contact')}
+							className={({ isActive }) =>
+								`group inline-flex items-center gap-1.5 border px-4 py-1.5 text-xs font-mono uppercase tracking-wider transition-all duration-300 ${
+									isActive
+										? "border-copper bg-copper text-canvas font-medium"
+										: "border-copper/60 hover:border-copper bg-copper/5 hover:bg-copper text-copper hover:text-canvas"
+								}`
+							}
+						>
+							<span>Contact</span>
+							<ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+						</NavLink>
+					</div>
 
-      const focusable = menuElement.querySelectorAll(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-      )
-      const first = focusable[0]
-      const last = focusable[focusable.length - 1]
+					{/* Mobile Menu Toggle Button (44x44px touch target) */}
+					<button
+						type="button"
+						onClick={() => setOpen((value) => !value)}
+						className="-mr-2 flex h-11 w-11 items-center justify-center text-text-2 hover:text-text transition-colors md:hidden cursor-pointer"
+						aria-expanded={open}
+						aria-controls="mobile-nav"
+						aria-label={open ? "Close navigation menu" : "Open navigation menu"}
+					>
+						<span className="relative block h-3 w-5">
+							<span
+								className={`absolute left-0 block h-[1.5px] w-5 bg-current transition-all duration-300 ${
+									open ? "top-1.5 rotate-45 text-copper" : "top-0"
+								}`}
+							/>
+							<span
+								className={`absolute left-0 block h-[1.5px] w-5 bg-current transition-all duration-300 ${
+									open ? "top-1.5 -rotate-45 text-copper" : "top-2.5"
+								}`}
+							/>
+						</span>
+					</button>
+				</div>
+			</div>
 
-      const handleTab = (e) => {
-        if (e.key !== 'Tab') return
-        if (e.shiftKey) {
-          if (document.activeElement === first) {
-            last.focus()
-            e.preventDefault()
-          }
-        } else {
-          if (document.activeElement === last) {
-            first.focus()
-            e.preventDefault()
-          }
-        }
-      }
+			{/* 2. Full-Screen Mobile Navigation Overlay (Covers entire screen cleanly) */}
+			{open ? (
+				<div
+					id="mobile-nav"
+					className="fixed inset-0 z-[100] flex flex-col justify-between bg-[#050505] md:hidden overflow-y-auto overscroll-contain"
+				>
+					{/* Mobile Top Bar (preserves branding & close action at top) */}
+					<div className="border-b border-white/[0.08] bg-canvas/95">
+						<div className="shell flex h-16 items-center justify-between gap-6">
+							<Link
+								to="/"
+								onClick={() => setOpen(false)}
+								className="group flex items-center gap-3 text-text"
+								aria-label={`${profile?.name || 'Advaita Chandra'}, home`}
+							>
+								<span className="font-display text-lg sm:text-xl font-normal tracking-tight text-[#E8E6E1]">
+									{profile?.name || 'Advaita Chandra'}
+								</span>
+								<span
+									aria-hidden="true"
+									className="h-1.5 w-1.5 rounded-full bg-copper shadow-[0_0_8px_rgba(194,149,106,0.6)]"
+								/>
+							</Link>
 
-      first?.focus()
-      menuElement.addEventListener('keydown', handleTab)
-      menuElement._cleanupTab = () => menuElement.removeEventListener('keydown', handleTab)
-    }, 100)
+							<button
+								type="button"
+								onClick={() => setOpen(false)}
+								className="-mr-2 flex h-11 w-11 items-center justify-center text-text-2 hover:text-copper transition-colors cursor-pointer"
+								aria-label="Close navigation menu"
+							>
+								<span className="relative block h-4 w-4">
+									<span className="absolute left-0 top-2 block h-[1.5px] w-4 bg-current rotate-45" />
+									<span className="absolute left-0 top-2 block h-[1.5px] w-4 bg-current -rotate-45" />
+								</span>
+							</button>
+						</div>
+					</div>
 
-    return () => {
-      clearTimeout(timer)
-      document.body.style.overflow = ''
-      const menuElement = document.getElementById('mobile-nav')
-      if (menuElement && menuElement._cleanupTab) {
-        menuElement._cleanupTab()
-      }
-    }
-  }, [menuOpen])
+					<div className="shell flex flex-col justify-between flex-1 py-6">
+						{/* Nav links section */}
+						<div>
+							<div className="flex items-center justify-between pb-3 mb-2 border-b border-white/[0.06]">
+								<span className="font-mono text-[10px] uppercase tracking-widest text-text-3">
+									Directory
+								</span>
+								<span className="font-mono text-[10px] text-copper/80">
+									{NAV_ITEMS.length} SECTIONS
+								</span>
+							</div>
 
-  return (
-    <>
-      <header
-        className={`sticky top-0 z-40 transition-all duration-300 ${
-          isTransparent
-            ? 'bg-transparent border-b border-transparent shadow-none'
-            : 'border-b border-line/60 bg-canvas/80 shadow-subtle backdrop-blur-xl'
-        }`}
-      >
-        <Container width="wide" className="lg:px-12 xl:px-16">
-          <div className="flex h-16 items-center justify-between gap-3 sm:gap-4">
-            <div className="flex items-center gap-6">
-              <Link
-                to="/"
-                onPointerEnter={() => preloadRoute('/')}
-                onFocus={() => preloadRoute('/')}
-                onTouchStart={() => preloadRoute('/')}
-                className="group shrink-0 py-2 font-display text-lg font-semibold tracking-tight transition-colors hover:text-accent"
-              >
-                {profile.name}
-              </Link>
-            </div>
+							<ul className="flex flex-col divide-y divide-white/[0.05]">
+								{NAV_ITEMS.map((route, idx) => (
+									<li key={route.path}>
+										<NavLink
+											to={route.path}
+											onClick={() => setOpen(false)}
+											className={({ isActive }) =>
+												`group flex items-center justify-between py-3.5 px-1 transition-colors ${
+													isActive ? "text-copper" : "text-[#E8E6E1] hover:text-copper"
+												}`
+											}
+										>
+											<div className="flex items-center gap-3">
+												<span
+													className="h-1.5 w-1.5 rounded-full bg-copper transition-opacity"
+													style={{
+														opacity: location.pathname === route.path ? 1 : 0,
+													}}
+												/>
+												<span className="font-serif text-2xl tracking-tight">
+													{route.label}
+												</span>
+											</div>
+											<span className="font-mono text-xs text-text-3 group-hover:text-copper transition-colors">
+												0{idx + 1}
+											</span>
+										</NavLink>
+									</li>
+								))}
+							</ul>
+						</div>
 
-            {/* Desktop Navigation with Modernist Active Beacon */}
-            <nav aria-label="Main" className="hidden min-w-0 lg:block">
-              <ul className="flex items-center gap-4 lg:gap-6">
-                {NAV_ITEMS.map((item) => (
-                  <li key={item.path}>
-                    <NavLink
-                      to={item.path}
-                      end={item.path === '/'}
-                      onPointerEnter={() => preloadRoute(item.path)}
-                      onFocus={() => preloadRoute(item.path)}
-                      onTouchStart={() => preloadRoute(item.path)}
-                      className={({ isActive }) =>
-                        `nav-link group relative inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm transition-all duration-200 ${
-                          isActive
-                            ? 'font-semibold text-ink'
-                            : 'font-medium text-muted hover:text-ink hover:bg-raised/40'
-                        }`
-                      }
-                    >
-                      {({ isActive }) => (
-                        <>
-                          <span>{item.label}</span>
-                          {isActive && (
-                            <motion.span
-                              layoutId="nav-active-dot"
-                              className="h-1.5 w-1.5 rounded-full bg-accent"
-                              transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                              aria-hidden="true"
-                            />
-                          )}
-                        </>
-                      )}
-                    </NavLink>
-                  </li>
-                ))}
-              </ul>
-            </nav>
+						{/* Bottom meta & action area */}
+						<div className="mt-8 pt-5 border-t border-white/[0.08] flex flex-col gap-4">
+							{/* Direct Contact Button */}
+							<Link
+								to="/contact"
+								onClick={() => setOpen(false)}
+								className="flex items-center justify-between p-3.5 bg-copper/10 border border-copper/40 text-copper hover:bg-copper hover:text-canvas transition-all font-mono text-xs tracking-wider uppercase"
+							>
+								<span>Initiate Contact</span>
+								<ArrowUpRight className="h-4 w-4" />
+							</Link>
 
-            {/* Header Right Controls */}
-            <div className="flex items-center gap-2 sm:gap-3">
-              {/* Desktop Theme Toggle Button Removed (Forced Dark Mode) */}
-
-              {/* Mobile Menu Trigger Button */}
-              <button
-                ref={toggleRef}
-                type="button"
-                onClick={() => setMenuOpen(true)}
-                aria-expanded={menuOpen}
-                aria-controls="mobile-nav"
-                aria-label="Open menu"
-                className="inline-flex h-10 shrink-0 whitespace-nowrap items-center justify-center gap-1.5 rounded-full border border-line bg-surface px-3.5 text-xs font-semibold tracking-wider text-ink shadow-sm transition-all hover:border-ink/25 hover:bg-raised active:scale-95 lg:hidden"
-              >
-                <Menu className="h-4 w-4" aria-hidden="true" />
-                <span className="uppercase">Menu</span>
-              </button>
-            </div>
-          </div>
-        </Container>
-      </header>
-
-      {/* Fullscreen Editorial Mobile Menu Overlay */}
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.div
-            id="mobile-nav"
-            role="dialog"
-            aria-modal="true"
-            aria-label="Navigation Menu"
-            className="fixed inset-0 z-50 flex flex-col justify-between overflow-y-auto bg-canvas/98 px-6 py-5 backdrop-blur-2xl sm:px-10 lg:hidden"
-            initial={{ opacity: 0, y: -16 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -16 }}
-            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-          >
-            {/* Top Row: Logo & Controls */}
-            <div className="flex h-12 items-center justify-between border-b border-line/40 pb-4">
-              <Link
-                to="/"
-                onClick={() => setMenuOpen(false)}
-                className="font-display text-lg font-semibold tracking-tight text-ink"
-              >
-                {profile.name}
-              </Link>
-              <div className="flex items-center gap-2.5">
-                {/* Mobile Theme Toggle Button Removed (Forced Dark Mode) */}
-                <button
-                  type="button"
-                  onClick={() => setMenuOpen(false)}
-                  aria-label="Close menu"
-                  className="inline-flex h-10 shrink-0 whitespace-nowrap items-center justify-center gap-1.5 rounded-full border border-line bg-surface px-3.5 text-xs font-semibold tracking-wider text-ink shadow-sm transition-all hover:bg-raised active:scale-95"
-                >
-                  <X className="h-4 w-4" aria-hidden="true" />
-                  <span className="uppercase">Close</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Middle Nav Items */}
-            <nav aria-label="Mobile Navigation" className="my-auto py-6">
-              <ul className="flex flex-col gap-1">
-                {NAV_ITEMS.map((item, index) => (
-                  <motion.li
-                    key={item.path}
-                    initial={{ opacity: 0, x: -14 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{
-                      delay: 0.04 * (index + 1),
-                      duration: 0.3,
-                      ease: [0.25, 1, 0.5, 1],
-                    }}
-                  >
-                    <NavLink
-                      to={item.path}
-                      end={item.path === '/'}
-                      onPointerEnter={() => preloadRoute(item.path)}
-                      onFocus={() => preloadRoute(item.path)}
-                      onTouchStart={() => preloadRoute(item.path)}
-                      onClick={() => setMenuOpen(false)}
-                      className={({ isActive }) =>
-                        `group flex items-center justify-between rounded-xl px-3.5 py-3 transition-all ${
-                          isActive
-                            ? 'bg-surface text-ink font-bold shadow-sm'
-                            : 'text-muted hover:bg-surface/40 hover:text-ink font-medium'
-                        }`
-                      }
-                    >
-                      {({ isActive }) => (
-                        <>
-                          <div className="flex items-baseline gap-4">
-                            <span className="font-mono text-xs opacity-50">
-                              {String(index + 1).padStart(2, '0')}
-                            </span>
-                            <span className="font-display text-2xl tracking-tight sm:text-3xl">
-                              {item.label}
-                            </span>
-                          </div>
-                          {isActive ? (
-                            <span className="h-2 w-2 rounded-full bg-accent shadow-sm" aria-hidden="true" />
-                          ) : (
-                            <ArrowUpRight
-                              className="h-4 w-4 opacity-0 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100"
-                              aria-hidden="true"
-                            />
-                          )}
-                        </>
-                      )}
-                    </NavLink>
-                  </motion.li>
-                ))}
-              </ul>
-            </nav>
-
-            {/* Bottom Footer Section */}
-            <motion.div
-              className="border-t border-line/40 pt-5"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.28, duration: 0.3 }}
-            >
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <ul className="flex flex-wrap items-center gap-4 text-xs font-semibold tracking-wider text-muted uppercase">
-                  {social
-                    ?.filter((s) => s.visible && s.kind === 'link')
-                    .slice(0, 3)
-                    .map((s) => (
-                      <li key={s.id}>
-                        <a
-                          href={s.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="transition-colors hover:text-ink"
-                        >
-                          {s.platform}
-                        </a>
-                      </li>
-                    ))}
-                </ul>
-                <span className="text-xs text-muted/80">{profile.location || 'India'}</span>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
-  )
+							{/* Social Links Row */}
+							<div className="flex items-center justify-between pt-1 font-mono text-[11px] text-text-3">
+								<div className="flex items-center gap-3">
+									{configuredSocials.map((link) => (
+										<a
+											key={link.id || link.label}
+											href={link.kind === 'email' ? `mailto:${link.url}` : link.url}
+											target={link.kind === 'email' ? undefined : '_blank'}
+											rel={link.kind === 'email' ? undefined : 'noopener noreferrer'}
+											className="hover:text-copper transition-colors py-1 px-1"
+											aria-label={link.label}
+										>
+											{link.label}
+										</a>
+									))}
+								</div>
+								<div className="flex items-center gap-2">
+									<span className="h-1.5 w-1.5 rounded-full bg-copper animate-pulse" />
+									<span className="text-copper tracking-wider uppercase">India</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			) : null}
+		</header>
+	)
 }

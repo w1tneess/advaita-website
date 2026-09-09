@@ -1,13 +1,13 @@
-import { motion } from 'framer-motion'
 import { Link } from 'react-router'
-import Container from '@/components/layout/Container.jsx'
+import PageHeader from '@/components/ui/PageHeader.jsx'
+import Reveal from '@/components/ui/Reveal.jsx'
 import EmptyState from '@/components/ui/EmptyState.jsx'
 import Seo from '@/components/meta/Seo.jsx'
 import { useContent } from '@/lib/content.jsx'
 import { PUBLIC_ROUTES } from '@/config/nav.js'
-import { pageLoadVariant, staggerContainer, staggerItem, scrollViewport } from '@/lib/animations.js'
 import { formatDate } from '@/lib/format.js'
 import { preloadRoute } from '@/lib/preload.js'
+import { ArrowRight } from 'lucide-react'
 
 const ROUTE = PUBLIC_ROUTES.find((route) => route.key === 'blog')
 
@@ -18,78 +18,76 @@ export default function Blog() {
     <>
       <Seo title={ROUTE.title} description={ROUTE.description} path="/blog" />
 
-      <Container>
-        <motion.div
-          className="py-12 sm:py-16 md:py-20"
-          initial="hidden"
-          animate="visible"
-          variants={pageLoadVariant}
-        >
-          <div className="border-b border-line/40 pb-8 sm:pb-10">
-            <div className="flex items-center gap-2 text-[11px] font-mono tracking-widest text-accent uppercase mb-3">
-              <span>⟐</span>
-              <span>ESSAYS & WORKING PAPERS</span>
-            </div>
+      <PageHeader
+        eyebrow="Writing"
+        title="Essays &amp; Writing"
+        lead="Articles, notes, and observations on philosophy, history, politics, and technology."
+      />
 
-            <div className="max-w-2xl">
-              <h1 className="font-display text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl text-ink">
-                Writing
-              </h1>
-              <p className="mt-3 text-base sm:text-lg leading-relaxed text-muted">
-                Notes, research, and ideas as they develop.
-              </p>
-            </div>
+      <section className="shell pb-24 md:pb-32">
+        {publicBlogPosts.length === 0 ? (
+          <div className="py-12 border border-line bg-surface/40 p-8">
+            <EmptyState
+              title="No articles yet"
+              message={settings?.blogEmptyState || 'Articles and notes will be published here.'}
+            />
           </div>
+        ) : (
+          <ul className="border-t border-line">
+            {publicBlogPosts.map((post, index) => (
+              <Reveal key={post.id} delay={index * 0.04}>
+                <li className="grid gap-4 border-b border-line py-8 sm:grid-cols-[11rem_minmax(0,1fr)] items-start">
+                  {/* Left Metadata Column */}
+                  <div className="font-mono text-xs text-text-3 space-y-2">
+                    <time dateTime={post.published_at} className="block text-copper">
+                      {formatDate(post.published_at)}
+                    </time>
+                    {post.category && (
+                      <span className="inline-block border border-line bg-surface px-2.5 py-0.5 text-[10px] uppercase tracking-wider text-text-2">
+                        {post.category}
+                      </span>
+                    )}
+                  </div>
 
-          <motion.div
-            className="mt-12 sm:mt-16 border-t border-line"
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={scrollViewport}
-          >
-            {publicBlogPosts.length === 0 ? (
-              <div className="py-12">
-                <EmptyState
-                  title="No articles yet"
-                  message={settings?.blogEmptyState || 'No public articles published yet.'}
-                />
-              </div>
-            ) : (
-              <ul className="divide-y divide-line">
-                {publicBlogPosts.map((post) => (
-                  <motion.li key={post.id} variants={staggerItem} className="py-8 sm:py-10">
-                    <article className="group relative max-w-3xl flex flex-col items-start justify-between">
-                      <div className="flex items-center gap-x-3 text-xs">
-                        <time dateTime={post.published_at} className="font-mono text-muted">
-                          {formatDate(post.published_at)}
-                        </time>
-                        <span className="text-line">/</span>
-                        <span className="rounded-full border border-line bg-surface px-2.5 py-0.5 text-xs font-medium text-muted">
-                          {post.category}
-                        </span>
-                      </div>
-                      <h2 className="mt-3 font-display text-xl sm:text-2xl font-semibold tracking-tight text-ink group-hover:text-accent transition-colors">
-                        <Link
-                          to={`/blog/${post.slug}`}
-                          onPointerEnter={() => preloadRoute(`/blog/${post.slug}`)}
-                          onFocus={() => preloadRoute(`/blog/${post.slug}`)}
-                          onTouchStart={() => preloadRoute(`/blog/${post.slug}`)}
-                        >
-                          {post.title}
-                        </Link>
-                      </h2>
-                      <p className="mt-2.5 line-clamp-3 text-sm sm:text-base leading-relaxed text-muted">
+                  {/* Right Content Column */}
+                  <div>
+                    <h2 className="font-display text-2xl sm:text-3xl text-text font-normal leading-snug hover:text-copper transition-colors duration-300">
+                      <Link
+                        to={`/blog/${post.slug}`}
+                        onPointerEnter={() => preloadRoute(`/blog/${post.slug}`)}
+                        onFocus={() => preloadRoute(`/blog/${post.slug}`)}
+                        onTouchStart={() => preloadRoute(`/blog/${post.slug}`)}
+                      >
+                        {post.title}
+                      </Link>
+                    </h2>
+                    {post.excerpt && (
+                      <p className="mt-3 text-lead text-text-2 font-light leading-relaxed">
                         {post.excerpt}
                       </p>
-                    </article>
-                  </motion.li>
-                ))}
-              </ul>
-            )}
-          </motion.div>
-        </motion.div>
-      </Container>
+                    )}
+                    <div className="mt-4">
+                      <Link
+                        to={`/blog/${post.slug}`}
+                        className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-copper hover:text-copper-strong transition-colors"
+                      >
+                        <span>Read essay</span>
+                        <ArrowRight className="h-3.5 w-3.5" />
+                      </Link>
+                    </div>
+                  </div>
+                </li>
+              </Reveal>
+            ))}
+          </ul>
+        )}
+
+        {/* Colophon Footnote */}
+        <div className="mt-16 pt-8 border-t border-line flex flex-col sm:flex-row sm:items-center justify-between gap-4 font-mono text-xs text-text-3">
+          <span>Articles &amp; Reading Notes</span>
+          <span className="text-copper">Location: India</span>
+        </div>
+      </section>
     </>
   )
 }

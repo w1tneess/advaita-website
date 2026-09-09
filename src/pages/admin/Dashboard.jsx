@@ -11,7 +11,10 @@ import {
   ArrowRight,
   Clock,
   FolderGit2,
-  BookMarked
+  BookMarked,
+  RefreshCw,
+  CheckCircle2,
+  AlertCircle
 } from 'lucide-react'
 import { Link } from 'react-router'
 import { useEffect, useState } from 'react'
@@ -20,6 +23,7 @@ import AdminPage from '../../components/admin/AdminPage.jsx'
 import Card from '@/components/ui/Card.jsx'
 import { useContent } from '../../lib/content.jsx'
 import { supabase, isSupabaseConfigured } from '../../lib/supabase/client.js'
+import { checkSupabaseHealth } from '../../lib/supabase/sync.js'
 
 function formatActivityDate(value) {
   return new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeStyle: 'short' }).format(
@@ -29,53 +33,84 @@ function formatActivityDate(value) {
 
 function StatItem({ icon: Icon, label, value, to }) {
   return (
-    <Link to={to} className="flex items-center justify-between p-3 rounded-lg hover:bg-zinc-800/60 transition-all group">
-      <div className="flex items-center gap-3 text-sm">
-        <div className="p-2 rounded-md bg-zinc-900 text-zinc-400 group-hover:bg-zinc-100 group-hover:text-zinc-950 transition-colors border border-zinc-800">
-          <Icon className="h-4 w-4" />
+    <Link to={to} className="flex items-center justify-between p-3 rounded-lg hover:bg-[#181a1a] transition-all group">
+      <div className="flex items-center gap-3 text-xs font-mono">
+        <div className="p-2 rounded-md bg-[#161818] text-neutral-400 group-hover:text-[#D1B18A] transition-colors border border-[#242626]">
+          <Icon className="h-3.5 w-3.5" />
         </div>
-        <span className="font-medium text-zinc-300 group-hover:text-zinc-100">{label}</span>
+        <span className="text-neutral-300 group-hover:text-[#E8E6E1] uppercase tracking-wider">{label}</span>
       </div>
-      <span className="font-mono text-sm text-zinc-500">{value}</span>
+      <span className="font-mono text-xs text-[#D1B18A] font-semibold">{value}</span>
     </Link>
   )
 }
 
-function QuickAction({ icon: Icon, label, description, to, colorClass }) {
+function QuickAction({ icon: Icon, label, description, to }) {
   return (
     <Link 
       to={to} 
-      className={`relative overflow-hidden flex flex-col p-5 rounded-xl border border-zinc-800 bg-[#0a0a0a] hover:bg-zinc-900 hover:border-zinc-700 hover:shadow-[0_8px_30px_rgb(0,0,0,0.5)] hover:-translate-y-1 transition-all duration-300 group ${colorClass}`}
+      className="relative overflow-hidden flex flex-col p-5 rounded-xl border border-[#242626] bg-[#121414] hover:bg-[#161818] hover:border-[#D1B18A]/50 transition-all duration-300 group"
     >
-      <div className="flex items-start justify-between mb-4">
-        <div className="p-2.5 rounded-lg bg-zinc-900 border border-zinc-800 group-hover:bg-zinc-100 group-hover:border-zinc-200 group-hover:text-zinc-950 text-zinc-300 transition-colors z-10">
-          <Icon className="h-5 w-5" />
+      <div className="flex items-start justify-between mb-3">
+        <div className="p-2.5 rounded-lg bg-[#181a1a] border border-[#292a2a] group-hover:border-[#D1B18A] group-hover:text-[#D1B18A] text-neutral-400 transition-colors">
+          <Icon className="h-4 w-4" />
         </div>
-        <ArrowRight className="h-4 w-4 text-zinc-500 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-zinc-300 transition-all z-10" />
+        <ArrowRight className="h-3.5 w-3.5 text-neutral-600 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-[#D1B18A] transition-all" />
       </div>
-      <h3 className="font-semibold text-zinc-100 z-10">{label}</h3>
-      <p className="text-xs text-zinc-500 mt-1 z-10">{description}</p>
+      <h3 className="font-display text-base font-normal text-[#E8E6E1] group-hover:text-[#D1B18A] transition-colors">{label}</h3>
+      <p className="font-mono text-[11px] text-neutral-500 mt-1">{description}</p>
     </Link>
   )
 }
 
 export default function Dashboard() {
   const {
-    projects,
-    interests,
-    skills,
-    timeline,
-    socialLinks,
-    projectCategories,
-    activity,
+    projects = [],
+    interests = [],
+    skills = [],
+    timeline = [],
+    socialLinks = [],
+    projectCategories = [],
+    activity = [],
     photography,
     blog = [],
     notes = [],
+    isRemote
   } = useContent()
 
   const [messages, setMessages] = useState([])
+  const [health, setHealth] = useState({
+    loading: true,
+    configured: false,
+    connected: false,
+    latencyMs: 0,
+    tables: { siteContent: false, contactSubmissions: false, imagesBucket: false },
+    message: ''
+  })
+  const [isTesting, setIsTesting] = useState(false)
+
+  const runHealthCheck = async () => {
+    setIsTesting(true)
+    try {
+      const res = await checkSupabaseHealth()
+      setHealth({ ...res, loading: false })
+    } catch (_) {
+      setHealth({
+        loading: false,
+        configured: isSupabaseConfigured(),
+        connected: false,
+        latencyMs: 0,
+        tables: { siteContent: false, contactSubmissions: false, imagesBucket: false },
+        message: 'Diagnostics failed to run'
+      })
+    } finally {
+      setIsTesting(false)
+    }
+  }
 
   useEffect(() => {
+    runHealthCheck()
+
     async function loadMessages() {
       if (!isSupabaseConfigured() || !supabase) return
       try {
@@ -95,23 +130,23 @@ export default function Dashboard() {
   const photos = photography?.photos || []
 
   const stats = [
-    { icon: FileText, label: 'Blog posts', value: blog.length, to: '/admin/blog' },
-    { icon: BookMarked, label: 'Philosophy notes', value: notes.length, to: '/admin/notes' },
+    { icon: FileText, label: 'Blog articles', value: blog.length, to: '/admin/blog' },
+    { icon: BookMarked, label: 'Reading notes', value: notes.length, to: '/admin/notes' },
     { icon: FolderOpen, label: 'Projects', value: projects.length, to: '/admin/projects' },
     { icon: Camera, label: 'Photography', value: photos.length, to: '/admin/photography' },
     { icon: Tags, label: 'Categories', value: projectCategories.length, to: '/admin/taxonomy' },
     { icon: BarChart3, label: 'Interests', value: interests.length, to: '/admin/profile' },
-    { icon: GraduationCap, label: 'Abilities', value: skills.length, to: '/admin/skills' },
-    { icon: Milestone, label: 'Timeline', value: timeline.length, to: '/admin/timeline' },
-    { icon: Link2, label: 'Links', value: socialLinks.length, to: '/admin/social' },
+    { icon: GraduationCap, label: 'Skills & Tools', value: skills.length, to: '/admin/skills' },
+    { icon: Milestone, label: 'Timeline entries', value: timeline.length, to: '/admin/timeline' },
+    { icon: Link2, label: 'Social links', value: socialLinks.length, to: '/admin/social' },
   ]
 
   const drafts = blog.filter((post) => post.status === 'draft')
 
   return (
     <AdminPage
-      title="Dashboard"
-      description="Manage your website content. Changes are synced directly to Supabase."
+      title="Studio Dashboard"
+      description="Overview of your website portfolio, live storage state, and recent messages."
     >
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
@@ -120,25 +155,26 @@ export default function Dashboard() {
           
           {/* Quick Actions */}
           <section>
-            <h2 className="text-sm font-semibold tracking-wide text-muted uppercase mb-4">Quick Actions</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <h2 className="font-mono text-[11px] font-bold tracking-widest text-neutral-500 uppercase mb-3">
+              Quick Actions
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
               <QuickAction 
                 icon={FileText} 
-                label="Write Post" 
-                description="Draft a new article" 
+                label="Write Article" 
+                description="Draft a new blog post or essay" 
                 to="/admin/blog/new"
-                colorClass="group-hover:text-accent"
               />
               <QuickAction 
                 icon={FolderGit2} 
                 label="Add Project" 
-                description="Showcase your work" 
+                description="Add a new project or case study" 
                 to="/admin/projects/new"
               />
               <QuickAction 
                 icon={Camera} 
-                label="Upload Photo" 
-                description="Publish to gallery" 
+                label="Add Photo" 
+                description="Upload a photo to gallery" 
                 to="/admin/photography/new"
               />
             </div>
@@ -146,31 +182,33 @@ export default function Dashboard() {
 
           {/* Recent Messages */}
           <section>
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-sm font-semibold tracking-wide text-muted uppercase">Recent Messages</h2>
-              <Link to="/admin/messages" className="text-xs text-accent hover:underline flex items-center gap-1">
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="font-mono text-[11px] font-bold tracking-widest text-neutral-500 uppercase">
+                Recent Messages
+              </h2>
+              <Link to="/admin/messages" className="font-mono text-xs text-[#D1B18A] hover:underline flex items-center gap-1">
                 View all <ArrowRight className="h-3 w-3" />
               </Link>
             </div>
-            <Card className="p-0 overflow-hidden border-zinc-800/60 bg-[#0a0a0a] shadow-lg">
+            <Card className="p-0 overflow-hidden border-[#242626] bg-[#121414] shadow-xl">
               {messages.length > 0 ? (
-                <div className="divide-y divide-zinc-800/60">
+                <div className="divide-y divide-[#242626]">
                   {messages.map((msg) => (
-                    <div key={msg.id} className="p-4 hover:bg-zinc-900/50 transition-colors">
+                    <div key={msg.id} className="p-4 hover:bg-[#161818] transition-colors">
                       <div className="flex items-baseline justify-between mb-1">
-                        <span className="font-medium text-sm text-zinc-200">{msg.name}</span>
-                        <span className="text-xs text-zinc-500">
+                        <span className="font-medium text-xs text-[#E8E6E1] font-mono">{msg.name}</span>
+                        <span className="text-[10px] font-mono text-neutral-500">
                           {new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' }).format(new Date(msg.created_at))}
                         </span>
                       </div>
-                      <p className="text-xs text-zinc-500 mb-2">{msg.email} {msg.topic && `• ${msg.topic}`}</p>
-                      <p className="text-sm text-zinc-300 line-clamp-2">{msg.message}</p>
+                      <p className="text-[11px] font-mono text-[#D1B18A] mb-1.5">{msg.email} {msg.topic && `• ${msg.topic}`}</p>
+                      <p className="text-xs text-neutral-300 font-light line-clamp-2">{msg.message}</p>
                     </div>
                   ))}
                 </div>
               ) : (
-                <div className="p-8 text-center text-sm text-zinc-500 flex flex-col items-center">
-                  <MessageSquare className="h-8 w-8 mb-3 opacity-20" />
+                <div className="p-8 text-center text-xs font-mono text-neutral-500 flex flex-col items-center">
+                  <MessageSquare className="h-7 w-7 mb-2.5 opacity-20 text-[#D1B18A]" />
                   No messages received yet.
                 </div>
               )}
@@ -179,95 +217,129 @@ export default function Dashboard() {
 
           {/* Activity Feed */}
           <section>
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-sm font-semibold tracking-wide text-muted uppercase">Recent Activity</h2>
-              <span className="text-xs text-zinc-400 bg-zinc-900 border border-zinc-800 px-2 py-1 rounded-full flex items-center gap-1.5 shadow-sm">
-                <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse"></span>
-                Live sync active
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="font-mono text-[11px] font-bold tracking-widest text-neutral-500 uppercase">
+                Recent Activity
+              </h2>
+              <span className="text-[11px] font-mono text-neutral-400 bg-[#141616] border border-[#242626] px-2.5 py-1 rounded-md flex items-center gap-1.5">
+                <span className={`h-2 w-2 rounded-full ${isRemote ? 'bg-emerald-400' : 'bg-[#D1B18A]'} animate-pulse`} />
+                {isRemote ? 'Cloud Synced' : 'Local Storage'}
               </span>
             </div>
-            <Card className="p-0 overflow-hidden border-zinc-800/60 bg-[#0a0a0a] shadow-lg">
+            <Card className="p-0 overflow-hidden border-[#242626] bg-[#121414] shadow-xl">
               {activity.length > 0 ? (
-                <ul className="divide-y divide-zinc-800/60">
+                <ul className="divide-y divide-[#242626]">
                   {activity.slice(0, 5).map((entry) => (
-                    <li key={entry.id} className="p-4 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 text-sm hover:bg-zinc-900/50 transition-colors">
+                    <li key={entry.id} className="p-3.5 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 text-xs hover:bg-[#161818] transition-colors">
                       <div className="flex items-center gap-2">
-                        <Clock className="h-4 w-4 text-zinc-500" />
-                        <span className="text-zinc-300">
-                          <strong className="font-medium capitalize">{entry.action}</strong>{' '}
+                        <Clock className="h-3.5 w-3.5 text-neutral-500" />
+                        <span className="text-neutral-300 font-mono">
+                          <strong className="font-semibold text-[#D1B18A] capitalize">{entry.action}</strong>{' '}
                           {entry.type.replace('categories.', '')} “{entry.label}”
                         </span>
                       </div>
-                      <time className="text-xs text-zinc-500" dateTime={entry.at}>
+                      <time className="text-[11px] font-mono text-neutral-500" dateTime={entry.at}>
                         {formatActivityDate(entry.at)}
                       </time>
                     </li>
                   ))}
                 </ul>
               ) : (
-                <p className="p-8 text-center text-sm text-zinc-500">No admin changes recorded yet.</p>
+                <p className="p-8 text-center text-xs font-mono text-neutral-500">No recent edits recorded.</p>
               )}
             </Card>
           </section>
 
         </div>
 
-        {/* Right Column: Overview & Publishing */}
+        {/* Right Column: Overview & System Diagnostics */}
         <div className="lg:col-span-4 space-y-8">
           
           {drafts.length > 0 && (
-            <Card className="p-5 border-opinion/30 bg-opinion/5">
-              <h3 className="text-sm font-semibold text-opinion flex items-center gap-2 mb-3">
-                <FileText className="h-4 w-4" />
-                Drafts in progress
+            <Card className="p-4 border-[#D1B18A]/30 bg-[#D1B18A]/5">
+              <h3 className="font-mono text-xs font-semibold text-[#D1B18A] flex items-center gap-2 mb-2 uppercase tracking-wider">
+                <FileText className="h-3.5 w-3.5" />
+                Drafts in Progress
               </h3>
-              <ul className="space-y-2">
+              <ul className="space-y-1.5">
                 {drafts.slice(0, 3).map(draft => (
                   <li key={draft.id}>
-                    <Link to={`/admin/blog/${draft.id}`} className="text-sm hover:text-accent hover:underline line-clamp-1">
+                    <Link to={`/admin/blog/${draft.id}`} className="text-xs text-neutral-300 hover:text-[#E8E6E1] hover:underline line-clamp-1">
                       {draft.title || 'Untitled Draft'}
                     </Link>
                   </li>
                 ))}
               </ul>
               {drafts.length > 3 && (
-                <Link to="/admin/blog" className="text-xs text-muted hover:text-accent mt-3 inline-block">
+                <Link to="/admin/blog" className="text-[10px] font-mono text-[#D1B18A] hover:underline mt-2 inline-block">
                   + {drafts.length - 3} more drafts
                 </Link>
               )}
             </Card>
           )}
 
+          {/* Real Dynamic System Diagnostics */}
           <section>
-            <h2 className="text-sm font-semibold tracking-wide text-muted uppercase mb-4">Content Overview</h2>
-            <Card className="p-2 border-zinc-800/60 bg-[#0a0a0a] shadow-lg">
-              <div className="flex flex-col space-y-1">
-                {stats.map((stat) => (
-                  <StatItem key={stat.label} {...stat} />
-                ))}
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="font-mono text-[11px] font-bold tracking-widest text-neutral-500 uppercase">
+                System Diagnostics
+              </h2>
+              <button
+                type="button"
+                onClick={runHealthCheck}
+                disabled={isTesting}
+                className="text-[10px] font-mono text-[#D1B18A] hover:underline flex items-center gap-1 cursor-pointer"
+              >
+                <RefreshCw className={`h-2.5 w-2.5 ${isTesting ? 'animate-spin' : ''}`} />
+                Test
+              </button>
+            </div>
+            <Card className="p-4 border-[#242626] bg-[#121414] shadow-xl space-y-3 font-mono text-xs">
+              <div className="flex items-center justify-between border-b border-[#242626] pb-2.5">
+                <span className="text-neutral-400">Database (Supabase)</span>
+                {health.connected ? (
+                  <span className="flex items-center gap-1.5 text-emerald-400 text-[11px]">
+                    <CheckCircle2 className="h-3.5 w-3.5" /> Connected ({health.latencyMs}ms)
+                  </span>
+                ) : (
+                  <span className="flex items-center gap-1.5 text-[#D1B18A] text-[11px]">
+                    <AlertCircle className="h-3.5 w-3.5" /> Offline / Local
+                  </span>
+                )}
+              </div>
+
+              <div className="flex items-center justify-between border-b border-[#242626] pb-2.5">
+                <span className="text-neutral-400">Content Table</span>
+                <span className={`text-[11px] ${health.tables.siteContent ? 'text-emerald-400' : 'text-neutral-500'}`}>
+                  {health.tables.siteContent ? 'site_content ready' : 'Not verified'}
+                </span>
+              </div>
+
+              <div className="flex items-center justify-between border-b border-[#242626] pb-2.5">
+                <span className="text-neutral-400">Storage Bucket</span>
+                <span className={`text-[11px] ${health.tables.imagesBucket ? 'text-emerald-400' : 'text-neutral-500'}`}>
+                  {health.tables.imagesBucket ? 'images ready' : 'Local URLs active'}
+                </span>
+              </div>
+
+              <div className="pt-2">
+                <Link to="/admin/data" className="text-[11px] text-[#D1B18A] hover:underline flex items-center justify-between">
+                  Manage backups &amp; schema <ArrowRight className="h-3 w-3" />
+                </Link>
               </div>
             </Card>
           </section>
 
+          {/* Content Overview */}
           <section>
-            <h2 className="text-sm font-semibold tracking-wide text-muted uppercase mb-4">System Status</h2>
-            <Card className="p-5 border-zinc-800/60 bg-[#0a0a0a] shadow-lg space-y-4">
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-zinc-400">Database Connection</span>
-                <span className="flex items-center gap-2 text-sm text-green-500 font-medium">
-                  <div className="h-2 w-2 rounded-full bg-green-500"></div> Connected
-                </span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-zinc-400">Storage Bucket</span>
-                <span className="flex items-center gap-2 text-sm text-green-500 font-medium">
-                  <div className="h-2 w-2 rounded-full bg-green-500"></div> Active
-                </span>
-              </div>
-              <div className="pt-4 border-t border-zinc-800/60">
-                <Link to="/admin/data" className="text-xs text-accent hover:underline flex items-center justify-between">
-                  Manage database backups <ArrowRight className="h-3 w-3" />
-                </Link>
+            <h2 className="font-mono text-[11px] font-bold tracking-widest text-neutral-500 uppercase mb-3">
+              Content Overview
+            </h2>
+            <Card className="p-1.5 border-[#242626] bg-[#121414] shadow-xl">
+              <div className="flex flex-col space-y-0.5">
+                {stats.map((stat) => (
+                  <StatItem key={stat.label} {...stat} />
+                ))}
               </div>
             </Card>
           </section>

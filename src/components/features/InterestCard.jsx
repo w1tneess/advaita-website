@@ -26,40 +26,32 @@ const ICON_MAP = {
   GraduationCap,
 }
 
-/**
- * Research-interest card.
- *
- * Designed as a quiet, authoritative editorial index entry — balancing clean
- * typography with bespoke hairline iconography.
- */
 export default function InterestCard({ interest, headingLevel = 3, index }) {
   const Heading = `h${headingLevel}`
   const IconComponent = interest.icon ? ICON_MAP[interest.icon] : null
 
   return (
-    <div
-      className="group relative flex flex-col justify-between p-5 sm:p-6 rounded-card border border-line/60 bg-surface/50 transition-all duration-200 hover:border-accent/40 hover:bg-surface shadow-subtle"
-    >
+    <div className="group relative flex flex-col justify-between p-6 border border-line bg-surface transition-all duration-300 hover:border-copper/50">
       <div>
-        <div className="flex items-center justify-between gap-3 pb-3 mb-3 border-b border-line/30">
+        <div className="flex items-center justify-between gap-3 pb-3 mb-3 border-b border-line/50 font-mono text-[11px]">
           <div className="flex items-center gap-2.5 min-w-0">
             {IconComponent && (
-              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded border border-line/50 bg-raised/60 text-accent/90 transition-colors group-hover:border-accent/40 group-hover:text-accent">
-                <IconComponent className="h-3.5 w-3.5" strokeWidth={1.75} aria-hidden="true" />
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center border border-line bg-canvas text-copper">
+                <IconComponent className="h-3 w-3" strokeWidth={1.75} aria-hidden="true" />
               </span>
             )}
-            <Heading className="font-display text-base font-semibold tracking-tight text-ink group-hover:text-accent transition-colors duration-200 truncate">
+            <Heading className="font-display text-base font-normal tracking-tight text-text group-hover:text-copper transition-colors truncate">
               {interest.name}
             </Heading>
           </div>
           {index !== undefined && (
-            <span className="font-mono text-[11px] font-medium text-muted/40 group-hover:text-accent/80 transition-colors shrink-0">
-              {String(index + 1).padStart(2, '0')}
+            <span className="font-mono text-[10px] text-text-3 group-hover:text-copper transition-colors shrink-0">
+              [{String(index + 1).padStart(2, '0')}]
             </span>
           )}
         </div>
         {interest.note && (
-          <p className="text-sm leading-relaxed text-muted/90">
+          <p className="text-xs sm:text-sm leading-relaxed text-text-2 font-light">
             {interest.note}
           </p>
         )}
@@ -67,4 +59,3 @@ export default function InterestCard({ interest, headingLevel = 3, index }) {
     </div>
   )
 }
-

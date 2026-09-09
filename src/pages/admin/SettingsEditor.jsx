@@ -26,8 +26,8 @@ export default function SettingsEditor() {
 
   return (
     <AdminPage
-      title="Website settings"
-      description="Tweaks the demo site. Changes live in this browser and persist to localStorage."
+      title="Website Settings"
+      description="Configure site-wide preferences, accent highlights, contact information, and homepage limits."
       actions={
         dirty && (
           <div className="flex items-center gap-2">
@@ -43,10 +43,8 @@ export default function SettingsEditor() {
         )
       }
     >
-      <Callout variant="analysis" title="These settings are front-end only">
-        Everything here is a client-side tweak. The real site will be deployed from the exported
-        seed document. Save → Export → Commit → Rebuild is the publish path. Nothing here writes to
-        a backend or persists beyond this browser.
+      <Callout variant="analysis" title="Site Preferences &amp; Sync">
+        Settings are saved to your browser immediately and synchronized with your Supabase database when connected. You can also export a full JSON backup from Database &amp; Sync.
       </Callout>
 
       <form onSubmit={submit} noValidate className="mt-8 space-y-8">

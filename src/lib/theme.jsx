@@ -1,14 +1,9 @@
-import { createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo } from 'react'
 import { useContent } from './content.jsx'
-import { THEME_STORAGE_KEY } from './store.js'
 
 const ThemeContext = createContext(null)
 
 const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect
-
-function getInitialTheme() {
-  return 'dark'
-}
 
 export function ThemeProvider({ children }) {
   const { settings } = useContent()

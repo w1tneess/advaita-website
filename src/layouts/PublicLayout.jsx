@@ -8,12 +8,12 @@ import Footer from '../components/layout/Footer.jsx'
 import Header from '../components/layout/Header.jsx'
 import SkipLink from '../components/layout/SkipLink.jsx'
 import BackToTopButton from '../components/ui/BackToTopButton.jsx'
-import ShortcutsModal from '../components/ui/ShortcutsModal.jsx'
+import CookieBanner from '../components/ui/CookieBanner.jsx'
 import PageFallback from '../components/ui/PageFallback.jsx'
-import { useShortcuts } from '../hooks/useShortcuts.js'
 import { useContent } from '../lib/content.jsx'
 import { useSmoothScroll } from '../lib/smooth-scroll.js'
 import { preloadRoute } from '../lib/preload.js'
+import { trackPageView } from '../lib/analytics.js'
 
 /**
  * Shell for every public page.
@@ -24,7 +24,11 @@ import { preloadRoute } from '../lib/preload.js'
 export default function PublicLayout() {
   const { previewDrafts, setPreviewDrafts } = useContent()
   const location = useLocation()
-  const { isOpen: shortcutsOpen, close: closeShortcuts } = useShortcuts()
+
+  // Track privacy-first pageviews
+  useEffect(() => {
+    trackPageView(location.pathname)
+  }, [location.pathname])
 
   // Initialize smooth scrolling
   useSmoothScroll()
@@ -102,7 +106,7 @@ export default function PublicLayout() {
 
       {/* Global Interactive Aids */}
       <BackToTopButton />
-      <ShortcutsModal isOpen={shortcutsOpen} onClose={closeShortcuts} />
+      <CookieBanner />
     </div>
   )
 }

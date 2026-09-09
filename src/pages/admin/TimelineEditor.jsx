@@ -17,13 +17,11 @@ export default function TimelineEditor() {
 
   return (
     <AdminPage
-      title="Learning direction"
-      description="Milestones in Advita's ongoing learning and practice. No dates that reveal age or school — only period labels, titles and details."
+      title="Timeline &amp; Milestones"
+      description="Milestones and learning periods displayed on the About page."
     >
-      <Callout variant="limitation" title="No age- or school-leak">
-        Use period labels that don't reveal exact age: phrases like "2024–2025", "Q3 2025", "Summer
-        2025", "During masters study" or "First year of studies". Do not include exact months, days,
-        or school names. The privacy note on the Profile page explains why this matters.
+      <Callout variant="limitation" title="Privacy Tip">
+        Use general period labels such as "2024–2025", "Summer 2025", or "College studies" to keep personal details private while charting your trajectory.
       </Callout>
 
       <CollectionEditor
@@ -33,9 +31,9 @@ export default function TimelineEditor() {
         create={createTimelineItem}
         validate={validateTimelineItem}
         singular="milestone"
-        addLabel="Add learning milestone"
+        addLabel="Add milestone"
         labelFor={(item) => item.title}
-        emptyMessage="No timeline entries yet. The learning direction section will be empty."
+        emptyMessage="No timeline entries yet. The timeline section on the About page will be empty."
         summary={(item) => (
           <div className="min-w-0">
             <p className="text-xs tracking-wide text-muted uppercase">{item.period}</p>

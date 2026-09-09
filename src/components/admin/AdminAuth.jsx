@@ -1,18 +1,13 @@
 import { createContext, useContext, useEffect, useState, useMemo, useCallback } from 'react'
 import { Link } from 'react-router'
-import { ArrowLeft, Loader2, Mail, AlertTriangle } from 'lucide-react'
+import { ArrowLeft, Loader2, Mail, Shield, AlertTriangle, UserPlus, LogIn, Laptop } from 'lucide-react'
 
 import { supabase, isSupabaseConfigured } from '../../lib/supabase/client.js'
-import Button from '../ui/Button.jsx'
 import PasswordInput from '../ui/PasswordInput.jsx'
 import { useToast } from '../../lib/toast.jsx'
 
-/**
- * Real Supabase authentication for admin panel.
- * Requires email/password login.
- */
-
 const AdminAuthContext = createContext(null)
+const LOCAL_AUTH_KEY = 'advaita-site.local-auth'
 
 export function useAdminAuth() {
   const context = useContext(AdminAuthContext)
@@ -27,26 +22,46 @@ export default function AdminAuth({ children }) {
 
   const [session, setSession] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [authMode, setAuthMode] = useState('signin') // 'signin' | 'signup'
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [signingIn, setSigningIn] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
   const [rememberMe, setRememberMe] = useState(false)
 
   const isConfigured = isSupabaseConfigured()
 
-  // Check auth on mount
+  // Check auth on mount (both Supabase session and Local session)
   useEffect(() => {
+    // 1. Check local offline mode session
+    try {
+      const localStored = localStorage.getItem(LOCAL_AUTH_KEY) || sessionStorage.getItem(LOCAL_AUTH_KEY)
+      if (localStored) {
+        const parsed = JSON.parse(localStored)
+        if (parsed?.user) {
+          setSession(parsed)
+          setLoading(false)
+          return
+        }
+      }
+    } catch (_) {
+      // Ignore storage access error
+    }
+
+    // 2. If Supabase is unconfigured, finish loading
     if (!isConfigured) {
       setLoading(false)
       return
     }
 
+    // 3. Check active Supabase session
     async function checkAuth() {
       try {
         const {
           data: { session },
         } = await supabase.auth.getSession()
-        setSession(session)
+        if (session) {
+          setSession(session)
+        }
       } catch (error) {
         console.error('Auth check error:', error)
       } finally {
@@ -56,255 +71,304 @@ export default function AdminAuth({ children }) {
 
     checkAuth()
 
-    // Listen for auth changes
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session)
+      if (session) {
+        setSession(session)
+      }
     })
 
     return () => subscription?.unsubscribe()
   }, [isConfigured])
 
-  const handleSignIn = async (e) => {
+  const handleAuthSubmit = async (e) => {
     e.preventDefault()
 
     if (!isConfigured) {
-      toast.error('Supabase is not configured. Please set your credentials in .env.local.')
+      toast.error('Supabase is not configured. You can use Local Mode to manage content.')
       return
     }
 
-    setSigningIn(true)
+    setSubmitting(true)
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      })
+      if (authMode === 'signin') {
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        })
 
-      if (error) {
-        toast.error(error.message || 'Login failed')
-        return
+        if (error) {
+          toast.error(error.message || 'Login failed')
+          return
+        }
+
+        if (data?.session) {
+          setSession(data.session)
+          toast.success('Signed in to workspace!')
+          setEmail('')
+          setPassword('')
+        }
+      } else {
+        // Sign up new admin user
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
+        })
+
+        if (error) {
+          toast.error(error.message || 'Sign up failed')
+          return
+        }
+
+        if (data?.session) {
+          setSession(data.session)
+          toast.success('Admin account created and signed in!')
+        } else {
+          toast.success('Account created! Please check your email to verify.')
+          setAuthMode('signin')
+        }
+        setEmail('')
+        setPassword('')
       }
-
-      toast.success('Logged in!')
-      setEmail('')
-      setPassword('')
-    } catch (_error) {
-      toast.error('An error occurred')
+    } catch (err) {
+      toast.error('Authentication error: ' + err.message)
     } finally {
-      setSigningIn(false)
+      setSubmitting(false)
     }
+  }
+
+  const handleEnterLocalMode = () => {
+    const localSession = {
+      user: { email: 'local-admin@advaita.local', id: 'local-admin' },
+      isLocalMode: true,
+      created_at: new Date().toISOString(),
+    }
+    try {
+      if (rememberMe) {
+        localStorage.setItem(LOCAL_AUTH_KEY, JSON.stringify(localSession))
+      } else {
+        sessionStorage.setItem(LOCAL_AUTH_KEY, JSON.stringify(localSession))
+      }
+    } catch (_) {
+      // Ignore storage access error
+    }
+    setSession(localSession)
+    toast.success('Entered Local Mode. All edits save locally.')
   }
 
   const handleSignOut = useCallback(async () => {
     try {
+      try {
+        localStorage.removeItem(LOCAL_AUTH_KEY)
+        sessionStorage.removeItem(LOCAL_AUTH_KEY)
+      } catch (_) {
+        // Ignore storage access error
+      }
+
       if (isConfigured) {
         await supabase.auth.signOut()
       }
       setSession(null)
-      toast.success('Logged out')
+      toast.success('Signed out')
     } catch (_error) {
-      toast.error('Logout failed')
+      toast.error('Sign out failed')
     }
   }, [isConfigured, toast])
 
   const contextValue = useMemo(
     () => ({
       session,
+      isLocalMode: !!session?.isLocalMode,
       logout: handleSignOut,
     }),
     [session, handleSignOut],
   )
 
   const handleForgotPassword = () => {
-    toast.info('To reset your admin password, use your Supabase project dashboard.')
+    toast.info('To reset your admin password, use your Supabase Project Dashboard → Authentication → Users.')
   }
 
   if (loading) {
     return (
-      <div className="flex min-h-dvh items-center justify-center bg-canvas px-6">
+      <div className="flex min-h-dvh items-center justify-center bg-[#0F0F0F] px-6 text-[#E8E6E1]">
         <div className="flex flex-col items-center gap-4">
-          <Loader2 className="h-8 w-8 animate-spin text-accent" />
-          <p className="text-sm font-medium text-muted">Checking access...</p>
+          <Loader2 className="h-7 w-7 animate-spin text-[#D1B18A]" />
+          <p className="font-mono text-xs tracking-wider uppercase text-neutral-400">Verifying access...</p>
         </div>
       </div>
     )
   }
 
-  // Show login if not authenticated
+  // Render Login Card if not authenticated
   if (!session) {
     return (
-      <div className="relative flex min-h-dvh flex-col items-center justify-center bg-canvas p-6 overflow-hidden selection:bg-accent/20">
-        {/* Ambient background glow */}
-        <div className="absolute inset-0 pointer-events-none flex justify-center items-center mix-blend-screen opacity-50">
-          <div
-            className="absolute top-[10%] left-[20%] h-[400px] w-[400px] rounded-full bg-accent/20 blur-[120px] animate-pulse"
-            style={{ animationDuration: '4s' }}
-          />
-          <div
-            className="absolute bottom-[10%] right-[20%] h-[400px] w-[400px] rounded-full bg-accent-strong/10 blur-[120px] animate-pulse"
-            style={{ animationDuration: '6s', animationDelay: '1s' }}
-          />
+      <div className="relative flex min-h-dvh flex-col items-center justify-center bg-[#0F0F0F] p-6 text-[#E8E6E1] overflow-hidden selection:bg-[#D1B18A]/20">
+        {/* Subtle Darkroom Glow */}
+        <div className="absolute inset-0 pointer-events-none flex justify-center items-center opacity-30">
+          <div className="h-[450px] w-[450px] rounded-full bg-[#D1B18A]/10 blur-[130px]" />
         </div>
 
-        <div className="relative z-10 w-full max-w-[440px] animate-rise flex flex-col items-center">
-          {/* Logo Area */}
-          <div className="mb-10 flex flex-col items-center">
-            <div className="relative mb-5 flex h-16 w-16 items-center justify-center">
-              <div
-                className="absolute inset-0 rounded-[1.25rem] bg-gradient-to-tr from-accent/40 to-white/20 blur-xl animate-pulse"
-                style={{ animationDuration: '4s' }}
-              />
-
-              <div className="relative flex h-full w-full items-center justify-center rounded-[1.25rem] border border-white/10 bg-surface shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]">
-                <svg
-                  width="30"
-                  height="30"
-                  viewBox="0 0 32 32"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="text-white drop-shadow-md"
-                >
-                  <circle cx="12" cy="16" r="8" stroke="url(#logo-grad)" strokeWidth="1.5" />
-                  <circle cx="20" cy="16" r="8" stroke="url(#logo-grad)" strokeWidth="1.5" />
-                  <circle cx="16" cy="16" r="2" fill="url(#logo-grad)" />
-                  <defs>
-                    <linearGradient
-                      id="logo-grad"
-                      x1="4"
-                      y1="16"
-                      x2="28"
-                      y2="16"
-                      gradientUnits="userSpaceOnUse"
-                    >
-                      <stop stopColor="#ffffff" />
-                      <stop offset="1" stopColor="var(--color-accent, #64748b)" stopOpacity="0.8" />
-                    </linearGradient>
-                  </defs>
-                </svg>
-              </div>
+        <div className="relative z-10 w-full max-w-[440px] flex flex-col items-center">
+          {/* Brand Header */}
+          <div className="mb-8 flex flex-col items-center text-center">
+            <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-xl border border-[#292a2a] bg-[#141616] text-[#D1B18A] shadow-lg">
+              <Shield className="h-6 w-6" />
             </div>
-            <h1 className="text-3xl font-bold tracking-tight text-ink">Advaita</h1>
-            <p className="mt-2 text-sm text-muted">Sign in to workspace</p>
+            <h1 className="font-display text-3xl font-light tracking-tight text-[#E8E6E1]">
+              Advaita <span className="italic text-[#D1B18A]">Workspace</span>
+            </h1>
+            <p className="mt-1 font-mono text-xs tracking-wider uppercase text-neutral-400">
+              Content Studio &amp; Archival Terminal
+            </p>
           </div>
 
-          {/* Configuration Warning Notice if Supabase is unconfigured */}
+          {/* Unconfigured Alert */}
           {!isConfigured && (
-            <div className="mb-6 w-full rounded-2xl border border-opinion/30 bg-opinion/10 p-4 text-xs text-opinion flex items-start gap-3 backdrop-blur-md">
-              <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
+            <div className="mb-6 w-full rounded-xl border border-[#D1B18A]/30 bg-[#D1B18A]/5 p-4 text-xs text-neutral-300 flex items-start gap-3">
+              <AlertTriangle className="h-4 w-4 shrink-0 text-[#D1B18A] mt-0.5" />
               <div>
-                <p className="font-semibold text-ink">Supabase unconfigured</p>
-                <p className="mt-1 text-muted">
-                  Set <code className="font-mono text-opinion">VITE_SUPABASE_URL</code> and{' '}
-                  <code className="font-mono text-opinion">VITE_SUPABASE_ANON_KEY</code> in{' '}
-                  <code className="font-mono text-opinion">.env.local</code> to connect authentication.
+                <p className="font-semibold text-[#E8E6E1]">Supabase Unconfigured</p>
+                <p className="mt-1 text-neutral-400">
+                  You can enter <strong className="text-[#D1B18A]">Local Mode</strong> to view and edit content offline, or connect credentials in <code className="font-mono text-[#D1B18A]">.env.local</code>.
                 </p>
               </div>
             </div>
           )}
 
-          {/* Glassmorphic Login Card */}
-          <div className="w-full rounded-3xl border border-white/[0.08] bg-surface/40 p-8 sm:p-10 shadow-2xl backdrop-blur-2xl relative overflow-hidden">
-            <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+          {/* Auth Card */}
+          <div className="w-full rounded-2xl border border-[#242626] bg-[#121414] p-7 sm:p-9 shadow-2xl relative">
+            {/* Tab switch between Sign In and Sign Up */}
+            {isConfigured && (
+              <div className="flex border-b border-[#242626] pb-4 mb-6">
+                <button
+                  type="button"
+                  onClick={() => setAuthMode('signin')}
+                  className={`flex-1 pb-2 text-xs font-mono tracking-wider uppercase transition-colors flex items-center justify-center gap-1.5 ${
+                    authMode === 'signin'
+                      ? 'border-b-2 border-[#D1B18A] text-[#E8E6E1] font-semibold'
+                      : 'text-neutral-500 hover:text-neutral-300'
+                  }`}
+                >
+                  <LogIn className="h-3.5 w-3.5" />
+                  Sign In
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setAuthMode('signup')}
+                  className={`flex-1 pb-2 text-xs font-mono tracking-wider uppercase transition-colors flex items-center justify-center gap-1.5 ${
+                    authMode === 'signup'
+                      ? 'border-b-2 border-[#D1B18A] text-[#E8E6E1] font-semibold'
+                      : 'text-neutral-500 hover:text-neutral-300'
+                  }`}
+                >
+                  <UserPlus className="h-3.5 w-3.5" />
+                  Create Admin
+                </button>
+              </div>
+            )}
 
-            <form onSubmit={handleSignIn} className="space-y-6 relative z-10">
-              {/* Email Field */}
+            <form onSubmit={handleAuthSubmit} className="space-y-5">
               <div className="space-y-1.5">
-                <label htmlFor="email" className="block text-sm font-medium text-ink">
-                  Email
+                <label htmlFor="auth-email" className="block font-mono text-[11px] uppercase tracking-wider text-neutral-400">
+                  Email Address
                 </label>
-                <div className="relative group">
-                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-muted group-focus-within:text-accent transition-colors">
-                    <Mail className="h-5 w-5" />
+                <div className="relative">
+                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-neutral-500">
+                    <Mail className="h-4 w-4" />
                   </div>
                   <input
-                    id="email"
+                    id="auth-email"
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="name@example.com"
+                    placeholder="admin@domain.org"
                     required
-                    disabled={signingIn}
-                    className="block w-full rounded-xl border border-line bg-canvas/50 py-3.5 pl-12 pr-4 text-sm text-ink placeholder:text-muted/40 transition-all hover:border-line/80 focus:border-accent focus:bg-canvas focus:outline-none focus:ring-2 focus:ring-accent/20 disabled:opacity-50 shadow-inner"
+                    disabled={submitting}
+                    className="block w-full rounded-lg border border-[#292a2a] bg-[#191b1b] py-2.5 pl-10 pr-4 text-sm text-[#E8E6E1] placeholder:text-neutral-600 focus:border-[#D1B18A] focus:outline-none transition-colors"
                   />
                 </div>
               </div>
 
-              {/* Password Field */}
-              <PasswordInput
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                required
-                disabled={signingIn}
-              />
-
-              {/* Extras */}
-              <div className="flex items-center justify-between pt-1">
-                <label className="flex items-center gap-2.5 cursor-pointer group">
-                  <div className="relative flex items-center justify-center">
-                    <input
-                      type="checkbox"
-                      checked={rememberMe}
-                      onChange={(e) => setRememberMe(e.target.checked)}
-                      className="peer h-4.5 w-4.5 appearance-none rounded-md border border-line bg-canvas/50 checked:border-accent checked:bg-accent transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-accent/40 focus:ring-offset-2 focus:ring-offset-surface"
-                    />
-                    <svg
-                      className="absolute w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity"
-                      viewBox="0 0 14 10"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M1 5L4.5 8.5L13 1"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </div>
-                  <span className="text-sm text-muted group-hover:text-ink transition-colors">
-                    Remember me
-                  </span>
+              <div>
+                <label htmlFor="auth-password" className="block font-mono text-[11px] uppercase tracking-wider text-neutral-400 mb-1.5">
+                  Password
                 </label>
-
-                <button
-                  type="button"
-                  onClick={handleForgotPassword}
-                  className="text-sm font-medium text-muted hover:text-ink transition-colors"
-                >
-                  Forgot Password?
-                </button>
+                <PasswordInput
+                  id="auth-password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  required
+                  disabled={submitting}
+                />
               </div>
 
-              <div className="pt-3">
-                <Button
+              <div className="flex items-center justify-between pt-1">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={rememberMe}
+                    onChange={(e) => setRememberMe(e.target.checked)}
+                    className="h-4 w-4 rounded border-[#292a2a] bg-[#191b1b] text-[#D1B18A] focus:ring-0 cursor-pointer"
+                  />
+                  <span className="font-mono text-xs text-neutral-400">Remember session</span>
+                </label>
+
+                {isConfigured && (
+                  <button
+                    type="button"
+                    onClick={handleForgotPassword}
+                    className="font-mono text-xs text-neutral-500 hover:text-[#D1B18A] transition-colors"
+                  >
+                    Forgot Password?
+                  </button>
+                )}
+              </div>
+
+              <div className="pt-2 space-y-3">
+                <button
                   type="submit"
-                  disabled={signingIn}
-                  className="w-full rounded-xl py-3.5 text-base font-medium shadow-lg transition-all active:scale-[0.98] relative overflow-hidden group border border-white/10"
+                  disabled={submitting || !isConfigured}
+                  className="w-full flex items-center justify-center gap-2 rounded-lg border border-[#D1B18A] bg-[#D1B18A] py-3 text-xs font-mono uppercase tracking-wider text-[#0F0F0F] font-semibold transition-all hover:bg-[#c4a279] active:scale-[0.99] disabled:opacity-40 cursor-pointer"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-[100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-out" />
-                  {signingIn ? (
-                    <span className="flex items-center justify-center gap-2 relative z-10">
-                      <Loader2 className="h-5 w-5 animate-spin" />
-                      Authenticating...
-                    </span>
+                  {submitting ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <span>Authenticating...</span>
+                    </>
+                  ) : authMode === 'signup' ? (
+                    <>
+                      <UserPlus className="h-4 w-4" />
+                      <span>Register Admin Account</span>
+                    </>
                   ) : (
-                    <span className="relative z-10">Log In</span>
+                    <>
+                      <LogIn className="h-4 w-4" />
+                      <span>Sign In to Studio</span>
+                    </>
                   )}
-                </Button>
+                </button>
+
+                {/* Local Mode Alternative */}
+                <button
+                  type="button"
+                  onClick={handleEnterLocalMode}
+                  className="w-full flex items-center justify-center gap-2 rounded-lg border border-[#292a2a] bg-[#191b1b] py-2.5 text-xs font-mono uppercase tracking-wider text-neutral-300 hover:border-[#D1B18A] hover:text-[#E8E6E1] transition-all cursor-pointer"
+                >
+                  <Laptop className="h-3.5 w-3.5 text-[#D1B18A]" />
+                  <span>Continue in Local Mode</span>
+                </button>
               </div>
             </form>
           </div>
 
           <Link
             to="/"
-            className="group mt-10 inline-flex items-center gap-2 text-sm font-medium text-muted transition-colors hover:text-ink bg-surface/50 px-4 py-2 rounded-full border border-line/50 backdrop-blur-sm"
+            className="group mt-8 inline-flex items-center gap-2 font-mono text-xs text-neutral-500 hover:text-[#E8E6E1] transition-colors"
           >
-            <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
+            <ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-1" />
             Return to public site
           </Link>
         </div>

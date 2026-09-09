@@ -11,7 +11,7 @@ const TOPICS = [
   { value: 'other', label: 'Other' },
 ]
 
-const INITIAL_FORM = { name: '', email: '', topic: '', message: '' }
+const INITIAL_FORM = { name: '', email: '', topic: '', message: '', hp_check: '' }
 const RATE_LIMIT_KEY = 'advaita_contact_last_submit'
 const RATE_LIMIT_MS = 30000 // 30 seconds
 
@@ -107,6 +107,13 @@ export default function ContactForm() {
     async (e) => {
       e.preventDefault()
 
+      // Honeypot anti-spam check
+      if (form.hp_check) {
+        setStatus('success')
+        setForm(INITIAL_FORM)
+        return
+      }
+
       if (timeRemaining > 0) {
         setStatus('error')
         setErrorMessage(`Please wait ${timeRemaining} seconds before submitting again.`)
@@ -152,25 +159,25 @@ export default function ContactForm() {
   if (status === 'success') {
     return (
       <motion.div
-        className="rounded-xl border border-accent/40 bg-accent/5 p-8 text-center"
+        className="border border-copper/40 bg-surface/90 p-8 sm:p-10 text-center relative overflow-hidden backdrop-blur-sm"
         initial={{ opacity: 0, scale: 0.98 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.3 }}
       >
-        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-accent/15 text-accent">
+        <div className="mx-auto flex h-12 w-12 items-center justify-center border border-copper/40 bg-copper/10 text-copper">
           <CheckCircle className="h-6 w-6" aria-hidden="true" />
         </div>
-        <h3 className="mt-4 font-display text-xl font-semibold text-ink">Message dispatched</h3>
-        <p className="mt-2 text-sm leading-relaxed text-muted max-w-md mx-auto">
-          Thank you for writing. Your note has been logged directly into my correspondence record. I reply to every thoughtful inquiry as time allows.
+        <h3 className="mt-4 font-display text-2xl font-normal text-text">Transmission Logged</h3>
+        <p className="mt-2 text-sm leading-relaxed text-text-2 max-w-md mx-auto">
+          Thank you for writing. Your dispatch has been entered into the correspondence archive. I reply to every thoughtful inquiry as time permits.
         </p>
-        <div className="mt-6 pt-5 border-t border-line/40 flex justify-center">
+        <div className="mt-6 pt-5 border-t border-line flex justify-center">
           <button
             type="button"
             onClick={() => setStatus('idle')}
-            className="filter-pill filter-pill-active"
+            className="border border-copper/60 bg-copper/10 px-5 py-2 font-mono text-xs tracking-wider uppercase text-copper hover:bg-copper hover:text-black transition-colors cursor-pointer"
           >
-            Send another note
+            Send another dispatch
           </button>
         </div>
       </motion.div>
@@ -179,12 +186,26 @@ export default function ContactForm() {
 
   return (
     <form onSubmit={handleSubmit} noValidate className="space-y-6">
+      {/* Honeypot field for bot spam deterrence */}
+      <div className="hidden" aria-hidden="true">
+        <label htmlFor="contact-hp">Leave this field blank</label>
+        <input
+          id="contact-hp"
+          type="text"
+          name="hp_check"
+          value={form.hp_check}
+          onChange={handleChange}
+          tabIndex={-1}
+          autoComplete="off"
+        />
+      </div>
+
       {/* Name and Email side-by-side on sm+ */}
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
         {/* Name */}
         <div>
-          <label htmlFor="contact-name" className="block font-mono text-[11px] uppercase tracking-wider text-muted font-medium mb-1.5">
-            Your Name <span className="text-accent">*</span>
+          <label htmlFor="contact-name" className="block font-mono text-[11px] uppercase tracking-wider text-text-3 font-medium mb-1.5">
+            Your Name <span className="text-copper">*</span>
           </label>
           <input
             id="contact-name"
@@ -193,15 +214,15 @@ export default function ContactForm() {
             value={form.name}
             onChange={handleChange}
             autoComplete="name"
-            className={`block w-full rounded-lg border bg-surface/60 px-3.5 py-2.5 text-sm text-ink transition-all placeholder:text-muted/40 focus:border-accent focus:bg-surface focus:ring-2 focus:ring-accent/15 focus:outline-none ${
-              errors.name ? 'border-limitation bg-limitation/5' : 'border-line hover:border-ink/20'
+            className={`block w-full border bg-canvas/70 px-3.5 py-2.5 font-sans text-sm text-text transition-all placeholder:text-text-3/40 focus:border-copper focus:bg-canvas focus:ring-1 focus:ring-copper/30 focus:outline-none ${
+              errors.name ? 'border-limitation bg-limitation/5' : 'border-line hover:border-copper/40'
             }`}
             placeholder="Advaita Chandra"
             aria-describedby={errors.name ? 'contact-name-error' : undefined}
             aria-invalid={errors.name ? 'true' : undefined}
           />
           {errors.name && (
-            <p id="contact-name-error" className="mt-1 text-xs text-limitation flex items-center gap-1" role="alert">
+            <p id="contact-name-error" className="mt-1 font-mono text-xs text-limitation flex items-center gap-1" role="alert">
               <span aria-hidden="true">›</span> {errors.name}
             </p>
           )}
@@ -209,8 +230,8 @@ export default function ContactForm() {
 
         {/* Email */}
         <div>
-          <label htmlFor="contact-email" className="block font-mono text-[11px] uppercase tracking-wider text-muted font-medium mb-1.5">
-            Email Address <span className="text-accent">*</span>
+          <label htmlFor="contact-email" className="block font-mono text-[11px] uppercase tracking-wider text-text-3 font-medium mb-1.5">
+            Email Address <span className="text-copper">*</span>
           </label>
           <input
             id="contact-email"
@@ -219,15 +240,15 @@ export default function ContactForm() {
             value={form.email}
             onChange={handleChange}
             autoComplete="email"
-            className={`block w-full rounded-lg border bg-surface/60 px-3.5 py-2.5 text-sm text-ink transition-all placeholder:text-muted/40 focus:border-accent focus:bg-surface focus:ring-2 focus:ring-accent/15 focus:outline-none ${
-              errors.email ? 'border-limitation bg-limitation/5' : 'border-line hover:border-ink/20'
+            className={`block w-full border bg-canvas/70 px-3.5 py-2.5 font-sans text-sm text-text transition-all placeholder:text-text-3/40 focus:border-copper focus:bg-canvas focus:ring-1 focus:ring-copper/30 focus:outline-none ${
+              errors.email ? 'border-limitation bg-limitation/5' : 'border-line hover:border-copper/40'
             }`}
             placeholder="name@institution.edu"
             aria-describedby={errors.email ? 'contact-email-error' : undefined}
             aria-invalid={errors.email ? 'true' : undefined}
           />
           {errors.email && (
-            <p id="contact-email-error" className="mt-1 text-xs text-limitation flex items-center gap-1" role="alert">
+            <p id="contact-email-error" className="mt-1 font-mono text-xs text-limitation flex items-center gap-1" role="alert">
               <span aria-hidden="true">›</span> {errors.email}
             </p>
           )}
@@ -237,11 +258,11 @@ export default function ContactForm() {
       {/* Modern Interactive Topic Selector */}
       <div>
         <div className="flex items-center justify-between mb-2">
-          <label id="contact-topic-label" className="block font-mono text-[11px] uppercase tracking-wider text-muted font-medium">
-            Inquiry Topic <span className="text-accent">*</span>
+          <label id="contact-topic-label" className="block font-mono text-[11px] uppercase tracking-wider text-text-3 font-medium">
+            Inquiry Topic <span className="text-copper">*</span>
           </label>
           {form.topic && (
-            <span className="font-mono text-[10px] text-accent uppercase tracking-widest">
+            <span className="font-mono text-[10px] text-copper uppercase tracking-widest">
               Selected
             </span>
           )}
@@ -261,11 +282,13 @@ export default function ContactForm() {
                 role="radio"
                 aria-checked={isSelected}
                 onClick={() => handleTopicSelect(t.value)}
-                className={`filter-pill text-xs transition-all duration-150 ${
-                  isSelected ? 'filter-pill-active scale-[1.02]' : 'hover:border-accent/40'
+                className={`font-mono text-xs uppercase tracking-wider px-3 py-1.5 border transition-all duration-150 cursor-pointer ${
+                  isSelected
+                    ? 'border-copper bg-copper/15 text-copper font-medium'
+                    : 'border-line bg-surface/40 text-text-3 hover:border-copper/40 hover:text-text-2'
                 }`}
               >
-                {isSelected && <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden="true" />}
+                {isSelected && <span className="inline-block mr-1.5 h-1.5 w-1.5 rounded-full bg-copper" aria-hidden="true" />}
                 <span>{t.label}</span>
               </button>
             )
@@ -273,7 +296,7 @@ export default function ContactForm() {
         </div>
 
         {errors.topic && (
-          <p id="contact-topic-error" className="mt-1.5 text-xs text-limitation flex items-center gap-1" role="alert">
+          <p id="contact-topic-error" className="mt-1.5 font-mono text-xs text-limitation flex items-center gap-1" role="alert">
             <span aria-hidden="true">›</span> {errors.topic}
           </p>
         )}
@@ -282,11 +305,11 @@ export default function ContactForm() {
       {/* Message */}
       <div>
         <div className="flex items-center justify-between mb-1.5">
-          <label htmlFor="contact-message" className="block font-mono text-[11px] uppercase tracking-wider text-muted font-medium">
-            Message <span className="text-accent">*</span>
+          <label htmlFor="contact-message" className="block font-mono text-[11px] uppercase tracking-wider text-text-3 font-medium">
+            Message <span className="text-copper">*</span>
           </label>
           <span className={`font-mono text-[11px] tabular-nums ${
-            form.message.length > 1900 ? 'text-limitation' : 'text-muted/60'
+            form.message.length > 1900 ? 'text-limitation' : 'text-text-3'
           }`}>
             {form.message.length} / 2000
           </span>
@@ -298,15 +321,15 @@ export default function ContactForm() {
           value={form.message}
           onChange={handleChange}
           rows={5}
-          className={`block w-full resize-y rounded-lg border bg-surface/60 px-3.5 py-3 text-sm leading-relaxed text-ink transition-all placeholder:text-muted/40 focus:border-accent focus:bg-surface focus:ring-2 focus:ring-accent/15 focus:outline-none ${
-            errors.message ? 'border-limitation bg-limitation/5' : 'border-line hover:border-ink/20'
+          className={`block w-full resize-y border bg-canvas/70 px-3.5 py-3 font-sans text-sm leading-relaxed text-text transition-all placeholder:text-text-3/40 focus:border-copper focus:bg-canvas focus:ring-1 focus:ring-copper/30 focus:outline-none ${
+            errors.message ? 'border-limitation bg-limitation/5' : 'border-line hover:border-copper/40'
           }`}
-          placeholder="Share your thoughts, recommended readings, or constructive critique..."
+          placeholder="Share your perspectives, research inquiries, recommended readings, or constructive critique..."
           aria-describedby={errors.message ? 'contact-message-error' : undefined}
           aria-invalid={errors.message ? 'true' : undefined}
         />
         {errors.message && (
-          <p id="contact-message-error" className="mt-1 text-xs text-limitation flex items-center gap-1" role="alert">
+          <p id="contact-message-error" className="mt-1 font-mono text-xs text-limitation flex items-center gap-1" role="alert">
             <span aria-hidden="true">›</span> {errors.message}
           </p>
         )}
@@ -315,7 +338,7 @@ export default function ContactForm() {
       {/* Error banner */}
       {status === 'error' && errorMessage && (
         <div
-          className="flex items-start gap-3 rounded-lg border border-limitation/40 bg-limitation/10 p-3.5"
+          className="flex items-start gap-3 border border-limitation/40 bg-limitation/10 p-3.5"
           role="alert"
         >
           <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-limitation" aria-hidden="true" />
@@ -324,11 +347,11 @@ export default function ContactForm() {
       )}
 
       {/* Submit footer */}
-      <div className="pt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-t border-line/40">
+      <div className="pt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-t border-line">
         <button
           type="submit"
           disabled={status === 'submitting' || timeRemaining > 0}
-          className="group inline-flex items-center justify-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent shadow-subtle transition-all duration-200 hover:bg-accent-strong hover:shadow active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+          className="group inline-flex items-center justify-center gap-2 border border-copper bg-copper px-6 py-2.5 font-mono text-xs uppercase tracking-widest font-semibold text-black transition-all duration-200 hover:bg-copper-strong hover:border-copper-strong active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
         >
           {status === 'submitting' ? (
             <>
@@ -348,9 +371,9 @@ export default function ContactForm() {
           )}
         </button>
 
-        <p className="font-mono text-[11px] text-muted/70 flex items-center gap-1.5">
-          <span className="text-accent">🔒</span>
-          <span>Logged to private correspondence log</span>
+        <p className="font-mono text-[11px] text-text-3 flex items-center gap-1.5">
+          <span className="text-copper">🔒</span>
+          <span>Archived in private correspondence ledger</span>
         </p>
       </div>
     </form>

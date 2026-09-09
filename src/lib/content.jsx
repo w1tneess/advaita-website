@@ -7,6 +7,7 @@ import {
   clearDocument,
   loadDocument,
   saveDocument,
+  syncLocalToSupabase,
   seedIsNewerThan,
 } from './store.js'
 import { useToast } from './toast.jsx'
@@ -74,7 +75,8 @@ export function ContentProvider({ children }) {
 
   const [content, setContent] = useState(null)
   const contentRef = useRef(null)
-  const [isRemote, setIsRemote] = useState(false) // represents if we are using remote DB
+  const [isRemote, setIsRemote] = useState(false)
+  const [syncStatus, setSyncStatus] = useState('idle') // 'synced' | 'local_only' | 'error'
   const [previewDrafts, setPreviewDrafts] = useState(false)
 
   const warningShown = useRef(false)
@@ -87,11 +89,12 @@ export function ContentProvider({ children }) {
         contentRef.current = state.doc
         setContent(state.doc)
         setIsRemote(state.source === 'remote')
+        setSyncStatus(state.source === 'remote' ? 'synced' : 'local_only')
         setIsLoaded(true)
 
         if (!warningShown.current && state.warning) {
           warningShown.current = true
-          toast.error(state.warning)
+          toast.info(state.warning)
         }
       } catch (error) {
         console.error('Failed to load content', error)
@@ -113,6 +116,7 @@ export function ContentProvider({ children }) {
         contentRef.current = seed
         setContent(seed)
         setIsRemote(false)
+        setSyncStatus('local_only')
         setIsLoaded(true)
       }
     }
@@ -130,22 +134,48 @@ export function ContentProvider({ children }) {
       // 1. Apply updates to the local state first
       const nextDoc = typeof updater === 'function' ? updater(currentDoc) : updater
 
-      // 2. Save to database
+      // 2. Save with hybrid resilience (local + remote)
       const result = await saveDocument(nextDoc)
       
       if (result.ok) {
-        // 3. Update local UI only if save was successful
+        // 3. Update local UI
         contentRef.current = nextDoc
         setContent(nextDoc)
-        setIsRemote(true)
-        return { ok: true }
+        setIsRemote(result.source === 'remote')
+        setSyncStatus(result.synced ? 'synced' : 'local_only')
+        
+        if (result.warning) {
+          toast.info(result.warning)
+        }
+        return { ok: true, synced: result.synced }
       } else {
         toast.error(result.error || 'Failed to save changes.')
+        setSyncStatus('error')
         return { ok: false, error: result.error }
       }
     } catch (e) {
       toast.error('An unexpected error occurred while saving: ' + e.message)
+      setSyncStatus('error')
       return { ok: false, error: e.message }
+    }
+  }, [toast])
+
+  const syncToRemote = useCallback(async () => {
+    if (!contentRef.current) return { ok: false, error: 'No content' }
+    try {
+      const res = await syncLocalToSupabase(contentRef.current)
+      if (res.ok) {
+        setIsRemote(true)
+        setSyncStatus('synced')
+        toast.success('Synced successfully to Supabase!')
+        return { ok: true }
+      } else {
+        toast.error(res.error || 'Could not sync to Supabase.')
+        return { ok: false, error: res.error }
+      }
+    } catch (err) {
+      toast.error('Sync failed: ' + err.message)
+      return { ok: false, error: err.message }
     }
   }, [toast])
 
@@ -287,8 +317,11 @@ export function ContentProvider({ children }) {
 
       // Storage state.
       isRemote,
-      storageAvailable: true, // Supabase is always available over network
-      hasLocalDocument: isRemote, // If source is remote, we have a document
+      isLocal: !isRemote,
+      syncStatus,
+      syncToRemote,
+      storageAvailable: true,
+      hasLocalDocument: true,
       seedIsNewer: content ? seedIsNewerThan(content) : false,
 
       // Preview mode.
@@ -306,6 +339,8 @@ export function ContentProvider({ children }) {
       replaceDocument,
       resetDocument,
       isRemote,
+      syncStatus,
+      syncToRemote,
       previewDrafts,
     ],
   )

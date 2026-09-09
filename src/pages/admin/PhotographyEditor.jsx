@@ -43,6 +43,27 @@ export default function PhotographyEditor() {
     return initialGallery.map(img => ({ type: 'existing', ...img }))
   })
   const [uploading, setUploading] = useState(false)
+  const [urlInput, setUrlInput] = useState('')
+
+  const handleAddUrl = (e) => {
+    if (e && e.preventDefault) e.preventDefault()
+    if (!urlInput.trim()) return
+    const url = urlInput.trim()
+    setItems((prev) => [
+      ...prev,
+      {
+        type: 'existing',
+        id: uid('img'),
+        image_url: url,
+        storage_path: '',
+        variants: [],
+        aspectRatio: null,
+      },
+    ])
+    setUrlInput('')
+    setHasUnsavedChanges(true)
+    setSaveStatus('idle')
+  }
 
   // Clean up object URLs on unmount
   useEffect(() => {
@@ -188,9 +209,10 @@ export default function PhotographyEditor() {
           finalDraft.variants = processedItems[0].variants;
           finalDraft.aspectRatio = processedItems[0].aspectRatio;
         }
-      } catch (_err) {
+      } catch (err) {
         setUploading(false)
-        toast.error('Image upload failed.')
+        console.error('Image upload failed:', err)
+        toast.error(`Upload error: ${err.message || 'Check Supabase bucket permissions'}. You can also use the direct URL field above.`)
         return
       }
       setUploading(false)
@@ -299,7 +321,7 @@ export default function PhotographyEditor() {
               </div>
             )}
 
-            <label className="block text-sm font-medium text-ink">Add Images</label>
+            <label className="block text-sm font-medium text-ink">Add Images (Upload File or Direct URL)</label>
             <input
               type="file"
               accept="image/*"
@@ -307,6 +329,25 @@ export default function PhotographyEditor() {
               onChange={handleFileChange}
               className="mt-2 block w-full text-sm text-muted file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-raised file:text-ink hover:file:bg-line cursor-pointer"
             />
+
+            <div className="mt-3 flex gap-2">
+              <input
+                type="url"
+                placeholder="Or paste direct image URL (https://... or /pfp.png)..."
+                value={urlInput}
+                onChange={(e) => setUrlInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault()
+                    handleAddUrl()
+                  }
+                }}
+                className="flex-1 rounded-lg border border-line bg-surface px-3 py-2 text-sm text-ink placeholder:text-muted/60 focus:border-accent focus:outline-none"
+              />
+              <Button type="button" size="sm" variant="secondary" onClick={handleAddUrl}>
+                Add URL
+              </Button>
+            </div>
             {errors.gallery && <p className="mt-1 text-sm text-limitation">{errors.gallery}</p>}
           </div>
         </FormSection>

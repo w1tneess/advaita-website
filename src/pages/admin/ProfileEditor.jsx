@@ -88,7 +88,7 @@ export default function ProfileEditor() {
             error={errors.location}
             required
             limit={60}
-            hint="State and country only. Do not narrow this to a city, district or neighbourhood."
+            hint="Country or region (e.g. India)."
           />
 
           <ListField
@@ -97,7 +97,7 @@ export default function ProfileEditor() {
             label="Roles"
             values={draft.roles ?? []}
             onChange={(value) => set('roles', value)}
-            hint="Separate with commas. Describe what is actually being done — avoid “expert”, “specialist” or any title that has not been earned."
+            hint="Separate with commas (e.g. Student, Learner, Developer)."
           />
 
           <div className="mt-5 grid gap-5 sm:grid-cols-2">
@@ -149,12 +149,12 @@ export default function ProfileEditor() {
           <Field
             className="mt-5"
             id="profile-epistemic-note"
-            label="Note on labelled claims"
+            label="Guiding Principle / Rule"
             type="textarea"
             rows={3}
             value={draft.epistemicNote ?? ''}
             onChange={(value) => set('epistemicNote', value)}
-            hint="Explains the sourced fact / analysis / opinion / limitation labels to a first-time reader."
+            hint="Your core rule for research and notes (e.g. separating facts from opinions)."
           />
         </Card>
 

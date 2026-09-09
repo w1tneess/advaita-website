@@ -46,20 +46,17 @@ export default function Taxonomy() {
   const { projectCategories } = useContent()
 
   return (
-    <AdminPage title="Categories" description="The vocabularies used by the portfolio filters.">
-      <Callout variant="limitation" title="Renaming a slug does not update what points at it">
-        Articles store their category slug and projects store their category slugs. If you change a
-        slug here, anything that referenced the old value stops matching and will drop out of that
-        filter. Change the display name freely; change a slug only if you are willing to update the
-        articles or projects that use it.
+    <AdminPage title="Project Categories" description="Categories used to organize and filter your projects on the website.">
+      <Callout variant="limitation" title="Category Web Slugs">
+        Changing a category's display name updates it across your site immediately. If you change the URL slug, be sure to check that existing projects using the old slug are updated as well.
       </Callout>
 
       <section aria-labelledby="project-categories-heading" className="mt-12">
         <h2 id="project-categories-heading" className="text-xl font-semibold tracking-tight">
-          Project categories
+          Project Categories
         </h2>
         <p className="mt-2 text-sm text-muted">
-          A project can have several. These become the filters on the portfolio page.
+          Categories assigned to projects appear as filter buttons on the Projects page.
         </p>
 
         <CollectionEditor
