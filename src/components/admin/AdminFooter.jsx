@@ -1,11 +1,9 @@
-import { ExternalLink, Settings, Database, Server, Cloud, HardDrive } from 'lucide-react'
+import { ExternalLink, Settings, Database, Server, Cloud } from 'lucide-react'
 import { Link } from 'react-router'
 import { useContent } from '@/lib/content.jsx'
-import { useAdminAuth } from './AdminAuth.jsx'
 
 export default function AdminFooter() {
   const { isRemote } = useContent()
-  const { isLocalMode } = useAdminAuth()
 
   return (
     <footer className="w-full shrink-0 h-9 sm:h-10 border-t border-[#242626] bg-[#0c0d0d] px-4 sm:px-6 flex items-center justify-between text-[11px] font-mono text-neutral-400 z-10 select-none">
@@ -18,15 +16,14 @@ export default function AdminFooter() {
 
         <span className="text-neutral-700">|</span>
 
-        {isRemote && !isLocalMode ? (
+        {isRemote ? (
           <span className="flex items-center gap-1 text-emerald-400">
             <Cloud className="h-3 w-3" />
             <span className="hidden md:inline">Supabase Cloud</span>
           </span>
         ) : (
-          <span className="flex items-center gap-1 text-[#D1B18A]">
-            <HardDrive className="h-3 w-3" />
-            <span className="hidden md:inline">Local Storage</span>
+          <span className="flex items-center gap-1 text-neutral-500">
+            <span className="hidden md:inline">Disconnected</span>
           </span>
         )}
       </div>

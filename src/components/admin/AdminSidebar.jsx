@@ -20,7 +20,6 @@ import {
   Plus,
   ChevronDown,
   Cloud,
-  HardDrive
 } from 'lucide-react'
 import { NavLink, Link } from 'react-router'
 import { useState, useRef, useEffect } from 'react'
@@ -76,7 +75,7 @@ function itemClasses({ isActive }) {
 }
 
 export default function AdminSidebar({ open, onClose }) {
-  const { session, isLocalMode, logout } = useAdminAuth()
+  const { session, logout } = useAdminAuth()
   const { isRemote } = useContent()
   const [quickAddOpen, setQuickAddOpen] = useState(false)
   const menuRef = useRef(null)
@@ -91,7 +90,7 @@ export default function AdminSidebar({ open, onClose }) {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
-  const userIdentifier = session?.user?.email?.split('@')[0] || (isLocalMode ? 'Local Admin' : 'Admin')
+  const userIdentifier = session?.user?.email?.split('@')[0] || 'Admin'
   const displayName = userIdentifier.charAt(0).toUpperCase() + userIdentifier.slice(1)
 
   return (
@@ -116,13 +115,13 @@ export default function AdminSidebar({ open, onClose }) {
           <div>
             <p className="font-display text-base font-medium text-[#E8E6E1] tracking-tight">Advaita Studio</p>
             <div className="flex items-center gap-1.5 mt-0.5">
-              {isRemote && !isLocalMode ? (
+              {isRemote ? (
                 <span className="flex items-center gap-1 text-[10px] font-mono text-emerald-400">
                   <Cloud className="h-2.5 w-2.5" /> Supabase Synced
                 </span>
               ) : (
-                <span className="flex items-center gap-1 text-[10px] font-mono text-[#D1B18A]">
-                  <HardDrive className="h-2.5 w-2.5" /> Local Mode
+                <span className="flex items-center gap-1 text-[10px] font-mono text-neutral-500">
+                  Disconnected
                 </span>
               )}
             </div>
@@ -231,7 +230,7 @@ export default function AdminSidebar({ open, onClose }) {
               <div className="min-w-0 flex-1">
                 <p className="text-xs font-mono font-medium text-[#E8E6E1] truncate">{displayName}</p>
                 <p className="text-[10px] font-mono text-neutral-500 truncate">
-                  {isLocalMode ? 'Local storage' : session?.user?.email}
+                  {session?.user?.email}
                 </p>
               </div>
             </div>

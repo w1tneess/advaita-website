@@ -1,13 +1,12 @@
 import { createContext, useContext, useEffect, useState, useMemo, useCallback } from 'react'
 import { Link } from 'react-router'
-import { ArrowLeft, Loader2, Mail, Shield, AlertTriangle, LogIn, Laptop } from 'lucide-react'
+import { ArrowLeft, Loader2, Mail, Shield, AlertTriangle, LogIn } from 'lucide-react'
 
 import { supabase, isSupabaseConfigured } from '../../lib/supabase/client.js'
 import PasswordInput from '../ui/PasswordInput.jsx'
 import { useToast } from '../../lib/toast.jsx'
 
 const AdminAuthContext = createContext(null)
-const LOCAL_AUTH_KEY = 'advaita-site.local-auth'
 
 export function useAdminAuth() {
   const context = useContext(AdminAuthContext)
@@ -29,32 +28,13 @@ export default function AdminAuth({ children }) {
 
   const isConfigured = isSupabaseConfigured()
 
-  // Check auth on mount (both Supabase session and Local session)
+  // Verify active Supabase session on mount
   useEffect(() => {
-    // 1. Check local offline mode session (development only)
-    if (import.meta.env.DEV) {
-      try {
-        const localStored = localStorage.getItem(LOCAL_AUTH_KEY) || sessionStorage.getItem(LOCAL_AUTH_KEY)
-        if (localStored) {
-          const parsed = JSON.parse(localStored)
-          if (parsed?.user) {
-            setSession(parsed)
-            setLoading(false)
-            return
-          }
-        }
-      } catch (_) {
-        // Ignore storage access error
-      }
-    }
-
-    // 2. If Supabase is unconfigured, finish loading
     if (!isConfigured) {
       setLoading(false)
       return
     }
 
-    // 3. Check active Supabase session
     async function checkAuth() {
       try {
         const {
@@ -64,7 +44,7 @@ export default function AdminAuth({ children }) {
           setSession(session)
         }
       } catch (error) {
-        console.error('Auth check error:', error)
+        console.error('Auth verification error:', error)
       } finally {
         setLoading(false)
       }
@@ -75,9 +55,7 @@ export default function AdminAuth({ children }) {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session) {
-        setSession(session)
-      }
+      setSession(session || null)
     })
 
     return () => subscription?.unsubscribe()
@@ -87,7 +65,7 @@ export default function AdminAuth({ children }) {
     e.preventDefault()
 
     if (!isConfigured) {
-      toast.error('Supabase is not configured.')
+      toast.error('Authentication service is unavailable.')
       return
     }
 
@@ -100,7 +78,7 @@ export default function AdminAuth({ children }) {
       })
 
       if (error) {
-        toast.error(error.message || 'Login failed')
+        toast.error(error.message || 'Authentication failed')
         return
       }
 
@@ -117,34 +95,8 @@ export default function AdminAuth({ children }) {
     }
   }
 
-  const handleEnterLocalMode = () => {
-    const localSession = {
-      user: { email: 'local-admin@advaita.local', id: 'local-admin' },
-      isLocalMode: true,
-      created_at: new Date().toISOString(),
-    }
-    try {
-      if (rememberMe) {
-        localStorage.setItem(LOCAL_AUTH_KEY, JSON.stringify(localSession))
-      } else {
-        sessionStorage.setItem(LOCAL_AUTH_KEY, JSON.stringify(localSession))
-      }
-    } catch (_) {
-      // Ignore storage access error
-    }
-    setSession(localSession)
-    toast.success('Entered Local Mode. All edits save locally.')
-  }
-
   const handleSignOut = useCallback(async () => {
     try {
-      try {
-        localStorage.removeItem(LOCAL_AUTH_KEY)
-        sessionStorage.removeItem(LOCAL_AUTH_KEY)
-      } catch (_) {
-        // Ignore storage access error
-      }
-
       if (isConfigured) {
         await supabase.auth.signOut()
       }
@@ -158,14 +110,13 @@ export default function AdminAuth({ children }) {
   const contextValue = useMemo(
     () => ({
       session,
-      isLocalMode: !!session?.isLocalMode,
       logout: handleSignOut,
     }),
     [session, handleSignOut],
   )
 
   const handleForgotPassword = () => {
-    toast.info('To reset your admin password, use your Supabase Project Dashboard → Authentication → Users.')
+    toast.info('To reset your password, contact your administrator or access the Supabase project dashboard.')
   }
 
   if (loading) {
@@ -173,7 +124,7 @@ export default function AdminAuth({ children }) {
       <div className="flex min-h-dvh items-center justify-center bg-[#0F0F0F] px-6 text-[#E8E6E1]">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="h-7 w-7 animate-spin text-[#D1B18A]" />
-          <p className="font-mono text-xs tracking-wider uppercase text-neutral-400">Verifying access...</p>
+          <p className="font-mono text-xs tracking-wider uppercase text-neutral-400">Verifying credentials...</p>
         </div>
       </div>
     )
@@ -202,14 +153,14 @@ export default function AdminAuth({ children }) {
             </p>
           </div>
 
-          {/* Unconfigured Alert (Development only) */}
-          {!isConfigured && import.meta.env.DEV && (
-            <div className="mb-6 w-full rounded-xl border border-[#D1B18A]/30 bg-[#D1B18A]/5 p-4 text-xs text-neutral-300 flex items-start gap-3">
-              <AlertTriangle className="h-4 w-4 shrink-0 text-[#D1B18A] mt-0.5" />
+          {/* Unconfigured Alert */}
+          {!isConfigured && (
+            <div className="mb-6 w-full rounded-xl border border-rose-900/50 bg-rose-950/20 p-4 text-xs text-neutral-300 flex items-start gap-3">
+              <AlertTriangle className="h-4 w-4 shrink-0 text-rose-400 mt-0.5" />
               <div>
-                <p className="font-semibold text-[#E8E6E1]">Supabase Unconfigured</p>
+                <p className="font-semibold text-[#E8E6E1]">Authentication Service Unavailable</p>
                 <p className="mt-1 text-neutral-400">
-                  You can enter <strong className="text-[#D1B18A]">Local Mode</strong> to view and edit content offline, or connect credentials in <code className="font-mono text-[#D1B18A]">.env.local</code>.
+                  Supabase backend is not connected. Admin login is currently disabled.
                 </p>
               </div>
             </div>
@@ -275,7 +226,7 @@ export default function AdminAuth({ children }) {
                 )}
               </div>
 
-              <div className="pt-2 space-y-3">
+              <div className="pt-2">
                 <button
                   type="submit"
                   disabled={submitting || !isConfigured}
@@ -293,18 +244,6 @@ export default function AdminAuth({ children }) {
                     </>
                   )}
                 </button>
-
-                {/* Local Mode Alternative (Development only) */}
-                {import.meta.env.DEV && (
-                  <button
-                    type="button"
-                    onClick={handleEnterLocalMode}
-                    className="w-full flex items-center justify-center gap-2 rounded-lg border border-[#292a2a] bg-[#191b1b] py-2.5 text-xs font-mono uppercase tracking-wider text-neutral-300 hover:border-[#D1B18A] hover:text-[#E8E6E1] transition-all cursor-pointer"
-                  >
-                    <Laptop className="h-3.5 w-3.5 text-[#D1B18A]" />
-                    <span>Continue in Local Mode (Dev Only)</span>
-                  </button>
-                )}
               </div>
             </form>
           </div>

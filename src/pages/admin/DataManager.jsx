@@ -179,7 +179,7 @@ CREATE POLICY "Authenticated users can manage contact submissions" ON public.con
               <p className="font-mono text-xs text-neutral-400 mt-0.5">
                 {isRemote 
                   ? 'Changes are automatically pushed to Supabase and mirrored locally for offline protection.' 
-                  : 'Operating in Local Mode. Edits are preserved in browser storage.'}
+                  : 'Operating in read-only fallback mode. Changes will not sync to cloud.'}
               </p>
             </div>
           </div>
