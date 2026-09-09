@@ -45,7 +45,6 @@ The site runs on a **Single Page Application (SPA) architecture with build-time 
 - **Public Site**: Fast, client-side rendered React 19 application with static route `<head>` metadata shells and `sitemap.xml` generated at build time (`scripts/prerender.js`).
 - **Data Layer**: Live content is loaded dynamically from Supabase Postgres (`site_content` table) with automatic fallback to bundled seed JSON files (`src/data/*.json`).
 - **Admin Workspace (`/admin`)**: Lazy-loaded editorial dashboard authenticated via Supabase Auth with Postgres Row-Level Security (RLS). Updates write directly to Supabase.
-- **Canonical Specification**: For complete architecture documentation, see [`ARCHITECTURE.md`](file:///d:/Website/advaita-website/ARCHITECTURE.md).
 
 ## Deployment
 
