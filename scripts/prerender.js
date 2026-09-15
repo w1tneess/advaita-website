@@ -202,7 +202,7 @@ function renderSemanticBody(route, siteData) {
             .join('\n')}
         </ul>
 
-        <h2>Notes &amp; Essays</h2>
+        <h2>Notes</h2>
         ${(philosophy.notes || [])
           .filter((n) => n.status === 'published')
           .map(
@@ -256,7 +256,7 @@ function renderSemanticBody(route, siteData) {
     mainContent = `
       <article>
         <h1>Writing &amp; Research Log</h1>
-        <p>Notes, long-form essays, and ideas as they develop.</p>
+        <p>Notes, long-form logs, and ideas as they develop.</p>
         ${
           posts.length > 0
             ? `<ul>
@@ -271,7 +271,7 @@ function renderSemanticBody(route, siteData) {
                   )
                   .join('\n')}
               </ul>`
-            : '<p>Long-form essays are being prepared. See the <a href="/philosophy">Philosophy</a> section for active inquiry notes.</p>'
+            : '<p>Long-form notes are being prepared. See the <a href="/philosophy">Philosophy</a> section for active inquiry notes.</p>'
         }
       </article>`
   } else if (route.type === 'article') {
@@ -420,7 +420,7 @@ function renderRssFeed({ posts = [], notes = [] }) {
   <channel>
     <title>Advaita Chandra</title>
     <link>${SITE_URL}/</link>
-    <description>Personal portfolio, research notes, and philosophy essays of Advaita Chandra.</description>
+    <description>Personal website for a student's projects and learning notes.</description>
     <language>en-us</language>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
     <atom:link href="${SITE_URL}/rss.xml" rel="self" type="application/rss+xml" />
@@ -469,7 +469,7 @@ function renderJsonFeed({ posts = [], notes = [] }) {
       title: 'Advaita Chandra',
       home_page_url: `${SITE_URL}/`,
       feed_url: `${SITE_URL}/feed.json`,
-      description: 'Personal portfolio, research notes, and philosophy essays of Advaita Chandra.',
+      description: "Personal website for a student's projects and learning notes.",
       authors: [
         {
           name: 'Advaita Chandra',

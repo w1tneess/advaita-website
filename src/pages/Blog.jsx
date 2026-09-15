@@ -20,8 +20,8 @@ export default function Blog() {
 
       <PageHeader
         eyebrow="Writing"
-        title="Essays &amp; Writing"
-        lead="Articles, notes, and observations on philosophy, history, politics, and technology."
+        title="Notes &amp; Logs"
+        lead="Notes and observations on philosophy, history, politics, and technology."
       />
 
       <section className="shell pb-24 md:pb-32">
@@ -71,7 +71,7 @@ export default function Blog() {
                         to={`/blog/${post.slug}`}
                         className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-copper hover:text-copper-strong transition-colors"
                       >
-                        <span>Read essay</span>
+                        <span>Read note</span>
                         <ArrowRight className="h-3.5 w-3.5" />
                       </Link>
                     </div>

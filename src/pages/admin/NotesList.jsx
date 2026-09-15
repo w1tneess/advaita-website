@@ -175,7 +175,7 @@ export default function NotesList() {
 
       <div className="mt-4">
         <DataTable
-          caption="Notes, with their category, status and publication date"
+          caption="Notes, with their category, status and date posted"
           columns={columns}
           rows={visible}
           empty={

@@ -45,7 +45,7 @@ export default function Philosophy() {
 			/>
 
 			<section className="shell">
-				<SectionIntro eyebrow="Reading notes" title="By writer" />
+				<SectionIntro eyebrow="Reading notes" title="By Advaita" />
 				<div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
 					{thinkers.map((thinker, index) => {
 						const thinkerNotes = notesByThinker.get(thinker.id) ?? []

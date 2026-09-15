@@ -58,7 +58,7 @@ export function buildMeta(route = {}, basePath = '/') {
 
   return {
     title: formatTitle(route.title),
-    description: route.description || 'Advaita Chandra is a student and developer from West Bengal, India. Official website, projects, notes, and research.',
+    description: route.description || 'Personal website and notebook of Advaita Chandra, a student based in West Bengal, India.',
     canonical: absoluteUrl(path, basePath),
     image: route.image
       ? absoluteUrl(route.image, basePath)
@@ -98,9 +98,9 @@ export function generateJsonLd(meta) {
     familyName: 'Chandra',
     url: `${SITE_URL}/`,
     image: `${SITE_URL}/og-image.jpg`,
-    jobTitle: 'Student and Developer',
+    jobTitle: 'Student',
     description:
-      'Advaita Chandra is a student and developer from West Bengal, India. He builds websites, experiments with code, explores digital technology, and documents his interests in photography, philosophy, history, and creative computing. His official website is https://advaitachandra.in/.',
+      'Advaita Chandra is a student from West Bengal, India. This is his personal website for projects, reading notes, and learning logs.',
     address: {
       '@type': 'PostalAddress',
       addressRegion: 'West Bengal',
@@ -132,7 +132,7 @@ export function generateJsonLd(meta) {
     url: `${SITE_URL}/`,
     name: 'Advaita Chandra',
     description:
-      'Personal portfolio, research notes, philosophy essays, and public profile of Advaita Chandra.',
+      "Personal website for a student's projects and learning notes.",
     publisher: { '@id': personEntity['@id'] },
     inLanguage: 'en-US',
   }
@@ -199,9 +199,9 @@ export function generateJsonLd(meta) {
       '@type': 'Person',
       name: 'Advaita Chandra',
       url: `${SITE_URL}/`,
-      jobTitle: 'Student and Developer',
+      jobTitle: 'Student',
       description:
-        'Advaita Chandra is a student and developer from West Bengal, India. He builds websites, experiments with code, explores digital technology, and documents his interests in photography, philosophy, history, and creative computing.',
+        'Advaita Chandra is a student from West Bengal, India. This is his personal website for projects, reading notes, and learning logs.',
       sameAs: [GITHUB_PROFILE, TWITTER_PROFILE, INSTAGRAM_PROFILE],
       knowsAbout: [
         'Web development',

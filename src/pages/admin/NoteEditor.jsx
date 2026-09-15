@@ -158,7 +158,7 @@ export default function NoteEditor() {
           <div className="mt-5 grid gap-5 sm:grid-cols-2">
             <Field
               id="note-published-at"
-              label="Publication date"
+              label="Date posted"
               type="date"
               value={draft.published_at}
               onChange={(value) => set('published_at', value)}

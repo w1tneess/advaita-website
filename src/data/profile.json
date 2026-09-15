@@ -1,12 +1,12 @@
 {
   "name": "Advaita Chandra",
   "shortName": "Advaita",
-  "tagline": "Official website of Advaita Chandra — Student and Developer",
-  "roles": ["Student", "Developer"],
+  "tagline": "Official website of Advaita Chandra — Student",
+  "roles": ["Student"],
   "location": "West Bengal, India",
   "photo": null,
   "photoAlt": "Portrait of Advaita Chandra",
-  "bio": "Advaita Chandra is a student and developer from West Bengal, India. He builds websites, experiments with code, explores digital technology, and documents his interests in photography, philosophy, history, and creative computing. His official website is https://advaitachandra.in/.",
+  "bio": "I'm Advaita Chandra, a student based in West Bengal, India. This site is where I keep the things I'm working on: projects, reading notes, photography, and questions I haven't fully worked out yet. This isn't a professional publication or a portfolio built to impress anyone. It's closer to a public notebook.",
   "learningDirection": "Currently focused on building web applications, experimenting with code, and exploring digital technology, while researching conflicting sources in data and history.",
   "approach": [
     {

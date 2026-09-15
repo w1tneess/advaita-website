@@ -25,7 +25,7 @@ export default function About() {
         title="About Advaita Chandra"
         lead={
           profile.bio ||
-          "Advaita Chandra is a student and developer from West Bengal, India. He builds websites, experiments with code, explores digital technology, and documents his interests in photography, philosophy, history, and creative computing. His official website is https://advaitachandra.in/."
+          "Advaita Chandra is a student from West Bengal, India. This is his personal website for projects, reading notes, and learning logs."
         }
       >
         <div className="flex flex-wrap items-center gap-3 font-mono text-xs text-text-3">
@@ -39,7 +39,7 @@ export default function About() {
             </span>
           )) || (
             <span className="border border-line bg-surface px-2.5 py-0.5 text-[11px] text-text font-medium">
-              Student and Developer
+              Student
             </span>
           )}
           <span className="text-line-strong">|</span>
@@ -69,13 +69,13 @@ export default function About() {
                   This is the official website of Advaita Chandra.
                 </h2>
                 <p className="text-sm sm:text-base text-text-2 font-light leading-relaxed">
-                  Advaita Chandra is a student and developer from West Bengal, India. He builds
-                  websites, experiments with code, explores digital technology, and documents his interests in
-                  photography, philosophy, history, and creative computing.
+                  I'm Advaita Chandra, a student based in West Bengal, India. This site is where I keep the things I'm working on: projects, reading notes, photography, and questions I haven't fully worked out yet.
                 </p>
-                <p className="text-xs sm:text-sm text-text-3 font-light leading-relaxed">
-                  This website is the central source of truth for his work, technical experiments, long-form
-                  research, and verified public accounts.
+                <p className="text-sm sm:text-base text-text-2 font-light leading-relaxed">
+                  Most of what I read and think about falls under philosophy, history, and computer systems, with psychology, politics, public policy, and cybersecurity mixed in. Some of it turns into actual projects, like a worksheet generator I built for teachers, or a data visualization on terrorism in India. Most of it just stays as notes.
+                </p>
+                <p className="text-sm sm:text-base text-text-2 font-light leading-relaxed">
+                  This isn't a professional publication or a portfolio built to impress anyone. It's closer to a public notebook. I'm not an expert in any of this. I'm just someone who reads a lot and likes building things, and this is where that ends up.
                 </p>
               </div>
 

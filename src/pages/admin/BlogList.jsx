@@ -175,7 +175,7 @@ export default function BlogList() {
 
       <div className="mt-4">
         <DataTable
-          caption="Blog posts, with their category, status and publication date"
+          caption="Blog posts, with their category, status and date posted"
           columns={columns}
           rows={visible}
           empty={

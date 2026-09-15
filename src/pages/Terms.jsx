@@ -38,11 +38,11 @@ export default function Terms() {
             <div className="border border-line bg-surface/80 p-6 backdrop-blur-sm">
               <div className="flex items-center gap-2 text-copper font-mono text-xs uppercase tracking-wider mb-3">
                 <BookOpen className="h-4 w-4" aria-hidden="true" />
-                <span>Scholarly Works</span>
+                <span>Written Notes</span>
               </div>
               <h3 className="font-display text-lg text-text font-normal">Original Writing</h3>
               <p className="mt-2 text-sm text-text-2 leading-relaxed">
-                Essays, philosophical reflections, and historical research are copyrighted by Advaita Chandra, with open citation permitted.
+                Notes, reflections, and historical research are copyrighted by Advaita Chandra, with open citation permitted.
               </p>
             </div>
 
@@ -80,11 +80,11 @@ export default function Terms() {
                 <h2 className="font-display text-xl text-text font-normal">Citation Standards & Fair Use</h2>
               </div>
               <p className="text-sm sm:text-base text-text-2 leading-relaxed">
-                Scholarly critique, quotations, and references to essays or philosophical notes on this site are warmly encouraged under fair use principles, provided accurate attribution is maintained:
+                Quotations and references to notes on this site are warmly encouraged under fair use principles, provided accurate attribution is maintained:
               </p>
               <div className="border-l-2 border-copper bg-canvas/60 p-4 font-mono text-xs text-text-2 space-y-1">
                 <p className="text-copper">SUGGESTED CITATION FORMAT:</p>
-                <p>Chandra, Advaita. &ldquo;[Essay / Note Title]&rdquo;. Advaita Chandra Research Archive, [Publication Year], https://advaitachandra.in/[path].</p>
+                <p>Chandra, Advaita. &ldquo;[Note Title]&rdquo;. Advaita Chandra, [Year], https://advaitachandra.in/[path].</p>
               </div>
             </section>
 

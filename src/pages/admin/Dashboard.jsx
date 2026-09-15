@@ -162,7 +162,7 @@ export default function Dashboard() {
               <QuickAction 
                 icon={FileText} 
                 label="Write Article" 
-                description="Draft a new blog post or essay" 
+                description="Draft a new blog post or note" 
                 to="/admin/blog/new"
               />
               <QuickAction 

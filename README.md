@@ -68,14 +68,14 @@ A cornerstone of this site is intellectual honesty and epistemic transparency:
   - Analytical reading notes on J. Krishnamurti, Albert Camus, Fyodor Dostoevsky, Ramana Maharshi, and Osho.
   - Interactive category filtering and individual reading views (`/philosophy/:slug`).
 - **Long-Form Writing (`/blog`)**:
-  - In-depth research articles, engineering logs, and essays.
-  - Real-time estimated reading times and publication metadata.
+  - In-depth research notes, engineering logs, and reflections.
+  - Real-time estimated reading times and post metadata.
 - **Photography Gallery (`/photography`)**:
   - Visual collection focusing on candid street, landscape, and everyday photography.
   - High-resolution modal lightbox viewer with keyboard navigation and metadata captions.
 - **Interactive Command Menu (`Cmd+K` / `Ctrl+K`)**:
   - Global modal palette powered by `cmdk` allowing keyboard-first navigation across all pages, external profiles, and themes.
-- **Editorial Studio & CMS (`/admin`)**:
+- **Admin Studio & CMS (`/admin`)**:
   - Secure management dashboard protected by Supabase Auth with Row-Level Security (RLS).
   - Client-side image compression via `browser-image-compression` to optimize uploads directly into Supabase Storage.
 - **Fluid Visual Design & Typography**:
@@ -164,7 +164,7 @@ advaita-website/
 │   └── validate-content.js     # Seed content integrity validation
 ├── src/
 │   ├── components/
-│   │   ├── admin/              # Editorial dashboard components & editors
+│   │   ├── admin/              # Admin dashboard components & editors
 │   │   ├── common/             # Reusable UI widgets (Header, Footer, Navigation)
 │   │   ├── features/           # Domain-specific components (ProjectCard, Gallery)
 │   │   └── meta/               # Dynamic Seo and OpenGraph tags

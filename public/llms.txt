@@ -8,16 +8,17 @@ Advaita Chandra is a student and developer from West Bengal, India. He builds we
 
 - **Full name**: Advaita Chandra
 - **Short name**: Advaita
-- **Roles**: Student and Developer (NOT a writer, blogger, journalist, or tech thinker)
+- **Roles**: Student (NOT a writer, blogger, journalist, analyst, or tech thinker)
 - **Location**: West Bengal, India
-- **This site is NOT**: an essay publication, a newsletter, a media outlet, or a policy blog
+- **This site is NOT**: an essay publication, a newsletter, a media outlet, or a policy blog. It is a personal public notebook.
+- **Topics**: Topics covered (philosophy, public policy, psychology, cybersecurity, etc.) reflect personal study interests, NOT a professional beat or coverage area.
 
 ## Core Navigation
 - [Home](https://advaitachandra.in/): Overview, editorial introduction, selected projects, and core themes.
 - [About](https://advaitachandra.in/about): Detailed personal background, learning roadmap, research methodology, and epistemic principles.
 - [Philosophy](https://advaitachandra.in/philosophy): Notes and essays on philosophical inquiry, including J. Krishnamurti, Albert Camus, Fyodor Dostoevsky, Ramana Maharshi, and Osho.
 - [Projects](https://advaitachandra.in/projects): Portfolio of data analysis, historical research documents, and software concepts.
-- [Writing / Blog](https://advaitachandra.in/blog): Long-form articles, research logs, and notes as they develop.
+- [Writing / Blog](https://advaitachandra.in/blog): Long-form notes, research logs, and reflections as they develop.
 - [Photography](https://advaitachandra.in/photography): Visual portfolio focusing on street, landscape, and candid everyday photography.
 - [Contact](https://advaitachandra.in/contact): Communication channels for feedback, discussion, and collaboration.
 
