@@ -1,23 +1,37 @@
-# Advaita Chandra - Personal Website & Portfolio
+# Advaita Chandra
 
-> This file is intended for LLMs and AI agents parsing this website.
+> Personal portfolio, research notes, philosophy essays, and public profile of Advaita Chandra.
 
-## About
-Advaita Chandra's personal portfolio, public profile, and blog. This site hosts philosophical writings, photography, and personal projects. 
+Advaita Chandra is an independent researcher, student, and developer based in India. His primary interests span philosophy (epistemology, existentialism, Eastern inquiry), data visualization, Indian politics and history, technology, and cybersecurity. He approaches research with explicit epistemic transparency: strictly distinguishing between documented facts, personal inferences, subjective opinions, and acknowledged unknowns.
 
-## Structure
-- **Home (`/`)**: Main landing page with a brief introduction, featured projects, and core interests.
-- **About (`/about`)**: Background, technical abilities, research interests, and approach.
-- **Philosophy (`/philosophy`)**: Writings on philosophy and ideas.
-- **Photography (`/photography`)**: Selected visual work.
-- **Projects (`/projects`)**: A collection of built projects and tools.
-- **Writing (`/blog`)**: Detailed blog posts, notes, and research.
-- **Contact (`/contact`)**: Information for getting in touch.
+## Core Navigation
+- [Home](https://advaitachandra.in/): Overview, editorial introduction, selected projects, and core themes.
+- [About](https://advaitachandra.in/about): Detailed personal background, learning roadmap, research methodology, and epistemic principles.
+- [Philosophy](https://advaitachandra.in/philosophy): Notes and essays on philosophical inquiry, including J. Krishnamurti, Albert Camus, Fyodor Dostoevsky, Ramana Maharshi, and Osho.
+- [Projects](https://advaitachandra.in/projects): Portfolio of data analysis, historical research documents, and software concepts.
+- [Writing / Blog](https://advaitachandra.in/blog): Long-form articles, research logs, and notes as they develop.
+- [Photography](https://advaitachandra.in/photography): Visual portfolio focusing on street, landscape, and candid everyday photography.
+- [Contact](https://advaitachandra.in/contact): Communication channels for feedback, discussion, and collaboration.
 
-## Links
-- **GitHub**: https://github.com/advaitachandra
-- **Email**: hi@advaitachandra.in
+## Key Research & Projects
+- [Terrorism in India: Data Visualization (1947–2026)](https://advaitachandra.in/projects#prj-terrorism-india-dataviz): Matplotlib and Python data visualization reconciling conflicting historical sources, marking data gaps without artificial smoothing, and mapping incident counts across decades.
+- [Osho: Documentary-Style Research Document](https://advaitachandra.in/projects#prj-osho-research-document): Archival and secondary source research placing contradictory biographical and institutional accounts side by side without premature adjudication.
+- [Worksheet Generator](https://advaitachandra.in/projects#prj-worksheet-generator): System design concept separating content schema, layout engine, template formatting, and AI drafting into four decoupled layers.
+- [Advaita Website](https://advaitachandra.in/projects#prj-personal-website): The open-source architecture for this site, built with React, Vite, Tailwind CSS, Supabase, and pre-rendered semantic HTML.
 
-## Technical Detail
-- Built with React + Vite
-- Uses static pre-rendering for SEO (`sitemap.xml` generated automatically).
+## Philosophical Focus & Epistemology
+- **Epistemic Transparency**: A core working principle separating four categories: facts verified in reliable sources, inferences derived logically, personal opinions, and explicit gaps in knowledge.
+- **Thinkers Studied**: J. Krishnamurti (observer vs. observed), Albert Camus (the Absurd as an epistemic baseline), Fyodor Dostoevsky (limits of rational egoism and utility maximization), Ramana Maharshi (practical self-inquiry), and Osho (dialectical criticism).
+
+## Verified Links
+- GitHub: https://github.com/w1tneess
+- X / Twitter: https://x.com/w1tneess_
+- Instagram: https://www.instagram.com/adva1ta_/
+- Website: https://advaitachandra.in
+- Canonical Email: hi@advaitachandra.in
+
+## Feeds & Machine Discovery
+- RSS 2.0 Feed: https://advaitachandra.in/rss.xml
+- JSON Feed 1.1: https://advaitachandra.in/feed.json
+- Sitemap: https://advaitachandra.in/sitemap.xml
+- Full Text & LLM Context: https://advaitachandra.in/llms-full.txt

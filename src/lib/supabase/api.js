@@ -5,11 +5,29 @@ export async function submitContactForm({ name, email, topic, message }) {
     throw new Error('Supabase is not configured. Unable to submit contact form.')
   }
 
+  const cleanName = String(name || '').trim().slice(0, 100)
+  const cleanEmail = String(email || '').trim().slice(0, 120)
+  const cleanTopic = String(topic || 'General').trim().slice(0, 60)
+  const cleanMessage = String(message || '').trim()
+
+  if (!cleanMessage) {
+    throw new Error('Message is required.')
+  }
+  if (cleanMessage.length > 3000) {
+    throw new Error('Message exceeds the maximum allowed length of 3000 characters.')
+  }
+  if (cleanEmail && cleanEmail !== 'reader@local') {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
+    if (!emailRegex.test(cleanEmail)) {
+      throw new Error('Please provide a valid email address.')
+    }
+  }
+
   const { error } = await supabase.from('contact_submissions').insert({
-    name,
-    email,
-    topic,
-    message,
+    name: cleanName || 'Anonymous',
+    email: cleanEmail || 'unspecified@local',
+    topic: cleanTopic,
+    message: cleanMessage,
   })
 
   if (error) throw error

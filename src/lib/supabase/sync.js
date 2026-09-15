@@ -12,6 +12,7 @@ export async function fetchContentFromSupabase(retries = 3) {
 
   let attempt = 0
   while (attempt < retries) {
+    let timerId = null
     try {
       // 3.5-second timeout safeguard
       const fetchPromise = supabase
@@ -20,11 +21,12 @@ export async function fetchContentFromSupabase(retries = 3) {
         .eq('id', 'main')
         .single()
 
-      const timeoutPromise = new Promise((resolve) =>
-        setTimeout(() => resolve({ timeout: true }), 3500),
-      )
+      const timeoutPromise = new Promise((resolve) => {
+        timerId = setTimeout(() => resolve({ timeout: true }), 3500)
+      })
 
       const response = await Promise.race([fetchPromise, timeoutPromise])
+      if (timerId) clearTimeout(timerId)
 
       if (response?.timeout) {
         throw new Error('Supabase fetch timed out')
@@ -42,6 +44,7 @@ export async function fetchContentFromSupabase(retries = 3) {
 
       return { data: data?.data || null, error: null }
     } catch (error) {
+      if (timerId) clearTimeout(timerId)
       attempt++
       if (attempt >= retries) {
         // Pass back whether it was a timeout or auth/network issue
@@ -64,6 +67,10 @@ export async function fetchContentFromSupabase(retries = 3) {
 export async function saveContentToSupabase(contentDocument) {
   if (!isSupabaseConfigured() || !supabase) {
     return { ok: false, error: 'Supabase client not initialized or unconfigured.' }
+  }
+
+  if (!contentDocument || typeof contentDocument !== 'object' || Array.isArray(contentDocument)) {
+    return { ok: false, error: 'Cannot save invalid or empty content document.' }
   }
 
   try {

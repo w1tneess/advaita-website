@@ -321,6 +321,9 @@ function ActiveInquiries({ philosophy = {} }) {
 	)
 }
 
+const RATE_LIMIT_KEY = 'advaita_contact_last_submit'
+const RATE_LIMIT_MS = 30000 // 30 seconds
+
 function Correspondence({ publicSocialLinks }) {
 	const links = (publicSocialLinks || []).filter((l) => l.url && l.kind !== "email")
 
@@ -330,22 +333,59 @@ function Correspondence({ publicSocialLinks }) {
 		topic: "General Inquiry",
 		message: "",
 		readingRef: "",
+		hp_check: "",
 	})
 	const [status, setStatus] = useState("idle")
 	const [feedback, setFeedback] = useState("")
 
 	const handleSubmit = async (e) => {
 		e.preventDefault()
+
+		// Bot honeypot check
+		if (form.hp_check) {
+			setStatus("success")
+			setFeedback("Message sent. Thank you for taking the time to write.")
+			return
+		}
+
+		// Rate limiting cooldown check
+		try {
+			const lastSubmit = parseInt(localStorage.getItem(RATE_LIMIT_KEY) || "0", 10)
+			const elapsed = Date.now() - lastSubmit
+			if (elapsed < RATE_LIMIT_MS) {
+				const waitSec = Math.ceil((RATE_LIMIT_MS - elapsed) / 1000)
+				setStatus("error")
+				setFeedback(`Please wait ${waitSec}s before sending another dispatch.`)
+				return
+			}
+		} catch (_) {
+			// Ignore localStorage issues
+		}
+
 		if (!form.message.trim()) {
 			setFeedback("Please enter a note or message.")
 			return
 		}
+
+		if (form.message.trim().length < 5) {
+			setFeedback("Message is too short (minimum 5 characters).")
+			return
+		}
+
+		if (form.email.trim()) {
+			const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
+			if (!emailRegex.test(form.email.trim())) {
+				setFeedback("Please enter a valid email address.")
+				return
+			}
+		}
+
 		setStatus("submitting")
 		setFeedback("")
 		try {
 			const finalMessage = form.readingRef.trim()
-				? `${form.message}\n\n[Reference/Link]: ${form.readingRef.trim()}`
-				: form.message
+				? `${form.message.trim()}\n\n[Reference/Link]: ${form.readingRef.trim().slice(0, 200)}`
+				: form.message.trim()
 
 			await submitContactForm({
 				name: form.name.trim() || "Anonymous Reader",
@@ -353,6 +393,13 @@ function Correspondence({ publicSocialLinks }) {
 				topic: form.topic,
 				message: finalMessage,
 			})
+
+			try {
+				localStorage.setItem(RATE_LIMIT_KEY, Date.now().toString())
+			} catch (_) {
+				// Ignore
+			}
+
 			setStatus("success")
 			setFeedback("Message sent. Thank you for taking the time to write.")
 			setForm({
@@ -361,6 +408,7 @@ function Correspondence({ publicSocialLinks }) {
 				topic: "General Inquiry",
 				message: "",
 				readingRef: "",
+				hp_check: "",
 			})
 		} catch (err) {
 			console.error(err)
@@ -465,6 +513,20 @@ function Correspondence({ publicSocialLinks }) {
 					</div>
 
 					<form onSubmit={handleSubmit} className="space-y-6">
+						{/* Honeypot field for anti-spam deterrence */}
+						<div className="hidden" aria-hidden="true">
+							<label htmlFor="contact-hp-home">Leave blank</label>
+							<input
+								id="contact-hp-home"
+								type="text"
+								name="hp_check"
+								value={form.hp_check}
+								onChange={(e) => setForm({ ...form, hp_check: e.target.value })}
+								tabIndex={-1}
+								autoComplete="off"
+							/>
+						</div>
+
 						{/* Topic Selection */}
 						<div>
 							<label className="font-mono text-[11px] text-text-3 uppercase block mb-2.5">
@@ -504,6 +566,7 @@ function Correspondence({ publicSocialLinks }) {
 								<input
 									id="contact-sender-name"
 									type="text"
+									maxLength={80}
 									placeholder="e.g. Reader, Colleague, or Anonymous"
 									value={form.name}
 									onChange={(e) => setForm({ ...form, name: e.target.value })}
@@ -520,6 +583,7 @@ function Correspondence({ publicSocialLinks }) {
 								<input
 									id="contact-sender-email"
 									type="email"
+									maxLength={120}
 									placeholder="you@domain.org"
 									value={form.email}
 									onChange={(e) => setForm({ ...form, email: e.target.value })}
@@ -530,15 +594,21 @@ function Correspondence({ publicSocialLinks }) {
 
 						{/* Message */}
 						<div>
-							<label
-								htmlFor="contact-message"
-								className="font-mono text-[11px] text-text-3 uppercase block mb-1.5"
-							>
-								Message *
-							</label>
+							<div className="flex items-center justify-between mb-1.5">
+								<label
+									htmlFor="contact-message"
+									className="font-mono text-[11px] text-text-3 uppercase block"
+								>
+									Message *
+								</label>
+								<span className="font-mono text-[10px] text-text-3">
+									{form.message.length}/2000
+								</span>
+							</div>
 							<textarea
 								id="contact-message"
 								rows={4}
+								maxLength={2000}
 								placeholder="Specify premise, data question, or note under discussion..."
 								value={form.message}
 								onChange={(e) => setForm({ ...form, message: e.target.value })}
@@ -557,6 +627,7 @@ function Correspondence({ publicSocialLinks }) {
 							<input
 								id="contact-reading-ref"
 								type="text"
+								maxLength={200}
 								placeholder="Title, author, or link..."
 								value={form.readingRef}
 								onChange={(e) => setForm({ ...form, readingRef: e.target.value })}

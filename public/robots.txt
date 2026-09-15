@@ -1,14 +1,80 @@
-# Served from the site root as https://advaitachandra.in/robots.txt
-# (Files in public/ are copied verbatim into dist/ by Vite.)
+# robots.txt for https://advaitachandra.in/
+# Welcoming search engines, public crawlers, and modern AI/LLM agents.
 
 User-agent: *
 Allow: /
-
-# /admin is a local, frontend-only demo editor: there is no server behind it and
-# no secrets in it, so there is nothing here to protect. These two lines only ask
-# crawlers to keep the demo out of search results. This is NOT access control --
-# robots.txt is a request, not a lock, and anyone can still open the page.
 Disallow: /admin
 Disallow: /admin/
 
+# Explicitly welcome AI assistants, search crawlers, and LLM indexing bots
+User-agent: GPTBot
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+User-agent: Claude-Web
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+User-agent: Applebot-Extended
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+User-agent: cohere-ai
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+User-agent: Amazonbot
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+User-agent: Bytespider
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+User-agent: CCBot
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+User-agent: Meta-ExternalAgent
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+User-agent: Diffbot
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+# Sitemaps & AI Context Endpoints
 Sitemap: https://advaitachandra.in/sitemap.xml
+
+# LLM Standard Definitions:
+# https://advaitachandra.in/llms.txt
+# https://advaitachandra.in/llms-full.txt

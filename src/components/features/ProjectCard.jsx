@@ -4,7 +4,17 @@ import Pending from '@/components/ui/Pending.jsx'
 export default function ProjectCard({ project, index }) {
 	const { title, categories, status, summary, description, methodology, links } = project
 	const kind = categories && categories.length > 0 ? categories[0] : (status || "Research & Tool")
-	const link = links?.live || links?.repository
+	// Sanitize links to allow only safe protocols (http, https, or relative paths)
+	const isSafeUrl = (url) => {
+		if (!url || typeof url !== 'string') return false
+		const trimmed = url.trim().toLowerCase()
+		return trimmed.startsWith('https://') || trimmed.startsWith('http://') || trimmed.startsWith('/')
+	}
+
+	const rawLink = links?.live || links?.repository
+	const link = isSafeUrl(rawLink) ? rawLink : null
+	const repoLink = isSafeUrl(links?.repository) ? links.repository : null
+	const liveLink = isSafeUrl(links?.live) ? links.live : null
 
 	const indexStr = index !== undefined ? String(index + 1).padStart(2, '0') : null
 
@@ -30,7 +40,7 @@ export default function ProjectCard({ project, index }) {
 						<a
 							href={link}
 							target="_blank"
-							rel="noreferrer"
+							rel="noopener noreferrer"
 							className="inline-flex items-baseline gap-1.5 focus:outline-none"
 						>
 							<span>{title}</span>
@@ -70,22 +80,22 @@ export default function ProjectCard({ project, index }) {
 			{/* Card Footer Actions */}
 			<div className="mt-8 pt-4 border-t border-line/50 flex items-center justify-between font-mono text-xs">
 				<div className="flex items-center gap-4 text-text-3">
-					{links?.repository && (
+					{repoLink && (
 						<a
-							href={links.repository}
+							href={repoLink}
 							target="_blank"
-							rel="noreferrer"
+							rel="noopener noreferrer"
 							className="inline-flex items-center gap-1.5 hover:text-copper transition-colors"
 						>
 							<Github className="h-3.5 w-3.5" />
 							<span>SOURCE</span>
 						</a>
 					)}
-					{links?.live && (
+					{liveLink && (
 						<a
-							href={links.live}
+							href={liveLink}
 							target="_blank"
-							rel="noreferrer"
+							rel="noopener noreferrer"
 							className="inline-flex items-center gap-1.5 hover:text-copper transition-colors"
 						>
 							<Globe className="h-3.5 w-3.5" />
