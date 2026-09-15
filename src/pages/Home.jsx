@@ -28,10 +28,10 @@ function Hero({ profile }) {
 					<Reveal y={14} delay={0.1}>
 						<div className="max-w-[34rem]">
 							<p className="font-serif text-base sm:text-xl text-text/90 font-normal leading-snug">
-								Student and independent learner based in India.
+								a witness to existence itself.
 							</p>
 							<p className="text-xs sm:text-sm md:text-base leading-relaxed text-text-2/80 font-light mt-2 sm:mt-3">
-								I study philosophy, history, and computer systems. This website collects my projects, reading notes, and open questions on data and ideas.
+								Philosophy, history, and computer systems are what I keep coming back to, but psychology, politics, public policy, and cybersecurity all sneak in there too. I&apos;m still a student, so most of this is me figuring things out as I go. Some of it becomes actual projects. Most of it just stays as notes I haven&apos;t finished thinking through yet.
 							</p>
 						</div>
 					</Reveal>
@@ -40,9 +40,9 @@ function Hero({ profile }) {
 						<div className="mt-6 sm:mt-10 flex flex-row items-center gap-2.5 sm:gap-4">
 							<a
 								href="#projects"
-								className="group inline-flex items-center justify-center gap-2 border border-text px-4 py-2.5 sm:px-6 sm:py-3 text-[11px] sm:text-xs font-mono uppercase tracking-wider text-text bg-transparent hover:bg-text hover:text-canvas transition-all flex-1 sm:flex-initial text-center"
+								className="group inline-flex items-center justify-center gap-2 border border-text px-4 py-2.5 sm:px-6 sm:py-3 text-[11px] sm:text-xs font-mono tracking-wider text-text bg-transparent hover:bg-text hover:text-canvas transition-all flex-1 sm:flex-initial text-center"
 							>
-								<span>Selected Projects</span>
+								<span className="normal-case">Selected Projects</span>
 								<span className="transition-transform duration-300 group-hover:translate-y-0.5">&darr;</span>
 							</a>
 							<Link
@@ -60,7 +60,7 @@ function Hero({ profile }) {
 				<Reveal y={22} delay={0.08} className="relative z-10 lg:col-span-5 mt-4 lg:mt-0">
 					<div className="bg-[#0b0c0c] border border-line p-3 sm:p-4 shadow-2xl relative">
 						{/* Contact Sheet Header Metadata */}
-						<div className="flex justify-between items-center font-mono text-[10px] text-text-3 pb-2.5 mb-3 border-b border-line">
+						<div className="flex justify-between items-center font-mono text-xs text-text-3 pb-2.5 mb-3 border-b border-line">
 							<span className="text-copper font-medium">FRAME 04</span>
 							<span className="tracking-wider">ILFORD HP5+ 400</span>
 						</div>
@@ -83,9 +83,9 @@ function Hero({ profile }) {
 							/>
 
 							{/* In-Negative Exposure Notation Overlay */}
-							<div className="absolute bottom-3 left-3 right-3 z-20 flex justify-between items-center font-mono text-[10px] text-text/80 bg-canvas/85 backdrop-blur-sm px-3 py-1.5 border border-line">
+							<div className="absolute bottom-3 left-3 right-3 z-20 flex justify-between items-center font-mono text-xs text-text/80 bg-canvas/85 backdrop-blur-sm px-3 py-1.5 border border-line">
 								<span className="tracking-widest">ISO 400 &middot; f/1.8 &middot; 50mm</span>
-								<span className="text-copper font-medium uppercase text-[9px] tracking-wider">PORTRAIT</span>
+								<span className="text-copper font-medium uppercase text-[10px] tracking-wider">PORTRAIT</span>
 							</div>
 						</div>
 					</div>
@@ -249,7 +249,7 @@ function ActiveInquiries({ philosophy = {} }) {
 									className="flex justify-between items-center text-text-2 hover:text-text transition-colors py-0.5"
 								>
 									<span>0{i + 1}. {thinker.name}</span>
-									<span className="text-text-3 text-[11px]">
+									<span className="text-text-3 text-xs">
 										{thinker.description ? thinker.description.split(".")[0].slice(0, 24) : thinker.role || "Inquiry"}
 									</span>
 								</li>
@@ -481,11 +481,10 @@ function Correspondence({ publicSocialLinks }) {
 										key={t}
 										type="button"
 										onClick={() => setForm({ ...form, topic: t })}
-										className={`p-2.5 border text-left font-mono text-xs transition-all duration-200 cursor-pointer ${
-											form.topic === t
-												? "border-copper bg-copper/10 text-text font-medium"
-												: "border-line bg-surface-2 text-text-2 hover:border-line-strong hover:text-text"
-										}`}
+										className={`p-2.5 border text-left font-mono text-xs transition-all duration-200 cursor-pointer ${form.topic === t
+											? "border-copper bg-copper/10 text-text font-medium"
+											: "border-line bg-surface-2 text-text-2 hover:border-line-strong hover:text-text"
+											}`}
 									>
 										{t}
 									</button>
@@ -567,9 +566,8 @@ function Correspondence({ publicSocialLinks }) {
 
 						{feedback && (
 							<p
-								className={`text-xs font-mono ${
-									status === "success" ? "text-copper" : "text-limitation"
-								}`}
+								className={`text-xs font-mono ${status === "success" ? "text-copper" : "text-limitation"
+									}`}
 							>
 								{feedback}
 							</p>

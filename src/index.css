@@ -74,8 +74,8 @@
   --color-copper-strong: #d4a87d;
   --color-copper-deep: #7a5a39;
 
-  --text-eyebrow: 0.6875rem;
-  --text-meta: 0.78rem;
+  --text-label: 0.75rem;   /* 12px — minimum legible; replaces --text-eyebrow & --text-meta */
+  --text-meta: 0.75rem;    /* alias kept for backward compat */
   --text-body: clamp(0.9875rem, 0.22vw + 0.94rem, 1.0625rem);
   --text-lead: clamp(1.06rem, 0.55vw + 0.94rem, 1.3rem);
   --text-h3: clamp(1.15rem, 0.45vw + 1.06rem, 1.45rem);
@@ -310,9 +310,10 @@ html.light,
   }
 
   .eyebrow {
-    font-size: var(--text-eyebrow);
+    font-size: var(--text-label);      /* 12px — meets min-legibility floor */
     letter-spacing: var(--tracking-eyebrow);
-    text-transform: uppercase;
+    /* text-transform removed: long labels like "Selected projects" are
+       harder to read in all-caps (issue #4 — 17-char all-caps string) */
     font-weight: 500;
     color: var(--color-text-3);
   }
