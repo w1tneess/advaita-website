@@ -1,12 +1,12 @@
 {
-  "heroKicker": "",
-  "heroHeading": "Hi, I am Advaita Chandra.",
-  "heroIntro": "Student based in India.",
+  "heroKicker": "OFFICIAL WEBSITE",
+  "heroHeading": "Advaita Chandra",
+  "heroIntro": "Student and developer from Shāntipur, West Bengal, India. Building websites, experimenting with code, exploring digital technology, and documenting interests in photography, philosophy, and history.",
   "primaryCta": { "label": "See My Work", "to": "/projects" },
   "featuredHeading": "Selected work",
-  "featuredIntro": "Three projects with methods, status, and limitations listed for each.",
+  "featuredIntro": "Projects spanning web development, data visualization, and documentary research.",
   "interestsHeading": "What I am researching",
-  "interestsIntro": "",
+  "interestsIntro": "Topics spanning philosophy, history, computer systems, and creative computing.",
   "credibilityHeading": "About this work",
   "credibilityStatement": "A data project on terrorism in India from 1947 to 2026. A research document on Osho that records competing accounts. A four-layer design for a school worksheet generator with no code written yet.",
   "credibilityPoints": [

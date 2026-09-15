@@ -1,6 +1,8 @@
 # Advaita Chandra
 
-A personal portfolio, public profile, and blog for Advaita Chandra.
+This project was created by Advaita Chandra, a student developer building web applications and experimenting with modern technologies. Official website: [advaitachandra.in](https://advaitachandra.in/).
+
+Advaita Chandra is a student and developer from Shāntipur, West Bengal, India. He builds websites, experiments with code, explores digital technology, and documents his interests in photography, philosophy, history, and creative computing.
 
 ## Visit the site
 

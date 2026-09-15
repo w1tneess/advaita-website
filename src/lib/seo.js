@@ -48,10 +48,8 @@ export function formatTitle(title) {
 export function buildMeta(route = {}, basePath = '/') {
   const path = route.path || '/'
   let pageType = 'WebPage'
-  if (path === '/') {
+  if (path === '/' || path === '/about') {
     pageType = 'ProfilePage'
-  } else if (path === '/about') {
-    pageType = 'AboutPage'
   } else if (['/projects', '/philosophy', '/blog', '/photography'].includes(path)) {
     pageType = 'CollectionPage'
   } else if (route.type === 'article') {
@@ -60,7 +58,7 @@ export function buildMeta(route = {}, basePath = '/') {
 
   return {
     title: formatTitle(route.title),
-    description: route.description || 'Personal portfolio, public profile, and research notes of Advaita Chandra.',
+    description: route.description || 'Advaita Chandra is a student and developer from West Bengal, India. Official website, projects, notes, and research.',
     canonical: absoluteUrl(path, basePath),
     image: route.image
       ? absoluteUrl(route.image, basePath)
@@ -100,19 +98,30 @@ export function generateJsonLd(meta) {
     familyName: 'Chandra',
     url: `${SITE_URL}/`,
     image: `${SITE_URL}/og-image.jpg`,
-    jobTitle: ['Student', 'Independent Researcher', 'Developer'],
+    jobTitle: 'Student and Developer',
     description:
-      'Student and independent researcher in India exploring philosophy, epistemology, Indian politics, and data visualization.',
+      'Advaita Chandra is a student and developer from West Bengal, India. He builds websites, experiments with code, explores digital technology, and documents his interests in photography, philosophy, history, and creative computing. His official website is https://advaitachandra.in/.',
+    address: {
+      '@type': 'PostalAddress',
+      addressRegion: 'West Bengal',
+      addressCountry: 'IN',
+    },
+    homeLocation: {
+      '@type': 'Place',
+      name: 'West Bengal, India',
+    },
     knowsAbout: [
+      'Web development',
+      'Programming',
+      'Full-stack development',
+      'Photography',
+      'Digital experiments',
       'Philosophy',
-      'Epistemology',
-      'Existentialism',
-      'Indian Politics',
-      'Data Visualization',
+      'History',
+      'Creative computing',
       'Python',
-      'Web Development',
-      'System Design',
-      'Artificial Intelligence',
+      'React',
+      'System design',
     ],
     sameAs: [GITHUB_PROFILE, TWITTER_PROFILE, INSTAGRAM_PROFILE],
   }
@@ -183,6 +192,28 @@ export function generateJsonLd(meta) {
     about: { '@id': personId },
     breadcrumb: { '@id': breadcrumbEntity['@id'] },
     inLanguage: 'en-US',
+  }
+
+  if (meta.pageType === 'ProfilePage') {
+    webpageEntity.mainEntity = {
+      '@type': 'Person',
+      name: 'Advaita Chandra',
+      url: `${SITE_URL}/`,
+      jobTitle: 'Student and Developer',
+      description:
+        'Advaita Chandra is a student and developer from West Bengal, India. He builds websites, experiments with code, explores digital technology, and documents his interests in photography, philosophy, history, and creative computing.',
+      sameAs: [GITHUB_PROFILE, TWITTER_PROFILE, INSTAGRAM_PROFILE],
+      knowsAbout: [
+        'Web development',
+        'Programming',
+        'Full-stack development',
+        'Photography',
+        'Digital experiments',
+        'Philosophy',
+        'History',
+        'Creative computing',
+      ],
+    }
   }
 
   if (meta.type === 'article') {

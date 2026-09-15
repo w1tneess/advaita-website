@@ -28,10 +28,10 @@ function Hero({ profile }) {
 					<Reveal y={14} delay={0.1}>
 						<div className="max-w-[34rem]">
 							<p className="font-serif text-base sm:text-xl text-text/90 font-normal leading-snug">
-								a witness to existence itself.
+								Student and developer from Shāntipur, West Bengal, India.
 							</p>
 							<p className="text-xs sm:text-sm md:text-base leading-relaxed text-text-2/80 font-light mt-2 sm:mt-3">
-								Philosophy, history, and computer systems are what I keep coming back to, but psychology, politics, public policy, and cybersecurity all sneak in there too. I&apos;m still a student, so most of this is me figuring things out as I go. Some of it becomes actual projects. Most of it just stays as notes I haven&apos;t finished thinking through yet.
+								Building websites, experimenting with code, exploring digital technology, and documenting interests in photography, philosophy, history, and creative computing.
 							</p>
 						</div>
 					</Reveal>

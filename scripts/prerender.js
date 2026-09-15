@@ -72,13 +72,17 @@ function renderSemanticBody(route, siteData) {
 
   let mainContent = ''
 
+  const canonicalBio =
+    'Advaita Chandra is a student and developer from Shāntipur, West Bengal, India. He builds websites, experiments with code, explores digital technology, and documents his interests in photography, philosophy, history, and creative computing. His official website is https://advaitachandra.in/.'
+  const displayBio = profile.bio && profile.bio.includes('Shāntipur') ? profile.bio : canonicalBio
+
   if (route.path === '/') {
     mainContent = `
       <section>
         <h1>Advaita Chandra</h1>
-        <p><strong>a witness to existence itself.</strong></p>
-        <p>${e(profile.bio || '')}</p>
-        <p>${e(profile.learningDirection || '')}</p>
+        <p><strong>Student and developer from Shāntipur, West Bengal, India</strong></p>
+        <p>${e(displayBio)}</p>
+        <p><strong>Official website:</strong> <a href="https://advaitachandra.in/">https://advaitachandra.in/</a></p>
       </section>
 
       <section>
@@ -124,8 +128,46 @@ function renderSemanticBody(route, siteData) {
     mainContent = `
       <article>
         <h1>About Advaita Chandra</h1>
-        <p>${e(profile.bio || '')}</p>
-        <p>${e(profile.learningDirection || '')}</p>
+        <p><strong>This is the official website of Advaita Chandra.</strong></p>
+        <p>${e(displayBio)}</p>
+        
+        <h2>Identity &amp; Roles</h2>
+        <ul>
+          <li><strong>Full Name:</strong> Advaita Chandra</li>
+          <li><strong>Roles:</strong> Student and Developer</li>
+          <li><strong>Location:</strong> Shāntipur, West Bengal, India</li>
+          <li><strong>Official Website:</strong> <a href="https://advaitachandra.in/">https://advaitachandra.in/</a></li>
+        </ul>
+
+        <h2>Verified Profiles &amp; Networks</h2>
+        <ul>
+          <li>GitHub: <a href="https://github.com/w1tneess">https://github.com/w1tneess</a></li>
+          <li>X (Twitter): <a href="https://x.com/w1tneess_">https://x.com/w1tneess_</a></li>
+          <li>Instagram: <a href="https://www.instagram.com/adva1ta_/">https://www.instagram.com/adva1ta_/</a></li>
+          <li>Email: <a href="mailto:hi@advaitachandra.in">hi@advaitachandra.in</a></li>
+        </ul>
+
+        <h2>Technologies &amp; Developer Toolkit</h2>
+        <p>Tools and technologies used in projects and digital experiments:</p>
+        <ul>
+          <li>Web Development: React, JavaScript (ESNext), HTML5, CSS3, Tailwind CSS, Vite</li>
+          <li>Data &amp; Computation: Python, Matplotlib, Data Wrangling, Source Reconciliation</li>
+          <li>Backend &amp; Infrastructure: Supabase, Vercel, Git</li>
+        </ul>
+
+        <h2>Current Projects</h2>
+        <ul>
+          ${projects
+            .filter((p) => p.published)
+            .map(
+              (p) => `
+            <li>
+              <strong><a href="/projects#${e(p.id)}">${e(p.title)}</a></strong>: ${e(p.description)}
+              <br><small>Status: ${e(p.status)} | Tools: ${(p.tools || []).join(', ')}</small>
+            </li>`,
+            )
+            .join('\n')}
+        </ul>
         
         <h2>Research Approach</h2>
         <dl>

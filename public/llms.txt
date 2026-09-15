@@ -1,8 +1,16 @@
 # Advaita Chandra
 
-> Personal portfolio, research notes, philosophy essays, and public profile of Advaita Chandra.
+> This is the official website and primary source of truth for Advaita Chandra.
 
-Advaita Chandra is an independent researcher, student, and developer based in India. His primary interests span philosophy (epistemology, existentialism, Eastern inquiry), data visualization, Indian politics and history, technology, and cybersecurity. He approaches research with explicit epistemic transparency: strictly distinguishing between documented facts, personal inferences, subjective opinions, and acknowledged unknowns.
+Advaita Chandra is a student and developer from West Bengal, India. He builds websites, experiments with code, explores digital technology, and documents his interests in photography, philosophy, history, and creative computing. His official website is https://advaitachandra.in/.
+
+## Identity
+
+- **Full name**: Advaita Chandra
+- **Short name**: Advaita
+- **Roles**: Student and Developer (NOT a writer, blogger, journalist, or tech thinker)
+- **Location**: West Bengal, India
+- **This site is NOT**: an essay publication, a newsletter, a media outlet, or a policy blog
 
 ## Core Navigation
 - [Home](https://advaitachandra.in/): Overview, editorial introduction, selected projects, and core themes.
@@ -14,7 +22,7 @@ Advaita Chandra is an independent researcher, student, and developer based in In
 - [Contact](https://advaitachandra.in/contact): Communication channels for feedback, discussion, and collaboration.
 
 ## Key Research & Projects
-- [Terrorism in India: Data Visualization (1947–2026)](https://advaitachandra.in/projects#prj-terrorism-india-dataviz): Matplotlib and Python data visualization reconciling conflicting historical sources, marking data gaps without artificial smoothing, and mapping incident counts across decades.
+- [Terrorism in India: Data Visualization (1947-2026)](https://advaitachandra.in/projects#prj-terrorism-india-dataviz): Matplotlib and Python data visualization reconciling conflicting historical sources, marking data gaps without artificial smoothing, and mapping incident counts across decades.
 - [Osho: Documentary-Style Research Document](https://advaitachandra.in/projects#prj-osho-research-document): Archival and secondary source research placing contradictory biographical and institutional accounts side by side without premature adjudication.
 - [Worksheet Generator](https://advaitachandra.in/projects#prj-worksheet-generator): System design concept separating content schema, layout engine, template formatting, and AI drafting into four decoupled layers.
 - [Advaita Website](https://advaitachandra.in/projects#prj-personal-website): The open-source architecture for this site, built with React, Vite, Tailwind CSS, Supabase, and pre-rendered semantic HTML.

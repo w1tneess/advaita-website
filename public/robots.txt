@@ -17,6 +17,11 @@ Allow: /
 Disallow: /admin
 Disallow: /admin/
 
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
 User-agent: ClaudeBot
 Allow: /
 Disallow: /admin

@@ -29,7 +29,7 @@ export const SCHEMA_VERSION = 4
  * Bump when the seed CONTENT changes. A visitor with older local edits is shown a
  * non-destructive notice in the admin panel; their edits are never overwritten.
  */
-export const SEED_VERSION = 2
+export const SEED_VERSION = 3
 
 /**
  * A fresh, deeply-cloned content document.
