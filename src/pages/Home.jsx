@@ -28,7 +28,7 @@ function Hero({ profile }) {
 					<Reveal y={14} delay={0.1}>
 						<div className="max-w-[34rem]">
 							<p className="font-serif text-base sm:text-xl text-text/90 font-normal leading-snug">
-								Student and developer from Shāntipur, West Bengal, India.
+								Student and developer from West Bengal, India.
 							</p>
 							<p className="text-xs sm:text-sm md:text-base leading-relaxed text-text-2/80 font-light mt-2 sm:mt-3">
 								Building websites, experimenting with code, exploring digital technology, and documenting interests in photography, philosophy, history, and creative computing.

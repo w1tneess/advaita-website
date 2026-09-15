@@ -25,7 +25,7 @@ export default function About() {
         title="About Advaita Chandra"
         lead={
           profile.bio ||
-          "Advaita Chandra is a student and developer from Shāntipur, West Bengal, India. He builds websites, experiments with code, explores digital technology, and documents his interests in photography, philosophy, history, and creative computing. His official website is https://advaitachandra.in/."
+          "Advaita Chandra is a student and developer from West Bengal, India. He builds websites, experiments with code, explores digital technology, and documents his interests in photography, philosophy, history, and creative computing. His official website is https://advaitachandra.in/."
         }
       >
         <div className="flex flex-wrap items-center gap-3 font-mono text-xs text-text-3">
@@ -44,7 +44,7 @@ export default function About() {
           )}
           <span className="text-line-strong">|</span>
           <span className="text-copper font-medium">
-            LOCATION: {profile.location ? profile.location.toUpperCase() : 'SHĀNTIPUR, WEST BENGAL, INDIA'}
+            LOCATION: {profile.location ? profile.location.toUpperCase() : 'WEST BENGAL, INDIA'}
           </span>
         </div>
       </PageHeader>
@@ -69,7 +69,7 @@ export default function About() {
                   This is the official website of Advaita Chandra.
                 </h2>
                 <p className="text-sm sm:text-base text-text-2 font-light leading-relaxed">
-                  Advaita Chandra is a student and developer from Shāntipur, West Bengal, India. He builds
+                  Advaita Chandra is a student and developer from West Bengal, India. He builds
                   websites, experiments with code, explores digital technology, and documents his interests in
                   photography, philosophy, history, and creative computing.
                 </p>

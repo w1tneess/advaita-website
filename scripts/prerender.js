@@ -73,14 +73,14 @@ function renderSemanticBody(route, siteData) {
   let mainContent = ''
 
   const canonicalBio =
-    'Advaita Chandra is a student and developer from Shāntipur, West Bengal, India. He builds websites, experiments with code, explores digital technology, and documents his interests in photography, philosophy, history, and creative computing. His official website is https://advaitachandra.in/.'
-  const displayBio = profile.bio && profile.bio.includes('Shāntipur') ? profile.bio : canonicalBio
+    'Advaita Chandra is a student and developer from West Bengal, India. He builds websites, experiments with code, explores digital technology, and documents his interests in photography, philosophy, history, and creative computing. His official website is https://advaitachandra.in/.'
+  const displayBio = profile.bio || canonicalBio
 
   if (route.path === '/') {
     mainContent = `
       <section>
         <h1>Advaita Chandra</h1>
-        <p><strong>Student and developer from Shāntipur, West Bengal, India</strong></p>
+        <p><strong>Student and developer from West Bengal, India</strong></p>
         <p>${e(displayBio)}</p>
         <p><strong>Official website:</strong> <a href="https://advaitachandra.in/">https://advaitachandra.in/</a></p>
       </section>
@@ -135,7 +135,7 @@ function renderSemanticBody(route, siteData) {
         <ul>
           <li><strong>Full Name:</strong> Advaita Chandra</li>
           <li><strong>Roles:</strong> Student and Developer</li>
-          <li><strong>Location:</strong> Shāntipur, West Bengal, India</li>
+          <li><strong>Location:</strong> West Bengal, India</li>
           <li><strong>Official Website:</strong> <a href="https://advaitachandra.in/">https://advaitachandra.in/</a></li>
         </ul>
 
