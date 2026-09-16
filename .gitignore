@@ -40,3 +40,8 @@ supabase/.branches/
 .claude/
 .vite/
 .vercel/
+
+# Sandboxes & Scratch
+sandbox-landing-page/
+sandbox/
+audit_scratch/

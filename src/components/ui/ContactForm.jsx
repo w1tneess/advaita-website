@@ -188,7 +188,7 @@ export default function ContactForm() {
     <form onSubmit={handleSubmit} noValidate className="space-y-6">
       {/* Honeypot field for bot spam deterrence */}
       <div className="hidden" aria-hidden="true">
-        <label htmlFor="contact-hp">Leave this field blank</label>
+        <label htmlFor="contact-hp" aria-hidden="true">Leave this field blank</label>
         <input
           id="contact-hp"
           type="text"
@@ -197,6 +197,7 @@ export default function ContactForm() {
           onChange={handleChange}
           tabIndex={-1}
           autoComplete="off"
+          aria-hidden="true"
         />
       </div>
 

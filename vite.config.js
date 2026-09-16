@@ -32,5 +32,18 @@ export default defineConfig({
   server: {
     port: 5173,
     open: false,
+    watch: {
+      // Exclude nested sub-projects and build outputs from the file watcher.
+      // These directories contain their own lock files, binaries, and build
+      // artifacts that cause EBUSY crashes on Windows when Vite tries to watch them.
+      ignored: [
+        '**/sandbox/**',
+        '**/sandbox-landing-page/**',
+        '**/rembg_env/**',
+        '**/audit_scratch/**',
+        '**/dist/**',
+        '**/.git/**',
+      ],
+    },
   },
 })
