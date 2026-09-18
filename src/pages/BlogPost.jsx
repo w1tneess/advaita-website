@@ -3,13 +3,14 @@ import { ArrowLeft } from 'lucide-react'
 import NotFound from '@/pages/NotFound.jsx'
 import CopyButton from '@/components/ui/CopyButton.jsx'
 import OpenGraphPreview from '@/components/ui/OpenGraphPreview.jsx'
+import RelatedNotes from '@/components/ui/RelatedNotes.jsx'
 import Seo from '@/components/meta/Seo.jsx'
 import { useContent } from '@/lib/content.jsx'
 import { formatDate } from '@/lib/format.js'
 
 export default function BlogPost() {
   const { slug } = useParams()
-  const { findBlogPostBySlug } = useContent()
+  const { findBlogPostBySlug, blog = [] } = useContent()
 
   const post = findBlogPostBySlug(slug)
 
@@ -90,6 +91,9 @@ export default function BlogPost() {
             url={typeof window !== 'undefined' ? window.location.href : 'https://advaitachandra.in'}
           />
         </div>
+
+        {/* Related Notes for Internal Linking */}
+        <RelatedNotes currentSlug={post.slug} posts={blog} />
       </article>
     </>
   )

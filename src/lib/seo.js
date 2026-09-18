@@ -99,7 +99,7 @@ export function generateJsonLd(meta) {
     image: `${SITE_URL}/og-image.jpg`,
     jobTitle: 'Student',
     description:
-      'Advaita Chandra is a student from West Bengal, India. This is his personal website for projects, reading notes, and learning logs.',
+      'Advaita Chandra is a student, learner, and explorer from West Bengal, India. This is his digital garden for coding projects, reading notes, and technology exploration.',
     address: {
       '@type': 'PostalAddress',
       addressRegion: 'West Bengal',
@@ -111,16 +111,13 @@ export function generateJsonLd(meta) {
     },
     knowsAbout: [
       'Web development',
+      'Coding projects',
+      'Digital garden',
       'Programming',
-      'Full-stack development',
       'Photography',
-      'Digital experiments',
+      'Data architecture',
       'Philosophy',
       'History',
-      'Creative computing',
-      'Python',
-      'React',
-      'System design',
     ],
     sameAs: [GITHUB_PROFILE, TWITTER_PROFILE, INSTAGRAM_PROFILE],
   }
