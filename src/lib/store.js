@@ -22,7 +22,7 @@ import { createSeedDocument, SCHEMA_VERSION, SEED_VERSION } from '../data/seed.j
 import { validateDocument } from './schema.js'
 
 export const STORAGE_KEY = 'advaita-site.content.v1'
-export const THEME_STORAGE_KEY = 'advaita-site.theme'
+
 
 /* --------------------------------------------------------------------------
    Safe storage access — localStorage throws in some private-browsing modes,
@@ -42,9 +42,7 @@ function getStorage() {
   }
 }
 
-export function storageAvailable() {
-  return getStorage() !== null
-}
+
 
 /* --------------------------------------------------------------------------
    Schema migrations
@@ -263,15 +261,7 @@ export async function clearDocument() {
   return { ok: true, error: null }
 }
 
-export async function hasLocalDocument() {
-  const storage = getStorage()
-  if (storage && storage.getItem(STORAGE_KEY)) return true
-  if (isSupabaseConfigured()) {
-    const { data } = await fetchContentFromSupabase()
-    return data !== null
-  }
-  return false
-}
+
 
 /**
  * True when the deployed seed content is newer than the local copy.

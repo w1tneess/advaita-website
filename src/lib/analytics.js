@@ -27,14 +27,3 @@ export function trackPageView(path) {
   }
 }
 
-export function trackEvent(eventName, eventData = {}) {
-  if (typeof window === 'undefined') return
-
-  if (window.plausible) {
-    window.plausible(eventName, { props: eventData })
-  } else if (window.umami) {
-    window.umami.track(eventName, eventData)
-  } else if (typeof window.gtag === 'function') {
-    window.gtag('event', eventName, eventData)
-  }
-}

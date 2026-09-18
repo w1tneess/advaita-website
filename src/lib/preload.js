@@ -34,14 +34,3 @@ export function preloadRoute(path) {
     })
   }
 }
-
-/**
- * Returns event handlers for preloading routes on hover/focus/touch.
- */
-export function getRoutePreloadProps(path) {
-  return {
-    onPointerEnter: () => preloadRoute(path),
-    onFocus: () => preloadRoute(path),
-    onTouchStart: () => preloadRoute(path),
-  }
-}

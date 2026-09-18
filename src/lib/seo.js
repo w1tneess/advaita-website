@@ -8,8 +8,7 @@
  * Plain JavaScript, no React — Node imports this directly.
  */
 
-export { SITE_NAME, SITE_URL, DEFAULT_OG_IMAGE } from './routes.js'
-import { SITE_NAME, SITE_URL, DEFAULT_OG_IMAGE } from './routes.js'
+import { SITE_NAME, SITE_URL, DEFAULT_OG_IMAGE } from '../config/site.js'
 
 export const TWITTER_HANDLE = '@w1tneess_'
 export const GITHUB_PROFILE = 'https://github.com/w1tneess'

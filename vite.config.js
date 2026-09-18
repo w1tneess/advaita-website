@@ -27,7 +27,7 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
-    include: ['react-router-dom', 'react-router', 'framer-motion', 'lucide-react', '@supabase/supabase-js'],
+    include: ['react-router', 'framer-motion', 'lucide-react', '@supabase/supabase-js'],
   },
   server: {
     port: 5173,

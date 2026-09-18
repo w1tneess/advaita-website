@@ -51,7 +51,7 @@ export default function CookieBanner() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 30 }}
           transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed bottom-4 left-4 right-4 z-50 mx-auto max-w-lg border border-line bg-surface/95 p-5 shadow-2xl backdrop-blur-xl sm:left-auto sm:right-6 relative overflow-hidden"
+          className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-4 right-4 z-50 mx-auto w-auto max-w-lg border border-line bg-surface/95 p-5 shadow-2xl backdrop-blur-xl sm:left-auto sm:right-6 sm:w-[min(32rem,calc(100vw-3rem))] overflow-hidden"
         >
           {/* Optical darkroom corner bracket */}
           <div className="absolute top-0 right-0 w-6 h-6 border-t border-r border-copper/40 pointer-events-none" />

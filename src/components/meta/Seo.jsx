@@ -1,4 +1,5 @@
-import { buildMeta, generateJsonLd, TWITTER_HANDLE, SITE_NAME } from '@/lib/seo.js'
+import { buildMeta, generateJsonLd, TWITTER_HANDLE } from '@/lib/seo.js'
+import { SITE_NAME } from '@/config/site.js'
 
 /**
  * Per-page document metadata.
