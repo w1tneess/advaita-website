@@ -8,7 +8,7 @@ import { Globe, Share2, Twitter, Facebook } from 'lucide-react'
 export default function OpenGraphPreview({
   title = 'Advaita — Personal Portfolio & Writing',
   description = 'Exploring philosophy, technology, software development, and visual arts.',
-  image = '/og-image.jpg',
+  image = '/og-placeholder.svg',
   url = 'https://advaitachandra.in',
 }) {
   const [platform, setPlatform] = useState('twitter') // 'twitter' | 'facebook'

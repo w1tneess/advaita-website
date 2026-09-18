@@ -96,7 +96,7 @@ export function generateJsonLd(meta) {
     givenName: 'Advaita',
     familyName: 'Chandra',
     url: `${SITE_URL}/`,
-    image: `${SITE_URL}/og-image.jpg`,
+    image: `${SITE_URL}/pfp.png`,
     jobTitle: 'Student',
     description:
       'Advaita Chandra is a student, learner, and explorer from West Bengal, India. This is his digital garden for coding projects, reading notes, and technology exploration.',

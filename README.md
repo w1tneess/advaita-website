@@ -158,7 +158,7 @@ advaita-website/
 │   ├── llms-full.txt           # Comprehensive knowledge base for LLMs
 │   ├── robots.txt              # Crawler permissions & AI bot directives
 │   ├── _headers                # Edge header rules (content-type, caching)
-│   └── og-image.jpg            # Default Open Graph preview image
+│   └── og-placeholder.svg      # Default Open Graph preview image
 ├── scripts/
 │   ├── prerender.js            # Build-time pre-render engine (HTML, sitemaps, feeds)
 │   └── validate-content.js     # Seed content integrity validation
