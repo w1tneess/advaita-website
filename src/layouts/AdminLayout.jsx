@@ -26,7 +26,7 @@ export default function AdminLayout() {
   }, [pathname])
 
   return (
-    <div className="h-screen w-full flex overflow-hidden bg-[#0F0F0F] text-[#E8E6E1] font-sans">
+    <div className="h-screen w-full flex overflow-hidden bg-[#0F0E0D] text-[#E8E6E1] font-sans">
       <Seo title="Content admin" description="Live content editor." path={pathname} noindex />
 
       <SkipLink />
@@ -36,7 +36,7 @@ export default function AdminLayout() {
       <AdminSidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       {/* Main Viewport Container */}
-      <div className="min-w-0 flex-1 flex flex-col h-screen overflow-hidden bg-[#0F0F0F] relative">
+      <div className="min-w-0 flex-1 flex flex-col h-screen overflow-hidden bg-[#0F0E0D] relative">
         {/* Fixed Header */}
         <AdminHeader onOpenSidebar={() => setSidebarOpen(true)} />
 

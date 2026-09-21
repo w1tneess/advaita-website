@@ -147,9 +147,17 @@ export default function ContactForm() {
         setForm(INITIAL_FORM)
       } catch (err) {
         setStatus('error')
+        const isNetworkErr =
+          err?.message?.includes('Failed to fetch') ||
+          err?.message?.includes('NetworkError') ||
+          err?.message?.includes('network') ||
+          err?.name === 'TypeError'
+
         setErrorMessage(
-          err?.message ||
-            'Something went wrong. Please try again or use an alternative contact method.',
+          isNetworkErr
+            ? 'Connection to the message service could not be established (this is often caused by an adblocker or strict privacy shield). You can also write directly to advaita974@gmail.com.'
+            : err?.message ||
+                'Something went wrong. Please try again or reach out directly at advaita974@gmail.com.',
         )
       }
     },
@@ -215,7 +223,8 @@ export default function ContactForm() {
             value={form.name}
             onChange={handleChange}
             autoComplete="name"
-            className={`block w-full border bg-canvas/70 px-3.5 py-2.5 font-sans text-sm text-text transition-all placeholder:text-text-3/40 focus:border-copper focus:bg-canvas focus:ring-1 focus:ring-copper/30 focus:outline-none ${
+            spellCheck={false}
+            className={`block w-full border bg-canvas/70 px-3.5 py-2.5 font-sans text-base sm:text-sm text-text transition-all placeholder:text-text-3/40 focus:border-copper focus:bg-canvas focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30 ${
               errors.name ? 'border-limitation bg-limitation/5' : 'border-line hover:border-copper/40'
             }`}
             placeholder="Advaita Chandra"
@@ -241,7 +250,8 @@ export default function ContactForm() {
             value={form.email}
             onChange={handleChange}
             autoComplete="email"
-            className={`block w-full border bg-canvas/70 px-3.5 py-2.5 font-sans text-sm text-text transition-all placeholder:text-text-3/40 focus:border-copper focus:bg-canvas focus:ring-1 focus:ring-copper/30 focus:outline-none ${
+            spellCheck={false}
+            className={`block w-full border bg-canvas/70 px-3.5 py-2.5 font-sans text-base sm:text-sm text-text transition-all placeholder:text-text-3/40 focus:border-copper focus:bg-canvas focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30 ${
               errors.email ? 'border-limitation bg-limitation/5' : 'border-line hover:border-copper/40'
             }`}
             placeholder="name@institution.edu"
@@ -283,7 +293,7 @@ export default function ContactForm() {
                 role="radio"
                 aria-checked={isSelected}
                 onClick={() => handleTopicSelect(t.value)}
-                className={`font-mono text-xs uppercase tracking-wider px-3 py-1.5 border transition-all duration-150 cursor-pointer ${
+                className={`font-mono text-xs uppercase tracking-wider px-3 py-1.5 border transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30 ${
                   isSelected
                     ? 'border-copper bg-copper/15 text-copper font-medium'
                     : 'border-line bg-surface/40 text-text-3 hover:border-copper/40 hover:text-text-2'
@@ -322,10 +332,12 @@ export default function ContactForm() {
           value={form.message}
           onChange={handleChange}
           rows={5}
-          className={`block w-full resize-y border bg-canvas/70 px-3.5 py-3 font-sans text-sm leading-relaxed text-text transition-all placeholder:text-text-3/40 focus:border-copper focus:bg-canvas focus:ring-1 focus:ring-copper/30 focus:outline-none ${
+          autoComplete="off"
+          spellCheck={true}
+          className={`block w-full resize-y border bg-canvas/70 px-3.5 py-3 font-sans text-base sm:text-sm leading-relaxed text-text transition-all placeholder:text-text-3/40 focus:border-copper focus:bg-canvas focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30 ${
             errors.message ? 'border-limitation bg-limitation/5' : 'border-line hover:border-copper/40'
           }`}
-          placeholder="Share your perspectives, research inquiries, recommended readings, or constructive critique..."
+          placeholder="Share your perspectives, research inquiries, recommended readings, or constructive critique…"
           aria-describedby={errors.message ? 'contact-message-error' : undefined}
           aria-invalid={errors.message ? 'true' : undefined}
         />
@@ -352,7 +364,7 @@ export default function ContactForm() {
         <button
           type="submit"
           disabled={status === 'submitting' || timeRemaining > 0}
-          className="group inline-flex items-center justify-center gap-2 border border-copper bg-copper px-6 py-2.5 font-mono text-xs uppercase tracking-widest font-semibold text-black transition-all duration-200 hover:bg-copper-strong hover:border-copper-strong active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+          className="group inline-flex items-center justify-center gap-2 border border-copper bg-copper px-6 py-2.5 font-mono text-xs uppercase tracking-widest font-semibold text-black transition-all duration-200 hover:bg-copper-strong hover:border-copper-strong active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
         >
           {status === 'submitting' ? (
             <>

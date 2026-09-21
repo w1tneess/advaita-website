@@ -169,12 +169,12 @@ CREATE POLICY "Authenticated users can manage contact submissions" ON public.con
       <div className="rounded-xl border border-[#242626] bg-[#121414] p-6 shadow-xl space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className={`p-3 rounded-lg border ${isRemote ? 'bg-emerald-950/30 border-emerald-900/50 text-emerald-400' : 'bg-[#181a1a] border-[#292a2a] text-[#D1B18A]'}`}>
+            <div className={`p-3 rounded-lg border ${isRemote ? 'bg-emerald-950/30 border-emerald-900/50 text-emerald-400' : 'bg-[#181716] border-[#2c2825] text-[#c2956a]'}`}>
               {isRemote ? <Cloud className="h-5 w-5" /> : <HardDrive className="h-5 w-5" />}
             </div>
             <div>
-              <h2 className="font-display text-base text-[#E8E6E1]">
-                Active Storage: <span className="text-[#D1B18A]">{isRemote ? 'Supabase Cloud Synced' : 'Local Browser Cache'}</span>
+              <h2 className="font-display text-base text-[#f2ede6]">
+                Active Storage: <span className="text-[#c2956a]">{isRemote ? 'Supabase Cloud Synced' : 'Local Browser Cache'}</span>
               </h2>
               <p className="font-mono text-xs text-neutral-400 mt-0.5">
                 {isRemote 
@@ -188,7 +188,7 @@ CREATE POLICY "Authenticated users can manage contact submissions" ON public.con
             <button
               onClick={handleManualSync}
               disabled={syncing}
-              className="inline-flex items-center gap-2 rounded-lg border border-[#D1B18A] bg-[#D1B18A]/10 px-4 py-2 text-xs font-mono tracking-wider uppercase text-[#D1B18A] hover:bg-[#D1B18A]/20 transition-all cursor-pointer disabled:opacity-40"
+              className="inline-flex items-center gap-2 rounded-lg border border-[#c2956a] bg-[#c2956a]/10 px-4 py-2 text-xs font-mono tracking-wider uppercase text-[#c2956a] hover:bg-[#c2956a]/20 transition-all cursor-pointer disabled:opacity-40"
             >
               <RefreshCw className={`h-3.5 w-3.5 ${syncing ? 'animate-spin' : ''}`} />
               <span>{syncing ? 'Syncing...' : 'Sync to Cloud'}</span>
@@ -207,14 +207,14 @@ CREATE POLICY "Authenticated users can manage contact submissions" ON public.con
             type="button"
             onClick={testConnection}
             disabled={testingHealth}
-            className="text-xs font-mono text-[#D1B18A] hover:underline flex items-center gap-1.5 cursor-pointer"
+            className="text-xs font-mono text-[#c2956a] hover:underline flex items-center gap-1.5 cursor-pointer"
           >
             <RefreshCw className={`h-3 w-3 ${testingHealth ? 'animate-spin' : ''}`} />
             Run Diagnostics
           </button>
         </div>
 
-        <div className="grid gap-4 rounded-xl border border-[#242626] bg-[#121414] p-5 sm:grid-cols-3 font-mono text-xs">
+        <div className="grid gap-4 rounded-xl border border-[#242220] bg-[#141312] p-5 sm:grid-cols-3 font-mono text-xs">
           <div>
             <p className="text-[10px] tracking-wider text-neutral-500 uppercase">Cloud Connection</p>
             <div className="mt-1.5 flex items-center gap-2">
@@ -225,8 +225,8 @@ CREATE POLICY "Authenticated users can manage contact submissions" ON public.con
                 </>
               ) : (
                 <>
-                  <AlertCircle className="h-4 w-4 text-[#D1B18A]" />
-                  <span className="text-[#D1B18A] font-medium">Offline / Local</span>
+                  <AlertCircle className="h-4 w-4 text-[#c2956a]" />
+                  <span className="text-[#c2956a] font-medium">Offline / Local</span>
                 </>
               )}
             </div>
@@ -235,7 +235,7 @@ CREATE POLICY "Authenticated users can manage contact submissions" ON public.con
 
           <div>
             <p className="text-[10px] tracking-wider text-neutral-500 uppercase">Database Tables</p>
-            <p className="mt-1.5 font-medium text-[#E8E6E1]">
+            <p className="mt-1.5 font-medium text-[#f2ede6]">
               site_content: <span className={health.tables.siteContent ? 'text-emerald-400' : 'text-neutral-500'}>{health.tables.siteContent ? 'Ready' : 'Not verified'}</span>
             </p>
             <p className="mt-0.5 text-[11px] text-neutral-400">
@@ -245,7 +245,7 @@ CREATE POLICY "Authenticated users can manage contact submissions" ON public.con
 
           <div>
             <p className="text-[10px] tracking-wider text-neutral-500 uppercase">Document Size</p>
-            <p className="mt-1.5 font-medium text-[#E8E6E1]">
+            <p className="mt-1.5 font-medium text-[#f2ede6]">
               {documentBytes > 0 ? `${Math.round(documentBytes / 1024)} KB` : '—'}
             </p>
             <p className="mt-0.5 text-[11px] text-neutral-400">Schema Version v{content?.schemaVersion ?? '—'}</p>
@@ -253,12 +253,12 @@ CREATE POLICY "Authenticated users can manage contact submissions" ON public.con
         </div>
 
         {/* Copy Schema SQL Button */}
-        <div className="mt-3 flex items-center justify-between p-3.5 rounded-lg border border-[#242626] bg-[#141616] text-xs font-mono">
+        <div className="mt-3 flex items-center justify-between p-3.5 rounded-lg border border-[#242220] bg-[#161514] text-xs font-mono">
           <span className="text-neutral-400">Setting up a new Supabase project? Copy the ready SQL schema:</span>
           <button
             type="button"
             onClick={handleCopySchemaSql}
-            className="inline-flex items-center gap-1.5 text-xs text-[#D1B18A] hover:underline cursor-pointer ml-3 shrink-0"
+            className="inline-flex items-center gap-1.5 text-xs text-[#c2956a] hover:underline cursor-pointer ml-3 shrink-0"
           >
             {copiedSql ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
             <span>{copiedSql ? 'Copied!' : 'Copy SQL Script'}</span>
@@ -293,9 +293,9 @@ CREATE POLICY "Authenticated users can manage contact submissions" ON public.con
         <div className="mt-4 flex flex-wrap items-center gap-4">
           <label
             htmlFor="content-import"
-            className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-[#242626] bg-[#141616] px-4 py-2.5 text-xs font-mono text-neutral-300 hover:border-[#D1B18A] hover:text-[#E8E6E1] transition-colors"
+            className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-[#242220] bg-[#161514] px-4 py-2.5 text-xs font-mono text-neutral-300 hover:border-[#c2956a] hover:text-[#f2ede6] transition-colors"
           >
-            <Upload className="h-4 w-4 text-[#D1B18A]" aria-hidden="true" />
+            <Upload className="h-4 w-4 text-[#c2956a]" aria-hidden="true" />
             Select JSON File
           </label>
           <input

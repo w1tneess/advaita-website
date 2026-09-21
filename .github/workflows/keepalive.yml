@@ -1,0 +1,35 @@
+name: Supabase Keepalive
+
+on:
+  schedule:
+    # Twice a week: Sunday and Wednesday at 3:00 AM UTC
+    - cron: '0 3 * * 0,3'
+  workflow_dispatch:
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase Database
+        env:
+          SUPABASE_URL: https://efpnrcwxvsvhlxqmvput.supabase.co
+          SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVmcG5yY3d4dnN2aGx4cW12cHV0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc2NTY2ODEsImV4cCI6MjEwMzIzMjY4MX0.lTAG1di8VWD0MeRP1U2ZQKHzdDkzvW-RBrjD2I-_VRI
+        run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_ANON_KEY" ]; then
+            echo "Error: SUPABASE_URL or SUPABASE_ANON_KEY is not set in repository secrets."
+            exit 1
+          fi
+
+          echo "Making authenticated query to Supabase REST API to prevent free-tier pause..."
+          
+          # We query the contact_submissions table with limit=1 to make a real DB hit
+          response=$(curl -w "%{http_code}" -s -o /dev/null -X GET "$SUPABASE_URL/rest/v1/contact_submissions?select=id&limit=1" \
+            -H "apikey: $SUPABASE_ANON_KEY" \
+            -H "Authorization: Bearer $SUPABASE_ANON_KEY")
+          
+          if [ "$response" -eq 200 ] || [ "$response" -eq 206 ]; then
+            echo "Success! Supabase project is active. (HTTP $response)"
+          else
+            echo "Failed to ping Supabase. HTTP Status: $response"
+            exit 1
+          fi

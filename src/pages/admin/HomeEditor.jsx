@@ -1,3 +1,4 @@
+import { ExternalLink } from 'lucide-react'
 import { useSaveShortcut } from '../../hooks/useSaveShortcut.js'
 import AdminPage from '../../components/admin/AdminPage.jsx'
 import Field from '../../components/admin/Field.jsx'
@@ -18,10 +19,13 @@ import { validateHome } from '../../lib/schema.js'
  * edited beside a reminder of what it may and may not say.
  */
 
-const DESTINATIONS = NAV_ITEMS.map((item) => ({
-  value: item.path,
-  label: `${item.label} (${item.path})`,
-}))
+const DESTINATIONS = [
+  ...NAV_ITEMS.map((item) => ({
+    value: item.path,
+    label: `${item.label} (${item.path})`,
+  })),
+  { value: '#inquiries', label: 'Reading Archive (#inquiries)' },
+]
 
 function CtaFields({ id, legend, cta, onChange, hint }) {
   return (
@@ -60,6 +64,12 @@ export default function HomeEditor() {
     <AdminPage
       title="Home page"
       description="The hero, the section headings and the credibility statement on the front page."
+      actions={
+        <Button to="/" target="_blank" variant="secondary" size="sm" className="gap-1.5 font-mono text-xs">
+          <ExternalLink className="h-3.5 w-3.5" />
+          <span>Preview Live Site</span>
+        </Button>
+      }
     >
       <form onSubmit={submit} noValidate>
         <Card className="p-6">

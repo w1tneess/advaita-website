@@ -45,12 +45,14 @@ export default function Lightbox({ photos, index, onClose, onChange }) {
   
   // Controls auto-hide state
   const [showControls, setShowControls] = useState(true)
+  const [hasImageError, setHasImageError] = useState(false)
   const idleTimer = useRef(null)
 
   // Sync internal page with external index changes
   useEffect(() => {
     if (isOpen && index !== page) {
       setPage([index, index > page ? 1 : -1])
+      setHasImageError(false)
     }
   }, [index, isOpen, page])
 
@@ -148,7 +150,7 @@ export default function Lightbox({ photos, index, onClose, onChange }) {
             onClick={onClose}
             variants={controlsVariants}
             animate={showControls ? 'visible' : 'hidden'}
-            className="absolute right-3 top-3 z-50 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-md transition-all hover:scale-105 hover:bg-white/20 md:right-8 md:top-8"
+            className="absolute right-3 top-[max(0.75rem,env(safe-area-inset-top))] z-50 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-md transition-all hover:scale-105 hover:bg-white/20 md:right-8 md:top-8 cursor-pointer active:scale-95"
             aria-label="Close lightbox"
           >
             <X className="h-5 w-5 sm:h-6 sm:w-6" />
@@ -157,33 +159,40 @@ export default function Lightbox({ photos, index, onClose, onChange }) {
           {/* Slider Container */}
           <div className="relative flex h-full w-full items-center justify-center p-4 md:p-12">
             <AnimatePresence initial={false} custom={direction}>
-              <motion.img
-                key={page}
-                {...getOptimizedImageProps(photo.image_url, photo.variants)}
-                alt={photo.alt_text || photo.title || 'Photograph by Advaita Chandra'}
-                custom={direction}
-                variants={variants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{
-                  x: { type: "spring", stiffness: 300, damping: 30 },
-                  opacity: { duration: 0.2 }
-                }}
-                drag="x"
-                dragConstraints={{ left: 0, right: 0 }}
-                dragElastic={1}
-                onDragEnd={(e, { offset, velocity }) => {
-                  const swipe = swipePower(offset.x, velocity.x);
+              {hasImageError ? (
+                <div key={`err-${page}`} className="flex flex-col items-center justify-center p-8 text-center text-white/60 font-mono text-xs">
+                  <p>Image temporarily unavailable</p>
+                </div>
+              ) : (
+                <motion.img
+                  key={page}
+                  {...getOptimizedImageProps(photo.image_url, photo.variants)}
+                  alt={photo.alt_text || photo.title || 'Photograph by Advaita Chandra'}
+                  onError={() => setHasImageError(true)}
+                  custom={direction}
+                  variants={variants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={{
+                    x: { type: "spring", stiffness: 300, damping: 30 },
+                    opacity: { duration: 0.2 }
+                  }}
+                  drag="x"
+                  dragConstraints={{ left: 0, right: 0 }}
+                  dragElastic={1}
+                  onDragEnd={(e, { offset, velocity }) => {
+                    const swipe = swipePower(offset.x, velocity.x);
 
-                  if (swipe < -swipeConfidenceThreshold) {
-                    goNext();
-                  } else if (swipe > swipeConfidenceThreshold) {
-                    goPrev();
-                  }
-                }}
-                className="absolute max-h-full max-w-full cursor-grab object-contain active:cursor-grabbing"
-              />
+                    if (swipe < -swipeConfidenceThreshold) {
+                      goNext();
+                    } else if (swipe > swipeConfidenceThreshold) {
+                      goPrev();
+                    }
+                  }}
+                  className="absolute max-h-full max-w-full cursor-grab object-contain active:cursor-grabbing"
+                />
+              )}
             </AnimatePresence>
           </div>
 

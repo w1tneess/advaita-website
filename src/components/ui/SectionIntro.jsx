@@ -1,4 +1,4 @@
-import Reveal from "./Reveal"
+
 
 /**
  * Section heading. One optional eyebrow word, a confident serif heading, and
@@ -12,19 +12,19 @@ export default function SectionIntro({
 	id,
 }) {
 	return (
-		<Reveal className={`max-w-[46rem] ${className}`}>
-			{eyebrow ? <p className="eyebrow">{eyebrow}</p> : null}
+		<div className={`max-w-[46rem] ${className}`}>
+			{eyebrow ? <p className="text-sm font-medium text-muted">{eyebrow}</p> : null}
 			<h2
 				id={id}
-				className={`text-h2 ${eyebrow ? "mt-3" : ""} text-text`}
+				className={`text-2xl sm:text-3xl font-semibold text-ink ${eyebrow ? "mt-3" : ""}`}
 			>
 				{title}
 			</h2>
 			{lead ? (
-				<p className="mt-4 max-w-[40rem] text-lead leading-relaxed text-text-2">
+				<p className="mt-4 max-w-[40rem] text-lg leading-relaxed text-muted">
 					{lead}
 				</p>
 			) : null}
-		</Reveal>
+		</div>
 	)
 }

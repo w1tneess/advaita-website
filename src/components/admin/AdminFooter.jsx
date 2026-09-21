@@ -6,7 +6,7 @@ export default function AdminFooter() {
   const { isRemote } = useContent()
 
   return (
-    <footer className="w-full shrink-0 h-9 sm:h-10 border-t border-[#242626] bg-[#0c0d0d] px-4 sm:px-6 flex items-center justify-between text-[11px] font-mono text-neutral-400 z-10 select-none">
+    <footer className="w-full shrink-0 h-9 sm:h-10 border-t border-[#242220] bg-[#0c0b0a] px-4 sm:px-6 flex items-center justify-between text-[11px] font-mono text-neutral-400 z-10 select-none">
       {/* Left Gateway & Sync Status */}
       <div className="flex items-center gap-3">
         <span className="flex items-center gap-1.5 text-neutral-400">
@@ -30,18 +30,18 @@ export default function AdminFooter() {
 
       {/* Center Shortcuts */}
       <div className="hidden md:flex items-center gap-3 text-neutral-400">
-        <Link to="/admin/settings" className="hover:text-[#D1B18A] transition-colors flex items-center gap-1">
-          <Settings className="h-3 w-3 text-[#D1B18A]" />
+        <Link to="/admin/settings" className="hover:text-[#c2956a] transition-colors flex items-center gap-1">
+          <Settings className="h-3 w-3 text-[#c2956a]" />
           Settings
         </Link>
         <span className="text-neutral-700">•</span>
-        <Link to="/admin/data" className="hover:text-[#D1B18A] transition-colors flex items-center gap-1">
-          <Database className="h-3 w-3 text-[#D1B18A]" />
+        <Link to="/admin/data" className="hover:text-[#c2956a] transition-colors flex items-center gap-1">
+          <Database className="h-3 w-3 text-[#c2956a]" />
           Sync &amp; Backups
         </Link>
         <span className="text-neutral-700">•</span>
-        <a href="/" target="_blank" rel="noopener noreferrer" className="hover:text-[#E8E6E1] transition-colors flex items-center gap-1">
-          <ExternalLink className="h-3 w-3 text-[#D1B18A]" />
+        <a href="/" target="_blank" rel="noopener noreferrer" className="hover:text-[#f2ede6] transition-colors flex items-center gap-1">
+          <ExternalLink className="h-3 w-3 text-[#c2956a]" />
           Public Site
         </a>
       </div>

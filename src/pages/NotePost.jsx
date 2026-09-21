@@ -33,31 +33,31 @@ export default function NotePost() {
         <div className="mb-8">
           <Link
             to="/philosophy"
-            className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-text-3 hover:text-copper transition-colors"
+            className="inline-flex items-center gap-2 font-utility text-muted hover:text-ink transition-colors"
           >
-            <ArrowLeft className="h-3.5 w-3.5" />
-            <span>Return to Philosophy &amp; Notes</span>
+            <ArrowLeft className="h-4 w-4" />
+            <span>Return to Philosophy</span>
           </Link>
         </div>
 
         <header className="border-b border-line pb-10 mb-10">
-          <div className="flex flex-wrap items-center gap-3 font-mono text-xs mb-4">
-            <time dateTime={note.published_at} className="text-copper">
+          <div className="flex flex-wrap items-center gap-3 font-utility text-muted mb-4">
+            <time dateTime={note.published_at} className="text-ink">
               {formatDate(note.published_at)}
             </time>
-            <span className="text-line-strong">|</span>
-            <span className="border border-line bg-surface px-2.5 py-0.5 text-[10px] uppercase tracking-wider text-text-2">
+            <span>|</span>
+            <span className="border border-line bg-surface px-2.5 py-0.5 text-ink">
               {note.category || 'Reading Note'}
             </span>
           </div>
 
-          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl text-text font-normal tracking-tight leading-[1.1]">
+          <h1 className="font-display text-4xl sm:text-5xl text-ink font-normal leading-[1.1]">
             {note.title}
           </h1>
 
           {note.excerpt && (
-            <div className="mt-6 border-l-2 border-copper pl-6 py-1">
-              <p className="font-display text-xl sm:text-2xl text-text-2/95 font-light italic leading-relaxed">
+            <div className="mt-6 border-l border-ink pl-6 py-1">
+              <p className="font-sans text-xl sm:text-2xl text-muted italic leading-relaxed">
                 {note.excerpt}
               </p>
             </div>
@@ -65,22 +65,22 @@ export default function NotePost() {
         </header>
 
         {/* Content Body */}
-        <div className="prose-body whitespace-pre-wrap text-base sm:text-lg leading-relaxed text-text-2 font-light space-y-6">
+        <div className="prose-body whitespace-pre-wrap text-base sm:text-lg font-sans leading-relaxed text-ink space-y-6">
           {note.content}
         </div>
 
         {/* Colophon & Share Registry */}
-        <div className="mt-16 border-t border-line pt-8 space-y-6 font-mono text-xs">
+        <div className="mt-16 border-t border-line pt-8 space-y-6 font-utility">
           <div className="flex flex-wrap items-center justify-between gap-4">
-            <span className="text-text-3 uppercase tracking-wider">
+            <span className="text-muted">
               PHILOSOPHICAL CITATION
             </span>
             <CopyButton
-              getText={() => window.location.href}
+              getText={() => (typeof window !== 'undefined' ? window.location.href : `https://advaitachandra.in/philosophy/${note.slug}`)}
               label="Copy Note URL"
               copiedLabel="URL Copied!"
               showText={true}
-              className="py-1 px-3 text-xs font-mono border border-line bg-surface hover:border-copper/60 hover:text-copper"
+              className="py-1 px-3 border border-line bg-surface text-muted hover:text-ink"
             />
           </div>
 

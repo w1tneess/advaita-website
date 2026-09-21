@@ -1,9 +1,6 @@
 import { ArrowRight, ArrowUpRight } from 'lucide-react'
 import { Link } from 'react-router'
 import PageHeader from '@/components/ui/PageHeader.jsx'
-import Reveal from '@/components/ui/Reveal.jsx'
-import InterestCard from '@/components/features/InterestCard.jsx'
-import StatusBadge from '@/components/ui/StatusBadge.jsx'
 import Seo from '@/components/meta/Seo.jsx'
 import { useContent } from '@/lib/content.jsx'
 import { PUBLIC_ROUTES } from '@/config/nav.js'
@@ -28,385 +25,347 @@ export default function About() {
           "Advaita Chandra is a student from West Bengal, India. This is his personal website for projects, reading notes, and learning logs."
         }
       >
-        <div className="flex flex-wrap items-center gap-3 font-mono text-xs text-text-3">
-          <span className="text-copper">ROLE //</span>
+        <div className="flex flex-wrap items-center gap-3 font-utility text-muted">
+          <span className="text-ink">Role:</span>
           {profile.roles?.map((role) => (
             <span
               key={role}
-              className="border border-line bg-surface px-2.5 py-0.5 text-[11px] text-text font-medium"
+              className="px-2 py-0.5 bg-surface text-ink"
             >
               {role}
             </span>
           )) || (
-            <span className="border border-line bg-surface px-2.5 py-0.5 text-[11px] text-text font-medium">
+            <span className="px-2 py-0.5 bg-surface text-ink">
               Student
             </span>
           )}
-          <span className="text-line-strong">|</span>
-          <span className="text-copper font-medium">
-            LOCATION: {profile.location ? profile.location.toUpperCase() : 'WEST BENGAL, INDIA'}
+          <span className="text-line">|</span>
+          <span className="text-ink">
+            Location: {profile.location ? profile.location : 'West Bengal, India'}
           </span>
         </div>
       </PageHeader>
 
-      <div className="shell pb-24 md:pb-32 space-y-20 md:space-y-28">
-        {/* 1. Official Verification & Central Identity Card */}
-        <Reveal y={12}>
-          <section className="border border-copper/40 bg-surface/60 p-6 sm:p-8 lg:p-10 relative overflow-hidden">
-            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-line pb-4 mb-6">
-              <div className="flex items-center gap-2.5 font-mono text-xs text-copper tracking-wider uppercase">
-                <span className="h-2 w-2 rounded-full bg-copper animate-pulse" />
-                <span>Central Source of Truth</span>
-              </div>
-              <span className="font-mono text-[11px] text-text-3 tracking-wider">
-                CANONICAL DOMAIN: ADVAITACHANDRA.IN
-              </span>
-            </div>
-
-            <div className="grid gap-8 lg:grid-cols-12 items-start">
-              <div className="lg:col-span-7 space-y-4">
-                <h2 className="font-display text-2xl sm:text-3xl text-text font-normal leading-snug">
-                  This is the official website of Advaita Chandra.
-                </h2>
-                <p className="text-sm sm:text-base text-text-2 font-light leading-relaxed">
+      <div className="shell pb-[clamp(2.5rem,5vw,4.5rem)] space-y-[clamp(2.5rem,5vw,4.5rem)]">
+        <section className="border-t border-line pt-[clamp(1.5rem,3vw,2.5rem)]">
+          <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-[clamp(1.5rem,3vw,2.5rem)] items-start">
+            <div className="space-y-3">
+              <h2 className="text-xl sm:text-2xl font-normal text-ink leading-snug text-balance">
+                This is the official website of Advaita Chandra.
+              </h2>
+              <div className="space-y-3 text-sm sm:text-base text-muted leading-relaxed max-w-prose font-sans">
+                <p>
                   I'm Advaita Chandra, a student based in West Bengal, India. This site is where I keep the things I'm working on: projects, reading notes, photography, and questions I haven't fully worked out yet.
                 </p>
-                <p className="text-sm sm:text-base text-text-2 font-light leading-relaxed">
+                <p>
                   Most of what I read and think about falls under philosophy, history, and computer systems, with psychology, politics, public policy, and cybersecurity mixed in. Some of it turns into actual projects, like a worksheet generator I built for teachers, or a data visualization on terrorism in India. Most of it just stays as notes.
                 </p>
-                <p className="text-sm sm:text-base text-text-2 font-light leading-relaxed">
+                <p>
                   This isn't a professional publication or a portfolio built to impress anyone. It's closer to a public notebook. I'm not an expert in any of this. I'm just someone who reads a lot and likes building things, and this is where that ends up.
                 </p>
               </div>
-
-              <div className="lg:col-span-5 bg-canvas/80 border border-line p-5 space-y-4 font-mono text-xs">
-                <div className="text-[11px] text-copper uppercase tracking-wider font-semibold border-b border-line/60 pb-2.5 flex items-center justify-between">
-                  <span>Verified Profiles</span>
-                  <span className="text-[10px] text-text-3 font-normal">AUTHENTIC LINKS</span>
-                </div>
-                <ul className="space-y-3">
-                  <li className="flex items-center justify-between gap-2 border-b border-line/30 pb-2">
-                    <span className="text-text-3">Website:</span>
-                    <a
-                      href="https://advaitachandra.in/"
-                      className="text-text hover:text-copper transition-colors inline-flex items-center gap-1 font-medium"
-                    >
-                      <span>advaitachandra.in</span>
-                      <ArrowUpRight className="h-3 w-3 text-copper" />
-                    </a>
-                  </li>
-                  <li className="flex items-center justify-between gap-2 border-b border-line/30 pb-2">
-                    <span className="text-text-3">GitHub:</span>
-                    <a
-                      href="https://github.com/w1tneess"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-text hover:text-copper transition-colors inline-flex items-center gap-1 font-medium"
-                    >
-                      <span>github.com/w1tneess</span>
-                      <ArrowUpRight className="h-3 w-3 text-copper" />
-                    </a>
-                  </li>
-                  <li className="flex items-center justify-between gap-2 border-b border-line/30 pb-2">
-                    <span className="text-text-3">X (Twitter):</span>
-                    <a
-                      href="https://x.com/w1tneess_"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-text hover:text-copper transition-colors inline-flex items-center gap-1 font-medium"
-                    >
-                      <span>x.com/w1tneess_</span>
-                      <ArrowUpRight className="h-3 w-3 text-copper" />
-                    </a>
-                  </li>
-                  <li className="flex items-center justify-between gap-2 border-b border-line/30 pb-2">
-                    <span className="text-text-3">Instagram:</span>
-                    <a
-                      href="https://www.instagram.com/adva1ta_/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-text hover:text-copper transition-colors inline-flex items-center gap-1 font-medium"
-                    >
-                      <span>instagram.com/adva1ta_</span>
-                      <ArrowUpRight className="h-3 w-3 text-copper" />
-                    </a>
-                  </li>
-                  <li className="flex items-center justify-between gap-2">
-                    <span className="text-text-3">Email:</span>
-                    <a
-                      href="mailto:hi@advaitachandra.in"
-                      className="text-text hover:text-copper transition-colors font-medium"
-                    >
-                      hi@advaitachandra.in
-                    </a>
-                  </li>
-                </ul>
-              </div>
             </div>
-          </section>
-        </Reveal>
 
-        {/* 2. Guiding Epistemic Principle */}
-        {profile.epistemicNote && (
-          <Reveal y={12}>
-            <section className="border-l-2 border-copper bg-surface/50 p-6 sm:p-10">
-              <div className="font-mono text-[11px] text-copper tracking-widest uppercase mb-3">
-                GUIDING PRINCIPLE
-              </div>
-              <p className="font-display text-xl sm:text-2xl text-text font-light italic leading-relaxed">
-                &ldquo;{profile.epistemicNote}&rdquo;
-              </p>
-            </section>
-          </Reveal>
-        )}
-
-        {/* 3. Current Projects & Practical Applications */}
-        {publicProjects?.length > 0 && (
-          <section>
-            <Reveal y={12}>
-              <div className="flex items-center justify-between border-b border-line pb-4 mb-8">
-                <div>
-                  <span className="font-mono text-xs text-copper uppercase tracking-wider block">
-                    PROJECTS &amp; SYSTEMS
-                  </span>
-                  <h2 className="font-display text-2xl sm:text-3xl text-text font-normal mt-1">
-                    Current Projects
-                  </h2>
-                </div>
-                <Link
-                  to="/projects"
-                  className="font-mono text-xs text-copper hover:underline transition-colors flex items-center gap-1"
-                >
-                  <span>All Projects ({publicProjects.length})</span>
-                  <ArrowRight className="h-3.5 w-3.5" />
-                </Link>
-              </div>
-
-              <div className="grid gap-6 md:grid-cols-2">
-                {publicProjects.map((project) => (
-                  <div
-                    key={project.id}
-                    className="border border-line bg-surface p-6 sm:p-7 flex flex-col justify-between"
+            <div className="pt-6 border-t border-line lg:border-t-0 lg:pt-0 lg:pl-8 lg:border-l space-y-4">
+              <h3 className="font-mono text-xs uppercase tracking-wider text-ink border-b border-line pb-3">
+                Verified Profiles
+              </h3>
+              <ul className="space-y-3 font-mono text-xs tracking-wide">
+                <li className="flex items-center justify-between gap-4 border-b border-line pb-3">
+                  <span className="text-muted">Website:</span>
+                  <a
+                    href="https://advaitachandra.in/"
+                    className="text-ink hover:text-accent transition-colors inline-flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm"
                   >
-                    <div>
-                      <div className="flex items-center justify-between gap-2 mb-3">
-                        <span className="font-mono text-[11px] text-copper uppercase tracking-wider">
-                          {project.categories?.join(' // ') || 'Project'}
-                        </span>
-                        <span className="font-mono text-[10px] text-text-3 border border-line px-2 py-0.5 uppercase">
-                          {project.status}
-                        </span>
-                      </div>
-                      <h3 className="font-display text-xl text-text font-normal mb-2.5">
-                        {project.title}
-                      </h3>
-                      <p className="text-xs sm:text-sm text-text-2 font-light leading-relaxed mb-6 line-clamp-3">
-                        {project.description}
-                      </p>
-                    </div>
-
-                    <div className="pt-4 border-t border-line flex items-center justify-between text-xs font-mono">
-                      <span className="text-text-3 truncate max-w-[220px]">
-                        {project.tools?.join(', ')}
-                      </span>
-                      <Link
-                        to="/projects"
-                        className="text-copper hover:underline inline-flex items-center gap-1 font-medium"
-                      >
-                        <span>View project</span>
-                        <ArrowRight className="h-3 w-3" />
-                      </Link>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </Reveal>
-          </section>
-        )}
-
-        {/* 4. Technical Toolkit & Skills */}
-        {settings?.showSkills && skillGroups?.length > 0 && (
-          <section>
-            <Reveal y={12}>
-              <div className="flex items-center justify-between border-b border-line pb-4 mb-8">
-                <div>
-                  <span className="font-mono text-xs text-copper uppercase tracking-wider block">
-                    SKILLS &amp; TOOLS
-                  </span>
-                  <h2 className="font-display text-2xl sm:text-3xl text-text font-normal mt-1">
-                    Technologies &amp; Developer Toolkit
-                  </h2>
-                </div>
-                <span className="hidden sm:inline-block font-mono text-[11px] text-text-3">
-                  ACCURATE, EVIDENCE-BASED RATINGS
-                </span>
-              </div>
-
-              <div className="grid gap-6 lg:grid-cols-2">
-                {skillGroups.map((group) => (
-                  <div key={group.name} className="border border-line bg-surface p-6 sm:p-8">
-                    <h3 className="font-mono text-xs font-semibold tracking-wider text-copper uppercase mb-5 pb-3 border-b border-line">
-                      {group.name}
-                    </h3>
-                    <ul className="space-y-4">
-                      {group.items?.map((skill) => {
-                        const project = evidenceFor(skill.evidence)
-                        return (
-                          <li
-                            key={skill.id}
-                            className="flex items-start justify-between gap-3 border-b border-line/30 pb-3 last:border-b-0 last:pb-0"
-                          >
-                            <div className="min-w-0 flex-1">
-                              <div className="flex flex-wrap items-center gap-2">
-                                <span className="text-sm font-medium text-text">{skill.name}</span>
-                                <StatusBadge kind="skill" value={skill.level} />
-                              </div>
-                              {skill.note && (
-                                <p className="mt-1 text-xs leading-relaxed text-text-2 font-light">{skill.note}</p>
-                              )}
-                              {project && (
-                                <Link
-                                  to={`/projects`}
-                                  className="mt-1.5 inline-block font-mono text-[11px] text-copper hover:underline transition-colors"
-                                >
-                                  Related Project: {project.title} &rarr;
-                                </Link>
-                              )}
-                            </div>
-                          </li>
-                        )
-                      })}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-            </Reveal>
-          </section>
-        )}
-
-        {/* 5. Areas of Study / Education & Learning Interests */}
-        <section>
-          <Reveal y={12}>
-            <div className="flex items-center justify-between border-b border-line pb-4 mb-8">
-              <div>
-                <span className="font-mono text-xs text-copper uppercase tracking-wider block">
-                  AREAS OF STUDY
-                </span>
-                <h2 className="font-display text-2xl sm:text-3xl text-text font-normal mt-1">
-                  Education &amp; Learning Interests
-                </h2>
-              </div>
-              <span className="font-mono text-xs text-text-3">
-                {interests?.length} TOPICS
-              </span>
+                    <span>advaitachandra.in</span>
+                    <ArrowUpRight className="h-3 w-3" />
+                  </a>
+                </li>
+                <li className="flex items-center justify-between gap-4 border-b border-line pb-3">
+                  <span className="text-muted">GitHub:</span>
+                  <a
+                    href="https://github.com/w1tneess"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-ink hover:text-accent transition-colors inline-flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm"
+                  >
+                    <span>github.com/w1tneess</span>
+                    <ArrowUpRight className="h-3 w-3" />
+                  </a>
+                </li>
+                <li className="flex items-center justify-between gap-4 border-b border-line pb-3">
+                  <span className="text-muted">X (Twitter):</span>
+                  <a
+                    href="https://x.com/w1tneess_"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-ink hover:text-accent transition-colors inline-flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm"
+                  >
+                    <span>x.com/w1tneess_</span>
+                    <ArrowUpRight className="h-3 w-3" />
+                  </a>
+                </li>
+                <li className="flex items-center justify-between gap-4 border-b border-line pb-3">
+                  <span className="text-muted">Instagram:</span>
+                  <a
+                    href="https://www.instagram.com/adva1ta_/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-ink hover:text-accent transition-colors inline-flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm"
+                  >
+                    <span>instagram.com/adva1ta_</span>
+                    <ArrowUpRight className="h-3 w-3" />
+                  </a>
+                </li>
+                <li className="flex items-center justify-between gap-4 pt-1">
+                  <span className="text-muted">Email:</span>
+                  <a
+                    href="mailto:hi@advaitachandra.in"
+                    className="text-ink hover:text-accent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm"
+                  >
+                    hi@advaitachandra.in
+                  </a>
+                </li>
+              </ul>
             </div>
-
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {interests?.map((interest, idx) => (
-                <InterestCard key={interest.id || idx} interest={interest} index={idx} />
-              ))}
-            </div>
-          </Reveal>
+          </div>
         </section>
 
-        {/* 6. Timeline / Learning Milestones */}
-        {settings?.showTimeline && timeline?.length > 0 && (
-          <section>
-            <Reveal y={12}>
-              <div className="flex items-center justify-between border-b border-line pb-4 mb-8">
-                <div>
-                  <span className="font-mono text-xs text-copper uppercase tracking-wider block">
-                    TIMELINE
-                  </span>
-                  <h2 className="font-display text-2xl sm:text-3xl text-text font-normal mt-1">
-                    Learning Milestones
-                  </h2>
-                </div>
-              </div>
-
-              <div className="border-l border-line pl-6 sm:pl-8 space-y-10">
-                {timeline.map((item) => (
-                  <div key={item.id} className="relative">
-                    <span
-                      className="absolute -left-[calc(1.5rem+4.5px)] sm:-left-[calc(2rem+4.5px)] top-1.5 h-2 w-2 rounded-full bg-copper"
-                      aria-hidden="true"
-                    />
-                    <span className="font-mono text-[11px] text-copper uppercase tracking-widest block mb-1">
-                      {item.period}
-                    </span>
-                    <h3 className="font-display text-lg sm:text-xl text-text font-normal">
-                      {item.title}
-                    </h3>
-                    {item.detail && (
-                      <p className="mt-2 text-sm text-text-2 font-light leading-relaxed max-w-2xl">
-                        {item.detail}
-                      </p>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </Reveal>
+        {profile.epistemicNote && (
+          <section className="border-l-2 border-accent/60 pl-4 py-1.5">
+            <div className="font-mono text-xs text-accent mb-2 tracking-wider uppercase">
+              Guiding Principle
+            </div>
+            <p className="text-base sm:text-lg text-muted italic leading-relaxed max-w-3xl font-display text-balance">
+              &ldquo;{profile.epistemicNote}&rdquo;
+            </p>
           </section>
         )}
 
-        {/* 7. Limitations & Transparency Notice */}
-        <section>
-          <Reveal y={12}>
-            <div className="grid gap-6 md:grid-cols-2">
-              <div className="border border-line bg-surface p-6 sm:p-8">
-                <div className="font-mono text-[11px] text-copper tracking-widest uppercase mb-3">
-                  HOW TO READ THIS SITE
-                </div>
-                <h3 className="font-display text-xl text-text font-normal mb-4">
-                  Honesty &amp; Limitations
-                </h3>
-                <ul className="space-y-3 font-mono text-xs text-text-2">
-                  <li className="flex items-start gap-2.5">
-                    <span className="text-copper">01/</span>
-                    <span>Independent student work: These notes reflect my ongoing learning and are not formal academic publications.</span>
-                  </li>
-                  <li className="flex items-start gap-2.5">
-                    <span className="text-copper">02/</span>
-                    <span>Preserving disagreements: When primary sources conflict, differing accounts are recorded side by side rather than forced into a single claim.</span>
-                  </li>
-                  <li className="flex items-start gap-2.5">
-                    <span className="text-copper">03/</span>
-                    <span>Open to feedback: Code, datasets, and essays are shared openly so others can spot mistakes and suggest improvements.</span>
-                  </li>
-                </ul>
+        {publicProjects?.length > 0 && (
+          <section>
+            <div className="flex items-center justify-between border-b border-line pb-3 mb-4">
+              <div>
+                <span className="font-mono text-xs text-muted block mb-1 tracking-wider uppercase">
+                  Projects &amp; Systems
+                </span>
+                <h2 className="text-xl sm:text-2xl text-ink font-normal">
+                  Current Projects
+                </h2>
               </div>
+              <Link
+                to="/projects"
+                className="font-mono text-xs text-ink hover:text-accent transition-colors flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm"
+              >
+                <span>All Projects ({publicProjects.length})</span>
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </div>
 
-              <div className="border border-line bg-surface p-6 sm:p-8 flex flex-col justify-between">
-                <div>
-                  <div className="font-mono text-[11px] text-copper tracking-widest uppercase mb-3">
-                    FEEDBACK &amp; DIALOGUE
+            <div className="divide-y divide-line border-t border-b border-line">
+              {publicProjects.map((project) => (
+                <div
+                  key={project.id}
+                  className="py-4 sm:py-5 grid gap-2 sm:gap-4 sm:grid-cols-[1fr_2.5fr] items-baseline group"
+                >
+                  <div className="font-mono text-xs tracking-wider uppercase text-muted">
+                    {project.categories?.join(' / ') || 'Project'}
                   </div>
-                  <h3 className="font-display text-xl text-text font-normal mb-4">
-                    Get in Touch
+                  <div>
+                    <h3 className="text-base sm:text-lg font-normal text-ink mb-1.5 group-hover:text-accent transition-colors text-balance">
+                      <Link to="/projects" className="inline-flex items-baseline gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm">
+                        <span>{project.title}</span>
+                        <ArrowUpRight className="h-3.5 w-3.5 opacity-50 group-hover:opacity-100 transition-opacity" />
+                      </Link>
+                    </h3>
+                    <p className="text-xs sm:text-sm text-muted leading-relaxed mb-3">
+                      {project.description}
+                    </p>
+                    <div className="flex items-center justify-between font-mono text-xs tracking-wide">
+                      <span className="text-muted">
+                        {project.tools?.join(', ')}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {settings?.showSkills && skillGroups?.length > 0 && (
+          <section className="pt-6 border-t border-line">
+            <div className="flex items-center justify-between border-b border-line pb-3 mb-4">
+              <h2 className="text-xl sm:text-2xl font-normal text-ink">
+                Technologies &amp; Toolkit
+              </h2>
+            </div>
+
+            <div className="grid gap-6 lg:grid-cols-2">
+              {skillGroups.map((group) => (
+                <div key={group.name} className="space-y-4">
+                  <h3 className="font-mono text-xs uppercase tracking-wider text-ink border-b border-line pb-2">
+                    {group.name}
                   </h3>
-                  <p className="text-sm text-text-2 font-light leading-relaxed">
-                    If you notice a factual error, a missing citation, or an incomplete dataset, please send a note. Constructive corrections and thoughtful conversations are always welcome.
+                  <ul className="space-y-4">
+                    {group.items?.map((skill) => {
+                      const project = evidenceFor(skill.evidence)
+                      return (
+                        <li
+                          key={skill.id}
+                          className="flex items-start justify-between gap-4"
+                        >
+                          <div className="min-w-0 flex-1">
+                            <div className="flex flex-wrap items-center gap-2.5 font-sans">
+                              <span className="text-ink text-sm sm:text-base">{skill.name}</span>
+                              <span className="text-[11px] font-mono text-muted px-1.5 py-0.5 border border-line rounded">
+                                {skill.level}
+                              </span>
+                            </div>
+                            {skill.note && (
+                              <p className="mt-1 text-xs sm:text-sm leading-relaxed text-muted">{skill.note}</p>
+                            )}
+                            {project && (
+                              <Link
+                                to={`/projects`}
+                                className="mt-1.5 inline-flex items-center gap-1 font-mono text-xs text-ink hover:text-accent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm"
+                              >
+                                <span>See in: {project.title}</span>
+                                <ArrowUpRight className="h-3 w-3" />
+                              </Link>
+                            )}
+                          </div>
+                        </li>
+                      )
+                    })}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        <section className="pt-6 border-t border-line">
+          <div className="flex items-center justify-between border-b border-line pb-3 mb-4">
+            <h2 className="text-xl sm:text-2xl font-normal text-ink">
+              Areas of Study
+            </h2>
+            <span className="font-mono text-xs tracking-wide text-muted">
+              {interests?.length} Topics
+            </span>
+          </div>
+
+          <div className="divide-y divide-line border-t border-b border-line">
+            {interests?.map((interest, idx) => (
+              <div key={interest.id || idx} className="py-4 sm:py-5 grid gap-2 sm:gap-4 sm:grid-cols-[1fr_2.5fr] items-baseline">
+                <div className="font-mono text-xs tracking-wider uppercase text-muted">
+                  {interest.category}
+                </div>
+                <div>
+                  <h3 className="text-base sm:text-lg font-normal text-ink mb-1.5 text-balance">
+                    {interest.title}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-muted leading-relaxed">
+                    {interest.description}
                   </p>
                 </div>
+              </div>
+            ))}
+          </div>
+        </section>
 
-                <div className="mt-8 pt-4 border-t border-line flex items-center gap-4">
-                  <Link
-                    to="/contact"
-                    className="inline-flex items-center gap-2 border border-copper bg-copper px-5 py-2.5 text-xs font-mono uppercase tracking-wider text-canvas font-medium hover:bg-copper-strong transition-colors"
-                  >
-                    <span>Send Message</span>
-                    <ArrowRight className="h-3.5 w-3.5" />
-                  </Link>
-                  <Link
-                    to="/projects"
-                    className="inline-flex items-center gap-2 border border-line px-5 py-2.5 text-xs font-mono uppercase tracking-wider text-text-2 hover:border-copper hover:text-copper transition-colors"
-                  >
-                    <span>View Projects</span>
-                  </Link>
-                </div>
+        {settings?.showTimeline && timeline?.length > 0 && (
+          <section>
+            <div className="flex items-center justify-between border-b border-line pb-3 mb-4">
+              <div>
+                <span className="font-mono text-xs text-muted block mb-1 tracking-wider uppercase">
+                  Timeline
+                </span>
+                <h2 className="text-xl sm:text-2xl font-normal text-ink">
+                  Learning Milestones
+                </h2>
               </div>
             </div>
-          </Reveal>
+
+            <div className="border-l border-line pl-6 sm:pl-8 space-y-8 ml-3">
+              {timeline.map((item) => (
+                <div key={item.id} className="relative">
+                  <span
+                    className="absolute -left-[calc(1.5rem+4.5px)] sm:-left-[calc(2rem+4.5px)] top-1.5 h-2 w-2 rounded-full bg-accent"
+                    aria-hidden="true"
+                  />
+                  <span className="font-mono text-xs text-muted block mb-1">
+                    {item.period}
+                  </span>
+                  <h3 className="text-base sm:text-lg font-normal text-ink mb-1.5">
+                    {item.title}
+                  </h3>
+                  {item.detail && (
+                    <p className="text-xs sm:text-sm text-muted leading-relaxed max-w-2xl">
+                      {item.detail}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        <section>
+          <div className="grid gap-6 md:grid-cols-2 lg:gap-8">
+            <div className="pt-4 border-t border-line">
+              <div className="font-mono text-xs text-muted mb-2 tracking-wider uppercase">
+                How to Read This Site
+              </div>
+              <h3 className="text-lg sm:text-xl font-normal text-ink mb-3">
+                Honesty &amp; Limitations
+              </h3>
+              <ul className="space-y-3.5 text-xs sm:text-sm text-muted leading-relaxed">
+                <li className="flex items-start gap-3">
+                  <span className="font-mono text-accent">1.</span>
+                  <span>Independent student work: These notes reflect my ongoing learning and are not formal academic publications.</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="font-mono text-accent">2.</span>
+                  <span>Preserving disagreements: When primary sources conflict, differing accounts are recorded side by side rather than forced into a single claim.</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="font-mono text-accent">3.</span>
+                  <span>Open to feedback: Code, datasets, and essays are shared openly so others can spot mistakes and suggest improvements.</span>
+                </li>
+              </ul>
+            </div>
+
+            <div className="pt-4 border-t border-line lg:border-t-0 lg:border-l lg:pl-8 flex flex-col justify-between">
+              <div>
+                <div className="font-mono text-xs text-muted mb-2 tracking-wider uppercase">
+                  Feedback &amp; Dialogue
+                </div>
+                <h3 className="text-lg sm:text-xl font-normal text-ink mb-3">
+                  Get in Touch
+                </h3>
+                <p className="text-xs sm:text-sm text-muted leading-relaxed">
+                  If you notice a factual error, a missing citation, or an incomplete dataset, please send a note. Constructive corrections and thoughtful conversations are always welcome.
+                </p>
+              </div>
+
+              <div className="mt-6 pt-4 border-t border-line flex flex-wrap items-center gap-3">
+                <Link
+                  to="/contact"
+                  className="inline-flex items-center gap-2 border border-line bg-surface text-ink px-4 sm:px-5 py-2 sm:py-2.5 font-mono text-xs hover:border-accent hover:text-accent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                >
+                  <span>Send Message</span>
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+                <Link
+                  to="/projects"
+                  className="inline-flex items-center gap-2 border border-line bg-surface text-muted px-4 sm:px-5 py-2 sm:py-2.5 font-mono text-xs hover:border-line-strong hover:text-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                >
+                  <span>View Projects</span>
+                </Link>
+              </div>
+            </div>
+          </div>
         </section>
       </div>
     </>

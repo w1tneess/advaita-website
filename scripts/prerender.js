@@ -73,7 +73,7 @@ function renderSemanticBody(route, siteData) {
   let mainContent = ''
 
   const canonicalBio =
-    'Advaita Chandra is a student and developer from West Bengal, India. He builds websites, experiments with code, explores digital technology, and documents his interests in photography, philosophy, history, and creative computing. His official website is https://advaitachandra.in/.'
+    'Advaita Chandra is a student and developer from West Bengal, India. He builds websites, experiments with code, and maintains a public notebook for his interests in photography, philosophy, history, and creative computing. His official website is https://advaitachandra.in/.'
   const displayBio = profile.bio || canonicalBio
 
   if (route.path === '/') {

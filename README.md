@@ -7,7 +7,7 @@
 [![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-3ECF8E?style=flat-square&logo=supabase&logoColor=white)](https://supabase.com/)
 [![Node Tests](https://img.shields.io/badge/Tests-12%20passing-brightgreen?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org/)
 
-The official repository for [advaitachandra.in](https://advaitachandra.in/) — a personal website, engineering portfolio, and digital garden designed and developed by **Advaita Chandra**, a student and developer from **West Bengal, India**.
+The official repository for [advaitachandra.in](https://advaitachandra.in/) — a personal site, engineering portfolio, and public notebook designed and developed by **Advaita Chandra**, a student and developer from **West Bengal, India**.
 
 This project combines a fast, aesthetic React 19 frontend with static-first build-time pre-rendering, Supabase-backed dynamic content management, and cutting-edge technical SEO and LLM discoverability standards (LLMO).
 
@@ -250,6 +250,12 @@ The application is deployed on **Vercel** with automatic continuous delivery:
   - Pre-rendered static HTML directories (`about/index.html`, `projects/index.html`, etc.).
   - Syndication assets: `sitemap.xml`, `rss.xml`, `feed.json`.
 - The `vercel.json` configuration provides clean URL rewrites and fallback handling for Single Page Application routing.
+
+---
+
+## Operational Notes
+
+- **Supabase Keepalive:** A GitHub Actions workflow (`.github/workflows/keepalive.yml`) runs twice weekly (Sundays and Wednesdays at 12:00 UTC) to ping the Supabase database. This authenticated REST API call prevents the project from being paused under Supabase's free-tier inactivity policy. The workflow requires `SUPABASE_URL` and `SUPABASE_ANON_KEY` to be set as GitHub Actions secrets.
 
 ---
 

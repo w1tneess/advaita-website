@@ -30,7 +30,7 @@ export const PUBLIC_ROUTES = [
     label: 'Home',
     nav: true,
     title: 'Advaita Chandra',
-    description: 'Personal digital garden of Advaita Chandra, a student, learner, and explorer. Notes on philosophy, data, technology, and coding projects.',
+    description: 'Personal site and public notebook of Advaita Chandra, a student, learner, and explorer. Notes on philosophy, data, technology, and coding projects.',
     priority: '1.0',
     changefreq: 'monthly',
   },
@@ -61,7 +61,7 @@ export const PUBLIC_ROUTES = [
     label: 'Writing',
     nav: true,
     title: 'Writing / Blog',
-    description: 'Digital garden of notes, research, and ideas as a learner and explorer.',
+    description: 'Public notebook of notes, research, and ideas as a learner and explorer.',
     priority: '0.9',
     changefreq: 'weekly',
   },
@@ -121,10 +121,11 @@ export const PUBLIC_ROUTES = [
 export const ADMIN_ROUTE_PREFIX = '/admin'
 
 /** Navigation items for the public header and footer. */
-export const NAV_ITEMS = PUBLIC_ROUTES.filter((route) => route.nav).map(({ path, label, key }) => ({
+export const NAV_ITEMS = PUBLIC_ROUTES.filter((route) => route.nav).map(({ path, label, key, description }) => ({
   path,
   label,
   key,
+  desc: description,
 }))
 
 /**

@@ -6,18 +6,45 @@ import ScrollToTop from './components/ui/ScrollToTop.jsx'
 import ToastViewport from './components/ui/ToastViewport.jsx'
 import ErrorBoundary from './components/ui/ErrorBoundary.jsx'
 import PublicLayout from './layouts/PublicLayout.jsx'
-const About = lazy(() => import('./pages/About.jsx'))
-const Contact = lazy(() => import('./pages/Contact.jsx'))
-const Home = lazy(() => import('./pages/Home.jsx'))
-const NotFound = lazy(() => import('./pages/NotFound.jsx'))
-const Philosophy = lazy(() => import('./pages/Philosophy.jsx'))
-const Photography = lazy(() => import('./pages/Photography.jsx'))
-const Projects = lazy(() => import('./pages/Projects.jsx'))
-const Blog = lazy(() => import('./pages/Blog.jsx'))
-const BlogPost = lazy(() => import('./pages/BlogPost.jsx'))
-const NotePost = lazy(() => import('./pages/NotePost.jsx'))
-const Privacy = lazy(() => import('./pages/Privacy.jsx'))
-const Terms = lazy(() => import('./pages/Terms.jsx'))
+/**
+ * Auto-retries dynamic imports when a new deployment invalidates old chunk hashes.
+ * If fetching a chunk fails (e.g. after a redeploy), performs a single hard refresh
+ * to retrieve the latest application bundle.
+ */
+function lazyWithRetry(componentImport) {
+  return lazy(async () => {
+    try {
+      const module = await componentImport()
+      if (typeof window !== 'undefined') {
+        window.sessionStorage.removeItem('advaita_chunk_retry')
+      }
+      return module
+    } catch (error) {
+      if (typeof window !== 'undefined') {
+        const hasRefreshed = window.sessionStorage.getItem('advaita_chunk_retry') === 'true'
+        if (!hasRefreshed) {
+          window.sessionStorage.setItem('advaita_chunk_retry', 'true')
+          window.location.reload()
+          return new Promise(() => {})
+        }
+      }
+      throw error
+    }
+  })
+}
+
+const About = lazyWithRetry(() => import('./pages/About.jsx'))
+const Contact = lazyWithRetry(() => import('./pages/Contact.jsx'))
+const Home = lazyWithRetry(() => import('./pages/Home.jsx'))
+const NotFound = lazyWithRetry(() => import('./pages/NotFound.jsx'))
+const Philosophy = lazyWithRetry(() => import('./pages/Philosophy.jsx'))
+const Photography = lazyWithRetry(() => import('./pages/Photography.jsx'))
+const Projects = lazyWithRetry(() => import('./pages/Projects.jsx'))
+const Blog = lazyWithRetry(() => import('./pages/Blog.jsx'))
+const BlogPost = lazyWithRetry(() => import('./pages/BlogPost.jsx'))
+const NotePost = lazyWithRetry(() => import('./pages/NotePost.jsx'))
+const Privacy = lazyWithRetry(() => import('./pages/Privacy.jsx'))
+const Terms = lazyWithRetry(() => import('./pages/Terms.jsx'))
 
 /**
  * Route table.
@@ -29,7 +56,7 @@ const Terms = lazy(() => import('./pages/Terms.jsx'))
  * See vite.config.js.
  */
 
-const AdminApp = lazy(() => import('./pages/admin/AdminApp.jsx'))
+const AdminApp = lazyWithRetry(() => import('./pages/admin/AdminApp.jsx'))
 
 
 

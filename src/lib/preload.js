@@ -13,6 +13,8 @@ const routeLoaders = {
   '/projects': () => import('../pages/Projects.jsx'),
   '/blog': () => import('../pages/Blog.jsx'),
   '/contact': () => import('../pages/Contact.jsx'),
+  '/privacy': () => import('../pages/Privacy.jsx'),
+  '/terms': () => import('../pages/Terms.jsx'),
 }
 
 const preloaded = new Set()
@@ -25,6 +27,8 @@ export function preloadRoute(path) {
 
   if (!loader && cleanPath.startsWith('/blog/')) {
     loader = () => import('../pages/BlogPost.jsx')
+  } else if (!loader && cleanPath.startsWith('/philosophy/')) {
+    loader = () => import('../pages/NotePost.jsx')
   }
 
   if (loader) {
@@ -34,3 +38,12 @@ export function preloadRoute(path) {
     })
   }
 }
+
+export function getRoutePreloadProps(path) {
+  return {
+    onPointerEnter: () => preloadRoute(path),
+    onFocus: () => preloadRoute(path),
+    onTouchStart: () => preloadRoute(path),
+  }
+}
+

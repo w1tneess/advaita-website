@@ -37,9 +37,9 @@
   },
   {
     "id": "soc-x",
-    "platform": "X (Twitter)",
-    "label": "X (Twitter)",
-    "icon": "Twitter",
+    "platform": "X",
+    "label": "X",
+    "icon": "X",
     "url": "https://x.com/w1tneess_",
     "handle": "w1tneess_",
     "placeholder": "https://x.com/your-username",

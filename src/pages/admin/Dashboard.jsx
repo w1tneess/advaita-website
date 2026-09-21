@@ -33,14 +33,14 @@ function formatActivityDate(value) {
 
 function StatItem({ icon: Icon, label, value, to }) {
   return (
-    <Link to={to} className="flex items-center justify-between p-3 rounded-lg hover:bg-[#181a1a] transition-all group">
+    <Link to={to} className="flex items-center justify-between p-3 rounded-lg hover:bg-[#181716] transition-all group">
       <div className="flex items-center gap-3 text-xs font-mono">
-        <div className="p-2 rounded-md bg-[#161818] text-neutral-400 group-hover:text-[#D1B18A] transition-colors border border-[#242626]">
+        <div className="p-2 rounded-md bg-[#161514] text-neutral-400 group-hover:text-[#c2956a] transition-colors border border-[#242220]">
           <Icon className="h-3.5 w-3.5" />
         </div>
-        <span className="text-neutral-300 group-hover:text-[#E8E6E1] uppercase tracking-wider">{label}</span>
+        <span className="text-neutral-300 group-hover:text-[#f2ede6] uppercase tracking-wider">{label}</span>
       </div>
-      <span className="font-mono text-xs text-[#D1B18A] font-semibold">{value}</span>
+      <span className="font-mono text-xs text-[#c2956a] font-semibold">{value}</span>
     </Link>
   )
 }
@@ -49,15 +49,15 @@ function QuickAction({ icon: Icon, label, description, to }) {
   return (
     <Link 
       to={to} 
-      className="relative overflow-hidden flex flex-col p-5 rounded-xl border border-[#242626] bg-[#121414] hover:bg-[#161818] hover:border-[#D1B18A]/50 transition-all duration-300 group"
+      className="relative overflow-hidden flex flex-col p-5 rounded-xl border border-[#242220] bg-[#141312] hover:bg-[#181716] hover:border-[#c2956a]/50 transition-all duration-300 group"
     >
       <div className="flex items-start justify-between mb-3">
-        <div className="p-2.5 rounded-lg bg-[#181a1a] border border-[#292a2a] group-hover:border-[#D1B18A] group-hover:text-[#D1B18A] text-neutral-400 transition-colors">
+        <div className="p-2.5 rounded-lg bg-[#181716] border border-[#2c2825] group-hover:border-[#c2956a] group-hover:text-[#c2956a] text-neutral-400 transition-colors">
           <Icon className="h-4 w-4" />
         </div>
-        <ArrowRight className="h-3.5 w-3.5 text-neutral-600 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-[#D1B18A] transition-all" />
+        <ArrowRight className="h-3.5 w-3.5 text-neutral-600 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-[#c2956a] transition-all" />
       </div>
-      <h3 className="font-display text-base font-normal text-[#E8E6E1] group-hover:text-[#D1B18A] transition-colors">{label}</h3>
+      <h3 className="font-display text-base font-normal text-[#f2ede6] group-hover:text-[#c2956a] transition-colors">{label}</h3>
       <p className="font-mono text-[11px] text-neutral-500 mt-1">{description}</p>
     </Link>
   )
@@ -186,29 +186,29 @@ export default function Dashboard() {
               <h2 className="font-mono text-[11px] font-bold tracking-widest text-neutral-500 uppercase">
                 Recent Messages
               </h2>
-              <Link to="/admin/messages" className="font-mono text-xs text-[#D1B18A] hover:underline flex items-center gap-1">
+              <Link to="/admin/messages" className="font-mono text-xs text-[#c2956a] hover:underline flex items-center gap-1">
                 View all <ArrowRight className="h-3 w-3" />
               </Link>
             </div>
-            <Card className="p-0 overflow-hidden border-[#242626] bg-[#121414] shadow-xl">
+            <Card className="p-0 overflow-hidden border-[#242220] bg-[#141312] shadow-xl">
               {messages.length > 0 ? (
-                <div className="divide-y divide-[#242626]">
+                <div className="divide-y divide-[#242220]">
                   {messages.map((msg) => (
-                    <div key={msg.id} className="p-4 hover:bg-[#161818] transition-colors">
+                    <div key={msg.id} className="p-4 hover:bg-[#181716] transition-colors">
                       <div className="flex items-baseline justify-between mb-1">
-                        <span className="font-medium text-xs text-[#E8E6E1] font-mono">{msg.name}</span>
+                        <span className="font-medium text-xs text-[#f2ede6] font-mono">{msg.name}</span>
                         <span className="text-[10px] font-mono text-neutral-500">
                           {new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' }).format(new Date(msg.created_at))}
                         </span>
                       </div>
-                      <p className="text-[11px] font-mono text-[#D1B18A] mb-1.5">{msg.email} {msg.topic && `• ${msg.topic}`}</p>
+                      <p className="text-[11px] font-mono text-[#c2956a] mb-1.5">{msg.email} {msg.topic && `• ${msg.topic}`}</p>
                       <p className="text-xs text-neutral-300 font-light line-clamp-2">{msg.message}</p>
                     </div>
                   ))}
                 </div>
               ) : (
                 <div className="p-8 text-center text-xs font-mono text-neutral-500 flex flex-col items-center">
-                  <MessageSquare className="h-7 w-7 mb-2.5 opacity-20 text-[#D1B18A]" />
+                  <MessageSquare className="h-7 w-7 mb-2.5 opacity-20 text-[#c2956a]" />
                   No messages received yet.
                 </div>
               )}
@@ -221,20 +221,20 @@ export default function Dashboard() {
               <h2 className="font-mono text-[11px] font-bold tracking-widest text-neutral-500 uppercase">
                 Recent Activity
               </h2>
-              <span className="text-[11px] font-mono text-neutral-400 bg-[#141616] border border-[#242626] px-2.5 py-1 rounded-md flex items-center gap-1.5">
-                <span className={`h-2 w-2 rounded-full ${isRemote ? 'bg-emerald-400' : 'bg-[#D1B18A]'} animate-pulse`} />
+              <span className="text-[11px] font-mono text-neutral-400 bg-[#161514] border border-[#242220] px-2.5 py-1 rounded-md flex items-center gap-1.5">
+                <span className={`h-2 w-2 rounded-full ${isRemote ? 'bg-emerald-400' : 'bg-[#c2956a]'} animate-pulse`} />
                 {isRemote ? 'Cloud Synced' : 'Local Storage'}
               </span>
             </div>
-            <Card className="p-0 overflow-hidden border-[#242626] bg-[#121414] shadow-xl">
+            <Card className="p-0 overflow-hidden border-[#242220] bg-[#141312] shadow-xl">
               {activity.length > 0 ? (
-                <ul className="divide-y divide-[#242626]">
+                <ul className="divide-y divide-[#242220]">
                   {activity.slice(0, 5).map((entry) => (
-                    <li key={entry.id} className="p-3.5 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 text-xs hover:bg-[#161818] transition-colors">
+                    <li key={entry.id} className="p-3.5 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 text-xs hover:bg-[#181716] transition-colors">
                       <div className="flex items-center gap-2">
                         <Clock className="h-3.5 w-3.5 text-neutral-500" />
                         <span className="text-neutral-300 font-mono">
-                          <strong className="font-semibold text-[#D1B18A] capitalize">{entry.action}</strong>{' '}
+                          <strong className="font-semibold text-[#c2956a] capitalize">{entry.action}</strong>{' '}
                           {entry.type.replace('categories.', '')} “{entry.label}”
                         </span>
                       </div>
@@ -256,22 +256,22 @@ export default function Dashboard() {
         <div className="lg:col-span-4 space-y-8">
           
           {drafts.length > 0 && (
-            <Card className="p-4 border-[#D1B18A]/30 bg-[#D1B18A]/5">
-              <h3 className="font-mono text-xs font-semibold text-[#D1B18A] flex items-center gap-2 mb-2 uppercase tracking-wider">
+            <Card className="p-4 border-[#c2956a]/30 bg-[#c2956a]/5">
+              <h3 className="font-mono text-xs font-semibold text-[#c2956a] flex items-center gap-2 mb-2 uppercase tracking-wider">
                 <FileText className="h-3.5 w-3.5" />
                 Drafts in Progress
               </h3>
               <ul className="space-y-1.5">
                 {drafts.slice(0, 3).map(draft => (
                   <li key={draft.id}>
-                    <Link to={`/admin/blog/${draft.id}`} className="text-xs text-neutral-300 hover:text-[#E8E6E1] hover:underline line-clamp-1">
+                    <Link to={`/admin/blog/${draft.id}`} className="text-xs text-neutral-300 hover:text-[#f2ede6] hover:underline line-clamp-1">
                       {draft.title || 'Untitled Draft'}
                     </Link>
                   </li>
                 ))}
               </ul>
               {drafts.length > 3 && (
-                <Link to="/admin/blog" className="text-[10px] font-mono text-[#D1B18A] hover:underline mt-2 inline-block">
+                <Link to="/admin/blog" className="text-[10px] font-mono text-[#c2956a] hover:underline mt-2 inline-block">
                   + {drafts.length - 3} more drafts
                 </Link>
               )}
@@ -288,34 +288,34 @@ export default function Dashboard() {
                 type="button"
                 onClick={runHealthCheck}
                 disabled={isTesting}
-                className="text-[10px] font-mono text-[#D1B18A] hover:underline flex items-center gap-1 cursor-pointer"
+                className="text-[10px] font-mono text-[#c2956a] hover:underline flex items-center gap-1 cursor-pointer"
               >
                 <RefreshCw className={`h-2.5 w-2.5 ${isTesting ? 'animate-spin' : ''}`} />
                 Test
               </button>
             </div>
-            <Card className="p-4 border-[#242626] bg-[#121414] shadow-xl space-y-3 font-mono text-xs">
-              <div className="flex items-center justify-between border-b border-[#242626] pb-2.5">
+            <Card className="p-4 border-[#242220] bg-[#141312] shadow-xl space-y-3 font-mono text-xs">
+              <div className="flex items-center justify-between border-b border-[#242220] pb-2.5">
                 <span className="text-neutral-400">Database (Supabase)</span>
                 {health.connected ? (
                   <span className="flex items-center gap-1.5 text-emerald-400 text-[11px]">
                     <CheckCircle2 className="h-3.5 w-3.5" /> Connected ({health.latencyMs}ms)
                   </span>
                 ) : (
-                  <span className="flex items-center gap-1.5 text-[#D1B18A] text-[11px]">
+                  <span className="flex items-center gap-1.5 text-[#c2956a] text-[11px]">
                     <AlertCircle className="h-3.5 w-3.5" /> Offline / Local
                   </span>
                 )}
               </div>
 
-              <div className="flex items-center justify-between border-b border-[#242626] pb-2.5">
+              <div className="flex items-center justify-between border-b border-[#242220] pb-2.5">
                 <span className="text-neutral-400">Content Table</span>
                 <span className={`text-[11px] ${health.tables.siteContent ? 'text-emerald-400' : 'text-neutral-500'}`}>
                   {health.tables.siteContent ? 'site_content ready' : 'Not verified'}
                 </span>
               </div>
 
-              <div className="flex items-center justify-between border-b border-[#242626] pb-2.5">
+              <div className="flex items-center justify-between border-b border-[#242220] pb-2.5">
                 <span className="text-neutral-400">Storage Bucket</span>
                 <span className={`text-[11px] ${health.tables.imagesBucket ? 'text-emerald-400' : 'text-neutral-500'}`}>
                   {health.tables.imagesBucket ? 'images ready' : 'Local URLs active'}
@@ -323,7 +323,7 @@ export default function Dashboard() {
               </div>
 
               <div className="pt-2">
-                <Link to="/admin/data" className="text-[11px] text-[#D1B18A] hover:underline flex items-center justify-between">
+                <Link to="/admin/data" className="text-[11px] text-[#c2956a] hover:underline flex items-center justify-between">
                   Manage backups &amp; schema <ArrowRight className="h-3 w-3" />
                 </Link>
               </div>
@@ -335,7 +335,7 @@ export default function Dashboard() {
             <h2 className="font-mono text-[11px] font-bold tracking-widest text-neutral-500 uppercase mb-3">
               Content Overview
             </h2>
-            <Card className="p-1.5 border-[#242626] bg-[#121414] shadow-xl">
+            <Card className="p-1.5 border-[#242220] bg-[#141312] shadow-xl">
               <div className="flex flex-col space-y-0.5">
                 {stats.map((stat) => (
                   <StatItem key={stat.label} {...stat} />

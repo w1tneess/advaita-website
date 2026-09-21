@@ -39,8 +39,8 @@ function LiveClock() {
   }, [])
 
   return (
-    <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-[#242626] bg-[#121414] text-[11px] font-mono text-neutral-400">
-      <Clock className="h-3 w-3 text-[#D1B18A]" />
+    <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-[#242220] bg-[#161514] text-[11px] font-mono text-neutral-400">
+      <Clock className="h-3 w-3 text-[#c2956a]" />
       <span>
         {time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
       </span>
@@ -73,7 +73,7 @@ function CreateDropdown() {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-[#D1B18A] bg-[#D1B18A]/10 text-[#D1B18A] hover:bg-[#D1B18A]/20 transition-all cursor-pointer"
+        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-[#c2956a] bg-[#c2956a]/10 text-[#c2956a] hover:bg-[#c2956a]/20 transition-all cursor-pointer"
         aria-label="Create new"
         title="Create new item"
       >
@@ -87,7 +87,7 @@ function CreateDropdown() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 8, scale: 0.95 }}
             transition={{ duration: 0.15, ease: 'easeOut' }}
-            className="absolute right-0 mt-2 w-48 rounded-xl border border-[#242626] bg-[#121414] p-1.5 shadow-2xl z-50"
+            className="absolute right-0 mt-2 w-48 rounded-xl border border-[#282523] bg-[#161514] p-1.5 shadow-2xl z-50"
           >
             <div className="px-2 py-1 text-[10px] font-mono font-semibold text-neutral-500 uppercase tracking-widest mb-1">
               Create Document
@@ -97,9 +97,9 @@ function CreateDropdown() {
                 key={action.to}
                 to={action.to}
                 onClick={() => setIsOpen(false)}
-                className="flex items-center gap-2 rounded-lg px-2.5 py-2 text-xs font-mono text-neutral-300 hover:bg-[#1b1c1c] hover:text-[#E8E6E1] transition-colors"
+                className="flex items-center gap-2 rounded-lg px-2.5 py-2 text-xs font-mono text-neutral-300 hover:bg-[#1d1b19] hover:text-[#f2ede6] transition-colors"
               >
-                <action.icon className="h-3.5 w-3.5 text-[#D1B18A]" />
+                <action.icon className="h-3.5 w-3.5 text-[#c2956a]" />
                 {action.label}
               </Link>
             ))}
@@ -126,43 +126,53 @@ export default function AdminHeader({ onOpenSidebar }) {
   }
 
   return (
-    <header className="sticky top-0 z-20 border-b border-[#242626] bg-[#0F0F0F]/85 backdrop-blur-xl">
-      <div className="flex h-14 items-center gap-4 px-4 sm:px-6">
+    <header className="sticky top-0 z-20 border-b border-[#242220] bg-[#0F0E0D]/85 backdrop-blur-xl">
+      <div className="flex h-14 items-center gap-3 sm:gap-4 px-4 sm:px-6">
         <button
           type="button"
           onClick={onOpenSidebar}
           aria-label="Open navigation"
           aria-controls="admin-sidebar"
-          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-[#242626] bg-[#141616] text-neutral-400 hover:text-[#E8E6E1] lg:hidden shrink-0 transition-colors"
+          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-[#242220] bg-[#161514] text-neutral-400 hover:text-[#f2ede6] lg:hidden shrink-0 transition-colors cursor-pointer"
         >
           <Menu className="h-4 w-4" aria-hidden="true" />
         </button>
 
         {/* Breadcrumb Section Label */}
-        <div className="flex items-center min-w-[120px]">
-          <p className="truncate font-mono text-xs uppercase tracking-wider text-[#E8E6E1] font-medium">
+        <div className="flex items-center min-w-[100px] sm:min-w-[120px]">
+          <p className="truncate font-mono text-xs uppercase tracking-wider text-[#f2ede6] font-medium">
             {sectionLabel(pathname)}
           </p>
         </div>
 
-        {/* Global Search Button */}
+        {/* Global Search Button - Desktop */}
         <div className="flex-1 max-w-lg mx-auto px-4 hidden sm:block">
           <button
             onClick={openSearch}
-            className="flex w-full items-center justify-between gap-2 rounded-lg border border-[#242626] bg-[#141616] px-3 py-1.5 text-xs font-mono text-neutral-400 transition-all hover:border-[#D1B18A]/50 hover:text-[#E8E6E1]"
+            className="flex w-full items-center justify-between gap-2 rounded-lg border border-[#242220] bg-[#161514] px-3 py-1.5 text-xs font-mono text-neutral-400 transition-all hover:border-[#c2956a]/50 hover:text-[#f2ede6] cursor-pointer"
           >
             <div className="flex items-center gap-2">
-              <Search className="h-3.5 w-3.5 text-[#D1B18A]" />
+              <Search className="h-3.5 w-3.5 text-[#c2956a]" />
               <span>Search documents &amp; tools...</span>
             </div>
-            <kbd className="hidden sm:inline-flex h-4.5 items-center gap-1 rounded border border-[#292a2a] bg-[#0F0F0F] px-1.5 font-mono text-[9px] text-neutral-400">
+            <kbd className="hidden sm:inline-flex h-4.5 items-center gap-1 rounded border border-[#282523] bg-[#0F0E0D] px-1.5 font-mono text-[9px] text-neutral-400">
               <span>⌘</span>K
             </kbd>
           </button>
         </div>
 
+        {/* Mobile Search Button */}
+        <button
+          type="button"
+          onClick={openSearch}
+          aria-label="Search documents"
+          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-[#242220] bg-[#161514] text-neutral-400 hover:text-[#f2ede6] sm:hidden shrink-0 transition-colors cursor-pointer"
+        >
+          <Search className="h-3.5 w-3.5 text-[#c2956a]" />
+        </button>
+
         {/* Right Action Icons & Sync Indicators */}
-        <div className="flex items-center gap-2.5 sm:gap-3 ml-auto">
+        <div className="flex items-center gap-2 sm:gap-3 ml-auto">
           {/* Cloud Sync Status Pill */}
           {isRemote && syncStatus === 'synced' ? (
             <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-emerald-900/40 bg-emerald-950/20 text-emerald-400 text-[11px] font-mono">
@@ -173,7 +183,7 @@ export default function AdminHeader({ onOpenSidebar }) {
             <button
               onClick={handleManualSync}
               disabled={syncing}
-              className="flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-[#D1B18A]/30 bg-[#D1B18A]/10 text-[#D1B18A] text-[11px] font-mono hover:bg-[#D1B18A]/20 transition-all cursor-pointer"
+              className="flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-[#c2956a]/30 bg-[#c2956a]/10 text-[#c2956a] text-[11px] font-mono hover:bg-[#c2956a]/20 transition-all cursor-pointer"
               title="Click to sync local changes to Supabase"
             >
               {syncing ? (
@@ -193,9 +203,9 @@ export default function AdminHeader({ onOpenSidebar }) {
             href="/"
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden sm:inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-mono text-neutral-400 hover:text-[#E8E6E1] transition-colors"
+            className="hidden sm:inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-mono text-neutral-400 hover:text-[#f2ede6] transition-colors"
           >
-            <ExternalLink className="h-3.5 w-3.5 text-[#D1B18A]" aria-hidden="true" />
+            <ExternalLink className="h-3.5 w-3.5 text-[#c2956a]" aria-hidden="true" />
             <span className="hidden lg:inline">Site</span>
           </a>
           
@@ -205,8 +215,8 @@ export default function AdminHeader({ onOpenSidebar }) {
             aria-pressed={previewDrafts}
             className={`inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs font-mono transition-colors shrink-0 cursor-pointer ${
               previewDrafts
-                ? 'border-[#D1B18A] bg-[#D1B18A]/15 text-[#D1B18A]'
-                : 'border-[#242626] bg-[#141616] text-neutral-400 hover:text-[#E8E6E1]'
+                ? 'border-[#c2956a] bg-[#c2956a]/15 text-[#c2956a]'
+                : 'border-[#242220] bg-[#161514] text-neutral-400 hover:text-[#f2ede6]'
             }`}
             title="Toggle Drafts Preview in Public Site"
           >
@@ -220,7 +230,7 @@ export default function AdminHeader({ onOpenSidebar }) {
 
           <Link
             to="/admin/messages"
-            className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-neutral-400 hover:bg-[#141616] hover:text-[#E8E6E1] transition-colors relative"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-neutral-400 hover:bg-[#161514] hover:text-[#f2ede6] transition-colors relative"
             title="Messages"
           >
             <Bell className="h-4 w-4" />

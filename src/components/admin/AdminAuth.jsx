@@ -121,9 +121,9 @@ export default function AdminAuth({ children }) {
 
   if (loading) {
     return (
-      <div className="flex min-h-dvh items-center justify-center bg-[#0F0F0F] px-6 text-[#E8E6E1]">
+      <div className="flex min-h-dvh items-center justify-center bg-[#0F0E0D] px-6 text-[#f2ede6]">
         <div className="flex flex-col items-center gap-4">
-          <Loader2 className="h-7 w-7 animate-spin text-[#D1B18A]" />
+          <Loader2 className="h-7 w-7 animate-spin text-[#c2956a]" />
           <p className="font-mono text-xs tracking-wider uppercase text-neutral-400">Verifying credentials...</p>
         </div>
       </div>
@@ -133,20 +133,20 @@ export default function AdminAuth({ children }) {
   // Render Login Card if not authenticated
   if (!session) {
     return (
-      <div className="relative flex min-h-dvh flex-col items-center justify-center bg-[#0F0F0F] p-6 text-[#E8E6E1] overflow-hidden selection:bg-[#D1B18A]/20">
+      <div className="relative flex min-h-dvh flex-col items-center justify-center bg-[#0F0E0D] p-6 text-[#f2ede6] overflow-hidden selection:bg-[#c2956a]/20">
         {/* Subtle Darkroom Glow */}
         <div className="absolute inset-0 pointer-events-none flex justify-center items-center opacity-30">
-          <div className="h-[450px] w-[450px] rounded-full bg-[#D1B18A]/10 blur-[130px]" />
+          <div className="h-[450px] w-[450px] rounded-full bg-[#c2956a]/10 blur-[130px]" />
         </div>
 
         <div className="relative z-10 w-full max-w-[440px] flex flex-col items-center">
           {/* Brand Header */}
           <div className="mb-8 flex flex-col items-center text-center">
-            <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-xl border border-[#292a2a] bg-[#141616] text-[#D1B18A] shadow-lg">
+            <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-xl border border-[#2c2825] bg-[#161514] text-[#c2956a] shadow-lg">
               <Shield className="h-6 w-6" />
             </div>
-            <h1 className="font-display text-3xl font-light tracking-tight text-[#E8E6E1]">
-              Advaita <span className="italic text-[#D1B18A]">Workspace</span>
+            <h1 className="font-display text-3xl font-light tracking-tight text-[#f2ede6]">
+              Advaita <span className="italic text-[#c2956a]">Workspace</span>
             </h1>
             <p className="mt-1 font-mono text-xs tracking-wider uppercase text-neutral-400">
               Content Studio &amp; Archival Terminal
@@ -158,7 +158,7 @@ export default function AdminAuth({ children }) {
             <div className="mb-6 w-full rounded-xl border border-rose-900/50 bg-rose-950/20 p-4 text-xs text-neutral-300 flex items-start gap-3">
               <AlertTriangle className="h-4 w-4 shrink-0 text-rose-400 mt-0.5" />
               <div>
-                <p className="font-semibold text-[#E8E6E1]">Authentication Service Unavailable</p>
+                <p className="font-semibold text-[#f2ede6]">Authentication Service Unavailable</p>
                 <p className="mt-1 text-neutral-400">
                   Supabase backend is not connected. Admin login is currently disabled.
                 </p>
@@ -167,7 +167,7 @@ export default function AdminAuth({ children }) {
           )}
 
           {/* Auth Card */}
-          <div className="w-full rounded-2xl border border-[#242626] bg-[#121414] p-7 sm:p-9 shadow-2xl relative">
+          <div className="w-full rounded-2xl border border-[#242220] bg-[#141312] p-7 sm:p-9 shadow-2xl relative">
             <form onSubmit={handleAuthSubmit} className="space-y-5">
               <div className="space-y-1.5">
                 <label htmlFor="auth-email" className="block font-mono text-[11px] uppercase tracking-wider text-neutral-400">
@@ -185,7 +185,7 @@ export default function AdminAuth({ children }) {
                     placeholder="admin@domain.org"
                     required
                     disabled={submitting}
-                    className="block w-full rounded-lg border border-[#292a2a] bg-[#191b1b] py-2.5 pl-10 pr-4 text-sm text-[#E8E6E1] placeholder:text-neutral-600 focus:border-[#D1B18A] focus:outline-none transition-colors"
+                    className="block w-full rounded-lg border border-[#2c2825] bg-[#1a1918] py-2.5 pl-10 pr-4 text-sm text-[#f2ede6] placeholder:text-neutral-600 focus:border-[#c2956a] focus:outline-none transition-colors"
                   />
                 </div>
               </div>
@@ -210,7 +210,7 @@ export default function AdminAuth({ children }) {
                     type="checkbox"
                     checked={rememberMe}
                     onChange={(e) => setRememberMe(e.target.checked)}
-                    className="h-4 w-4 rounded border-[#292a2a] bg-[#191b1b] text-[#D1B18A] focus:ring-0 cursor-pointer"
+                    className="h-4 w-4 rounded border-[#2c2825] bg-[#1a1918] text-[#c2956a] focus:ring-0 cursor-pointer"
                   />
                   <span className="font-mono text-xs text-neutral-400">Remember session</span>
                 </label>
@@ -219,7 +219,7 @@ export default function AdminAuth({ children }) {
                   <button
                     type="button"
                     onClick={handleForgotPassword}
-                    className="font-mono text-xs text-neutral-500 hover:text-[#D1B18A] transition-colors"
+                    className="font-mono text-xs text-neutral-500 hover:text-[#c2956a] transition-colors"
                   >
                     Forgot Password?
                   </button>
@@ -230,7 +230,7 @@ export default function AdminAuth({ children }) {
                 <button
                   type="submit"
                   disabled={submitting || !isConfigured}
-                  className="w-full flex items-center justify-center gap-2 rounded-lg border border-[#D1B18A] bg-[#D1B18A] py-3 text-xs font-mono uppercase tracking-wider text-[#0F0F0F] font-semibold transition-all hover:bg-[#c4a279] active:scale-[0.99] disabled:opacity-40 cursor-pointer"
+                  className="w-full flex items-center justify-center gap-2 rounded-lg border border-[#c2956a] bg-[#c2956a] py-3 text-xs font-mono uppercase tracking-wider text-[#0F0E0D] font-semibold transition-all hover:bg-[#d4a87d] active:scale-[0.99] disabled:opacity-40 cursor-pointer"
                 >
                   {submitting ? (
                     <>

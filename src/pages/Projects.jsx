@@ -1,7 +1,6 @@
 import { useState, useMemo } from "react"
 import PageHeader from "@/components/ui/PageHeader.jsx"
 import ProjectCard from "@/components/features/ProjectCard.jsx"
-import Reveal from "@/components/ui/Reveal.jsx"
 import { useContent } from "@/lib/content.jsx"
 import Seo from "@/components/meta/Seo.jsx"
 import { PUBLIC_ROUTES } from "@/config/nav.js"
@@ -12,7 +11,6 @@ export default function Projects() {
 	const { publicProjects } = useContent()
 	const [activeCategory, setActiveCategory] = useState("All")
 
-	// Extract unique categories
 	const categories = useMemo(() => {
 		const cats = new Set()
 		publicProjects?.forEach((p) => {
@@ -41,21 +39,20 @@ export default function Projects() {
 				title="Projects &amp; Studies"
 				lead="Data projects, tools, and research notes. Each project explains the question behind it, the sources used, and what I learned."
 			>
-				{/* Filter Tabs */}
 				{categories.length > 2 && (
-					<div className="flex flex-wrap items-center gap-2 font-mono text-xs">
-						<span className="text-text-3 uppercase text-[10px] tracking-widest mr-2">
-							Filter by category:
+					<div className="flex flex-wrap items-center gap-2 sm:gap-3 mt-4 sm:mt-6 font-utility">
+						<span className="text-muted mr-1 sm:mr-2 text-xs">
+							Filter:
 						</span>
 						{categories.map((cat) => (
 							<button
 								key={cat}
 								type="button"
 								onClick={() => setActiveCategory(cat)}
-								className={`px-3 py-1.5 border transition-all duration-200 cursor-pointer ${
+								className={`px-3.5 sm:px-4 py-1.5 sm:py-2 text-xs transition-all duration-200 cursor-pointer rounded-sm active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
 									activeCategory === cat
-										? "border-copper bg-copper text-canvas font-medium"
-										: "border-line bg-surface/60 text-text-3 hover:border-line-strong hover:text-text"
+										? "bg-ink text-canvas font-medium shadow-subtle"
+										: "bg-surface border border-line text-muted hover:text-ink hover:border-line-strong"
 								}`}
 							>
 								{cat}
@@ -65,26 +62,18 @@ export default function Projects() {
 				)}
 			</PageHeader>
 
-			<section className="shell pb-24 md:pb-32">
+			<section className="shell py-[clamp(1.75rem,4vw,3.25rem)]">
 				{filteredProjects.length === 0 ? (
-					<div className="border border-line bg-surface/40 p-12 text-center font-mono text-sm text-text-3">
+					<div className="bg-surface p-[clamp(1.5rem,3vw,2.5rem)] text-center text-sm font-utility text-muted border border-line">
 						No projects found in this category.
 					</div>
 				) : (
-					<div className="grid gap-6 sm:grid-cols-2">
-						{filteredProjects.map((project, index) => (
-							<Reveal key={project.id} delay={index * 0.04}>
-								<ProjectCard project={project} index={index} />
-							</Reveal>
+					<div className="grid gap-[clamp(1rem,2.5vw,2rem)] sm:grid-cols-2">
+						{filteredProjects.map((project, idx) => (
+							<ProjectCard key={project.id} project={project} index={idx} />
 						))}
 					</div>
 				)}
-
-				{/* Colophon Note */}
-				<div className="mt-16 pt-8 border-t border-line flex flex-col sm:flex-row sm:items-center justify-between gap-4 font-mono text-xs text-text-3">
-					<span>Open code &amp; data sources</span>
-					<span className="text-copper">Location: India</span>
-				</div>
 			</section>
 		</>
 	)

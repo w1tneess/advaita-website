@@ -1,9 +1,6 @@
 import { useState } from "react"
 import { Link } from "react-router"
 import { ArrowRight, ArrowUpRight, Check, Loader2 } from "lucide-react"
-import Reveal from "@/components/ui/Reveal.jsx"
-import SectionIntro from "@/components/ui/SectionIntro.jsx"
-import ProjectCard from "@/components/features/ProjectCard.jsx"
 import { useContent } from "@/lib/content.jsx"
 import { submitContactForm } from "@/lib/supabase/api.js"
 import Seo from "@/components/meta/Seo.jsx"
@@ -11,111 +8,126 @@ import { PUBLIC_ROUTES } from "@/config/nav.js"
 
 const ROUTE = PUBLIC_ROUTES.find((route) => route.key === 'home')
 
-function Hero({ profile }) {
+function Hero() {
+	const branches = [
+		{ label: "Philosophy", desc: "Krishnamurti, Camus, inquiry notes", path: "/philosophy" },
+		{ label: "Projects & Tools", desc: "Data analysis, code experiments", path: "/projects" },
+		{ label: "Photography", desc: "Visual documentation & geometry", path: "/photography" },
+		{ label: "Notes & Logs", desc: "Working essays & observations", path: "/blog" },
+	]
+
 	return (
-		<section className="shell pt-8 sm:pt-16 md:pt-28 lg:pt-36 pb-16 md:pb-28">
-			<div className="relative grid items-start gap-y-8 sm:gap-y-12 lg:grid-cols-12 lg:gap-x-16 xl:gap-x-20">
-				{/* Left Editorial Pillar (7 cols) */}
-				<div className="relative z-20 lg:col-span-7 flex flex-col justify-between">
-					<Reveal y={18} delay={0.04}>
-						<h1 className="font-display text-3xl sm:text-5xl md:text-6xl lg:text-[4.75rem] font-normal tracking-[-0.02em] text-[#E8E6E1] leading-[1.08] sm:leading-[1.02] select-none break-words">
-							<span className="inline sm:block">Advaita </span>
-							<span className="inline sm:block sm:mt-1.5 text-[#E8E6E1]">Chandra</span>
-						</h1>
-						<div className="w-12 sm:w-16 h-[1px] bg-copper/70 my-4 sm:mt-8 sm:mb-7" />
-					</Reveal>
+		<section className="shell relative pt-[clamp(9.5rem,17vw,15rem)] pb-[clamp(3rem,6vw,5.5rem)] overflow-hidden">
+			{/* Atmospheric Ambient Glows */}
+			<div 
+				className="ambient-glow top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(48rem,95vw)] h-[min(48rem,95vw)] opacity-20" 
+				aria-hidden="true" 
+			/>
 
-					<Reveal y={14} delay={0.1}>
-						<div className="max-w-[34rem]">
-							<p className="font-serif text-base sm:text-xl text-text/90 font-normal leading-snug">
-								Student from West Bengal, India.
-							</p>
-							<p className="text-xs sm:text-sm md:text-base leading-relaxed text-text-2/80 font-light mt-2 sm:mt-3">
-								Building websites, experimenting with code, exploring digital technology, and documenting interests in photography, philosophy, history, and creative computing.
-							</p>
-						</div>
-					</Reveal>
-
-					<Reveal y={14} delay={0.16}>
-						<div className="mt-6 sm:mt-10 flex flex-row items-center gap-2.5 sm:gap-4">
-							<a
-								href="#projects"
-								className="group inline-flex items-center justify-center gap-2 border border-text px-4 py-2.5 sm:px-6 sm:py-3 text-[11px] sm:text-xs font-mono tracking-wider text-text bg-transparent hover:bg-text hover:text-canvas transition-all flex-1 sm:flex-initial text-center"
-							>
-								<span className="normal-case">Selected Projects</span>
-								<span className="transition-transform duration-300 group-hover:translate-y-0.5">&darr;</span>
-							</a>
-							<Link
-								to="/projects"
-								className="inline-flex items-center justify-center gap-1.5 border border-line px-3.5 py-2.5 sm:px-5 sm:py-3 text-[11px] sm:text-xs font-mono uppercase tracking-wider text-text-2 hover:border-copper hover:text-copper transition-all flex-1 sm:flex-initial text-center"
-							>
-								<span>Projects Index</span>
-								<ArrowUpRight className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-copper" />
-							</Link>
-						</div>
-					</Reveal>
+			<div className="relative z-10 w-full">
+				{/* Top Status Eyebrow */}
+				<div className="inline-flex items-center gap-2.5 px-3.5 py-1 rounded-full border border-line bg-surface/60 text-muted font-mono text-[11px] mb-6 sm:mb-8 backdrop-blur-sm">
+					<span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" />
+					<span className="text-ink font-medium">Advaita Chandra</span>
+					<span className="text-line">•</span>
+					<span>Archive &amp; Notebook</span>
 				</div>
 
-				{/* Right Darkroom Film Contact Sheet (5 cols) */}
-				<Reveal y={22} delay={0.08} className="relative z-10 lg:col-span-5 mt-4 lg:mt-0">
-					<div className="bg-[#0b0c0c] border border-line p-3 sm:p-4 shadow-2xl relative">
-						{/* Contact Sheet Header Metadata */}
-						<div className="flex justify-between items-center font-mono text-xs text-text-3 pb-2.5 mb-3 border-b border-line">
-							<span className="text-copper font-medium">FRAME 04</span>
-							<span className="tracking-wider">ILFORD HP5+ 400</span>
-						</div>
+				<div className="max-w-5xl">
+					<h1 className="text-[clamp(2.15rem,1.4rem+3.5vw,4.5rem)] font-normal tracking-tight text-ink mb-[clamp(1rem,2vw,1.5rem)] leading-[1.12] text-balance">
+						I am someone who notices, thinks, builds, photographs, reads, and writes.
+					</h1>
+					
+					<p className="text-[clamp(1rem,0.95rem+0.4vw,1.25rem)] text-muted leading-relaxed mb-[clamp(1.5rem,3vw,2.5rem)] max-w-3xl">
+						Working drafts, code experiments, and study notes tracking my interests in creative computing, philosophy, history, and internet infrastructure.
+					</p>
 
-						{/* Film Frame Container with Corner Registration Marks */}
-						<div className="relative overflow-hidden group bg-[#050505]">
-							{/* Corner Optical Registration Brackets */}
-							<span className="absolute top-2.5 left-2.5 w-3 h-3 border-t-2 border-l-2 border-copper/80 z-20 pointer-events-none" />
-							<span className="absolute top-2.5 right-2.5 w-3 h-3 border-t-2 border-r-2 border-copper/80 z-20 pointer-events-none" />
-							<span className="absolute bottom-2.5 left-2.5 w-3 h-3 border-b-2 border-l-2 border-copper/80 z-20 pointer-events-none" />
-							<span className="absolute bottom-2.5 right-2.5 w-3 h-3 border-b-2 border-r-2 border-copper/80 z-20 pointer-events-none" />
-
-							<img
-								src="/pfp.png"
-								alt={`Portrait of ${profile.name || "Advaita Chandra"}`}
-								width={1200}
-								height={1500}
-								fetchPriority="high"
-								className="relative block aspect-[3/4] w-full object-cover grayscale contrast-[1.08] brightness-[1.02] transition-all duration-700 group-hover:contrast-[1.12]"
-							/>
-
-							{/* In-Negative Exposure Notation Overlay */}
-							<div className="absolute bottom-3 left-3 right-3 z-20 flex justify-between items-center font-mono text-xs text-text/80 bg-canvas/85 backdrop-blur-sm px-3 py-1.5 border border-line">
-								<span className="tracking-widest">ISO 400 &middot; f/1.8 &middot; 50mm</span>
-								<span className="text-copper font-medium uppercase text-[10px] tracking-wider">PORTRAIT</span>
-							</div>
-						</div>
+					{/* Primary Call to Action */}
+					<div className="flex flex-wrap items-center gap-3 sm:gap-4 mb-[clamp(2.5rem,5vw,4rem)]">
+						<Link
+							to="/projects"
+							className="inline-flex items-center gap-2 px-5 py-2.5 rounded-sm bg-accent text-canvas font-mono text-xs uppercase tracking-wider font-semibold hover:bg-accent-strong active:scale-[0.98] transition-all shadow-subtle"
+						>
+							<span>Explore Projects</span>
+							<ArrowUpRight className="h-3.5 w-3.5" />
+						</Link>
+						<a
+							href="#inquiries"
+							className="inline-flex items-center gap-2 px-5 py-2.5 rounded-sm border border-line bg-surface/50 text-muted hover:text-ink hover:border-line-strong active:scale-[0.98] transition-all font-mono text-xs uppercase tracking-wider"
+						>
+							<span>Reading Archive</span>
+							<span aria-hidden="true">&darr;</span>
+						</a>
 					</div>
-				</Reveal>
+				</div>
+
+				{/* Archive Directory Explorer Strip - Spans full width */}
+				<div className="pt-6 border-t border-line grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 w-full">
+					{branches.map((b) => (
+						<Link
+							key={b.path}
+							to={b.path}
+							className="group p-3.5 sm:p-4 rounded-sm border border-line/60 bg-surface/30 hover:bg-surface/70 hover:border-line-strong transition-all duration-200 active:scale-[0.99] flex flex-col justify-between"
+						>
+							<div className="flex items-center justify-between mb-1.5">
+								<span className="font-mono text-xs text-ink group-hover:text-accent transition-colors font-medium">
+									{b.label}
+								</span>
+								<ArrowUpRight className="h-3 w-3 text-muted group-hover:text-accent transition-colors opacity-60 group-hover:opacity-100" />
+							</div>
+							<p className="text-[11px] text-muted leading-relaxed line-clamp-2">
+								{b.desc}
+							</p>
+						</Link>
+					))}
+				</div>
 			</div>
 		</section>
 	)
 }
 
-function SelectedProjects({ home, featuredProjects }) {
+function SelectedProjects({ featuredProjects }) {
 	return (
-		<section className="shell pt-16 md:pt-24 border-t border-line" id="projects">
-			<div className="flex flex-wrap items-end justify-between gap-6">
-				<SectionIntro eyebrow="Selected projects" title={home.featuredHeading || "What I'm building"} />
-				<Reveal>
-					<Link
-						to="/projects"
-						className="link-sweep text-meta text-copper"
-					>
-						All projects
-					</Link>
-				</Reveal>
+		<section className="shell pt-[clamp(2rem,4vw,3.5rem)] border-t border-line" id="projects">
+			<div className="flex flex-wrap items-end justify-between gap-4 mb-6">
+				<h2 className="text-xl sm:text-2xl font-normal text-ink text-balance">Currently building</h2>
+				<Link
+					to="/projects"
+					className="font-mono text-xs tracking-wide text-ink border-b border-line-strong hover:text-accent hover:border-accent transition-colors"
+				>
+					View all projects &rarr;
+				</Link>
 			</div>
 
-			<div className="mt-10 grid gap-4 sm:grid-cols-2">
-				{featuredProjects.map((project, index) => (
-					<Reveal key={project.id} delay={index * 0.05}>
-						<ProjectCard project={project} />
-					</Reveal>
-				))}
+			<div className="divide-y divide-line border-t border-b border-line">
+				{featuredProjects.map((project) => {
+					const category = project.categories?.[0] || project.status || "Project"
+					const rawLink = project.links?.live || project.links?.repository
+					const link = rawLink ? rawLink : null
+
+					return (
+						<article key={project.id} className="group py-5 sm:py-6 grid gap-3 sm:grid-cols-[1fr_2fr] items-baseline transition-all hover:bg-surface/60 -mx-3 px-3 sm:-mx-4 sm:px-4 rounded">
+							<div className="font-mono text-xs tracking-widest uppercase text-muted">
+								{category}
+							</div>
+							<div>
+								<h3 className="text-base sm:text-lg font-normal text-ink group-hover:text-accent transition-colors leading-snug mb-1.5">
+									{link ? (
+										<a href={link} target="_blank" rel="noopener noreferrer" className="inline-flex items-baseline gap-2">
+											<span>{project.title}</span>
+											<ArrowUpRight className="h-4 w-4 opacity-50 group-hover:opacity-100 transition-opacity text-accent" />
+										</a>
+									) : (
+										project.title
+									)}
+								</h3>
+								<p className="text-base sm:text-lg text-muted font-sans leading-relaxed max-w-2xl">
+									{project.summary || project.description}
+								</p>
+							</div>
+						</article>
+					)
+				})}
 			</div>
 		</section>
 	)
@@ -132,7 +144,6 @@ function ActiveInquiries({ philosophy = {} }) {
 
 	const inquiries = [
 		{
-			id: "01",
 			category: "Philosophy & Psychology",
 			status: "Active inquiry",
 			title: "Attention, observation, and mental habits",
@@ -144,7 +155,6 @@ function ActiveInquiries({ philosophy = {} }) {
 			linkText: "Read note",
 		},
 		{
-			id: "02",
 			category: "History & Data Analysis",
 			status: "Completed study",
 			title: "Terrorism in India: Data Visualisation, 1947–2026",
@@ -156,7 +166,6 @@ function ActiveInquiries({ philosophy = {} }) {
 			linkText: "View project",
 		},
 		{
-			id: "03",
 			category: "Historical Accounts",
 			status: "Documentary research",
 			title: "Osho: Comparing Conflicting Accounts",
@@ -168,7 +177,6 @@ function ActiveInquiries({ philosophy = {} }) {
 			linkText: "Read document",
 		},
 		{
-			id: "04",
 			category: "Computer Systems",
 			status: "Ongoing learning",
 			title: "Fundamentals of Computer Systems & Security",
@@ -180,7 +188,6 @@ function ActiveInquiries({ philosophy = {} }) {
 			linkText: "View log",
 		},
 		{
-			id: "05",
 			category: "Public Policy & Governance",
 			status: "Study notes",
 			title: "Policy Decisions: Costs, Incentives, and Outcomes",
@@ -194,62 +201,49 @@ function ActiveInquiries({ philosophy = {} }) {
 	]
 
 	return (
-		<section className="shell pt-20 md:pt-32" id="inquiries">
-			{/* Editorial Section Header */}
-			<div className="border-b border-line pb-8 mb-12">
-				<div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+		<section className="shell pt-[clamp(2rem,4vw,3.5rem)]" id="inquiries">
+			<div className="border-b border-line pb-4 mb-6">
+				<div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
 					<div>
-						<div className="flex items-center gap-2 font-mono text-xs text-copper uppercase tracking-wider mb-3">
-							<span className="w-1.5 h-1.5 bg-copper" />
-							<span>Research &amp; Notes</span>
-						</div>
-						<h2 className="font-display text-h1 text-text leading-[1.05] tracking-tight">
-							Current Projects &amp; <br />
-							<span className="italic font-normal text-copper">Open Questions</span>
+						<h2 className="text-xl sm:text-2xl font-normal text-ink leading-snug text-balance">
+							Currently studying &amp; reading
 						</h2>
 					</div>
 					<div className="max-w-xs md:text-right">
-						<p className="text-sm text-text-2 leading-relaxed font-light">
+						<p className="text-sm text-muted leading-relaxed">
 							Notes, studies, and questions I am exploring in philosophy, history, governance, and computer systems.
 						</p>
 					</div>
 				</div>
 			</div>
 
-			{/* Asymmetrical Editorial Catalog Layout */}
-			<div className="grid grid-cols-1 lg:grid-cols-12 gap-y-12 lg:gap-x-12 items-start">
-				{/* Left Sidebar: Premise & Thinkers (Col 1-4) */}
-				<div className="lg:col-span-4 space-y-10 lg:sticky lg:top-28 border-b lg:border-b-0 lg:border-r border-line pb-10 lg:pb-0 lg:pr-8">
+			<div className="grid-asymmetric items-start">
+				<div className="space-y-[var(--spacing-fluid-lg)] lg:sticky lg:top-12 border-b lg:border-b-0 lg:border-r border-line pb-10 lg:pb-0 lg:pr-[var(--spacing-fluid-md)]">
 					<div>
-						<span className="font-mono text-xs tracking-wider text-copper uppercase block mb-2 font-medium">
-							How I Work
-						</span>
-						<p className="text-text-2 text-sm leading-relaxed font-light">
+						<h3 className="font-sans text-sm tracking-wide text-ink mb-4">How I Work</h3>
+						<p className="text-muted text-base leading-relaxed">
 							I study topics through primary sources and datasets. These notes track questions that come up across books, official records, and data projects.
 						</p>
 					</div>
 
-					{/* Theoretical Counterparts */}
-					<div className="pt-6 border-t border-line">
-						<div className="flex items-center justify-between mb-4">
-							<span className="font-mono text-xs tracking-wider text-copper uppercase block font-medium">
-								Readings &amp; Thinkers
-							</span>
+					<div className="pt-8 border-t border-line">
+						<div className="flex items-center justify-between mb-6">
+							<h3 className="font-sans text-sm tracking-wide text-ink">Readings &amp; Thinkers</h3>
 							<Link
 								to="/philosophy"
-								className="text-xs font-mono text-text-3 hover:text-copper transition-colors"
+								className="font-sans text-sm tracking-wide text-ink border-b border-line-strong hover:text-muted hover:border-muted transition-colors"
 							>
 								Reading log &rarr;
 							</Link>
 						</div>
-						<ul className="space-y-3 font-mono text-xs">
-							{thinkers.map((thinker, i) => (
+						<ul className="space-y-5 text-base">
+							{thinkers.map((thinker) => (
 								<li
-									key={thinker.id || thinker.name}
-									className="flex justify-between items-center text-text-2 hover:text-text transition-colors py-0.5"
+									key={thinker.name}
+									className="flex justify-between items-start gap-4 text-muted hover:text-ink transition-colors"
 								>
-									<span>0{i + 1}. {thinker.name}</span>
-									<span className="text-text-3 text-xs">
+									<span className="font-normal whitespace-nowrap text-ink">{thinker.name}</span>
+									<span className="text-right italic">
 										{thinker.description ? thinker.description.split(".")[0].slice(0, 24) : thinker.role || "Inquiry"}
 									</span>
 								</li>
@@ -257,61 +251,35 @@ function ActiveInquiries({ philosophy = {} }) {
 						</ul>
 					</div>
 
-					{/* Desk Manifesto Box */}
-					<div className="p-5 border border-line bg-surface">
-						<div className="flex items-center gap-2 text-copper mb-2">
-							<span className="font-mono text-xs tracking-wider uppercase font-medium">
-								Guiding Rule
-							</span>
-						</div>
-						<p className="text-xs leading-relaxed text-text-2 font-light">
+					<div className="pt-8 border-t border-line">
+						<h3 className="font-sans text-sm tracking-wide text-ink mb-4">Guiding Rule</h3>
+						<blockquote className="text-lg leading-relaxed text-muted italic font-display">
 							&ldquo;On this site I try to separate four things: facts from sources, my inferences, my opinions, and things I do not know.&rdquo;
-						</p>
+						</blockquote>
 					</div>
 				</div>
 
-				{/* Right Index Ledger: Detailed Inquiries (Col 5-12) */}
-				<div className="lg:col-span-8 divide-y divide-line">
-					{inquiries.map((item) => (
+				<div className="divide-y divide-line border-t border-b border-line lg:border-t-0 lg:border-b-0">
+					{inquiries.map((item, idx) => (
 						<article
-							key={item.id}
-							className="group py-8 first:pt-0 last:pb-0 transition-all duration-300 hover:pl-2"
+							key={idx}
+							className="group py-7 sm:py-9 grid gap-3 sm:grid-cols-[1fr_2fr] items-baseline transition-all hover:bg-surface/60 -mx-3 px-3 sm:-mx-6 sm:px-6 rounded first:pt-4"
 						>
-							<div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 mb-2">
-								<div className="flex items-baseline gap-3">
-									<span className="font-mono text-xs text-copper font-semibold">
-										[{item.id}]
-									</span>
-									<span className="font-mono text-[11px] tracking-wider text-text-3 uppercase">
-										{item.category}
-									</span>
-								</div>
-								<span className="font-mono text-[10px] tracking-wider text-text-3 group-hover:text-copper transition-colors">
-									{item.status}
-								</span>
+							<div className="font-sans text-xs tracking-widest uppercase text-muted">
+								{item.category}
 							</div>
 
-							<h3 className="font-display text-xl sm:text-2xl text-text font-normal mb-3 group-hover:text-copper transition-colors">
-								{item.title}
-							</h3>
+							<div>
+								<h3 className="text-[length:var(--text-2xl)] font-normal text-ink group-hover:text-accent transition-colors leading-snug mb-2 sm:mb-3">
+									<Link to={item.link} className="inline-flex items-baseline gap-2">
+										<span>{item.title}</span>
+										<ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0 text-accent" />
+									</Link>
+								</h3>
 
-							<p className="text-text-2 text-sm leading-relaxed mb-4 max-w-2xl">
-								{item.summary}
-							</p>
-
-							<div className="flex flex-wrap items-center gap-y-2 gap-x-5 font-mono text-xs text-text-3">
-								<span>
-									<strong className="text-text-2 font-medium">Field:</strong> {item.locus}
-								</span>
-								<span>
-									<strong className="text-text-2 font-medium">Context:</strong> {item.text}
-								</span>
-								<Link
-									to={item.link}
-									className="inline-flex items-center text-copper hover:underline ml-auto font-mono text-xs tracking-wider"
-								>
-									{item.linkText} <ArrowRight className="h-3 w-3 ml-1 transition-transform group-hover:translate-x-1" />
-								</Link>
+								<p className="text-lg text-muted font-sans leading-relaxed max-w-2xl">
+									{item.summary}
+								</p>
 							</div>
 						</article>
 					))}
@@ -322,7 +290,7 @@ function ActiveInquiries({ philosophy = {} }) {
 }
 
 const RATE_LIMIT_KEY = 'advaita_contact_last_submit'
-const RATE_LIMIT_MS = 30000 // 30 seconds
+const RATE_LIMIT_MS = 30000
 
 function Correspondence({ publicSocialLinks }) {
 	const links = (publicSocialLinks || []).filter((l) => l.url && l.kind !== "email")
@@ -341,14 +309,12 @@ function Correspondence({ publicSocialLinks }) {
 	const handleSubmit = async (e) => {
 		e.preventDefault()
 
-		// Bot honeypot check
 		if (form.hp_check) {
 			setStatus("success")
 			setFeedback("Message sent. Thank you for taking the time to write.")
 			return
 		}
 
-		// Rate limiting cooldown check
 		try {
 			const lastSubmit = parseInt(localStorage.getItem(RATE_LIMIT_KEY) || "0", 10)
 			const elapsed = Date.now() - lastSubmit
@@ -359,7 +325,7 @@ function Correspondence({ publicSocialLinks }) {
 				return
 			}
 		} catch (_) {
-			// Ignore localStorage issues
+			/* ignore localStorage access errors */
 		}
 
 		if (!form.message.trim()) {
@@ -397,7 +363,7 @@ function Correspondence({ publicSocialLinks }) {
 			try {
 				localStorage.setItem(RATE_LIMIT_KEY, Date.now().toString())
 			} catch (_) {
-				// Ignore
+				/* ignore localStorage write errors */
 			}
 
 			setStatus("success")
@@ -413,107 +379,83 @@ function Correspondence({ publicSocialLinks }) {
 		} catch (err) {
 			console.error(err)
 			setStatus("error")
-			setFeedback("Notice: Message could not be sent right now. You can also reach me directly via the contact page.")
+			const isNetworkErr =
+				err?.message?.includes("Failed to fetch") ||
+				err?.message?.includes("NetworkError") ||
+				err?.message?.includes("network") ||
+				err?.name === "TypeError"
+
+			setFeedback(
+				isNetworkErr
+					? "Notice: Could not connect to transmission service (possibly blocked by an adblocker or privacy shield). You can write directly to advaita974@gmail.com."
+					: "Notice: Message could not be sent right now. You can also reach me directly at advaita974@gmail.com."
+			)
 		}
 	}
 
 	return (
-		<section className="shell pt-20 md:pt-32 pb-24 md:pb-36" id="correspondence">
-			{/* Divider */}
-			<div className="w-full border-t border-line mb-16" />
+		<section className="shell py-[var(--spacing-fluid-section)]" id="correspondence">
+			<div className="w-full border-t border-line mb-[var(--spacing-fluid-xl)]" />
 
-			<div className="grid grid-cols-1 lg:grid-cols-12 gap-y-16 lg:gap-x-16 items-start">
-				{/* Left Editorial Column (Col 1-6) */}
-				<div className="lg:col-span-6 space-y-8">
+			<div className="grid grid-cols-1 lg:grid-cols-2 gap-[var(--spacing-fluid-lg)] items-start">
+				<div className="space-y-[var(--spacing-fluid-md)]">
 					<div>
-						<div className="flex items-center gap-2 font-mono text-xs text-copper uppercase tracking-wider mb-3">
-							<span className="w-1.5 h-1.5 bg-copper" />
-							<span>Get in Touch</span>
-						</div>
-						<h2 className="font-display text-h1 text-text leading-[1.05] tracking-tight">
+						<span className="font-utility text-muted block mb-3">
+							Get in Touch
+						</span>
+						<h2 className="text-[length:var(--text-4xl)] font-normal text-ink leading-[1.1] text-balance">
 							Questions, corrections, or book recommendations.
 						</h2>
 					</div>
 
-					<p className="text-lead text-text-2 leading-relaxed max-w-xl font-light">
+					<p className="text-lg text-muted leading-relaxed max-w-xl">
 						I appreciate constructive feedback and book recommendations. If you spot an error in my data, a missing citation, or want to discuss any of the topics here, please write directly.
 					</p>
 
-					{/* Note on availability & India location */}
-					<div className="p-6 border border-line bg-surface space-y-3.5 max-w-xl">
-						<div className="flex items-center justify-between border-b border-line pb-2.5">
-							<span className="font-mono text-[11px] text-text-3 uppercase">
-								Location
-							</span>
-							<span className="font-mono text-xs text-text">
-								India
-							</span>
+					<div className="max-w-xl space-y-4 pt-6 border-t border-line">
+						<div className="flex items-center justify-between font-utility">
+							<span className="text-ink">Location</span>
+							<span className="text-muted">India</span>
 						</div>
-						<div className="flex items-center justify-between border-b border-line pb-2.5">
-							<span className="font-mono text-[11px] text-text-3 uppercase">
-								Response Time
-							</span>
-							<span className="font-mono text-xs text-text">
-								Within ~24–48 hours
-							</span>
-						</div>
-						<div className="flex items-center justify-between">
-							<span className="font-mono text-[11px] text-text-3 uppercase">
-								Notes
-							</span>
-							<span className="font-mono text-xs text-copper">
-								Corrections are welcomed &amp; updated
-							</span>
+						<div className="flex items-center justify-between font-utility">
+							<span className="text-ink">Response Time</span>
+							<span className="text-muted">Within ~24–48 hours</span>
 						</div>
 					</div>
 
-					{/* Direct Channels */}
-					<div className="pt-4 border-t border-line max-w-xl">
-						<span className="font-mono text-[11px] text-text-3 uppercase block mb-3">
-							Direct Channels
-						</span>
-						<div className="grid grid-cols-2 sm:grid-cols-3 gap-3 font-mono text-xs">
-							{links.map((link, idx) => (
+					<div className="pt-6 border-t border-line max-w-xl">
+						<h3 className="font-utility text-ink mb-4">Direct Channels</h3>
+						<div className="flex flex-wrap gap-6 font-utility">
+							{links.map((link) => (
 								<a
 									key={link.id}
 									href={link.url}
 									target="_blank"
 									rel="me noopener noreferrer"
-									className="text-text-2 hover:text-copper transition-colors flex items-center gap-1.5"
+									className="text-ink border-b border-transparent hover:border-ink transition-colors flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas"
 								>
-									<span className="text-text-3">0{idx + 1}.</span>
 									<span>{link.label}</span>
-									<ArrowUpRight className="h-3 w-3 text-text-3" />
+									<ArrowUpRight className="h-3 w-3" />
 								</a>
 							))}
 							<Link
 								to="/contact"
-								className="text-text-2 hover:text-copper transition-colors flex items-center gap-1.5"
+								className="text-ink border-b border-transparent hover:border-ink transition-colors flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas"
 							>
-								<span className="text-text-3">0{links.length + 1}.</span>
 								<span>Full Form</span>
-								<ArrowRight className="h-3 w-3 text-text-3" />
+								<ArrowRight className="h-3 w-3" />
 							</Link>
 						</div>
 					</div>
 				</div>
 
-				{/* Right Contact Form (Col 7-12) */}
-				<div className="lg:col-span-6 border border-line bg-surface p-5 sm:p-10 relative">
-					<div className="flex items-center justify-between border-b border-line pb-4 mb-6">
-						<div className="flex items-center gap-2">
-							<span className="h-2 w-2 rounded-full bg-copper" />
-							<span className="font-mono text-xs text-text uppercase tracking-wider font-medium">
-								Send a Message
-							</span>
-						</div>
-						<span className="font-mono text-[11px] text-text-3">
-							India [UTC +05:30]
-						</span>
+				<div>
+					<div className="mb-6">
+						<h3 className="text-xl sm:text-2xl font-normal text-ink mb-2">Send a Message</h3>
+						<p className="text-sm text-muted">Fields marked with * are required.</p>
 					</div>
 
 					<form onSubmit={handleSubmit} className="space-y-6">
-						{/* Honeypot field for anti-spam deterrence */}
 						<div className="hidden" aria-hidden="true">
 							<label htmlFor="contact-hp-home">Leave blank</label>
 							<input
@@ -527,153 +469,123 @@ function Correspondence({ publicSocialLinks }) {
 							/>
 						</div>
 
-						{/* Topic Selection */}
 						<div>
-							<label className="font-mono text-[11px] text-text-3 uppercase block mb-2.5">
+							<label htmlFor="contact-topic" className="font-utility text-ink block mb-2">
 								Topic of Inquiry
 							</label>
-							<div className="grid grid-cols-2 gap-2">
-								{[
-									"General Inquiry",
-									"Correction / Citation",
-									"Book Recommendation",
-									"Project Discussion",
-								].map((t) => (
-									<button
-										key={t}
-										type="button"
-										onClick={() => setForm({ ...form, topic: t })}
-										className={`p-2.5 border text-left font-mono text-xs transition-all duration-200 cursor-pointer ${form.topic === t
-											? "border-copper bg-copper/10 text-text font-medium"
-											: "border-line bg-surface-2 text-text-2 hover:border-line-strong hover:text-text"
-											}`}
-									>
-										{t}
-									</button>
+							<select 
+								id="contact-topic"
+								value={form.topic}
+								onChange={(e) => setForm({ ...form, topic: e.target.value })}
+								autoComplete="off"
+								className="w-full bg-surface border border-line px-4 py-3 text-base text-ink focus:border-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
+							>
+								{["General Inquiry", "Correction / Citation", "Book Recommendation", "Project Discussion"].map((t) => (
+									<option key={t} value={t}>{t}</option>
 								))}
-							</div>
+							</select>
 						</div>
 
-						{/* Name & Email */}
-						<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+						<div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
 							<div>
-								<label
-									htmlFor="contact-sender-name"
-									className="font-mono text-[11px] text-text-3 uppercase block mb-1.5"
-								>
+								<label htmlFor="contact-sender-name" className="font-utility text-ink block mb-2">
 									Your Name
 								</label>
 								<input
 									id="contact-sender-name"
 									type="text"
 									maxLength={80}
-									placeholder="e.g. Reader, Colleague, or Anonymous"
+									placeholder="Anonymous Reader"
 									value={form.name}
 									onChange={(e) => setForm({ ...form, name: e.target.value })}
-									className="w-full bg-surface-2 border border-line px-3.5 py-2.5 text-base sm:text-sm text-text placeholder:text-text-3/60 focus:border-copper focus:outline-none transition-colors"
+									autoComplete="name"
+									spellCheck={false}
+									className="w-full bg-surface border border-line px-4 py-3 text-base text-ink focus:border-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
 								/>
 							</div>
 							<div>
-								<label
-									htmlFor="contact-sender-email"
-									className="font-mono text-[11px] text-text-3 uppercase block mb-1.5"
-								>
+								<label htmlFor="contact-sender-email" className="font-utility text-ink block mb-2">
 									Email Address
 								</label>
 								<input
 									id="contact-sender-email"
 									type="email"
+									inputMode="email"
 									maxLength={120}
-									placeholder="you@domain.org"
+									placeholder="you@example.com"
 									value={form.email}
 									onChange={(e) => setForm({ ...form, email: e.target.value })}
-									className="w-full bg-surface-2 border border-line px-3.5 py-2.5 text-base sm:text-sm text-text placeholder:text-text-3/60 focus:border-copper focus:outline-none transition-colors"
+									autoComplete="email"
+									spellCheck={false}
+									className="w-full bg-surface border border-line px-4 py-3 text-base text-ink focus:border-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
 								/>
 							</div>
 						</div>
 
-						{/* Message */}
 						<div>
-							<div className="flex items-center justify-between mb-1.5">
-								<label
-									htmlFor="contact-message"
-									className="font-mono text-[11px] text-text-3 uppercase block"
-								>
-									Message *
-								</label>
-								<span className="font-mono text-[10px] text-text-3">
-									{form.message.length}/2000
-								</span>
-							</div>
+							<label htmlFor="contact-message" className="font-utility text-ink block mb-2">
+								Message *
+							</label>
 							<textarea
 								id="contact-message"
-								rows={4}
+								rows={5}
 								maxLength={2000}
-								placeholder="Specify premise, data question, or note under discussion..."
+								placeholder="What's on your mind?"
 								value={form.message}
 								onChange={(e) => setForm({ ...form, message: e.target.value })}
-								className="w-full bg-surface-2 border border-line p-3 text-base sm:text-sm text-text placeholder:text-text-3/60 focus:border-copper focus:outline-none transition-colors leading-relaxed"
+								autoComplete="off"
+								spellCheck={true}
+								className="w-full bg-surface border border-line p-4 text-base text-ink focus:border-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
 							/>
 						</div>
 
-						{/* Optional Reading Ref */}
 						<div>
-							<label
-								htmlFor="contact-reading-ref"
-								className="font-mono text-[11px] text-text-3 uppercase block mb-1.5"
-							>
-								Recommended Reading or Link (Optional)
+							<label htmlFor="contact-reading-ref" className="font-utility text-ink block mb-2">
+								Recommended Reading/Link (Optional)
 							</label>
 							<input
 								id="contact-reading-ref"
 								type="text"
+								inputMode="url"
 								maxLength={200}
-								placeholder="Title, author, or link..."
+								placeholder="https://…"
 								value={form.readingRef}
 								onChange={(e) => setForm({ ...form, readingRef: e.target.value })}
-								className="w-full bg-surface-2 border border-line px-3 py-2 text-sm text-text placeholder:text-text-3/60 focus:border-copper focus:outline-none transition-colors"
+								autoComplete="url"
+								spellCheck={false}
+								className="w-full bg-surface border border-line px-4 py-3 text-base text-ink focus:border-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
 							/>
 						</div>
 
 						{feedback && (
-							<p
-								className={`text-xs font-mono ${status === "success" ? "text-copper" : "text-limitation"
-									}`}
-							>
+							<p className={`text-base font-utility mt-4 ${status === "success" ? "text-ink" : "text-limitation"}`}>
 								{feedback}
 							</p>
 						)}
 
-						<div className="pt-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+						<div className="pt-4 flex items-center justify-between">
 							<button
 								type="submit"
 								disabled={status === "submitting"}
-								className="group inline-flex items-center gap-3 border border-copper bg-copper px-6 py-3 text-xs font-mono uppercase tracking-widest text-canvas font-semibold transition-all duration-300 hover:bg-copper-strong disabled:opacity-50 cursor-pointer"
+								className="inline-flex items-center gap-2 bg-ink text-canvas px-6 py-3 font-utility hover:bg-muted disabled:opacity-50 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas"
 							>
 								{status === "submitting" ? (
 									<>
-										<Loader2 className="h-3.5 w-3.5 animate-spin" />
-										<span>Sending...</span>
+										<Loader2 className="h-4 w-4 animate-spin" />
+										<span>Sending…</span>
 									</>
 								) : status === "success" ? (
 									<>
-										<Check className="h-3.5 w-3.5" />
-										<span>Message Sent</span>
+										<Check className="h-4 w-4" />
+										<span>Sent</span>
 									</>
 								) : (
 									<>
-										<span>Send Message</span>
-										<ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+										<span>Submit</span>
+										<ArrowRight className="h-4 w-4" />
 									</>
 								)}
 							</button>
-
-							<Link
-								to="/contact"
-								className="text-xs font-mono text-text-3 hover:text-copper transition-colors"
-							>
-								Full contact page &rarr;
-							</Link>
 						</div>
 					</form>
 				</div>
@@ -683,19 +595,13 @@ function Correspondence({ publicSocialLinks }) {
 }
 
 export default function Home() {
-	const {
-		profile,
-		home,
-		featuredProjects,
-		philosophy,
-		publicSocialLinks,
-	} = useContent()
+	const { featuredProjects, philosophy, publicSocialLinks } = useContent()
 
 	return (
 		<>
 			<Seo title={ROUTE.title} description={ROUTE.description} path="/" />
-			<Hero profile={profile} home={home} />
-			<SelectedProjects home={home} featuredProjects={featuredProjects} />
+			<Hero />
+			<SelectedProjects featuredProjects={featuredProjects} />
 			<ActiveInquiries philosophy={philosophy} />
 			<Correspondence publicSocialLinks={publicSocialLinks} />
 		</>
