@@ -69,3 +69,17 @@ export function scrollToTop() {
     window.scrollTo(0, 0)
   }
 }
+
+/**
+ * Pause Lenis scrolling (e.g. when mobile nav or lightbox modal is open).
+ */
+export function stopScroll() {
+  lenisInstance?.stop()
+}
+
+/**
+ * Resume Lenis scrolling.
+ */
+export function startScroll() {
+  lenisInstance?.start()
+}
