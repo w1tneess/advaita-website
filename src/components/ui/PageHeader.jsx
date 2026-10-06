@@ -5,7 +5,7 @@
  */
 export default function PageHeader({ eyebrow, title, lead, registry, children }) {
 	return (
-		<header className="shell pt-[clamp(4.5rem,7vw,6.25rem)] pb-[clamp(1.5rem,3vw,2.5rem)] mb-[clamp(1.5rem,3.5vw,2.75rem)] border-b border-line">
+		<header className="shell pt-[clamp(6.5rem,10vw,8.5rem)] pb-[clamp(1.5rem,3vw,2.5rem)] mb-[clamp(1.5rem,3.5vw,2.75rem)] border-b border-line">
 			<div className="flex flex-wrap items-center justify-between gap-2 pb-2 sm:pb-3">
 				<p className="font-utility text-[length:var(--text-label)] text-muted">
 					{eyebrow}

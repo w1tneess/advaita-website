@@ -50,7 +50,7 @@ export default function ReorderList({
                 onClick={() => move(item, -1, index)}
                 disabled={index === 0}
                 aria-label={`Move ${labelFor ? labelFor(item) : 'item'} up`}
-                className="rounded-md border border-line p-1 text-muted transition-colors hover:text-accent disabled:cursor-not-allowed disabled:opacity-40"
+                className="rounded-md border border-line p-1 text-muted transition-all duration-150 ease-[var(--ease-out-quart)] hover:text-accent hover:bg-surface active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-40"
               >
                 <ChevronUp className="h-3.5 w-3.5" aria-hidden="true" />
               </button>
@@ -59,7 +59,7 @@ export default function ReorderList({
                 onClick={() => move(item, 1, index)}
                 disabled={index === items.length - 1}
                 aria-label={`Move ${labelFor ? labelFor(item) : 'item'} down`}
-                className="rounded-md border border-line p-1 text-muted transition-colors hover:text-accent disabled:cursor-not-allowed disabled:opacity-40"
+                className="rounded-md border border-line p-1 text-muted transition-all duration-150 ease-[var(--ease-out-quart)] hover:text-accent hover:bg-surface active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-40"
               >
                 <ChevronDown className="h-3.5 w-3.5" aria-hidden="true" />
               </button>

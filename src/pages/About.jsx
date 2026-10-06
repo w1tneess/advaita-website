@@ -2,6 +2,7 @@ import { ArrowRight, ArrowUpRight } from 'lucide-react'
 import { Link } from 'react-router'
 import PageHeader from '@/components/ui/PageHeader.jsx'
 import Seo from '@/components/meta/Seo.jsx'
+import Icon from '@/components/meta/Icon.jsx'
 import { useContent } from '@/lib/content.jsx'
 import { PUBLIC_ROUTES } from '@/config/nav.js'
 
@@ -46,14 +47,14 @@ export default function About() {
         </div>
       </PageHeader>
 
-      <div className="shell pb-[clamp(2.5rem,5vw,4.5rem)] space-y-[clamp(2.5rem,5vw,4.5rem)]">
-        <section className="border-t border-line pt-[clamp(1.5rem,3vw,2.5rem)]">
-          <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-[clamp(1.5rem,3vw,2.5rem)] items-start">
-            <div className="space-y-3">
-              <h2 className="text-xl sm:text-2xl font-normal text-ink leading-snug text-balance">
+      <div className="shell pb-24 pt-8 space-y-24">
+        <section className="border-t border-line pt-12">
+          <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-12 items-start">
+            <div className="space-y-4">
+              <h2 className="text-2xl sm:text-3xl font-normal text-ink leading-snug text-balance">
                 This is the official website of Advaita Chandra.
               </h2>
-              <div className="space-y-3 text-sm sm:text-base text-muted leading-relaxed max-w-prose font-sans">
+              <div className="space-y-4 text-base sm:text-lg text-muted leading-relaxed max-w-prose font-sans">
                 <p>
                   I'm Advaita Chandra, a student based in West Bengal, India. This site is where I keep the things I'm working on: projects, reading notes, photography, and questions I haven't fully worked out yet.
                 </p>
@@ -66,7 +67,7 @@ export default function About() {
               </div>
             </div>
 
-            <div className="pt-6 border-t border-line lg:border-t-0 lg:pt-0 lg:pl-8 lg:border-l space-y-4">
+            <div className="pt-8 border-t border-line lg:border-t-0 lg:pt-0 lg:pl-10 lg:border-l space-y-5">
               <h3 className="font-mono text-xs uppercase tracking-wider text-ink border-b border-line pb-3">
                 Verified Profiles
               </h3>
@@ -75,7 +76,7 @@ export default function About() {
                   <span className="text-muted">Website:</span>
                   <a
                     href="https://advaitachandra.in/"
-                    className="text-ink hover:text-accent transition-colors inline-flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm"
+                    className="text-ink hover:text-muted active:opacity-80 transition-colors duration-150 ease-[var(--ease-out-quart)] inline-flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas rounded-sm"
                   >
                     <span>advaitachandra.in</span>
                     <ArrowUpRight className="h-3 w-3" />
@@ -87,7 +88,7 @@ export default function About() {
                     href="https://github.com/w1tneess"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-ink hover:text-accent transition-colors inline-flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm"
+                    className="text-ink hover:text-muted active:opacity-80 transition-colors duration-150 ease-[var(--ease-out-quart)] inline-flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas rounded-sm"
                   >
                     <span>github.com/w1tneess</span>
                     <ArrowUpRight className="h-3 w-3" />
@@ -99,7 +100,7 @@ export default function About() {
                     href="https://x.com/w1tneess_"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-ink hover:text-accent transition-colors inline-flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm"
+                    className="text-ink hover:text-muted active:opacity-80 transition-colors duration-150 ease-[var(--ease-out-quart)] inline-flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas rounded-sm"
                   >
                     <span>x.com/w1tneess_</span>
                     <ArrowUpRight className="h-3 w-3" />
@@ -111,7 +112,7 @@ export default function About() {
                     href="https://www.instagram.com/adva1ta_/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-ink hover:text-accent transition-colors inline-flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm"
+                    className="text-ink hover:text-muted active:opacity-80 transition-colors duration-150 ease-[var(--ease-out-quart)] inline-flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas rounded-sm"
                   >
                     <span>instagram.com/adva1ta_</span>
                     <ArrowUpRight className="h-3 w-3" />
@@ -121,7 +122,7 @@ export default function About() {
                   <span className="text-muted">Email:</span>
                   <a
                     href="mailto:hi@advaitachandra.in"
-                    className="text-ink hover:text-accent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm"
+                    className="text-ink hover:text-muted active:opacity-80 transition-colors duration-150 ease-[var(--ease-out-quart)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas rounded-sm"
                   >
                     hi@advaitachandra.in
                   </a>
@@ -132,11 +133,11 @@ export default function About() {
         </section>
 
         {profile.epistemicNote && (
-          <section className="border-l-2 border-accent/60 pl-4 py-1.5">
-            <div className="font-mono text-xs text-accent mb-2 tracking-wider uppercase">
+          <section className="border-l-2 border-muted/30 pl-6 py-2">
+            <div className="font-mono text-xs text-muted mb-3 tracking-wider uppercase">
               Guiding Principle
             </div>
-            <p className="text-base sm:text-lg text-muted italic leading-relaxed max-w-3xl font-display text-balance">
+            <p className="text-lg sm:text-xl text-muted italic leading-relaxed max-w-3xl font-display text-balance">
               &ldquo;{profile.epistemicNote}&rdquo;
             </p>
           </section>
@@ -144,45 +145,45 @@ export default function About() {
 
         {publicProjects?.length > 0 && (
           <section>
-            <div className="flex items-center justify-between border-b border-line pb-3 mb-4">
+            <div className="flex items-center justify-between border-b border-line pb-4 mb-6">
               <div>
                 <span className="font-mono text-xs text-muted block mb-1 tracking-wider uppercase">
-                  Projects &amp; Systems
+                  Projects & Systems
                 </span>
-                <h2 className="text-xl sm:text-2xl text-ink font-normal">
+                <h2 className="text-2xl sm:text-3xl text-ink font-normal">
                   Current Projects
                 </h2>
               </div>
               <Link
                 to="/projects"
-                className="font-mono text-xs text-ink hover:text-accent transition-colors flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm"
+                className="font-mono text-xs text-ink hover:text-muted active:opacity-80 transition-colors duration-150 ease-[var(--ease-out-quart)] flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas rounded-sm"
               >
                 <span>All Projects ({publicProjects.length})</span>
                 <ArrowRight className="h-3.5 w-3.5" />
               </Link>
             </div>
 
-            <div className="divide-y divide-line border-t border-b border-line">
+            <div className="divide-y divide-line border-t border-b border-line lg:border-t-0 lg:border-b-0">
               {publicProjects.map((project) => (
                 <div
                   key={project.id}
-                  className="py-4 sm:py-5 grid gap-2 sm:gap-4 sm:grid-cols-[1fr_2.5fr] items-baseline group"
+                  className="py-6 sm:py-8 grid gap-4 sm:gap-6 sm:grid-cols-[1fr_2.5fr] items-baseline group -mx-4 px-4 sm:-mx-6 sm:px-6 rounded-xl hover:bg-surface/40 hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-250 ease-[var(--ease-out-quart)] first:pt-4"
                 >
-                  <div className="font-mono text-xs tracking-wider uppercase text-muted">
+                  <div className="font-mono text-xs tracking-wider uppercase text-muted font-medium">
                     {project.categories?.join(' / ') || 'Project'}
                   </div>
                   <div>
-                    <h3 className="text-base sm:text-lg font-normal text-ink mb-1.5 group-hover:text-accent transition-colors text-balance">
-                      <Link to="/projects" className="inline-flex items-baseline gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm">
+                    <h3 className="text-lg sm:text-xl font-normal text-ink mb-2 group-hover:text-muted transition-colors duration-150 ease-[var(--ease-out-quart)] text-balance">
+                      <Link to="/projects" className="inline-flex items-baseline gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas rounded-sm">
                         <span>{project.title}</span>
-                        <ArrowUpRight className="h-3.5 w-3.5 opacity-50 group-hover:opacity-100 transition-opacity" />
+                        <ArrowUpRight className="h-4 w-4 opacity-50 group-hover:opacity-100 transition-all duration-150 ease-[var(--ease-out-quart)] text-muted" />
                       </Link>
                     </h3>
-                    <p className="text-xs sm:text-sm text-muted leading-relaxed mb-3">
+                    <p className="text-sm sm:text-base text-muted leading-relaxed mb-4 max-w-2xl">
                       {project.description}
                     </p>
                     <div className="flex items-center justify-between font-mono text-xs tracking-wide">
-                      <span className="text-muted">
+                      <span className="text-muted/80">
                         {project.tools?.join(', ')}
                       </span>
                     </div>
@@ -197,7 +198,7 @@ export default function About() {
           <section className="pt-6 border-t border-line">
             <div className="flex items-center justify-between border-b border-line pb-3 mb-4">
               <h2 className="text-xl sm:text-2xl font-normal text-ink">
-                Technologies &amp; Toolkit
+                Technologies & Toolkit
               </h2>
             </div>
 
@@ -218,8 +219,8 @@ export default function About() {
                           <div className="min-w-0 flex-1">
                             <div className="flex flex-wrap items-center gap-2.5 font-sans">
                               <span className="text-ink text-sm sm:text-base">{skill.name}</span>
-                              <span className="text-[11px] font-mono text-muted px-1.5 py-0.5 border border-line rounded">
-                                {skill.level}
+                              <span className="text-[10px] font-mono text-muted uppercase tracking-wider px-2 py-0.5 border border-line rounded bg-surface">
+                                {skill.level?.replace('-', ' ')}
                               </span>
                             </div>
                             {skill.note && (
@@ -228,7 +229,7 @@ export default function About() {
                             {project && (
                               <Link
                                 to={`/projects`}
-                                className="mt-1.5 inline-flex items-center gap-1 font-mono text-xs text-ink hover:text-accent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm"
+                                className="mt-2 inline-flex items-center gap-1.5 font-mono text-xs text-ink hover:text-muted transition-colors duration-150 ease-[var(--ease-out-quart)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas rounded-sm"
                               >
                                 <span>See in: {project.title}</span>
                                 <ArrowUpRight className="h-3 w-3" />
@@ -246,31 +247,51 @@ export default function About() {
         )}
 
         <section className="pt-6 border-t border-line">
-          <div className="flex items-center justify-between border-b border-line pb-3 mb-4">
-            <h2 className="text-xl sm:text-2xl font-normal text-ink">
-              Areas of Study
-            </h2>
-            <span className="font-mono text-xs tracking-wide text-muted">
-              {interests?.length} Topics
+          <div className="flex flex-wrap items-end justify-between gap-4 border-b border-line pb-4 mb-8">
+            <div>
+              <span className="font-mono text-xs text-muted uppercase tracking-widest block mb-2">
+                Curiosity Index
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-normal text-ink">
+                Areas of Study
+              </h2>
+            </div>
+            <span className="font-mono text-xs tracking-wide text-muted bg-surface/50 px-3 py-1.5 rounded-md border border-line/50">
+              {interests?.length || 11} Topics Cataloged
             </span>
           </div>
 
-          <div className="divide-y divide-line border-t border-b border-line">
-            {interests?.map((interest, idx) => (
-              <div key={interest.id || idx} className="py-4 sm:py-5 grid gap-2 sm:gap-4 sm:grid-cols-[1fr_2.5fr] items-baseline">
-                <div className="font-mono text-xs tracking-wider uppercase text-muted">
-                  {interest.category}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            {interests?.map((interest, idx) => {
+              const name = interest.name || interest.title || "Study Topic"
+              const note = interest.note || interest.description || ""
+              const iconName = interest.icon || "BookOpen"
+
+              return (
+                <div
+                  key={interest.id || idx}
+                  className="p-6 sm:p-8 rounded-2xl border border-line/60 bg-surface/30 hover:bg-surface/60 hover:-translate-y-1 hover:border-line-strong hover:shadow-subtle active:scale-[0.98] transition-all duration-250 ease-[var(--ease-out-quart)] flex flex-col justify-between group"
+                >
+                  <div>
+                    <div className="flex items-center justify-between gap-3 mb-4">
+                      <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-line/60 bg-surface text-muted group-hover:border-line-strong group-hover:bg-surface transition-colors duration-150 ease-[var(--ease-out-quart)] shadow-subtle">
+                        <Icon name={iconName} className="h-5 w-5" />
+                      </span>
+                      <span className="font-mono text-[10px] text-muted/80 bg-raised px-2 py-0.5 rounded border border-line/50">
+                        {String(interest.order || idx + 1).padStart(2, '0')}
+                      </span>
+                    </div>
+
+                    <h3 className="text-lg font-medium text-ink group-hover:text-muted transition-colors duration-150 ease-[var(--ease-out-quart)] mb-2">
+                      {name}
+                    </h3>
+                    <p className="text-sm sm:text-base text-muted leading-relaxed font-sans">
+                      {note}
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-base sm:text-lg font-normal text-ink mb-1.5 text-balance">
-                    {interest.title}
-                  </h3>
-                  <p className="text-xs sm:text-sm text-muted leading-relaxed">
-                    {interest.description}
-                  </p>
-                </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </section>
 
@@ -291,7 +312,7 @@ export default function About() {
               {timeline.map((item) => (
                 <div key={item.id} className="relative">
                   <span
-                    className="absolute -left-[calc(1.5rem+4.5px)] sm:-left-[calc(2rem+4.5px)] top-1.5 h-2 w-2 rounded-full bg-accent"
+                    className="absolute -left-[calc(1.5rem+4px)] sm:-left-[calc(2rem+4px)] top-1.5 h-2 w-2 rounded-full bg-muted"
                     aria-hidden="true"
                   />
                   <span className="font-mono text-xs text-muted block mb-1">
@@ -318,7 +339,7 @@ export default function About() {
                 How to Read This Site
               </div>
               <h3 className="text-lg sm:text-xl font-normal text-ink mb-3">
-                Honesty &amp; Limitations
+                Honesty & Limitations
               </h3>
               <ul className="space-y-3.5 text-xs sm:text-sm text-muted leading-relaxed">
                 <li className="flex items-start gap-3">
@@ -339,7 +360,7 @@ export default function About() {
             <div className="pt-4 border-t border-line lg:border-t-0 lg:border-l lg:pl-8 flex flex-col justify-between">
               <div>
                 <div className="font-mono text-xs text-muted mb-2 tracking-wider uppercase">
-                  Feedback &amp; Dialogue
+                  Feedback & Dialogue
                 </div>
                 <h3 className="text-lg sm:text-xl font-normal text-ink mb-3">
                   Get in Touch
@@ -349,17 +370,17 @@ export default function About() {
                 </p>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-line flex flex-wrap items-center gap-3">
+              <div className="mt-8 pt-6 border-t border-line flex flex-wrap items-center gap-4">
                 <Link
                   to="/contact"
-                  className="inline-flex items-center gap-2 border border-line bg-surface text-ink px-4 sm:px-5 py-2 sm:py-2.5 font-mono text-xs hover:border-accent hover:text-accent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-md bg-ink text-canvas font-mono text-xs uppercase tracking-wider font-semibold hover:bg-white/20 hover:text-ink active:scale-[0.97] active:opacity-80 transition-all duration-250 ease-[var(--ease-out-quart)] shadow-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas"
                 >
                   <span>Send Message</span>
                   <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
                 <Link
                   to="/projects"
-                  className="inline-flex items-center gap-2 border border-line bg-surface text-muted px-4 sm:px-5 py-2 sm:py-2.5 font-mono text-xs hover:border-line-strong hover:text-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-md border border-line bg-surface/50 text-muted hover:text-ink hover:border-line-strong hover:bg-surface active:scale-[0.97] active:opacity-80 transition-all duration-250 ease-[var(--ease-out-quart)] font-mono text-xs uppercase tracking-wider focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas"
                 >
                   <span>View Projects</span>
                 </Link>

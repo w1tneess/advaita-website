@@ -43,6 +43,7 @@ const Projects = lazyWithRetry(() => import('./pages/Projects.jsx'))
 const Blog = lazyWithRetry(() => import('./pages/Blog.jsx'))
 const BlogPost = lazyWithRetry(() => import('./pages/BlogPost.jsx'))
 const NotePost = lazyWithRetry(() => import('./pages/NotePost.jsx'))
+const AlgorithmicArt = lazyWithRetry(() => import('./pages/AlgorithmicArt.jsx'))
 const Privacy = lazyWithRetry(() => import('./pages/Privacy.jsx'))
 const Terms = lazyWithRetry(() => import('./pages/Terms.jsx'))
 
@@ -93,6 +94,7 @@ export default function App() {
             <Route path="blog" element={<Blog />} />
             <Route path="blog/:slug" element={<BlogPost />} />
             <Route path="contact" element={<Contact />} />
+            <Route path="art" element={<AlgorithmicArt />} />
             <Route path="privacy" element={<Privacy />} />
             <Route path="terms" element={<Terms />} />
             <Route path="*" element={<NotFound />} />

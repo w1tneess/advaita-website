@@ -110,7 +110,7 @@ export default function MessagesList() {
                 </div>
               </div>
               <div className="mb-3 text-sm text-muted">
-                <a href={`mailto:${msg.email}`} className="text-accent hover:underline">
+                <a href={`mailto:${msg.email}`} className="text-accent hover:underline transition-all duration-150 ease-[var(--ease-out-quart)] active:opacity-80">
                   {msg.email}
                 </a>
                 {msg.topic && (

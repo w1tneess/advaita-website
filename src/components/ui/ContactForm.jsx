@@ -167,23 +167,23 @@ export default function ContactForm() {
   if (status === 'success') {
     return (
       <motion.div
-        className="border border-copper/40 bg-surface/90 p-8 sm:p-10 text-center relative overflow-hidden backdrop-blur-sm"
+        className="border border-copper/40 bg-surface/90 p-8 sm:p-10 text-center relative overflow-hidden backdrop-blur-sm rounded-2xl shadow-subtle"
         initial={{ opacity: 0, scale: 0.98 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.3 }}
       >
-        <div className="mx-auto flex h-12 w-12 items-center justify-center border border-copper/40 bg-copper/10 text-copper">
+        <div className="mx-auto flex h-12 w-12 items-center justify-center border border-copper/40 bg-copper/10 text-copper rounded-xl">
           <CheckCircle className="h-6 w-6" aria-hidden="true" />
         </div>
         <h3 className="mt-4 font-display text-2xl font-normal text-text">Transmission Logged</h3>
         <p className="mt-2 text-sm leading-relaxed text-text-2 max-w-md mx-auto">
           Thank you for writing. Your dispatch has been entered into the correspondence archive. I reply to every thoughtful inquiry as time permits.
         </p>
-        <div className="mt-6 pt-5 border-t border-line flex justify-center">
+        <div className="mt-6 pt-6 border-t border-line flex justify-center">
           <button
             type="button"
             onClick={() => setStatus('idle')}
-            className="border border-copper/60 bg-copper/10 px-5 py-2 font-mono text-xs tracking-wider uppercase text-copper hover:bg-copper hover:text-black transition-colors cursor-pointer"
+            className="border border-copper/60 bg-copper/10 px-5 py-2 rounded-md font-mono text-xs tracking-wider uppercase text-copper hover:bg-copper hover:text-canvas active:scale-[0.97] transition-all duration-250 ease-[var(--ease-out-quart)] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30"
           >
             Send another dispatch
           </button>
@@ -224,7 +224,7 @@ export default function ContactForm() {
             onChange={handleChange}
             autoComplete="name"
             spellCheck={false}
-            className={`block w-full border bg-canvas/70 px-3.5 py-2.5 font-sans text-base sm:text-sm text-text transition-all placeholder:text-text-3/40 focus:border-copper focus:bg-canvas focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30 ${
+            className={`block w-full rounded-lg border bg-canvas/70 px-3.5 py-2.5 font-sans text-base sm:text-sm text-text transition-all duration-250 ease-[var(--ease-out-quart)] placeholder:text-text-3/40 focus:border-copper focus:bg-canvas focus:-translate-y-0.5 focus:shadow-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30 ${
               errors.name ? 'border-limitation bg-limitation/5' : 'border-line hover:border-copper/40'
             }`}
             placeholder="Advaita Chandra"
@@ -251,7 +251,7 @@ export default function ContactForm() {
             onChange={handleChange}
             autoComplete="email"
             spellCheck={false}
-            className={`block w-full border bg-canvas/70 px-3.5 py-2.5 font-sans text-base sm:text-sm text-text transition-all placeholder:text-text-3/40 focus:border-copper focus:bg-canvas focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30 ${
+            className={`block w-full rounded-lg border bg-canvas/70 px-3.5 py-2.5 font-sans text-base sm:text-sm text-text transition-all duration-250 ease-[var(--ease-out-quart)] placeholder:text-text-3/40 focus:border-copper focus:bg-canvas focus:-translate-y-0.5 focus:shadow-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30 ${
               errors.email ? 'border-limitation bg-limitation/5' : 'border-line hover:border-copper/40'
             }`}
             placeholder="name@institution.edu"
@@ -293,10 +293,10 @@ export default function ContactForm() {
                 role="radio"
                 aria-checked={isSelected}
                 onClick={() => handleTopicSelect(t.value)}
-                className={`font-mono text-xs uppercase tracking-wider px-3 py-1.5 border transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30 ${
+                className={`font-mono text-xs uppercase tracking-wider px-3 py-1.5 border rounded-md transition-all duration-250 ease-[var(--ease-out-quart)] active:scale-[0.97] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30 ${
                   isSelected
-                    ? 'border-copper bg-copper/15 text-copper font-medium'
-                    : 'border-line bg-surface/40 text-text-3 hover:border-copper/40 hover:text-text-2'
+                    ? 'border-copper bg-copper/15 text-copper font-medium shadow-subtle'
+                    : 'border-line bg-surface/40 text-text-3 hover:border-copper/40 hover:text-text-2 hover:bg-surface/80'
                 }`}
               >
                 {isSelected && <span className="inline-block mr-1.5 h-1.5 w-1.5 rounded-full bg-copper" aria-hidden="true" />}
@@ -334,7 +334,7 @@ export default function ContactForm() {
           rows={5}
           autoComplete="off"
           spellCheck={true}
-          className={`block w-full resize-y border bg-canvas/70 px-3.5 py-3 font-sans text-base sm:text-sm leading-relaxed text-text transition-all placeholder:text-text-3/40 focus:border-copper focus:bg-canvas focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30 ${
+          className={`block w-full resize-y rounded-lg border bg-canvas/70 px-3.5 py-3 font-sans text-base sm:text-sm leading-relaxed text-text transition-all duration-250 ease-[var(--ease-out-quart)] placeholder:text-text-3/40 focus:border-copper focus:bg-canvas focus:-translate-y-0.5 focus:shadow-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30 ${
             errors.message ? 'border-limitation bg-limitation/5' : 'border-line hover:border-copper/40'
           }`}
           placeholder="Share your perspectives, research inquiries, recommended readings, or constructive critique…"
@@ -364,7 +364,7 @@ export default function ContactForm() {
         <button
           type="submit"
           disabled={status === 'submitting' || timeRemaining > 0}
-          className="group inline-flex items-center justify-center gap-2 border border-copper bg-copper px-6 py-2.5 font-mono text-xs uppercase tracking-widest font-semibold text-black transition-all duration-200 hover:bg-copper-strong hover:border-copper-strong active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
+          className="group inline-flex items-center justify-center gap-2 rounded-lg border border-copper bg-copper px-6 py-2.5 font-mono text-xs uppercase tracking-widest font-semibold text-canvas transition-all duration-250 ease-[var(--ease-out-quart)] hover:bg-copper-strong hover:border-copper-strong active:scale-[0.97] hover:-translate-y-0.5 hover:shadow-subtle disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
         >
           {status === 'submitting' ? (
             <>

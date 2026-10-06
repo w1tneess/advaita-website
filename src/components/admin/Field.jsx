@@ -9,7 +9,7 @@ import { AlertCircle } from 'lucide-react'
  */
 
 const CONTROL_CLASSES =
-  'w-full rounded-lg border bg-surface px-3 py-2.5 text-sm transition-colors placeholder:text-muted/70 focus:outline-none disabled:opacity-60'
+  'w-full rounded-lg border bg-surface px-3 py-2.5 text-sm transition-all duration-250 ease-[var(--ease-out-quart)] placeholder:text-muted/70 focus:outline-none focus:-translate-y-0.5 focus:shadow-subtle disabled:opacity-60'
 
 function controlClasses(hasError) {
   return `${CONTROL_CLASSES} ${
@@ -244,7 +244,7 @@ export function CheckboxGroup({
           return (
             <label
               key={option.value}
-              className={`inline-flex cursor-pointer items-center gap-2 rounded-full border px-3 py-1.5 text-sm transition-colors ${
+              className={`inline-flex cursor-pointer items-center gap-2 rounded-full border px-3 py-1.5 text-sm transition-all duration-250 ease-[var(--ease-out-quart)] active:scale-[0.97] ${
                 checked
                   ? 'border-accent bg-accent/12 text-accent'
                   : 'border-line bg-surface text-muted hover:border-accent'

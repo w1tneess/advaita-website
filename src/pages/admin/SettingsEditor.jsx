@@ -35,7 +35,7 @@ export default function SettingsEditor() {
             <button
               type="button"
               onClick={revert}
-              className="text-xs text-limitation underline hover:text-limitation/80"
+              className="text-xs text-limitation underline hover:text-limitation/80 transition-colors duration-150 ease-[var(--ease-out-quart)] active:opacity-80"
             >
               Revert
             </button>

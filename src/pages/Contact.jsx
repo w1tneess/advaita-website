@@ -24,8 +24,8 @@ export default function Contact() {
         lead={contact.intro || "I welcome messages regarding research projects, book recommendations, feedback, and interesting ideas."}
       />
 
-      <div className="shell pb-[var(--spacing-fluid-section)] space-y-[var(--spacing-fluid-lg)]">
-        <div className="grid gap-[var(--spacing-fluid-lg)] lg:grid-cols-5 lg:gap-[var(--spacing-fluid-xl)]">
+      <div className="shell pb-24 pt-8 space-y-16">
+        <div className="grid gap-8 lg:grid-cols-5 lg:gap-12">
           {/* Left / Primary: Contact dispatch terminal */}
           {/* Left / Primary: Contact dispatch terminal */}
           <div className="lg:col-span-3">
@@ -49,18 +49,18 @@ export default function Contact() {
               <div>
                 <div className="flex items-center justify-between border-b border-line pb-2 mb-3">
                   <span className="font-mono text-xs tracking-wide text-ink">
-                    Questions &amp; Ideas
+                    Questions & Ideas
                   </span>
                   <MessageSquare className="h-4 w-4 text-muted" aria-hidden="true" />
                 </div>
                 <h3 className="text-base sm:text-lg font-normal text-ink text-balance">
                   Exchanging Ideas
                 </h3>
-                <p className="mt-2 text-xs sm:text-sm font-sans leading-relaxed text-muted">
+                <p className="mt-2 text-sm font-sans leading-relaxed text-muted">
                   Whether you are a student, researcher, or curious reader interested in data, history, or philosophy, I am always glad to exchange ideas and book recommendations.
                 </p>
                 {contact.responseNote && (
-                  <p className="mt-[var(--spacing-fluid-sm)] pt-[var(--spacing-fluid-sm)] border-t border-line text-[length:var(--text-base)] font-display italic text-muted">
+                  <p className="mt-4 pt-4 border-t border-line text-sm font-display italic text-muted">
                     {contact.responseNote}
                   </p>
                 )}
@@ -68,27 +68,27 @@ export default function Contact() {
 
               {socialLinks.length > 0 && (
                 <div>
-                  <div className="border-b border-line pb-[var(--spacing-fluid-sm)] mb-[var(--spacing-fluid-sm)]">
-                    <span className="font-sans text-[length:var(--text-label)] tracking-wide text-ink">
+                  <div className="border-b border-line pb-2 mb-3">
+                    <span className="font-mono text-xs tracking-wide text-ink">
                       Public Profiles
                     </span>
                   </div>
-                  <ul className="space-y-[var(--spacing-fluid-sm)]">
+                  <ul className="space-y-4">
                     {socialLinks.map((link) => (
                       <li key={link.id} className="flex items-center gap-4">
                         <span
-                          className="flex h-10 w-10 shrink-0 items-center justify-center border border-line text-ink rounded-full"
+                          className="flex h-10 w-10 shrink-0 items-center justify-center border border-line text-muted rounded-xl bg-surface/50 shadow-subtle"
                           aria-hidden="true"
                         >
                           <Icon name={link.icon} className="h-5 w-5" />
                         </span>
                         <div className="min-w-0 flex-1">
-                          <p className="font-sans text-[length:var(--text-label)] tracking-wide text-ink">{link.label}</p>
+                          <p className="font-mono text-xs tracking-wide text-ink uppercase mb-0.5">{link.label}</p>
                           <a
                             href={link.url}
                             target="_blank"
                             rel="me noopener noreferrer"
-                            className="font-sans text-sm text-muted hover:text-ink transition-colors underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-canvas rounded-sm"
+                            className="font-sans text-sm text-muted hover:text-ink active:opacity-80 transition-colors duration-150 ease-[var(--ease-out-quart)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-canvas rounded-sm block truncate"
                           >
                             {link.handle || link.url}
                             <span className="sr-only"> (opens in a new tab)</span>
@@ -104,27 +104,27 @@ export default function Contact() {
         </div>
 
         {/* Bottom: Scholarly Integrity and Privacy */}
-        <div className="grid gap-[var(--spacing-fluid-lg)] lg:grid-cols-2 lg:gap-[var(--spacing-fluid-xl)]">
-          <div className="pt-[var(--spacing-fluid-md)] border-t border-line">
-            <h3 className="flex items-center gap-2 text-[length:var(--text-2xl)] font-normal text-ink text-balance">
-              <CheckCircle2 className="h-6 w-6 text-muted" aria-hidden="true" />
-              Corrections &amp; Scrutiny
+        <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
+          <div className="pt-6 border-t border-line">
+            <h3 className="flex items-center gap-2 text-xl font-normal text-ink text-balance mb-3">
+              <CheckCircle2 className="h-5 w-5 text-muted" aria-hidden="true" />
+              Corrections & Scrutiny
             </h3>
-            <p className="mt-[var(--spacing-fluid-xs)] text-[length:var(--text-base)] font-sans leading-relaxed text-muted">
+            <p className="text-base font-sans leading-relaxed text-muted">
               {contact.corrections ||
                 'Constructive critique is how research matures. If you notice a factual discrepancy, citation gap, or methodological error anywhere on this site, please send details and sources.'}
             </p>
-            <p className="mt-[var(--spacing-fluid-sm)] pt-[var(--spacing-fluid-sm)] border-t border-line font-utility text-muted">
+            <p className="mt-4 pt-4 border-t border-line font-mono text-xs tracking-wide text-muted">
               All confirmed corrections are updated in project registries with appropriate attribution.
             </p>
           </div>
 
-          <div className="pt-[var(--spacing-fluid-md)] border-t border-line">
-            <h3 className="flex items-center gap-2 text-[length:var(--text-2xl)] font-normal text-ink text-balance">
-              <ShieldCheck className="h-6 w-6 text-muted" aria-hidden="true" />
+          <div className="pt-6 border-t border-line">
+            <h3 className="flex items-center gap-2 text-xl font-normal text-ink text-balance mb-3">
+              <ShieldCheck className="h-5 w-5 text-muted" aria-hidden="true" />
               Privacy Policy
             </h3>
-            <p className="mt-[var(--spacing-fluid-xs)] text-[length:var(--text-base)] font-sans leading-relaxed text-muted">
+            <p className="text-base font-sans leading-relaxed text-muted">
               {contact.privacyNote ||
                 'Personal contact details are handled respectfully and used strictly for direct correspondence. I do not share email addresses or use them for any secondary purpose.'}
             </p>

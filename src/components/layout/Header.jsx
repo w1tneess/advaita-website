@@ -59,7 +59,7 @@ export default function Header() {
 		<header
 			className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
 				scrolled
-					? "bg-canvas/85 backdrop-blur-md border-b border-line shadow-subtle pt-[max(0.5rem,env(safe-area-inset-top))] pb-2.5 sm:py-3"
+					? "glass-dock border-b border-line shadow-2xl pt-[max(0.5rem,env(safe-area-inset-top))] pb-2.5 sm:py-3"
 					: "bg-transparent border-b border-transparent pt-[max(0.75rem,env(safe-area-inset-top))] sm:pt-5 pb-2"
 			}`}
 		>
@@ -68,36 +68,37 @@ export default function Header() {
 				<Link
 					to="/"
 					{...getRoutePreloadProps('/')}
-					className="group flex items-center gap-2.5 sm:gap-3 text-ink"
+					className="group flex items-center gap-2.5 sm:gap-3 text-ink select-none"
 					aria-label={`${profile?.name || 'Advaita Chandra'}, home`}
 				>
-					<span className="font-display text-xl sm:text-2xl font-normal tracking-tight transition-colors duration-300 group-hover:text-accent">
+					<span className="font-display text-[1.15rem] sm:text-[1.3rem] font-normal tracking-[-0.015em] text-ink transition-colors duration-300 group-hover:text-accent">
 						{profile?.name || 'Advaita Chandra'}
 					</span>
 					<span
 						aria-hidden="true"
-						className="h-1.5 w-1.5 rounded-full bg-accent shadow-[0_0_8px_rgba(194,149,106,0.6)]"
+						className="h-1.5 w-1.5 rounded-full bg-accent shadow-[0_0_8px_rgba(194,149,106,0.55)] transition-transform duration-300 group-hover:scale-110"
 					/>
 					<span
 						aria-hidden="true"
-						className="hidden h-px w-4 bg-accent/50 transition-all duration-300 group-hover:w-8 sm:block"
+						className="hidden sm:block h-px w-3 bg-accent/40 transition-all duration-300 group-hover:w-5"
 					/>
 				</Link>
 
 				{/* Desktop Navigation */}
-				<nav className="hidden items-center gap-7 lg:gap-8 md:flex" aria-label="Primary">
+				<nav className="hidden items-center gap-6 lg:gap-7 md:flex" aria-label="Primary">
 					{desktopLinks.map((route) => (
 						<NavLink
 							key={route.path}
 							to={route.path}
 							{...getRoutePreloadProps(route.path)}
 							className={({ isActive }) =>
-								`relative text-[length:var(--text-label)] font-sans tracking-wide transition-colors duration-300 py-1 ${
+								`relative text-[13.5px] font-sans tracking-[-0.01em] transition-colors duration-200 py-1 ${
 									isActive
 										? "text-ink font-medium"
-										: "text-muted hover:text-ink"
+										: "text-muted hover:text-ink font-normal"
 								}`
 							}
+							aria-current={({ isActive }) => (isActive ? "page" : undefined)}
 						>
 							{({ isActive }) => (
 								<>
@@ -105,8 +106,8 @@ export default function Header() {
 									{isActive && (
 										<motion.span
 											layoutId="activeNavIndicator"
-											className="absolute -bottom-1 left-0 right-0 h-px bg-accent"
-											transition={{ type: "spring", stiffness: 380, damping: 30 }}
+											className="absolute -bottom-1 left-0 right-0 h-[2px] rounded-full bg-accent"
+											transition={{ type: "spring", stiffness: 400, damping: 32 }}
 										/>
 									)}
 								</>
@@ -115,21 +116,21 @@ export default function Header() {
 					))}
 				</nav>
 
-				{/* Desktop Contact Action */}
-				<div className="hidden sm:flex items-center gap-3.5">
+				{/* Desktop Right Actions: Contact */}
+				<div className="hidden sm:flex items-center gap-3">
 					<NavLink
 						to="/contact"
 						{...getRoutePreloadProps('/contact')}
 						className={({ isActive }) =>
-							`group inline-flex items-center gap-1.5 px-3.5 py-1.5 text-[length:var(--text-label)] font-sans tracking-wide border rounded-sm transition-all duration-300 active:scale-[0.98] ${
+							`group inline-flex items-center gap-1.5 px-4 py-1.5 text-[13px] font-sans font-medium tracking-[-0.005em] rounded-full border transition-all duration-200 active:scale-[0.97] ${
 								isActive
-									? "text-ink border-accent bg-accent/10"
-									: "text-muted border-line hover:text-ink hover:border-line-strong hover:bg-surface"
+									? "text-ink border-accent bg-accent/10 shadow-sm"
+									: "text-muted border-line hover:text-ink hover:border-line-strong hover:bg-surface/80"
 							}`
 						}
 					>
 						<span>Contact</span>
-						<ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 text-accent" />
+						<ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 text-accent" />
 					</NavLink>
 				</div>
 
@@ -206,10 +207,10 @@ export default function Header() {
 									{/* Nav links section */}
 									<div>
 										<div className="flex items-center justify-between pb-2.5 mb-2 border-b border-line">
-											<span className="font-mono text-xs text-muted">
+											<span className="font-mono text-[11px] uppercase tracking-wider text-muted font-medium">
 												Navigation
 											</span>
-											<span className="font-mono text-xs text-accent">
+											<span className="font-mono text-[11px] uppercase tracking-wider text-accent font-semibold">
 												Directory
 											</span>
 										</div>
@@ -227,8 +228,8 @@ export default function Header() {
 														onClick={() => setOpen(false)}
 														{...getRoutePreloadProps(route.path)}
 														className={({ isActive }) =>
-															`group flex items-center justify-between py-3.5 px-2 rounded-md transition-all active:scale-[0.98] ${
-																isActive ? "text-accent bg-surface/50" : "text-ink hover:text-accent hover:bg-surface/30"
+															`group flex items-center justify-between py-3.5 px-2 rounded-xl transition-all active:scale-[0.98] ${
+																isActive ? "text-accent bg-surface/60" : "text-ink hover:text-accent hover:bg-surface/30"
 															}`
 														}
 													>
@@ -240,12 +241,12 @@ export default function Header() {
 																		opacity: location.pathname === route.path ? 1 : 0,
 																	}}
 																/>
-																<span className="font-sans text-lg font-normal tracking-tight">
+																<span className="font-sans text-[17px] font-medium tracking-[-0.01em]">
 																	{route.label}
 																</span>
 															</div>
 															{route.desc && (
-																<span className="text-xs text-muted pl-4 mt-0.5 line-clamp-1 font-sans">
+																<span className="text-[13px] text-muted pl-4 mt-0.5 line-clamp-1 font-sans leading-relaxed">
 																	{route.desc}
 																</span>
 															)}
@@ -257,21 +258,10 @@ export default function Header() {
 										</ul>
 									</div>
 
-									{/* Bottom meta & action area */}
+									{/* Bottom meta area */}
 									<div className="mt-6 pt-5 border-t border-line flex flex-col gap-3.5">
-										{/* Direct Contact Button */}
-										<Link
-											to="/contact"
-											onClick={() => setOpen(false)}
-											{...getRoutePreloadProps('/contact')}
-											className="flex items-center justify-between p-3.5 bg-surface border border-line hover:border-accent text-ink hover:text-accent transition-all font-mono text-xs rounded-sm active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-										>
-											<span>Get in touch</span>
-											<ArrowUpRight className="h-4 w-4 text-accent" />
-										</Link>
-
 										{/* Social Links Row */}
-										<div className="flex items-center justify-between pt-1 font-mono text-xs text-muted">
+										<div className="flex items-center justify-between pt-1 font-sans text-[13px] text-muted">
 											<div className="flex items-center gap-3">
 												{configuredSocials.map((link) => (
 													<a
@@ -279,16 +269,16 @@ export default function Header() {
 														href={link.kind === 'email' ? `mailto:${link.url}` : link.url}
 														target={link.kind === 'email' ? undefined : '_blank'}
 														rel={link.kind === 'email' ? undefined : 'noopener noreferrer'}
-														className="hover:text-accent transition-colors py-1 px-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 rounded-sm"
+														className="hover:text-accent transition-colors py-1 px-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 rounded-sm font-medium"
 														aria-label={link.label}
 													>
 														{link.label}
 													</a>
 												))}
 											</div>
-											<div className="flex items-center gap-2">
+											<div className="flex items-center gap-2 font-mono text-[11px] text-muted">
 												<span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" />
-												<span className="text-muted">India</span>
+												<span>India</span>
 											</div>
 										</div>
 									</div>

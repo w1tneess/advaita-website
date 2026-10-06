@@ -37,11 +37,11 @@ export default function Footer() {
                 <a 
                   key={link.id || link.label}
                   href={hrefFor(link)} 
-                  className="w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-line bg-surface flex items-center justify-center text-muted hover:text-accent hover:border-accent/60 hover:bg-accent/10 active:scale-95 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                  className="w-10 h-10 sm:w-11 sm:h-11 rounded-full border border-line bg-surface flex items-center justify-center text-muted hover:text-accent hover:border-accent/60 hover:bg-accent/10 active:scale-95 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                   {...(link.kind === 'email' ? {} : { target: '_blank', rel: 'me noopener noreferrer' })}
                   aria-label={link.label}
                 >
-                  <Icon name={link.icon} className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                  <Icon name={link.icon} className="w-4 h-4 sm:w-[18px] sm:h-[18px]" />
                 </a>
               ))}
             </div>
@@ -71,14 +71,14 @@ export default function Footer() {
           {/* Right Column - Location & Dispatch */}
           <div className="md:col-span-3 space-y-[clamp(0.5rem,1.5vw,1rem)] text-xs sm:text-sm">
             <h3 className="font-mono text-[10px] sm:text-[11px] uppercase tracking-widest text-accent font-semibold">
-              Location &amp; Reach
+              Location & Reach
             </h3>
             <div className="space-y-1.5 text-muted">
               <div className="flex items-center gap-2">
                 <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" />
                 <span>West Bengal, India</span>
               </div>
-              <p className="text-[11px] text-muted/70">Timezone: IST (UTC+5:30)</p>
+              <p className="text-[11px] text-muted">Timezone: IST (UTC+5:30)</p>
             </div>
             {profile?.email && (
               <div className="pt-1">

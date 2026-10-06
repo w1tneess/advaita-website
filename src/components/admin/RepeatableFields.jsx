@@ -22,7 +22,7 @@ function RowFrame({ index, label, onRemove, canRemove, children }) {
           type="button"
           onClick={onRemove}
           disabled={!canRemove}
-          className="inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs text-muted transition-colors hover:text-limitation disabled:cursor-not-allowed disabled:opacity-40"
+          className="inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs text-muted transition-all duration-150 ease-[var(--ease-out-quart)] hover:text-limitation active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-40 disabled:active:scale-100"
         >
           <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
           Remove
@@ -38,7 +38,7 @@ function AddButton({ onClick, children }) {
     <button
       type="button"
       onClick={onClick}
-      className="mt-3 inline-flex items-center gap-1.5 rounded-lg border border-dashed border-line px-3 py-2 text-sm text-muted transition-colors hover:border-accent hover:text-accent"
+      className="mt-3 inline-flex items-center gap-1.5 rounded-lg border border-dashed border-line px-3 py-2 text-sm text-muted transition-all duration-250 ease-[var(--ease-out-quart)] hover:border-accent hover:text-accent hover:bg-surface active:scale-[0.99] cursor-pointer"
     >
       <Plus className="h-4 w-4" aria-hidden="true" />
       {children}

@@ -12,13 +12,13 @@ import { preloadRoute } from '@/lib/preload.js'
 
 const VARIANTS = {
   primary:
-    'bg-accent text-on-accent border border-accent hover:bg-accent-strong hover:border-accent-strong shadow-subtle hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.99]',
+    'bg-accent text-on-accent border border-accent hover:bg-accent-strong hover:border-accent-strong shadow-subtle hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.97]',
   secondary:
-    'bg-surface text-ink border border-line hover:border-ink/25 hover:bg-raised shadow-subtle hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.99]',
+    'bg-surface text-ink border border-line hover:border-ink/25 hover:bg-raised shadow-subtle hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.97]',
   ghost:
-    'bg-transparent text-muted border border-transparent hover:bg-surface hover:text-ink active:scale-[0.99]',
+    'bg-transparent text-muted border border-transparent hover:bg-surface hover:text-ink active:scale-[0.97]',
   danger:
-    'bg-transparent text-limitation border border-limitation/30 hover:bg-limitation/10 hover:border-limitation active:scale-[0.99]',
+    'bg-transparent text-limitation border border-limitation/30 hover:bg-limitation/10 hover:border-limitation active:scale-[0.97]',
   link: 'bg-transparent text-accent border-0 p-0 underline underline-offset-4 hover:text-accent-strong',
 }
 
@@ -46,7 +46,7 @@ export default function Button({
   const variantClasses = VARIANTS[variant] || VARIANTS.primary
 
   const classes = [
-    'inline-flex max-w-full items-center justify-center font-semibold break-words text-center transition-[background-color,border-color,color,box-shadow,transform] duration-200 ease-out',
+    'inline-flex max-w-full items-center justify-center font-semibold break-words text-center transition-[background-color,border-color,color,box-shadow,transform] duration-250 ease-[var(--ease-out-quart)]',
     'disabled:cursor-not-allowed disabled:opacity-50 disabled:transform-none',
     'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
     variant === 'link' ? 'motion-reduce:hover:text-accent' : 'motion-reduce:hover:-translate-y-0',

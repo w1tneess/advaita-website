@@ -8,7 +8,7 @@ import { PUBLIC_ROUTES } from "@/config/nav.js"
 
 const ROUTE = PUBLIC_ROUTES.find((route) => route.key === 'home')
 
-function Hero() {
+function Hero({ profile = {} }) {
 	const branches = [
 		{ label: "Philosophy", desc: "Krishnamurti, Camus, inquiry notes", path: "/philosophy" },
 		{ label: "Projects & Tools", desc: "Data analysis, code experiments", path: "/projects" },
@@ -17,8 +17,8 @@ function Hero() {
 	]
 
 	return (
-		<section className="shell relative pt-[clamp(9.5rem,17vw,15rem)] pb-[clamp(3rem,6vw,5.5rem)] overflow-hidden">
-			{/* Atmospheric Ambient Glows */}
+		<section className="shell relative pt-[clamp(7.5rem,13vw,11.5rem)] pb-[clamp(2.5rem,5vw,4.5rem)] overflow-hidden">
+			{/* Atmospheric Ambient Glow */}
 			<div 
 				className="ambient-glow top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(48rem,95vw)] h-[min(48rem,95vw)] opacity-20" 
 				aria-hidden="true" 
@@ -28,32 +28,32 @@ function Hero() {
 				{/* Top Status Eyebrow */}
 				<div className="inline-flex items-center gap-2.5 px-3.5 py-1 rounded-full border border-line bg-surface/60 text-muted font-mono text-[11px] mb-6 sm:mb-8 backdrop-blur-sm">
 					<span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" />
-					<span className="text-ink font-medium">Advaita Chandra</span>
+					<span className="text-ink font-medium">{profile?.name || "Advaita Chandra"}</span>
 					<span className="text-line">•</span>
 					<span>Archive &amp; Notebook</span>
 				</div>
 
 				<div className="max-w-5xl">
-					<h1 className="text-[clamp(2.15rem,1.4rem+3.5vw,4.5rem)] font-normal tracking-tight text-ink mb-[clamp(1rem,2vw,1.5rem)] leading-[1.12] text-balance">
+					<h1 className="text-[length:var(--text-hero)] font-normal tracking-tight text-ink mb-[var(--spacing-fluid-sm)] leading-[1.12] text-balance">
 						I am someone who notices, thinks, builds, photographs, reads, and writes.
 					</h1>
 					
-					<p className="text-[clamp(1rem,0.95rem+0.4vw,1.25rem)] text-muted leading-relaxed mb-[clamp(1.5rem,3vw,2.5rem)] max-w-3xl">
+					<p className="text-[length:var(--text-lg)] text-muted leading-relaxed mb-[var(--spacing-fluid-md)] max-w-3xl">
 						Working drafts, code experiments, and study notes tracking my interests in creative computing, philosophy, history, and internet infrastructure.
 					</p>
 
 					{/* Primary Call to Action */}
-					<div className="flex flex-wrap items-center gap-3 sm:gap-4 mb-[clamp(2.5rem,5vw,4rem)]">
+					<div className="flex flex-wrap items-center gap-4 sm:gap-6 mb-[var(--spacing-fluid-lg)]">
 						<Link
 							to="/projects"
-							className="inline-flex items-center gap-2 px-5 py-2.5 rounded-sm bg-accent text-canvas font-mono text-xs uppercase tracking-wider font-semibold hover:bg-accent-strong active:scale-[0.98] transition-all shadow-subtle"
+							className="inline-flex items-center gap-2 px-6 py-3 rounded-md bg-accent text-canvas font-mono text-xs uppercase tracking-wider font-semibold hover:bg-white/20 hover:text-ink active:scale-[0.97] active:opacity-80 transition-all duration-250 ease-[var(--ease-out-quart)] shadow-subtle"
 						>
 							<span>Explore Projects</span>
 							<ArrowUpRight className="h-3.5 w-3.5" />
 						</Link>
 						<a
 							href="#inquiries"
-							className="inline-flex items-center gap-2 px-5 py-2.5 rounded-sm border border-line bg-surface/50 text-muted hover:text-ink hover:border-line-strong active:scale-[0.98] transition-all font-mono text-xs uppercase tracking-wider"
+							className="inline-flex items-center gap-2 px-6 py-3 rounded-md border border-line bg-surface/50 text-muted hover:text-ink hover:border-line-strong hover:bg-surface active:scale-[0.97] active:opacity-80 transition-all duration-250 ease-[var(--ease-out-quart)] font-mono text-xs uppercase tracking-wider"
 						>
 							<span>Reading Archive</span>
 							<span aria-hidden="true">&darr;</span>
@@ -62,20 +62,20 @@ function Hero() {
 				</div>
 
 				{/* Archive Directory Explorer Strip - Spans full width */}
-				<div className="pt-6 border-t border-line grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 w-full">
+				<div className="pt-8 border-t border-line grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 w-full">
 					{branches.map((b) => (
 						<Link
 							key={b.path}
 							to={b.path}
-							className="group p-3.5 sm:p-4 rounded-sm border border-line/60 bg-surface/30 hover:bg-surface/70 hover:border-line-strong transition-all duration-200 active:scale-[0.99] flex flex-col justify-between"
+							className="group p-4 sm:p-6 rounded-xl border border-line/60 bg-surface/30 hover:bg-surface/70 hover:border-line-strong hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-250 ease-[var(--ease-out-quart)] flex flex-col justify-between"
 						>
-							<div className="flex items-center justify-between mb-1.5">
-								<span className="font-mono text-xs text-ink group-hover:text-accent transition-colors font-medium">
+							<div className="flex items-center justify-between mb-2">
+								<span className="font-mono text-xs text-ink group-hover:text-muted transition-colors duration-150 ease-[var(--ease-out-quart)] font-medium">
 									{b.label}
 								</span>
-								<ArrowUpRight className="h-3 w-3 text-muted group-hover:text-accent transition-colors opacity-60 group-hover:opacity-100" />
+								<ArrowUpRight className="h-4 w-4 text-muted group-hover:text-ink transition-colors duration-150 ease-[var(--ease-out-quart)] opacity-60 group-hover:opacity-100" />
 							</div>
-							<p className="text-[11px] text-muted leading-relaxed line-clamp-2">
+							<p className="text-xs text-muted leading-relaxed line-clamp-2">
 								{b.desc}
 							</p>
 						</Link>
@@ -88,12 +88,12 @@ function Hero() {
 
 function SelectedProjects({ featuredProjects }) {
 	return (
-		<section className="shell pt-[clamp(2rem,4vw,3.5rem)] border-t border-line" id="projects">
-			<div className="flex flex-wrap items-end justify-between gap-4 mb-6">
-				<h2 className="text-xl sm:text-2xl font-normal text-ink text-balance">Currently building</h2>
+		<section className="shell pt-[var(--spacing-fluid-section)] border-t border-line" id="projects">
+			<div className="flex flex-wrap items-end justify-between gap-6 mb-8">
+				<h2 className="text-2xl sm:text-3xl font-normal text-ink text-balance">Currently building</h2>
 				<Link
 					to="/projects"
-					className="font-mono text-xs tracking-wide text-ink border-b border-line-strong hover:text-accent hover:border-accent transition-colors"
+					className="font-mono text-xs tracking-wide text-ink border-b border-line hover:text-muted hover:border-muted active:opacity-80 transition-all duration-150 ease-[var(--ease-out-quart)] pb-1"
 				>
 					View all projects &rarr;
 				</Link>
@@ -106,16 +106,27 @@ function SelectedProjects({ featuredProjects }) {
 					const link = rawLink ? rawLink : null
 
 					return (
-						<article key={project.id} className="group py-5 sm:py-6 grid gap-3 sm:grid-cols-[1fr_2fr] items-baseline transition-all hover:bg-surface/60 -mx-3 px-3 sm:-mx-4 sm:px-4 rounded">
-							<div className="font-mono text-xs tracking-widest uppercase text-muted">
-								{category}
+						<article key={project.id} className="group py-6 sm:py-8 grid gap-4 sm:grid-cols-[1fr_2fr] items-baseline transition-all duration-250 ease-[var(--ease-out-quart)] hover:bg-surface/50 -mx-4 px-4 sm:-mx-6 sm:px-6 rounded-xl hover:-translate-y-0.5 hover:shadow-subtle active:scale-[0.98]">
+							<div className="space-y-2">
+								<div className="font-mono text-xs tracking-widest uppercase text-muted font-medium">
+									{category}
+								</div>
+								{project.tools && project.tools.length > 0 && (
+									<div className="flex flex-wrap gap-2 pt-1">
+										{project.tools.slice(0, 3).map((tool) => (
+											<span key={tool} className="code-badge border-line group-hover:border-line-strong transition-colors duration-150">
+												{tool}
+											</span>
+										))}
+									</div>
+								)}
 							</div>
 							<div>
-								<h3 className="text-base sm:text-lg font-normal text-ink group-hover:text-accent transition-colors leading-snug mb-1.5">
+								<h3 className="text-lg sm:text-xl font-normal text-ink group-hover:text-muted transition-colors duration-150 ease-[var(--ease-out-quart)] leading-snug mb-2">
 									{link ? (
-										<a href={link} target="_blank" rel="noopener noreferrer" className="inline-flex items-baseline gap-2">
+										<a href={link} target="_blank" rel="noopener noreferrer" className="inline-flex items-baseline gap-2 outline-none">
 											<span>{project.title}</span>
-											<ArrowUpRight className="h-4 w-4 opacity-50 group-hover:opacity-100 transition-opacity text-accent" />
+											<ArrowUpRight className="h-4 w-4 opacity-50 group-hover:opacity-100 transition-opacity duration-150 text-muted" />
 										</a>
 									) : (
 										project.title
@@ -201,16 +212,16 @@ function ActiveInquiries({ philosophy = {} }) {
 	]
 
 	return (
-		<section className="shell pt-[clamp(2rem,4vw,3.5rem)]" id="inquiries">
-			<div className="border-b border-line pb-4 mb-6">
-				<div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+		<section className="shell pt-[var(--spacing-fluid-section)]" id="inquiries">
+			<div className="border-b border-line pb-6 mb-8">
+				<div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
 					<div>
-						<h2 className="text-xl sm:text-2xl font-normal text-ink leading-snug text-balance">
-							Currently studying &amp; reading
+						<h2 className="text-2xl sm:text-3xl font-normal text-ink leading-snug text-balance">
+							Currently studying & reading
 						</h2>
 					</div>
 					<div className="max-w-xs md:text-right">
-						<p className="text-sm text-muted leading-relaxed">
+						<p className="text-base text-muted leading-relaxed">
 							Notes, studies, and questions I am exploring in philosophy, history, governance, and computer systems.
 						</p>
 					</div>
@@ -228,10 +239,10 @@ function ActiveInquiries({ philosophy = {} }) {
 
 					<div className="pt-8 border-t border-line">
 						<div className="flex items-center justify-between mb-6">
-							<h3 className="font-sans text-sm tracking-wide text-ink">Readings &amp; Thinkers</h3>
+							<h3 className="font-sans text-sm tracking-wide text-ink">Readings & Thinkers</h3>
 							<Link
 								to="/philosophy"
-								className="font-sans text-sm tracking-wide text-ink border-b border-line-strong hover:text-muted hover:border-muted transition-colors"
+								className="font-sans text-sm tracking-wide text-ink border-b border-line hover:text-muted hover:border-muted active:opacity-80 transition-all duration-150 ease-[var(--ease-out-quart)] pb-1"
 							>
 								Reading log &rarr;
 							</Link>
@@ -240,7 +251,7 @@ function ActiveInquiries({ philosophy = {} }) {
 							{thinkers.map((thinker) => (
 								<li
 									key={thinker.name}
-									className="flex justify-between items-start gap-4 text-muted hover:text-ink transition-colors"
+									className="flex justify-between items-start gap-6 text-muted"
 								>
 									<span className="font-normal whitespace-nowrap text-ink">{thinker.name}</span>
 									<span className="text-right italic">
@@ -263,17 +274,17 @@ function ActiveInquiries({ philosophy = {} }) {
 					{inquiries.map((item, idx) => (
 						<article
 							key={idx}
-							className="group py-7 sm:py-9 grid gap-3 sm:grid-cols-[1fr_2fr] items-baseline transition-all hover:bg-surface/60 -mx-3 px-3 sm:-mx-6 sm:px-6 rounded first:pt-4"
+							className="group py-8 sm:py-10 grid gap-4 sm:grid-cols-[1fr_2fr] items-baseline transition-all duration-250 ease-[var(--ease-out-quart)] hover:bg-surface/60 -mx-4 px-4 sm:-mx-6 sm:px-6 rounded-xl hover:-translate-y-0.5 hover:shadow-subtle active:scale-[0.98] first:pt-4"
 						>
-							<div className="font-sans text-xs tracking-widest uppercase text-muted">
+							<div className="font-mono text-xs tracking-widest uppercase text-muted font-medium">
 								{item.category}
 							</div>
 
 							<div>
-								<h3 className="text-[length:var(--text-2xl)] font-normal text-ink group-hover:text-accent transition-colors leading-snug mb-2 sm:mb-3">
-									<Link to={item.link} className="inline-flex items-baseline gap-2">
+								<h3 className="text-[length:var(--text-2xl)] font-normal text-ink group-hover:text-muted transition-colors duration-150 ease-[var(--ease-out-quart)] leading-snug mb-3">
+									<Link to={item.link} className="inline-flex items-baseline gap-3 outline-none">
 										<span>{item.title}</span>
-										<ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0 text-accent" />
+										<ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-all duration-250 ease-[var(--ease-out-quart)] -translate-x-3 group-hover:translate-x-0 text-muted" />
 									</Link>
 								</h3>
 
@@ -432,7 +443,7 @@ function Correspondence({ publicSocialLinks }) {
 									href={link.url}
 									target="_blank"
 									rel="me noopener noreferrer"
-									className="text-ink border-b border-transparent hover:border-ink transition-colors flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas"
+									className="text-ink border-b border-line hover:border-ink hover:text-muted active:opacity-80 transition-all duration-150 ease-[var(--ease-out-quart)] flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas pb-1"
 								>
 									<span>{link.label}</span>
 									<ArrowUpRight className="h-3 w-3" />
@@ -440,7 +451,7 @@ function Correspondence({ publicSocialLinks }) {
 							))}
 							<Link
 								to="/contact"
-								className="text-ink border-b border-transparent hover:border-ink transition-colors flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas"
+								className="text-ink border-b border-line hover:border-ink hover:text-muted active:opacity-80 transition-all duration-150 ease-[var(--ease-out-quart)] flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas pb-1"
 							>
 								<span>Full Form</span>
 								<ArrowRight className="h-3 w-3" />
@@ -567,7 +578,7 @@ function Correspondence({ publicSocialLinks }) {
 							<button
 								type="submit"
 								disabled={status === "submitting"}
-								className="inline-flex items-center gap-2 bg-ink text-canvas px-6 py-3 font-utility hover:bg-muted disabled:opacity-50 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas"
+								className="inline-flex items-center gap-2 bg-ink text-canvas px-8 py-3 rounded-md font-utility hover:bg-white/20 hover:text-ink active:scale-[0.97] active:opacity-80 disabled:opacity-50 transition-all duration-250 ease-[var(--ease-out-quart)] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas shadow-subtle"
 							>
 								{status === "submitting" ? (
 									<>
@@ -595,12 +606,12 @@ function Correspondence({ publicSocialLinks }) {
 }
 
 export default function Home() {
-	const { featuredProjects, philosophy, publicSocialLinks } = useContent()
+	const { featuredProjects, philosophy, publicSocialLinks, profile } = useContent()
 
 	return (
 		<>
 			<Seo title={ROUTE.title} description={ROUTE.description} path="/" />
-			<Hero />
+			<Hero profile={profile} />
 			<SelectedProjects featuredProjects={featuredProjects} />
 			<ActiveInquiries philosophy={philosophy} />
 			<Correspondence publicSocialLinks={publicSocialLinks} />

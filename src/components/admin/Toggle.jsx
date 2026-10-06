@@ -19,11 +19,11 @@ export default function Toggle({ id, label, description, checked, onChange, clas
           className="peer sr-only"
         />
         <span
-          className="h-5 w-9 rounded-full border border-line bg-raised transition-colors peer-checked:border-accent peer-checked:bg-accent peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-accent"
+          className="h-5 w-9 rounded-full border border-line bg-raised transition-colors duration-250 ease-[var(--ease-out-quart)] peer-checked:border-accent peer-checked:bg-accent peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-accent"
           aria-hidden="true"
         />
         <span
-          className="pointer-events-none absolute left-0.5 h-4 w-4 rounded-full bg-surface shadow-subtle transition-transform peer-checked:translate-x-4"
+          className="pointer-events-none absolute left-0.5 h-4 w-4 rounded-full bg-surface shadow-subtle transition-transform duration-250 ease-[var(--ease-out-quart)] peer-checked:translate-x-4"
           aria-hidden="true"
         />
       </label>

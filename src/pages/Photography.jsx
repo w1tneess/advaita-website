@@ -60,9 +60,18 @@ export default function Photography() {
       return gallery.map((img) => ({
         ...img,
         postId: post.id,
+        title: post.title,
         alt_text: post.alt_text,
         caption: post.caption,
-        aspectRatio: post.aspectRatio
+        aspectRatio: post.aspectRatio,
+        camera: post.camera,
+        lens: post.lens,
+        focal_length: post.focal_length,
+        aperture: post.aperture,
+        shutter_speed: post.shutter_speed,
+        iso: post.iso,
+        location: post.location,
+        category: post.category,
       }))
     })
   }, [filtered])
@@ -90,10 +99,10 @@ export default function Photography() {
             <button
               type="button"
               onClick={() => setValue('category', [])}
-              className={`px-3 sm:px-4 py-1.5 sm:py-2 text-xs transition-all duration-200 cursor-pointer rounded-sm active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
+              className={`px-4 py-2 min-h-[36px] text-xs transition-all duration-150 ease-[var(--ease-out-quart)] cursor-pointer rounded-full active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas ${
                 activeCategories.length === 0
                   ? "bg-ink text-canvas font-medium shadow-subtle"
-                  : "bg-surface border border-line text-muted hover:text-ink hover:border-line-strong"
+                  : "bg-surface border border-line/60 text-muted hover:text-ink hover:border-line-strong hover:bg-surface/80"
               }`}
             >
               All Photos ({photos.length})
@@ -103,10 +112,10 @@ export default function Photography() {
                 key={cat.id}
                 type="button"
                 onClick={() => toggleValue('category', cat.slug)}
-                className={`px-3 sm:px-4 py-1.5 sm:py-2 text-xs transition-all duration-200 cursor-pointer rounded-sm active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
+                className={`px-4 py-2 min-h-[36px] text-xs transition-all duration-150 ease-[var(--ease-out-quart)] cursor-pointer rounded-full active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas ${
                   activeCategories.includes(cat.slug)
                     ? "bg-ink text-canvas font-medium shadow-subtle"
-                    : "bg-surface border border-line text-muted hover:text-ink hover:border-line-strong"
+                    : "bg-surface border border-line/60 text-muted hover:text-ink hover:border-line-strong hover:bg-surface/80"
                 }`}
               >
                 {cat.name}
@@ -116,7 +125,7 @@ export default function Photography() {
         )}
       </PageHeader>
 
-      <section className="shell pb-[clamp(2rem,4vw,3.5rem)]">
+      <section className="shell pb-24 pt-8">
         {filtered.length > 0 ? (
           <div className="columns-1 gap-4 sm:columns-2 lg:columns-3 space-y-4">
             {filtered.map((photo) => {
@@ -131,7 +140,7 @@ export default function Photography() {
               return (
                 <figure
                   key={photo.id}
-                  className="relative break-inside-avoid border border-line bg-surface p-2.5 sm:p-3 transition-all duration-300 hover:border-accent/40 group cursor-pointer"
+                  className="relative break-inside-avoid border border-line/60 bg-surface/30 p-2 sm:p-3 rounded-xl transition-all duration-250 ease-[var(--ease-out-quart)] hover:bg-surface/60 hover:border-line-strong hover:-translate-y-0.5 hover:shadow-subtle active:scale-[0.98] group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas"
                   onClick={() => openLightbox(photo)}
                   role="button"
                   tabIndex={0}
@@ -143,7 +152,7 @@ export default function Photography() {
                   }}
                   aria-label={`View ${photo.alt_text || photo.title || 'photo'} in full size`}
                 >
-                  <div className="relative overflow-hidden bg-surface">
+                  <div className="relative overflow-hidden bg-surface rounded-lg">
                     <img
                       {...getOptimizedImageProps(cover.image_url, cover.variants)}
                       alt={photo.alt_text || photo.title || 'Photograph by Advaita Chandra'}
@@ -156,7 +165,7 @@ export default function Photography() {
 
                     {/* Floating Slide Counter */}
                     {images.length > 1 && (
-                      <div className="absolute top-2.5 right-2.5 flex items-center gap-1.5 bg-surface/90 backdrop-blur-sm border border-line px-2.5 py-0.5 font-mono text-xs text-ink z-20">
+                      <div className="absolute top-3 right-3 flex items-center gap-1.5 bg-surface/80 backdrop-blur-md border border-line/50 rounded-full px-2.5 py-1 font-mono text-xs text-ink z-20 shadow-subtle">
                         <Images className="h-3.5 w-3.5 text-muted" />
                         <span>{images.length}</span>
                       </div>

@@ -185,7 +185,7 @@ export default function AdminAuth({ children }) {
                     placeholder="admin@domain.org"
                     required
                     disabled={submitting}
-                    className="block w-full rounded-lg border border-[#2c2825] bg-[#1a1918] py-2.5 pl-10 pr-4 text-sm text-[#f2ede6] placeholder:text-neutral-600 focus:border-[#c2956a] focus:outline-none transition-colors"
+                    className="block w-full rounded-lg border border-[#2c2825] bg-[#1a1918] py-2.5 pl-10 pr-4 text-sm text-[#f2ede6] placeholder:text-neutral-600 focus:border-[#c2956a] focus:outline-none transition-all duration-250 ease-[var(--ease-out-quart)] focus:-translate-y-0.5 focus:shadow-subtle"
                   />
                 </div>
               </div>
@@ -219,7 +219,7 @@ export default function AdminAuth({ children }) {
                   <button
                     type="button"
                     onClick={handleForgotPassword}
-                    className="font-mono text-xs text-neutral-500 hover:text-[#c2956a] transition-colors"
+                    className="font-mono text-xs text-neutral-500 hover:text-[#c2956a] transition-colors duration-150 ease-[var(--ease-out-quart)] active:opacity-80"
                   >
                     Forgot Password?
                   </button>
@@ -230,7 +230,7 @@ export default function AdminAuth({ children }) {
                 <button
                   type="submit"
                   disabled={submitting || !isConfigured}
-                  className="w-full flex items-center justify-center gap-2 rounded-lg border border-[#c2956a] bg-[#c2956a] py-3 text-xs font-mono uppercase tracking-wider text-[#0F0E0D] font-semibold transition-all hover:bg-[#d4a87d] active:scale-[0.99] disabled:opacity-40 cursor-pointer"
+                  className="w-full flex items-center justify-center gap-2 rounded-lg border border-[#c2956a] bg-[#c2956a] py-3 text-xs font-mono uppercase tracking-wider text-[#0F0E0D] font-semibold transition-all duration-250 ease-[var(--ease-out-quart)] hover:bg-[#d4a87d] active:scale-[0.97] hover:-translate-y-0.5 hover:shadow-subtle disabled:opacity-40 cursor-pointer"
                 >
                   {submitting ? (
                     <>
@@ -250,7 +250,7 @@ export default function AdminAuth({ children }) {
 
           <Link
             to="/"
-            className="group mt-8 inline-flex items-center gap-2 font-mono text-xs text-neutral-500 hover:text-[#E8E6E1] transition-colors"
+            className="group mt-8 inline-flex items-center gap-2 font-mono text-xs text-neutral-500 hover:text-[#E8E6E1] transition-colors duration-150 ease-[var(--ease-out-quart)] active:opacity-80"
           >
             <ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-1" />
             Return to public site

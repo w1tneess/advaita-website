@@ -9,6 +9,7 @@ import SlugField from '../../components/admin/forms/SlugField.jsx'
 import StatusSelector from '../../components/admin/forms/StatusSelector.jsx'
 import SaveStatus from '../../components/admin/feedback/SaveStatus.jsx'
 import UnsavedChangesDialog from '../../components/admin/feedback/UnsavedChangesDialog.jsx'
+import MarkdownSplitEditor from '../../components/admin/MarkdownSplitEditor.jsx'
 import Button from '@/components/ui/Button.jsx'
 import { useContent } from '@/lib/content.jsx'
 import { createBlogPost, hasErrors, slugify, todayIso, validateBlogPost } from '@/lib/schema.js'
@@ -68,6 +69,11 @@ export default function BlogEditor() {
       if (result.ok) {
         setSaveStatus('success')
         setHasUnsavedChanges(false)
+        try {
+          localStorage.removeItem(`advaita_draft_blog_${isNew ? 'new' : draft.id}`)
+        } catch (_e) {
+          // Ignore localStorage errors
+        }
         toast.success(`“${draft.title}” ${isNew ? 'created' : 'saved'}.`)
         setTimeout(() => navigate('/admin/blog'), 800)
       } else {
@@ -197,19 +203,20 @@ export default function BlogEditor() {
 
         <FormSection
           title="Content (Markdown)"
-          description="The full article content."
+          description="Write with live side-by-side preview and automatic local draft saving."
           className="mt-6"
         >
           <div className="mt-6">
-            <Field
+            <MarkdownSplitEditor
               id="post-content"
               label="Markdown Content"
-              type="textarea"
-              rows={20}
               value={draft.content ?? ''}
               onChange={(value) => set('content', value)}
               error={errors.content}
-              required
+              storageKey={`blog_${isNew ? 'new' : draft.id}`}
+              title={draft.title}
+              category={draft.category}
+              excerpt={draft.excerpt}
             />
           </div>
         </FormSection>

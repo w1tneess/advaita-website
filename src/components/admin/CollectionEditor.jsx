@@ -119,7 +119,7 @@ export default function CollectionEditor({
               <button
                 type="button"
                 onClick={close}
-                className="rounded-md p-1 text-muted transition-colors hover:text-ink"
+                className="rounded-md p-1 text-muted transition-all duration-150 ease-[var(--ease-out-quart)] hover:text-ink hover:bg-surface active:scale-[0.97]"
                 aria-label="Cancel editing"
               >
                 <X className="h-4 w-4" aria-hidden="true" />

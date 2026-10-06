@@ -37,7 +37,7 @@ export default function BlogPost() {
             className="inline-flex items-center gap-2 font-utility text-muted hover:text-ink transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />
-            <span>Return to Notes &amp; Logs</span>
+            <span>Return to Notes & Logs</span>
           </Link>
         </div>
 
@@ -74,7 +74,7 @@ export default function BlogPost() {
         <div className="mt-16 border-t border-line pt-8 space-y-6 font-utility">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <span className="text-muted">
-              CITATION &amp; PROVENANCE
+              CITATION & PROVENANCE
             </span>
             <CopyButton
               getText={() => (typeof window !== 'undefined' ? window.location.href : `https://advaitachandra.in/blog/${post.slug}`)}

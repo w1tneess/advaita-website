@@ -96,6 +96,16 @@ export const PUBLIC_ROUTES = [
     changefreq: 'yearly',
   },
   {
+    path: '/art',
+    key: 'art',
+    label: 'Algorithmic Art',
+    nav: false,
+    title: 'Algorithmic Art & Creative Computing',
+    description: 'Interactive computational aesthetics, mathematical flow fields, and particle dynamics.',
+    priority: '0.8',
+    changefreq: 'monthly',
+  },
+  {
     path: '/privacy',
     key: 'privacy',
     label: 'Privacy Policy',

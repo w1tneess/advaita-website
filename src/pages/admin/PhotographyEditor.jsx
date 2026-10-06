@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate, useParams } from 'react-router'
-import { ChevronLeft, ChevronRight, X as XIcon } from 'lucide-react'
+import { ChevronLeft, ChevronRight, X as XIcon, UploadCloud, Sparkles } from 'lucide-react'
 
 import AdminPage from '../../components/admin/AdminPage.jsx'
 import Field from '../../components/admin/Field.jsx'
@@ -14,6 +14,7 @@ import { createPhotography, hasErrors, validatePhotography, uid } from '@/lib/sc
 import { useToast } from '@/lib/toast.jsx'
 import { uploadImage } from '@/lib/supabase/api.js'
 import { generateImageVariants, IMAGE_VARIANTS } from '@/lib/imageProcessor.js'
+import { extractExifFromFile } from '@/lib/exif.js'
 
 export default function PhotographyEditor() {
   const { id } = useParams()
@@ -44,6 +45,8 @@ export default function PhotographyEditor() {
   })
   const [uploading, setUploading] = useState(false)
   const [urlInput, setUrlInput] = useState('')
+  const [isDragging, setIsDragging] = useState(false)
+  const fileInputRef = useRef(null)
 
   const handleAddUrl = (e) => {
     if (e && e.preventDefault) e.preventDefault()
@@ -90,15 +93,17 @@ export default function PhotographyEditor() {
     setSaveStatus('idle')
   }
 
-  const handleFileChange = async (e) => {
-    const files = Array.from(e.target.files)
-    
-    // Process files sequentially to extract dimensions
+  const processFiles = async (fileList) => {
+    const rawFiles = Array.from(fileList).filter((f) => f.type.startsWith('image/'))
+    if (!rawFiles.length) return
+
+    let detectedExif = null
     const newFiles = []
-    for (const f of files) {
+
+    for (const f of rawFiles) {
       const url = URL.createObjectURL(f)
-      
       let aspectRatio = null
+
       try {
         const img = new Image()
         img.src = url
@@ -108,18 +113,52 @@ export default function PhotographyEditor() {
         console.warn('Could not extract dimensions for', f.name)
       }
 
+      // Client-side auto-EXIF extraction
+      try {
+        const exifData = await extractExifFromFile(f)
+        if (exifData && !detectedExif) {
+          detectedExif = exifData
+        }
+      } catch (err) {
+        console.debug('EXIF extraction skipped:', err)
+      }
+
       newFiles.push({
         type: 'file',
         id: uid('file'),
         file: f,
         previewUrl: url,
-        aspectRatio
+        aspectRatio,
       })
     }
-    
-    setItems(prev => [...prev, ...newFiles]);
-    setHasUnsavedChanges(true);
-    setSaveStatus('idle');
+
+    setItems((prev) => [...prev, ...newFiles])
+    setHasUnsavedChanges(true)
+    setSaveStatus('idle')
+
+    // Auto-populate EXIF metadata if found and not yet filled
+    if (detectedExif) {
+      setDraft((curr) => ({
+        ...curr,
+        camera: curr.camera || detectedExif.camera || '',
+        lens: curr.lens || detectedExif.lens || '',
+        aperture: curr.aperture || detectedExif.aperture || '',
+        shutter_speed: curr.shutter_speed || detectedExif.shutter_speed || '',
+        focal_length: curr.focal_length || detectedExif.focal_length || '',
+        iso: curr.iso || detectedExif.iso || '',
+      }))
+
+      const tags = [detectedExif.camera, detectedExif.aperture, detectedExif.shutter_speed, detectedExif.iso]
+        .filter(Boolean)
+        .join(', ')
+      if (tags) {
+        toast.info(`Auto-detected EXIF: ${tags}`)
+      }
+    }
+  }
+
+  const handleFileChange = (e) => {
+    processFiles(e.target.files)
   }
 
   const moveItem = (index, direction) => {
@@ -290,7 +329,7 @@ export default function PhotographyEditor() {
                           type="button"
                           onClick={() => moveItem(index, -1)}
                           disabled={index === 0}
-                          className="p-1 text-white bg-black/40 rounded hover:bg-black/80 disabled:opacity-30 transition-colors"
+                          className="p-1 text-white bg-black/40 rounded hover:bg-black/80 disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-150 ease-[var(--ease-out-quart)] active:scale-[0.97] disabled:active:scale-100"
                           aria-label="Move left"
                         >
                           <ChevronLeft className="h-5 w-5" />
@@ -299,7 +338,7 @@ export default function PhotographyEditor() {
                           type="button"
                           onClick={() => moveItem(index, 1)}
                           disabled={index === items.length - 1}
-                          className="p-1 text-white bg-black/40 rounded hover:bg-black/80 disabled:opacity-30 transition-colors"
+                          className="p-1 text-white bg-black/40 rounded hover:bg-black/80 disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-150 ease-[var(--ease-out-quart)] active:scale-[0.97] disabled:active:scale-100"
                           aria-label="Move right"
                         >
                           <ChevronRight className="h-5 w-5" />
@@ -309,7 +348,7 @@ export default function PhotographyEditor() {
                         <button
                           type="button"
                           onClick={() => removeItem(item.id)}
-                          className="p-1.5 text-white bg-red-500/80 rounded hover:bg-red-500 transition-colors shadow-sm"
+                          className="p-1.5 text-white bg-red-500/80 rounded hover:bg-red-500 transition-all duration-150 ease-[var(--ease-out-quart)] active:scale-[0.97] shadow-sm"
                           aria-label="Remove image"
                         >
                           <XIcon className="h-4 w-4" />
@@ -321,16 +360,51 @@ export default function PhotographyEditor() {
               </div>
             )}
 
-            <label className="block text-sm font-medium text-ink">Add Images (Upload File or Direct URL)</label>
-            <input
-              type="file"
-              accept="image/*"
-              multiple
-              onChange={handleFileChange}
-              className="mt-2 block w-full text-sm text-muted file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-raised file:text-ink hover:file:bg-line cursor-pointer"
-            />
+            {/* Apple Drag and Drop Zone */}
+            <div
+              onDragOver={(e) => {
+                e.preventDefault()
+                setIsDragging(true)
+              }}
+              onDragLeave={(e) => {
+                e.preventDefault()
+                setIsDragging(false)
+              }}
+              onDrop={(e) => {
+                e.preventDefault()
+                setIsDragging(false)
+                if (e.dataTransfer.files?.length) {
+                  processFiles(e.dataTransfer.files)
+                }
+              }}
+              onClick={() => fileInputRef.current?.click()}
+              className={`p-6 sm:p-8 border-2 border-dashed rounded-2xl flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-250 ease-[var(--ease-out-quart)] active:scale-[0.99] ${
+                isDragging
+                  ? 'border-accent bg-accent/10 scale-[1.01]'
+                  : 'border-line hover:border-accent/40 bg-surface/40 hover:bg-surface/70'
+              }`}
+            >
+              <div className="h-12 w-12 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center text-accent mb-3 shadow-subtle">
+                <UploadCloud className="h-6 w-6" />
+              </div>
+              <p className="text-sm font-medium text-ink">
+                Click to browse or drag & drop photographs here
+              </p>
+              <p className="text-xs text-muted mt-1.5 flex items-center gap-1.5 font-mono">
+                <Sparkles className="h-3 w-3 text-accent" />
+                Auto-extracts camera, lens, aperture, shutter & ISO from EXIF
+              </p>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={handleFileChange}
+                className="hidden"
+              />
+            </div>
 
-            <div className="mt-3 flex gap-2">
+            <div className="mt-4 flex gap-2">
               <input
                 type="url"
                 placeholder="Or paste direct image URL (https://... or /pfp.png)..."
@@ -342,7 +416,7 @@ export default function PhotographyEditor() {
                     handleAddUrl()
                   }
                 }}
-                className="flex-1 rounded-lg border border-line bg-surface px-3 py-2 text-sm text-ink placeholder:text-muted/60 focus:border-accent focus:outline-none"
+                className="flex-1 rounded-xl border border-line bg-surface px-3.5 py-2.5 text-sm text-ink placeholder:text-muted/60 focus:border-accent focus:outline-none focus:-translate-y-0.5 focus:shadow-subtle transition-all duration-250 ease-[var(--ease-out-quart)]"
               />
               <Button type="button" size="sm" variant="secondary" onClick={handleAddUrl}>
                 Add URL
@@ -407,6 +481,69 @@ export default function PhotographyEditor() {
               onChange={(value) => set('featured', value)}
             />
           </div>
+        </FormSection>
+
+        <FormSection
+          title="Optics & Exposure"
+          description="Camera hardware, lens, and exposure settings extracted automatically from EXIF or adjusted manually."
+          className="mt-6"
+        >
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-5">
+            <Field
+              id="photo-camera"
+              label="Camera Model"
+              value={draft.camera ?? ''}
+              onChange={(value) => set('camera', value)}
+              placeholder="e.g. Fujifilm X-T4 or Leica M6"
+            />
+            <Field
+              id="photo-lens"
+              label="Lens"
+              value={draft.lens ?? ''}
+              onChange={(value) => set('lens', value)}
+              placeholder="e.g. XF 35mm f/1.4 R"
+            />
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-4">
+            <Field
+              id="photo-aperture"
+              label="Aperture"
+              value={draft.aperture ?? ''}
+              onChange={(value) => set('aperture', value)}
+              placeholder="e.g. f/2.8"
+            />
+            <Field
+              id="photo-shutter"
+              label="Shutter Speed"
+              value={draft.shutter_speed ?? ''}
+              onChange={(value) => set('shutter_speed', value)}
+              placeholder="e.g. 1/250s"
+            />
+            <Field
+              id="photo-iso"
+              label="ISO"
+              value={draft.iso ?? ''}
+              onChange={(value) => set('iso', value)}
+              placeholder="e.g. ISO 400"
+            />
+            <Field
+              id="photo-focal-length"
+              label="Focal Length"
+              value={draft.focal_length ?? ''}
+              onChange={(value) => set('focal_length', value)}
+              placeholder="e.g. 50mm"
+            />
+          </div>
+
+          <Field
+            className="mt-4"
+            id="photo-location"
+            label="Location / Region (optional)"
+            value={draft.location ?? ''}
+            onChange={(value) => set('location', value)}
+            placeholder="e.g. Kolkata, West Bengal"
+          />
         </FormSection>
 
         <div className="sticky bottom-0 mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-line bg-canvas/90 py-4 backdrop-blur-sm">

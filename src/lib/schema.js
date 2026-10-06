@@ -284,6 +284,14 @@ export function createPhotography(overrides = {}) {
     alt_text: '',
     featured: false,
     gallery: [],
+    // EXIF metadata
+    camera: '',
+    lens: '',
+    focal_length: '',
+    aperture: '',
+    shutter_speed: '',
+    iso: '',
+    location: '',
     // Legacy single-image fields (kept for backward compatibility, optionally omitted later)
     image_url: '',
     storage_path: '',

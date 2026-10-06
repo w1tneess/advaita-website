@@ -188,7 +188,7 @@ CREATE POLICY "Authenticated users can manage contact submissions" ON public.con
             <button
               onClick={handleManualSync}
               disabled={syncing}
-              className="inline-flex items-center gap-2 rounded-lg border border-[#c2956a] bg-[#c2956a]/10 px-4 py-2 text-xs font-mono tracking-wider uppercase text-[#c2956a] hover:bg-[#c2956a]/20 transition-all cursor-pointer disabled:opacity-40"
+              className="inline-flex items-center gap-2 rounded-lg border border-[#c2956a] bg-[#c2956a]/10 px-4 py-2 text-xs font-mono tracking-wider uppercase text-[#c2956a] hover:bg-[#c2956a]/20 transition-all duration-250 ease-[var(--ease-out-quart)] active:scale-[0.97] cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100"
             >
               <RefreshCw className={`h-3.5 w-3.5 ${syncing ? 'animate-spin' : ''}`} />
               <span>{syncing ? 'Syncing...' : 'Sync to Cloud'}</span>
@@ -207,7 +207,7 @@ CREATE POLICY "Authenticated users can manage contact submissions" ON public.con
             type="button"
             onClick={testConnection}
             disabled={testingHealth}
-            className="text-xs font-mono text-[#c2956a] hover:underline flex items-center gap-1.5 cursor-pointer"
+            className="text-xs font-mono text-[#c2956a] hover:underline flex items-center gap-1.5 cursor-pointer transition-all duration-150 ease-[var(--ease-out-quart)] active:opacity-80"
           >
             <RefreshCw className={`h-3 w-3 ${testingHealth ? 'animate-spin' : ''}`} />
             Run Diagnostics
@@ -258,7 +258,7 @@ CREATE POLICY "Authenticated users can manage contact submissions" ON public.con
           <button
             type="button"
             onClick={handleCopySchemaSql}
-            className="inline-flex items-center gap-1.5 text-xs text-[#c2956a] hover:underline cursor-pointer ml-3 shrink-0"
+            className="inline-flex items-center gap-1.5 text-xs text-[#c2956a] hover:underline cursor-pointer ml-3 shrink-0 transition-all duration-150 ease-[var(--ease-out-quart)] active:opacity-80"
           >
             {copiedSql ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
             <span>{copiedSql ? 'Copied!' : 'Copy SQL Script'}</span>
@@ -293,7 +293,7 @@ CREATE POLICY "Authenticated users can manage contact submissions" ON public.con
         <div className="mt-4 flex flex-wrap items-center gap-4">
           <label
             htmlFor="content-import"
-            className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-[#242220] bg-[#161514] px-4 py-2.5 text-xs font-mono text-neutral-300 hover:border-[#c2956a] hover:text-[#f2ede6] transition-colors"
+            className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-[#242220] bg-[#161514] px-4 py-2.5 text-xs font-mono text-neutral-300 hover:border-[#c2956a] hover:bg-surface hover:text-[#f2ede6] transition-all duration-250 ease-[var(--ease-out-quart)] active:scale-[0.97]"
           >
             <Upload className="h-4 w-4 text-[#c2956a]" aria-hidden="true" />
             Select JSON File
