@@ -23,9 +23,9 @@ const VARIANTS = {
 }
 
 const SIZES = {
-  sm: 'px-3 py-1.5 text-sm gap-1.5 rounded-lg',
-  md: 'px-4 py-2.5 text-sm gap-2 rounded-lg',
-  lg: 'px-5 py-3 text-base gap-2 rounded-xl',
+  sm: 'px-4 py-1.5 text-sm gap-1.5 rounded-full',
+  md: 'px-5 py-2.5 text-sm gap-2 rounded-full',
+  lg: 'px-7 py-3.5 text-base gap-2.5 rounded-full',
 }
 
 export default function Button({
@@ -46,7 +46,7 @@ export default function Button({
   const variantClasses = VARIANTS[variant] || VARIANTS.primary
 
   const classes = [
-    'inline-flex max-w-full items-center justify-center font-semibold break-words text-center transition-[background-color,border-color,color,box-shadow,transform] duration-250 ease-[var(--ease-out-quart)]',
+    'inline-flex max-w-full items-center justify-center font-semibold break-words text-center transition-[background-color,border-color,color,box-shadow,transform] duration-500 ease-[var(--ease-out-expo)]',
     'disabled:cursor-not-allowed disabled:opacity-50 disabled:transform-none',
     'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
     variant === 'link' ? 'motion-reduce:hover:text-accent' : 'motion-reduce:hover:-translate-y-0',

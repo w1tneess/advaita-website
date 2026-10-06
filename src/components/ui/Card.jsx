@@ -1,7 +1,9 @@
 /**
- * Surface container with a subtle border and shadow.
- * `interactive` adds the hover lift used by project and article cards.
+ * Double-bezel surface: an outer hairline tray holding an inner core with its own
+ * highlight, using concentric radii. `interactive` adds a soft lift on hover.
  */
+const OUTER_CLASS = /^(-?m[trblxy]?-|col-|row-|self-|justify-self-|order-|w-|max-w-|min-w-|[a-z]+:(-?m[trblxy]?|col|row|w)-)/
+
 export default function Card({
   as: Tag = 'div',
   interactive = false,
@@ -9,20 +11,32 @@ export default function Card({
   children,
   ...rest
 }) {
+  const tokens = className.split(/\s+/).filter(Boolean)
+  const outer = tokens.filter((t) => OUTER_CLASS.test(t))
+  const inner = tokens.filter((t) => !OUTER_CLASS.test(t))
+
   return (
     <Tag
       className={[
-        'rounded-card border border-line bg-surface shadow-subtle transition-[background-color,border-color,box-shadow,transform] duration-200',
+        'rounded-[1.25rem] border border-line/70 bg-surface/60 p-1 shadow-subtle',
+        'transition-[border-color,box-shadow,transform] duration-500 ease-[var(--ease-out-expo)]',
         interactive
-          ? 'card-interactive cursor-pointer active:scale-[0.99] motion-reduce:hover:translate-y-0'
+          ? 'cursor-pointer hover:-translate-y-1 hover:border-line-strong hover:shadow-card-hover active:scale-[0.99] motion-reduce:hover:translate-y-0'
           : '',
-        className,
+        ...outer,
       ]
         .filter(Boolean)
         .join(' ')}
       {...rest}
     >
-      {children}
+      <div
+        className={[
+          'h-full rounded-[calc(1.25rem-0.25rem)] bg-surface shadow-[inset_0_1px_0_rgba(248,246,240,0.06)]',
+          ...inner,
+        ].join(' ')}
+      >
+        {children}
+      </div>
     </Tag>
   )
 }

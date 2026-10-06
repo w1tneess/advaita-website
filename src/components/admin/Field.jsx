@@ -23,7 +23,7 @@ function controlClasses(hasError) {
  * `children` is a render function receiving the props the control must spread, so custom
  * controls (checkbox groups, block editors) get the same wiring as a plain input.
  */
-export function FieldShell({
+function FieldShell({
   id,
   label,
   hint,

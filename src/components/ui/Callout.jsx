@@ -10,7 +10,7 @@ import { BookOpen, HelpCircle, Info, MessageSquare, Search } from 'lucide-react'
  * icons and colours that appear in the content.
  */
 
-export const VARIANT_META = {
+const VARIANT_META = {
   fact: {
     label: 'Sourced fact',
     icon: BookOpen,

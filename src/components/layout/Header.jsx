@@ -122,7 +122,7 @@ export default function Header() {
 						to="/contact"
 						{...getRoutePreloadProps('/contact')}
 						className={({ isActive }) =>
-							`group inline-flex items-center gap-1.5 px-4 py-1.5 text-[13px] font-sans font-medium tracking-[-0.005em] rounded-full border transition-all duration-200 active:scale-[0.97] ${
+							`group inline-flex items-center gap-2 pl-4 pr-1 py-1 text-[13px] font-sans font-medium tracking-[-0.005em] rounded-full border transition-all duration-300 active:scale-[0.97] ${
 								isActive
 									? "text-ink border-accent bg-accent/10 shadow-sm"
 									: "text-muted border-line hover:text-ink hover:border-line-strong hover:bg-surface/80"
@@ -130,7 +130,9 @@ export default function Header() {
 						}
 					>
 						<span>Contact</span>
-						<ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 text-accent" />
+						<div className="flex h-6 w-6 items-center justify-center rounded-full bg-ink/5 transition-transform duration-300 group-hover:scale-105 group-hover:translate-x-[1px]">
+							<ArrowUpRight className="h-3 w-3 text-accent" />
+						</div>
 					</NavLink>
 				</div>
 

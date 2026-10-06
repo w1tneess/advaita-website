@@ -1,14 +1,15 @@
 import { ArrowUpRight, Github, Globe } from 'lucide-react'
 
+// Allow only safe protocols (http, https) or relative paths.
+const isSafeUrl = (url) => {
+	if (!url || typeof url !== 'string') return false
+	const trimmed = url.trim().toLowerCase()
+	return trimmed.startsWith('https://') || trimmed.startsWith('http://') || trimmed.startsWith('/')
+}
+
 export default function ProjectCard({ project }) {
 	const { title, categories, status, summary, description, methodology, links, tools } = project
 	const kind = categories && categories.length > 0 ? categories[0] : (status || "Research & Tool")
-	// Sanitize links to allow only safe protocols (http, https, or relative paths)
-	const isSafeUrl = (url) => {
-		if (!url || typeof url !== 'string') return false
-		const trimmed = url.trim().toLowerCase()
-		return trimmed.startsWith('https://') || trimmed.startsWith('http://') || trimmed.startsWith('/')
-	}
 
 	const rawLink = links?.live || links?.repository
 	const link = isSafeUrl(rawLink) ? rawLink : null
@@ -16,7 +17,7 @@ export default function ProjectCard({ project }) {
 	const liveLink = isSafeUrl(links?.live) ? links.live : null
 
 	return (
-		<article className="group flex h-full flex-col justify-between p-6 sm:p-8 rounded-2xl border border-line/60 bg-surface/30 hover:bg-surface/60 hover:-translate-y-1 hover:border-line-strong hover:shadow-subtle active:scale-[0.98] transition-all duration-250 ease-[var(--ease-out-quart)]">
+		<article className="group flex h-full flex-col justify-between p-6 sm:p-8 rounded-[1.5rem] border border-line/60 bg-surface/40 shadow-[inset_0_1px_0_rgba(248,246,240,0.05)] hover:bg-surface/70 hover:-translate-y-1 hover:border-line-strong hover:shadow-card-hover active:scale-[0.99] motion-reduce:hover:translate-y-0 transition-[background-color,border-color,box-shadow,transform] duration-500 ease-[var(--ease-out-expo)]">
 			<div>
 				{/* Top Card Catalog Bar */}
 				<div className="flex items-center justify-between border-b border-line pb-4 mb-5 font-mono text-[11px] tracking-widest uppercase text-muted">
@@ -32,7 +33,7 @@ export default function ProjectCard({ project }) {
 				</div>
 
 				{/* Title */}
-				<h3 className="text-xl sm:text-2xl font-normal text-ink group-hover:text-muted transition-colors duration-150 ease-[var(--ease-out-quart)] leading-snug text-balance">
+				<h3 className="text-xl sm:text-2xl font-normal text-ink group-hover:text-accent-strong transition-colors duration-500 ease-[var(--ease-out-expo)] leading-snug text-balance">
 					{link ? (
 						<a
 							href={link}

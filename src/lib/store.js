@@ -21,7 +21,7 @@
 import { createSeedDocument, SCHEMA_VERSION, SEED_VERSION } from '../data/seed.js'
 import { validateDocument } from './schema.js'
 
-export const STORAGE_KEY = 'advaita-site.content.v1'
+const STORAGE_KEY = 'advaita-site.content.v1'
 
 
 /* --------------------------------------------------------------------------

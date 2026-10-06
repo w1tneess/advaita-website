@@ -183,9 +183,9 @@ export default function ContactForm() {
           <button
             type="button"
             onClick={() => setStatus('idle')}
-            className="border border-copper/60 bg-copper/10 px-5 py-2 rounded-md font-mono text-xs tracking-wider uppercase text-copper hover:bg-copper hover:text-canvas active:scale-[0.97] transition-all duration-250 ease-[var(--ease-out-quart)] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30"
+            className="border border-copper/60 bg-copper/10 px-5 py-2.5 rounded-full font-semibold text-sm text-copper hover:bg-copper hover:text-canvas active:scale-[0.97] transition-all duration-250 ease-[var(--ease-out-quart)] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30"
           >
-            Send another dispatch
+            Send Another Dispatch
           </button>
         </div>
       </motion.div>
@@ -364,22 +364,28 @@ export default function ContactForm() {
         <button
           type="submit"
           disabled={status === 'submitting' || timeRemaining > 0}
-          className="group inline-flex items-center justify-center gap-2 rounded-lg border border-copper bg-copper px-6 py-2.5 font-mono text-xs uppercase tracking-widest font-semibold text-canvas transition-all duration-250 ease-[var(--ease-out-quart)] hover:bg-copper-strong hover:border-copper-strong active:scale-[0.97] hover:-translate-y-0.5 hover:shadow-subtle disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
+          className="group inline-flex items-center justify-center gap-3 rounded-full border border-copper bg-copper pl-6 pr-2 py-2 text-sm font-semibold text-canvas transition-all duration-500 ease-[var(--ease-out-expo)] hover:bg-copper-strong hover:border-copper-strong active:scale-[0.97] shadow-subtle disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
         >
           {status === 'submitting' ? (
             <>
-              <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
               <span>Transmitting…</span>
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-canvas/15">
+                <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+              </div>
             </>
           ) : timeRemaining > 0 ? (
             <>
-              <Loader2 className="h-4 w-4" aria-hidden="true" />
               <span>Cooldown ({timeRemaining}s)</span>
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-canvas/15">
+                <Loader2 className="h-4 w-4" aria-hidden="true" />
+              </div>
             </>
           ) : (
             <>
-              <span>Send message</span>
-              <Send className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+              <span>Send Message</span>
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-canvas/15 transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:scale-105 group-hover:translate-x-0.5">
+                <Send className="h-4 w-4" aria-hidden="true" />
+              </div>
             </>
           )}
         </button>

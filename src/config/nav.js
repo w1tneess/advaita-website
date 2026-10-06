@@ -127,9 +127,6 @@ export const PUBLIC_ROUTES = [
   },
 ]
 
-/** Routes that must never be indexed or listed in the sitemap. */
-export const ADMIN_ROUTE_PREFIX = '/admin'
-
 /** Navigation items for the public header and footer. */
 export const NAV_ITEMS = PUBLIC_ROUTES.filter((route) => route.nav).map(({ path, label, key, description }) => ({
   path,

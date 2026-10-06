@@ -5,7 +5,7 @@
    ---------------------------------------------------------------------------
    Utilitarian "Ink on Paper" palette.
    Defaults to light mode (parchment), falls back to dark mode (obsidian).
-   Uses Playfair Display for display, Hanken Grotesk for body, and JetBrains Mono for utility.
+   Uses Playfair Display for display, Plus Jakarta Sans for body, and Space Mono for utility.
 --------------------------------------------------------------------------- */
 
 @theme {
@@ -30,11 +30,11 @@
   --color-limitation: #fb7185;
 
   /* Typography */
-  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  --font-mono: 'Space Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
   
-  --font-display: 'Playfair Display', ui-serif, Georgia, serif;
-  --font-serif: 'Playfair Display', ui-serif, Georgia, serif;
+  --font-display: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
 
   /* Fluid Typography Scale */
   --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
@@ -85,11 +85,11 @@
   --section-gap: clamp(3.5rem, 8vw, 8rem);
   --content-gap: 1.5rem;
 
-  /* Extremely restrained cards */
-  --radius-card: 4px;
-  --shadow-subtle: 0 4px 20px -2px rgba(0, 0, 0, 0.3);
-  --shadow-raised: 0 10px 40px -4px rgba(0, 0, 0, 0.4);
-  --shadow-card-hover: 0 12px 48px -4px rgba(0, 0, 0, 0.5);
+  /* Apple HIG inspired cards */
+  --radius-card: 12px;
+  --shadow-subtle: 0 4px 16px -4px rgba(0, 0, 0, 0.15);
+  --shadow-raised: 0 12px 32px -8px rgba(0, 0, 0, 0.20);
+  --shadow-card-hover: 0 16px 40px -12px rgba(0, 0, 0, 0.25);
 
   /* Animation timing */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
@@ -158,7 +158,7 @@
     min-width: 320px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    transition: background-color 0.15s ease, color 0.15s ease;
+    transition: background-color 0.3s var(--ease-out-expo), color 0.3s var(--ease-out-expo);
   }
 
   img,
@@ -187,12 +187,13 @@
   }
 
   :focus-visible {
-    outline: 1px solid var(--color-ink);
-    outline-offset: 2px;
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 4px;
   }
 
   ::selection {
-    background-color: color-mix(in oklch, var(--color-ink) 15%, transparent);
+    background-color: color-mix(in oklch, var(--color-accent) 35%, transparent);
   }
 
   input, textarea, select, button {
@@ -229,13 +230,6 @@
     padding-inline: var(--margin-safe);
   }
 
-  .glass-header {
-    background-color: rgba(15, 14, 13, 0.82);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border-bottom: 1px solid var(--color-line-strong);
-  }
-
   .ambient-glow {
     position: absolute;
     border-radius: 9999px;
@@ -243,19 +237,6 @@
     pointer-events: none;
     opacity: 0.22;
     background: radial-gradient(circle, var(--color-accent) 0%, rgba(194, 149, 106, 0.08) 50%, transparent 75%);
-  }
-
-  .grid-hero {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--spacing-fluid-lg);
-    align-items: center;
-  }
-  @media (min-width: 1024px) {
-    .grid-hero {
-      grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-      gap: var(--spacing-fluid-xl);
-    }
   }
 
   .grid-asymmetric {
@@ -305,24 +286,6 @@
     line-height: 1.4;
   }
 
-  /* Nav link - simple unstyled links with subtle hover */
-  .nav-link {
-    color: var(--color-ink);
-    text-decoration: none;
-    font-family: var(--font-mono);
-    font-size: var(--text-label);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    transition: color 0.2s ease;
-  }
-
-  .nav-link:hover,
-  .nav-link[data-active='true'] {
-    color: var(--color-muted);
-    text-decoration: underline;
-    text-underline-offset: 4px;
-    text-decoration-thickness: 1px;
-  }
 }
 
 @layer utilities {
@@ -343,11 +306,6 @@
     font-size: var(--text-label);
     letter-spacing: 0.05em;
     text-transform: uppercase;
-  }
-
-  .focus-ring {
-    outline: 2px solid var(--color-accent);
-    outline-offset: 2px;
   }
 
   .glass-dock {
@@ -373,16 +331,6 @@
   .code-badge:hover {
     border-color: var(--color-accent);
     color: var(--color-ink);
-  }
-
-  .dev-grid {
-    background-image: radial-gradient(rgba(248, 246, 240, 0.16) 1.25px, transparent 1.25px);
-    background-size: 24px 24px;
-  }
-
-  .dev-grid-mask {
-    -webkit-mask-image: radial-gradient(ellipse 85% 70% at 50% 32%, #000 35%, transparent 95%);
-    mask-image: radial-gradient(ellipse 85% 70% at 50% 32%, #000 35%, transparent 95%);
   }
 
   .premium-noise {

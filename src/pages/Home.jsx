@@ -42,21 +42,24 @@ function Hero({ profile = {} }) {
 						Working drafts, code experiments, and study notes tracking my interests in creative computing, philosophy, history, and internet infrastructure.
 					</p>
 
-					{/* Primary Call to Action */}
 					<div className="flex flex-wrap items-center gap-4 sm:gap-6 mb-[var(--spacing-fluid-lg)]">
 						<Link
 							to="/projects"
-							className="inline-flex items-center gap-2 px-6 py-3 rounded-md bg-accent text-canvas font-mono text-xs uppercase tracking-wider font-semibold hover:bg-white/20 hover:text-ink active:scale-[0.97] active:opacity-80 transition-all duration-250 ease-[var(--ease-out-quart)] shadow-subtle"
+							className="group inline-flex items-center gap-3 pl-6 pr-2 py-2 rounded-full bg-accent text-canvas text-sm font-semibold hover:bg-accent-strong active:scale-[0.97] transition-all duration-500 ease-[var(--ease-out-expo)] shadow-subtle"
 						>
 							<span>Explore Projects</span>
-							<ArrowUpRight className="h-3.5 w-3.5" />
+							<div className="flex h-8 w-8 items-center justify-center rounded-full bg-canvas/15 transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:scale-105 group-hover:translate-x-0.5">
+								<ArrowUpRight className="h-4 w-4" />
+							</div>
 						</Link>
 						<a
 							href="#inquiries"
-							className="inline-flex items-center gap-2 px-6 py-3 rounded-md border border-line bg-surface/50 text-muted hover:text-ink hover:border-line-strong hover:bg-surface active:scale-[0.97] active:opacity-80 transition-all duration-250 ease-[var(--ease-out-quart)] font-mono text-xs uppercase tracking-wider"
+							className="group inline-flex items-center gap-3 pl-6 pr-2 py-2 rounded-full border border-line bg-surface/50 text-muted hover:text-ink hover:border-line-strong hover:bg-surface active:scale-[0.97] transition-all duration-500 ease-[var(--ease-out-expo)] text-sm font-semibold"
 						>
 							<span>Reading Archive</span>
-							<span aria-hidden="true">&darr;</span>
+							<div className="flex h-8 w-8 items-center justify-center rounded-full bg-ink/5 transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:scale-105 group-hover:translate-y-0.5">
+								<span aria-hidden="true">&darr;</span>
+							</div>
 						</a>
 					</div>
 				</div>

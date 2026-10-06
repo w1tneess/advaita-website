@@ -91,7 +91,7 @@ function LinkedinIcon({ size = 24, className = '', ...props }) {
  * tree-shaking and would pull the entire icon set into the bundle. Add an icon here to
  * make it available to the seed data and the admin pickers.
  */
-export const ICON_REGISTRY = {
+const ICON_REGISTRY = {
   AtSign,
   BarChart3,
   BookOpen,

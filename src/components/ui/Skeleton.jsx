@@ -30,7 +30,7 @@ export function Skeleton({ className = '', variant = 'rectangular', width, heigh
   )
 }
 
-export function SkeletonText({ lines = 3, className = '' }) {
+function SkeletonText({ lines = 3, className = '' }) {
   return (
     <div className={`space-y-2.5 ${className}`}>
       {Array.from({ length: lines }).map((_, i) => (
@@ -44,7 +44,7 @@ export function SkeletonText({ lines = 3, className = '' }) {
   )
 }
 
-export function SkeletonCard({ className = '' }) {
+function SkeletonCard({ className = '' }) {
   return (
     <div className={`rounded-card border border-line bg-surface/60 p-6 space-y-4 ${className}`}>
       <Skeleton className="h-48 w-full rounded-lg" />
