@@ -1,0 +1,47 @@
+name: Production Health & Uptime Check
+
+on:
+  schedule:
+    # Daily at 04:00 UTC
+    - cron: '0 4 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  health-check:
+    name: Verify Live Site Endpoints
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test Production Endpoints
+        run: |
+          set -e
+          endpoints=(
+            "https://advaitachandra.in"
+            "https://advaitachandra.in/projects"
+            "https://advaitachandra.in/philosophy"
+            "https://advaitachandra.in/photography"
+            "https://advaitachandra.in/blog"
+            "https://advaitachandra.in/sitemap.xml"
+            "https://advaitachandra.in/feed.json"
+            "https://oshodocumentary.advaitachandra.in"
+          )
+
+          failed=0
+          for url in "${endpoints[@]}"; do
+            echo "Checking: $url"
+            status=$(curl -s -o /dev/null -w "%{http_code}" -L --max-time 15 "$url")
+            if [ "$status" -eq 200 ]; then
+              echo "  ✓ OK (HTTP $status)"
+            else
+              echo "  ✗ FAILED (HTTP $status)"
+              failed=1
+            fi
+          done
+
+          if [ "$failed" -ne 0 ]; then
+            echo "One or more endpoint health checks failed."
+            exit 1
+          fi
+          echo "All production endpoints healthy!"

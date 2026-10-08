@@ -24,7 +24,7 @@ Advaita Chandra is a student and developer from West Bengal, India. He builds we
 
 ## Key Research & Projects
 - [Terrorism in India: Data Visualization (1947-2026)](https://advaitachandra.in/projects#prj-terrorism-india-dataviz): Matplotlib and Python data visualization reconciling conflicting historical sources, marking data gaps without artificial smoothing, and mapping incident counts across decades.
-- [Osho: Documentary-Style Research Document](https://advaitachandra.in/projects#prj-osho-research-document): Archival and secondary source research placing contradictory biographical and institutional accounts side by side without premature adjudication.
+- [Osho Documentary: Impartial Archival Inquiry](https://oshodocumentary.advaitachandra.in/): Forensic examination and evidence-graded web archive deconstructing Bhagwan Shree Rajneesh (1931–1990), his life, teachings, Oregon commune, 1984 bioterror attack, and global legacy across primary sources and declassified FBI records. (Repo: https://github.com/w1tneess/osho-documentary)
 - [Worksheet Generator](https://advaitachandra.in/projects#prj-worksheet-generator): System design concept separating content schema, layout engine, template formatting, and AI drafting into four decoupled layers.
 - [Advaita Website](https://advaitachandra.in/projects#prj-personal-website): The open-source architecture for this site, built with React, Vite, Tailwind CSS, Supabase, and pre-rendered semantic HTML.
 

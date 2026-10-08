@@ -112,16 +112,18 @@ Advaita operates under an explicit framework designed to prevent bias and mainta
   - Variable institutional definitions make cross-decade aggregation non-trivial.
   - The project charts documented occurrences; it does not claim to prove definitive geopolitical causation.
 
-### Project 2: Osho: Documentary-Style Research Document
-- **Categories**: Research, Writing, History
-- **Summary**: A comprehensive long-form archival document compiling contested secondary accounts of Osho and associated communes.
+### Project 2: Osho Documentary: Impartial Archival Inquiry
+- **Categories**: Research, Writing, Technology
+- **Summary**: An unflinching, evidence-graded investigative web documentary deconstructing Bhagwan Shree Rajneesh (1931–1990), examining his life, teachings, the Oregon commune, the 1984 bioterror attack, and his global legacy.
+- **Live Website**: https://oshodocumentary.advaitachandra.in/
+- **Repository**: https://github.com/w1tneess/osho-documentary
 - **Methodology**:
-  - Gathered published memoirs, legal proceedings, and historical analyses.
-  - Structured chronologically to illuminate turning points and divergence in witnesses' accounts.
-  - Placed competing narratives side by side with explicit epistemic flags rather than asserting singular conclusions.
+  - Gathered primary audio recordings (over 5,000 discourses), declassified FBI vault dossiers, Wasco County grand jury records, CDC reports, and published memoirs.
+  - Structured across five core investigative volumes (Life, Teachings, Movement, Controversies, Legacy) with an interactive timeline, photographic vault, and geo-spatial map.
+  - Placed competing accounts side by side with explicit epistemic grading rather than asserting premature conclusions.
 - **Stated Limitations**:
-  - Many primary sources carry strong personal bias or dispute.
-  - The document is personal research, not peer-reviewed scholarship.
+  - Accounts of Osho and Rajneeshpuram are heavily polarized across memoirs, state prosecutions, and sannyasin perspectives.
+  - Secondary sources carry significant institutional biases; primary legal and audio evidence is given precedence.
 
 ### Project 3: Worksheet Generator (System Concept)
 - **Categories**: System Design, Education, Technology

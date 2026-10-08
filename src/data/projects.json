@@ -46,38 +46,36 @@
   {
     "id": "prj-osho-research-document",
     "slug": "osho-documentary-research-document",
-    "title": "Osho: Documentary-Style Research Document",
-    "categories": ["research", "writing"],
-    "summary": "A long research document on Osho. It places competing historical accounts side by side instead of picking one narrative.",
-    "description": "A research document about Osho written from published secondary sources. Because accounts of his life and organizations differ sharply, the document records competing accounts side by side and flags disputed claims.",
-    "role": "Creator. Read sources, structured sections, and drafted text.",
-    "tools": ["Source reading", "Drafting"],
+    "title": "Osho Documentary: Impartial Archival Inquiry",
+    "categories": ["research", "writing", "technology"],
+    "summary": "An impartial, evidence-graded investigative inquiry into Bhagwan Shree Rajneesh (1931–1990) deconstructing his life, teachings, Oregon commune, 1984 bioterror attack, and global legacy.",
+    "description": "An unflinching, evidence-graded documentary web archive examining Bhagwan Shree Rajneesh (Osho). Built from over 5,000 recorded audio discourses, declassified FBI vault dossiers, and Wasco County court exhibits, placing contradictory biographical and institutional accounts side by side with rigorous epistemic grading.",
+    "role": "Creator and researcher. Archival curation, historical synthesis, and web development.",
+    "tools": ["Next.js", "React", "Tailwind CSS", "Primary Sources", "Archival Curation"],
     "status": "completed",
-    "visibility": "Research document. Not published as a public article.",
+    "visibility": "Public web documentary and archival research project.",
     "published": true,
     "methodology": [
       {
-        "title": "Used published sources",
-        "detail": "Compiled from public materials with source notes for each account."
+        "title": "Primary source corpus & FBI vault",
+        "detail": "Cross-referenced thousands of audio discourses, Wasco County grand jury records, CDC reports, and declassified federal exhibits."
       },
       {
-        "title": "Organized chronologically",
-        "detail": "Used a timeline format to make sequence of events and divergence points clear."
+        "title": "Evidence-graded chronology",
+        "detail": "Structured across five investigative volumes (Life, Teachings, Movement, Controversies, Legacy) with interactive timeline and photo vault."
       },
       {
-        "title": "Separated facts from interpretation",
-        "detail": "Kept documented events distinct from interpretations and flagged disputed claims."
+        "title": "Contested claims side-by-side",
+        "detail": "Keeps documented events distinct from interpretations and explicitly flags conflicting witness testimonies without premature adjudication."
       }
     ],
     "limitations": [
-      "Accounts of Osho are contested. This document records competing versions without adjudicating between them.",
-      "This is a personal research document, not peer-reviewed scholarship.",
-      "No public link exists currently.",
-      "Secondary sources carry their own biases."
+      "Accounts of Osho and Rajneeshpuram are heavily polarized across memoirs, state prosecutions, and sannyasin accounts.",
+      "Secondary sources carry significant institutional and emotional biases; primary legal and audio evidence is given precedence."
     ],
     "links": {
-      "repository": null,
-      "live": null,
+      "repository": "https://github.com/w1tneess/osho-documentary",
+      "live": "https://oshodocumentary.advaitachandra.in/",
       "writeup": null
     },
     "featured": true,

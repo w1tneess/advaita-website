@@ -181,14 +181,14 @@ function ActiveInquiries({ philosophy = {} }) {
 		},
 		{
 			category: "Historical Accounts",
-			status: "Documentary research",
-			title: "Osho: Comparing Conflicting Accounts",
+			status: "Documentary inquiry",
+			title: "Osho: Impartial Archival Inquiry",
 			summary:
-				"A study comparing published books and memoirs about Osho and his movements. Records conflicting versions side by side instead of choosing a single narrative.",
-			locus: "Published Sources",
+				"An evidence-graded investigative inquiry into Bhagwan Shree Rajneesh (1931–1990) deconstructing his life, teachings, Oregon commune, 1984 bioterror attack, and global legacy across primary sources.",
+			locus: "Web Archive & Primary Sources",
 			text: "Comparative Analysis",
-			link: "/projects",
-			linkText: "Read document",
+			link: "https://oshodocumentary.advaitachandra.in/",
+			linkText: "Visit documentary",
 		},
 		{
 			category: "Computer Systems",
@@ -285,10 +285,22 @@ function ActiveInquiries({ philosophy = {} }) {
 
 							<div>
 								<h3 className="text-[length:var(--text-2xl)] font-normal text-ink group-hover:text-muted transition-colors duration-150 ease-[var(--ease-out-quart)] leading-snug mb-3">
-									<Link to={item.link} className="inline-flex items-baseline gap-3 outline-none">
-										<span>{item.title}</span>
-										<ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-all duration-250 ease-[var(--ease-out-quart)] -translate-x-3 group-hover:translate-x-0 text-muted" />
-									</Link>
+									{item.link?.startsWith("http") ? (
+										<a
+											href={item.link}
+											target="_blank"
+											rel="noopener noreferrer"
+											className="inline-flex items-baseline gap-3 outline-none"
+										>
+											<span>{item.title}</span>
+											<ArrowUpRight className="h-4 w-4 opacity-50 group-hover:opacity-100 transition-all duration-250 ease-[var(--ease-out-quart)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 text-muted" />
+										</a>
+									) : (
+										<Link to={item.link} className="inline-flex items-baseline gap-3 outline-none">
+											<span>{item.title}</span>
+											<ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-all duration-250 ease-[var(--ease-out-quart)] -translate-x-3 group-hover:translate-x-0 text-muted" />
+										</Link>
+									)}
 								</h3>
 
 								<p className="text-lg text-muted font-sans leading-relaxed max-w-2xl">
