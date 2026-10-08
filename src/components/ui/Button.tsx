@@ -1,6 +1,6 @@
 import React, { type ReactNode, type ButtonHTMLAttributes } from 'react'
 import { Link } from 'react-router'
-import { preloadRoute } from '@/lib/preload'
+import { preloadRoute } from '../../lib/preload'
 
 export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'link'
 export type ButtonSize = 'sm' | 'md' | 'lg'
@@ -43,6 +43,8 @@ export default function Button({
   disabled = false,
   className = '',
   children,
+  target,
+  rel,
   onPointerEnter,
   onFocus,
   onTouchStart,
@@ -68,6 +70,8 @@ export default function Button({
       <Link
         to={to}
         className={classes}
+        target={target}
+        rel={rel}
         onPointerEnter={(e) => {
           preloadRoute(to)
           onPointerEnter?.(e as unknown as React.PointerEvent<HTMLButtonElement>)
@@ -80,6 +84,7 @@ export default function Button({
           preloadRoute(to)
           onTouchStart?.(e as unknown as React.TouchEvent<HTMLButtonElement>)
         }}
+        {...(rest as unknown as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
       >
         {children}
       </Link>
@@ -95,7 +100,9 @@ export default function Button({
       <a
         href={safeHref}
         className={classes}
-        {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+        target={isExternal ? '_blank' : target}
+        rel={isExternal ? 'noopener noreferrer' : rel}
+        {...(rest as unknown as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
       >
         {children}
       </a>
