@@ -114,6 +114,59 @@ import {
 import { isSupabaseConfigured } from './supabase/client.js'
 
 /**
+ * Reconciles a loaded document with the deployed seed to ensure that new seed
+ * versions (with updated projects, links, and content) take precedence over stale stores.
+ */
+function reconcileWithSeed(doc) {
+  const seed = createSeedDocument()
+  if (!doc) return seed
+
+  // If the stored document has an older seedVersion than the codebase,
+  // upgrade to the fresh seed while preserving any user-added items and activity.
+  if ((doc.seedVersion ?? 0) < SEED_VERSION) {
+    return {
+      ...seed,
+      activity: doc.activity || [],
+      blog: Array.isArray(doc.blog) && doc.blog.length > 0 ? doc.blog : seed.blog,
+      photography: {
+        ...seed.photography,
+        photos:
+          Array.isArray(doc.photography?.photos) && doc.photography.photos.length > 0
+            ? doc.photography.photos
+            : seed.photography.photos,
+      },
+      seedVersion: SEED_VERSION,
+      schemaVersion: SCHEMA_VERSION,
+    }
+  }
+
+  // Backfill official project links from seed if missing or null in stored data
+  if (Array.isArray(doc.projects)) {
+    const updatedProjects = doc.projects.map((project) => {
+      const seedProject = seed.projects.find(
+        (sp) => sp.id === project.id || sp.slug === project.slug,
+      )
+      if (seedProject && seedProject.links) {
+        return {
+          ...project,
+          links: {
+            ...seedProject.links,
+            ...(project.links || {}),
+            live: project.links?.live || seedProject.links.live,
+            repository: project.links?.repository || seedProject.links.repository,
+            writeup: project.links?.writeup || seedProject.links.writeup,
+          },
+        }
+      }
+      return project
+    })
+    return { ...doc, projects: updatedProjects }
+  }
+
+  return doc
+}
+
+/**
  * Load the active content document asynchronously.
  * Tries Supabase first; falls back gracefully to localStorage or seed.
  *
@@ -132,15 +185,20 @@ export async function loadDocument() {
         if (blockedAt === null) {
           const { ok } = validateDocument(migrated)
           if (ok) {
-            // Mirror to localStorage for offline resilience
+            const finalDoc = reconcileWithSeed(migrated)
+            // Mirror reconciled document to localStorage for offline resilience
             if (storage) {
               try {
-                storage.setItem(STORAGE_KEY, JSON.stringify(migrated))
+                storage.setItem(STORAGE_KEY, JSON.stringify(finalDoc))
               } catch (_) {
                 // Ignore storage quota error
               }
             }
-            return { doc: migrated, source: 'remote', warning: null }
+            return {
+              doc: finalDoc,
+              source: (migrated.seedVersion ?? 0) < SEED_VERSION ? 'seed' : 'remote',
+              warning: null,
+            }
           }
         }
       }
@@ -159,9 +217,17 @@ export async function loadDocument() {
         if (blockedAt === null) {
           const { ok } = validateDocument(migrated)
           if (ok) {
+            const finalDoc = reconcileWithSeed(migrated)
+            if (storage && finalDoc !== migrated) {
+              try {
+                storage.setItem(STORAGE_KEY, JSON.stringify(finalDoc))
+              } catch (_) {
+                // Ignore storage quota error
+              }
+            }
             return {
-              doc: migrated,
-              source: 'local',
+              doc: finalDoc,
+              source: (migrated.seedVersion ?? 0) < SEED_VERSION ? 'seed' : 'local',
               warning: isSupabaseConfigured()
                 ? 'Using cached local edits (offline mode).'
                 : null,
