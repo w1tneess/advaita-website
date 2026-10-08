@@ -7,16 +7,12 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
-  actions: write
+  contents: read
 
 jobs:
   keepalive:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
       - name: Ping Supabase Database (Real PostgreSQL Query)
         env:
           SUPABASE_URL: https://efpnrcwxvsvhlxqmvput.supabase.co
@@ -25,24 +21,17 @@ jobs:
           echo "Executing authenticated SELECT query against site_content table..."
           
           # Query site_content with select=id,updated_at to perform an active database read
-          response=$(curl -w "%{http_code}" -s -o /tmp/supabase_res.json -X GET "$SUPABASE_URL/rest/v1/site_content?select=id,updated_at&limit=1" \
+          response=$(curl -w "%{http_code}" -s -o /tmp/supabase_res.json --connect-timeout 15 --max-time 30 -X GET "$SUPABASE_URL/rest/v1/site_content?select=id,updated_at&limit=1" \
             -H "apikey: $SUPABASE_ANON_KEY" \
             -H "Authorization: Bearer $SUPABASE_ANON_KEY")
           
           echo "Supabase HTTP status: $response"
-          cat /tmp/supabase_res.json
+          cat /tmp/supabase_res.json || true
           echo ""
 
-          if [ "$response" -eq 200 ] || [ "$response" -eq 206 ]; then
+          if [ "$response" = "200" ] || [ "$response" = "206" ]; then
             echo "Success! Supabase PostgreSQL instance is active and queried."
           else
             echo "Failed to ping Supabase. HTTP Status: $response"
             exit 1
           fi
-
-      - name: Prevent GitHub from disabling workflow after 60 days
-        uses: gautamkrishnar/keepalive-workflow@v2
-        with:
-          committer_username: 'github-actions[bot]'
-          committer_email: 'github-actions[bot]@users.noreply.github.com'
-          commit_message: 'chore: keepalive heartbeat [skip ci]'
