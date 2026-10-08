@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react"
 import { Link } from "react-router"
 import PageHeader from "@/components/ui/PageHeader.jsx"
-import ProjectCard from "@/components/features/ProjectCard.jsx"
+import ProjectCard from "@/components/features/ProjectCard"
 import { useContent } from "@/lib/content.jsx"
 import Seo from "@/components/meta/Seo.jsx"
 import { PUBLIC_ROUTES } from "@/config/nav.js"
