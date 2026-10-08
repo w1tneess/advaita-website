@@ -1,35 +1,48 @@
-name: Supabase Keepalive
+name: Supabase Keepalive & Health Ping
 
 on:
   schedule:
-    # Twice a week: Sunday and Wednesday at 3:00 AM UTC
-    - cron: '0 3 * * 0,3'
+    # Run twice daily (04:00 and 16:00 UTC) so a single network glitch never causes a pause
+    - cron: '0 4,16 * * *'
   workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
 
 jobs:
   keepalive:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping Supabase Database
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Ping Supabase Database (Real PostgreSQL Query)
         env:
           SUPABASE_URL: https://efpnrcwxvsvhlxqmvput.supabase.co
           SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVmcG5yY3d4dnN2aGx4cW12cHV0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc2NTY2ODEsImV4cCI6MjEwMzIzMjY4MX0.lTAG1di8VWD0MeRP1U2ZQKHzdDkzvW-RBrjD2I-_VRI
         run: |
-          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_ANON_KEY" ]; then
-            echo "Error: SUPABASE_URL or SUPABASE_ANON_KEY is not set in repository secrets."
-            exit 1
-          fi
-
-          echo "Making authenticated query to Supabase REST API to prevent free-tier pause..."
+          echo "Executing authenticated SELECT query against site_content table..."
           
-          # We query the contact_submissions table with limit=1 to make a real DB hit
-          response=$(curl -w "%{http_code}" -s -o /dev/null -X GET "$SUPABASE_URL/rest/v1/contact_submissions?select=id&limit=1" \
+          # Query site_content with select=id,updated_at to perform an active database read
+          response=$(curl -w "%{http_code}" -s -o /tmp/supabase_res.json -X GET "$SUPABASE_URL/rest/v1/site_content?select=id,updated_at&limit=1" \
             -H "apikey: $SUPABASE_ANON_KEY" \
             -H "Authorization: Bearer $SUPABASE_ANON_KEY")
           
+          echo "Supabase HTTP status: $response"
+          cat /tmp/supabase_res.json
+          echo ""
+
           if [ "$response" -eq 200 ] || [ "$response" -eq 206 ]; then
-            echo "Success! Supabase project is active. (HTTP $response)"
+            echo "Success! Supabase PostgreSQL instance is active and queried."
           else
             echo "Failed to ping Supabase. HTTP Status: $response"
             exit 1
           fi
+
+      - name: Prevent GitHub from disabling workflow after 60 days
+        uses: gautamkrishnar/keepalive-workflow@v2
+        with:
+          committer_username: 'github-actions[bot]'
+          committer_email: 'github-actions[bot]@users.noreply.github.com'
+          commit_message: 'chore: keepalive heartbeat [skip ci]'
