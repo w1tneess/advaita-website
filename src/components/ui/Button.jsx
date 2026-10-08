@@ -82,10 +82,13 @@ export default function Button({
   }
 
   if (href && !disabled) {
-    const isExternal = /^https?:\/\//i.test(href)
+    const trimmed = typeof href === 'string' ? href.trim() : ''
+    const isSafe = /^(?:https?:\/\/|\/|#|mailto:|tel:)/i.test(trimmed)
+    const safeHref = isSafe ? trimmed : '#'
+    const isExternal = /^https?:\/\//i.test(safeHref)
     return (
       <a
-        href={href}
+        href={safeHref}
         className={classes}
         {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
         {...rest}

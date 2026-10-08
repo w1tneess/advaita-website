@@ -106,7 +106,12 @@ function SelectedProjects({ featuredProjects }) {
 				{featuredProjects.map((project) => {
 					const category = project.categories?.[0] || project.status || "Project"
 					const rawLink = project.links?.live || project.links?.repository
-					const link = rawLink ? rawLink : null
+					const isSafeUrl = (url) => {
+						if (!url || typeof url !== 'string') return false
+						const trimmed = url.trim().toLowerCase()
+						return trimmed.startsWith('https://') || trimmed.startsWith('http://') || trimmed.startsWith('/')
+					}
+					const link = isSafeUrl(rawLink) ? rawLink : null
 
 					return (
 						<article key={project.id} className="group py-6 sm:py-8 grid gap-4 sm:grid-cols-[1fr_2fr] items-baseline transition-all duration-250 ease-[var(--ease-out-quart)] hover:bg-surface/50 -mx-4 px-4 sm:-mx-6 sm:px-6 rounded-xl hover:-translate-y-0.5 hover:shadow-subtle active:scale-[0.98]">
