@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react'
 
 import { useContent } from '../lib/content.jsx'
 import { hasErrors } from '../lib/schema.js'
-import { useToast } from '../lib/toast.jsx'
+import { useToast } from '../lib/toast'
 
 /**
  * Draft state for one object section of the content document (profile, home, settings).

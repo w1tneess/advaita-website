@@ -1,6 +1,6 @@
 import React, { type ReactNode, type ButtonHTMLAttributes } from 'react'
 import { Link } from 'react-router'
-import { preloadRoute } from '@/lib/preload.js'
+import { preloadRoute } from '@/lib/preload'
 
 export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'link'
 export type ButtonSize = 'sm' | 'md' | 'lg'

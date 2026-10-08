@@ -2,7 +2,7 @@ import { ArrowLeft, ArrowRight } from 'lucide-react'
 import { Link, useLocation } from 'react-router'
 import Seo from '@/components/meta/Seo.jsx'
 import { NAV_ITEMS } from '@/config/nav.js'
-import { getRoutePreloadProps } from '@/lib/preload.js'
+import { getRoutePreloadProps } from '@/lib/preload'
 
 export default function NotFound() {
   const { pathname } = useLocation()

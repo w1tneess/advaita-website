@@ -1,6 +1,6 @@
 import { AlertCircle, CheckCircle2, Info, X } from 'lucide-react'
 
-import { useToast } from '@/lib/toast.jsx'
+import { useToast } from '@/lib/toast'
 
 /**
  * Renders the active toasts.

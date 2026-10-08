@@ -4,8 +4,8 @@ import EmptyState from '@/components/ui/EmptyState.jsx'
 import Seo from '@/components/meta/Seo.jsx'
 import { useContent } from '@/lib/content.jsx'
 import { PUBLIC_ROUTES } from '@/config/nav.js'
-import { formatDate } from '@/lib/format.js'
-import { preloadRoute } from '@/lib/preload.js'
+import { formatDate } from '@/lib/format'
+import { preloadRoute } from '@/lib/preload'
 import { ArrowRight, FileText } from 'lucide-react'
 
 const ROUTE = PUBLIC_ROUTES.find((route) => route.key === 'blog')

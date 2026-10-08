@@ -2,11 +2,11 @@ import { RefreshCw, Trash2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 import AdminPage from '../../components/admin/AdminPage.jsx'
-import Button from '@/components/ui/Button.jsx'
+import Button from '@/components/ui/Button'
 import ConfirmDialog from '../../components/admin/ConfirmDialog.jsx'
 import { useConfirm } from '../../hooks/useConfirm.jsx'
 import { supabase, isSupabaseConfigured } from '../../lib/supabase/client.js'
-import { useToast } from '../../lib/toast.jsx'
+import { useToast } from '../../lib/toast'
 
 export default function MessagesList() {
   const [messages, setMessages] = useState([])

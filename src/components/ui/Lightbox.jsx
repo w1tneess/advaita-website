@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, ChevronRight, X, Info, ZoomIn, ZoomOut, Aperture, Camera, Compass } from 'lucide-react'
-import { lightboxOverlay } from '@/lib/animations.js'
+import { lightboxOverlay } from '@/lib/animations'
 import { getOptimizedImageProps } from '@/lib/image.js'
 
 // Swipe confidence threshold

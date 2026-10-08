@@ -1,6 +1,6 @@
 import { Component } from 'react'
 import EmptyState from './EmptyState.jsx'
-import Button from './Button.jsx'
+import Button from './Button'
 
 class ErrorBoundary extends Component {
   constructor(props) {

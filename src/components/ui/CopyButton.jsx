@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Check, Copy } from 'lucide-react'
-import { useToast } from '@/lib/toast.jsx'
+import { useToast } from '@/lib/toast'
 
 /**
  * Reusable Copy-To-Clipboard button component.

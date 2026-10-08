@@ -5,11 +5,11 @@ import AdminPage from '../../components/admin/AdminPage.jsx'
 import ConfirmDialog from '../../components/admin/ConfirmDialog.jsx'
 import ReorderList from '../../components/admin/ReorderList.jsx'
 import Badge from '@/components/ui/Badge.jsx'
-import Button from '@/components/ui/Button.jsx'
+import Button from '@/components/ui/Button'
 import StatusBadge, { VisibilityBadge } from '@/components/ui/StatusBadge.jsx'
 import { useConfirm } from '../../hooks/useConfirm.jsx'
 import { useContent } from '../../lib/content.jsx'
-import { useToast } from '../../lib/toast.jsx'
+import { useToast } from '../../lib/toast'
 import { createProject } from '../../lib/schema.js'
 
 /**

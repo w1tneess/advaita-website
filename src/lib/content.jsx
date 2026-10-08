@@ -1,7 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 
 import { createSeedDocument } from '../data/seed.js'
-import { byOrder } from './format.js'
+import { byOrder } from './format'
 import { useDerivedContent } from '../hooks/useDerivedContent.js'
 import {
   clearDocument,
@@ -10,7 +10,7 @@ import {
   syncLocalToSupabase,
   seedIsNewerThan,
 } from './store.js'
-import { useToast } from './toast.jsx'
+import { useToast } from './toast'
 import PageFallback from '../components/ui/PageFallback.jsx'
 
 /**

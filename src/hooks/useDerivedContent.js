@@ -1,5 +1,5 @@
 import { useMemo, useCallback } from 'react'
-import { byNewest, byOrder } from '../lib/format.js'
+import { byNewest, byOrder } from '../lib/format'
 
 /**
  * Encapsulates the derivation of display-ready collections from raw site content.

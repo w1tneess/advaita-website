@@ -1,6 +1,6 @@
 import AdminPage from '../../components/admin/AdminPage.jsx'
 import Field from '../../components/admin/Field.jsx'
-import Button from '@/components/ui/Button.jsx'
+import Button from '@/components/ui/Button'
 import Callout from '@/components/ui/Callout.jsx'
 import { useContent } from '../../lib/content.jsx'
 import { useSectionForm } from '../../hooks/useSectionForm.js'

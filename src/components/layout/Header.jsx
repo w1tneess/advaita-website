@@ -5,7 +5,7 @@ import { ArrowUpRight } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { NAV_ITEMS } from '@/config/nav.js'
 import { useContent } from '@/lib/content.jsx'
-import { getRoutePreloadProps } from '@/lib/preload.js'
+import { getRoutePreloadProps } from '@/lib/preload'
 import { stopScroll, startScroll } from '@/lib/smooth-scroll.js'
 
 export default function Header() {

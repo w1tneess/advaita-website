@@ -6,7 +6,7 @@ import OpenGraphPreview from '@/components/ui/OpenGraphPreview.jsx'
 import RelatedNotes from '@/components/ui/RelatedNotes.jsx'
 import Seo from '@/components/meta/Seo.jsx'
 import { useContent } from '@/lib/content.jsx'
-import { formatDate } from '@/lib/format.js'
+import { formatDate } from '@/lib/format'
 
 export default function BlogPost() {
   const { slug } = useParams()

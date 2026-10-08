@@ -5,7 +5,7 @@ import CopyButton from '@/components/ui/CopyButton.jsx'
 import OpenGraphPreview from '@/components/ui/OpenGraphPreview.jsx'
 import Seo from '@/components/meta/Seo.jsx'
 import { useContent } from '@/lib/content.jsx'
-import { formatDate } from '@/lib/format.js'
+import { formatDate } from '@/lib/format'
 
 export default function NotePost() {
   const { slug } = useParams()

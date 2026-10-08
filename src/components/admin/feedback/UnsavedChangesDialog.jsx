@@ -1,5 +1,5 @@
 import { AlertTriangle } from 'lucide-react'
-import Button from '@/components/ui/Button.jsx'
+import Button from '@/components/ui/Button'
 import { useConfirm } from '@/hooks/useConfirm.jsx'
 
 /**

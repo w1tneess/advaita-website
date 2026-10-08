@@ -4,7 +4,7 @@ import { ArrowUpRight } from 'lucide-react'
 import Icon from '@/components/meta/Icon.jsx'
 import { useContent } from '@/lib/content.jsx'
 import { NAV_ITEMS } from '@/config/nav.js'
-import { getRoutePreloadProps } from '@/lib/preload.js'
+import { getRoutePreloadProps } from '@/lib/preload'
 
 export default function Footer() {
   const { profile, publicSocialLinks } = useContent()

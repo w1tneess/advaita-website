@@ -11,7 +11,7 @@
     "prerender": "node scripts/prerender.js",
     "preview": "vite preview",
     "content:validate": "node scripts/validate-content.js",
-    "test": "node --test",
+    "test": "node --experimental-strip-types --test",
     "typecheck": "tsc --noEmit",
     "lint": "eslint . --max-warnings 0",
     "format": "prettier --write \"src/**/*.{js,jsx,json,css}\""

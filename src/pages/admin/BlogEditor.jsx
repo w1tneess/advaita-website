@@ -10,10 +10,10 @@ import StatusSelector from '../../components/admin/forms/StatusSelector.jsx'
 import SaveStatus from '../../components/admin/feedback/SaveStatus.jsx'
 import UnsavedChangesDialog from '../../components/admin/feedback/UnsavedChangesDialog.jsx'
 import MarkdownSplitEditor from '../../components/admin/MarkdownSplitEditor.jsx'
-import Button from '@/components/ui/Button.jsx'
+import Button from '@/components/ui/Button'
 import { useContent } from '@/lib/content.jsx'
 import { createBlogPost, hasErrors, slugify, todayIso, validateBlogPost } from '@/lib/schema.js'
-import { useToast } from '@/lib/toast.jsx'
+import { useToast } from '@/lib/toast'
 
 export default function BlogEditor() {
   

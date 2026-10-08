@@ -1,7 +1,7 @@
 import { useSaveShortcut } from '../../hooks/useSaveShortcut.js'
 import AdminPage from '../../components/admin/AdminPage.jsx'
 import Field from '../../components/admin/Field.jsx'
-import Button from '@/components/ui/Button.jsx'
+import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card.jsx'
 import { useSectionForm } from '../../hooks/useSectionForm.js'
 import { useContent } from '../../lib/content.jsx'

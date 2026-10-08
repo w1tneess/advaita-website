@@ -1,14 +1,14 @@
 import { Pencil, Plus, Trash2, X } from 'lucide-react'
 import { useCallback, useState } from 'react'
 
-import Button from '../ui/Button.jsx'
+import Button from '../ui/Button'
 import Card from '../ui/Card.jsx'
 import ConfirmDialog from './ConfirmDialog.jsx'
 import ReorderList from './ReorderList.jsx'
 import { useConfirm } from '../../hooks/useConfirm.jsx'
 import { useContent } from '../../lib/content.jsx'
 import { hasErrors } from '../../lib/schema.js'
-import { useToast } from '../../lib/toast.jsx'
+import { useToast } from '../../lib/toast'
 
 /**
  * Add / edit / reorder / delete for one collection in the content document.

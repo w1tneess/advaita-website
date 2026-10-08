@@ -8,7 +8,7 @@ import { PairList, TextList } from '../../components/admin/RepeatableFields.jsx'
 import Toggle from '../../components/admin/Toggle.jsx'
 import SaveStatus from '../../components/admin/feedback/SaveStatus.jsx'
 import UnsavedChangesDialog from '../../components/admin/feedback/UnsavedChangesDialog.jsx'
-import Button from '@/components/ui/Button.jsx'
+import Button from '@/components/ui/Button'
 import Callout from '@/components/ui/Callout.jsx'
 import Card from '@/components/ui/Card.jsx'
 import { useContent } from '../../lib/content.jsx'
@@ -19,7 +19,7 @@ import {
   slugify,
   validateProject,
 } from '../../lib/schema.js'
-import { useToast } from '../../lib/toast.jsx'
+import { useToast } from '../../lib/toast'
 
 /**
  * Create or edit one project.

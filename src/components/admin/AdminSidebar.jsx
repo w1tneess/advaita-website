@@ -26,7 +26,7 @@ import { useState, useRef, useEffect } from 'react'
 
 import { useAdminAuth } from './AdminAuth.jsx'
 import { useContent } from '@/lib/content.jsx'
-import { preloadRoute } from '@/lib/preload.js'
+import { preloadRoute } from '@/lib/preload'
 
 export const NAV_GROUPS = [
   {

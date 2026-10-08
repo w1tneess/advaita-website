@@ -3,12 +3,12 @@ import { useRef, useState, useEffect } from 'react'
 
 import AdminPage from '../../components/admin/AdminPage.jsx'
 import ConfirmDialog from '../../components/admin/ConfirmDialog.jsx'
-import Button from '@/components/ui/Button.jsx'
+import Button from '@/components/ui/Button'
 import { useConfirm } from '../../hooks/useConfirm.jsx'
 import { useContent } from '../../lib/content.jsx'
 import { documentToJson, exportFilename, parseImportedJson } from '../../lib/store.js'
 import { checkSupabaseHealth } from '../../lib/supabase/sync.js'
-import { useToast } from '../../lib/toast.jsx'
+import { useToast } from '../../lib/toast'
 
 export default function DataManager() {
   const {

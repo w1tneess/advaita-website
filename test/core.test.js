@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { generateImageVariants } from '../src/lib/imageProcessor.js'
+import { generateImageVariants } from '../src/lib/imageProcessor.ts'
 
 test('draft filtering correctly removes unpublished items', () => {
   const items = [
@@ -38,7 +38,7 @@ test('seed content document is structurally valid with zero problems', async () 
 })
 
 test('formatDate and formatDateShort format both dates and full ISO timestamps safely', async () => {
-  const { formatDate, formatDateShort } = await import('../src/lib/format.js')
+  const { formatDate, formatDateShort } = await import('../src/lib/format.ts')
 
   assert.equal(formatDate(''), '')
   assert.equal(formatDate(null), '')
@@ -61,7 +61,7 @@ test('formatDate and formatDateShort format both dates and full ISO timestamps s
 })
 
 test('byNewest sorts collections by date field descending across camelCase and snake_case', async () => {
-  const { byNewest } = await import('../src/lib/format.js')
+  const { byNewest } = await import('../src/lib/format.ts')
 
   // snake_case published_at via comparator factory
   const snakeList = [
@@ -91,7 +91,7 @@ test('byNewest sorts collections by date field descending across camelCase and s
 })
 
 test('readingMinutes calculates read time accurately from content and body', async () => {
-  const { readingMinutes } = await import('../src/lib/format.js')
+  const { readingMinutes } = await import('../src/lib/format.ts')
 
   // Empty post
   assert.equal(readingMinutes({}), 1)
@@ -105,7 +105,7 @@ test('readingMinutes calculates read time accurately from content and body', asy
 })
 
 test('matchesQuery filters items across multiple fields case-insensitively', async () => {
-  const { matchesQuery } = await import('../src/lib/format.js')
+  const { matchesQuery } = await import('../src/lib/format.ts')
 
   const item = {
     title: 'Distributed Systems',
@@ -152,7 +152,7 @@ test('theme configuration adheres to verified accent tokens', async () => {
 })
 
 test('route preloader correctly registers handlers and resolves paths for first-click reliability', async () => {
-  const { preloadRoute, getRoutePreloadProps } = await import('../src/lib/preload.js')
+  const { preloadRoute, getRoutePreloadProps } = await import('../src/lib/preload.ts')
   const { PUBLIC_ROUTES } = await import('../src/config/nav.js')
 
   // Verify preloadRoute does not throw for any public route

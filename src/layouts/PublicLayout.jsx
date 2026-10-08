@@ -12,7 +12,7 @@ import CookieBanner from '../components/ui/CookieBanner.jsx'
 import PageFallback from '../components/ui/PageFallback.jsx'
 import { useContent } from '../lib/content.jsx'
 import { useSmoothScroll } from '../lib/smooth-scroll.js'
-import { preloadRoute } from '../lib/preload.js'
+import { preloadRoute } from '../lib/preload'
 import { trackPageView } from '../lib/analytics.js'
 
 /**

@@ -4,8 +4,8 @@ import { createRoot } from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
 import { ContentProvider } from './lib/content.jsx'
-import { ThemeProvider } from './lib/theme.jsx'
-import { ToastProvider } from './lib/toast.jsx'
+import { ThemeProvider } from './lib/theme'
+import { ToastProvider } from './lib/toast'
 
 /**
  * Provider order matters and is not arbitrary:

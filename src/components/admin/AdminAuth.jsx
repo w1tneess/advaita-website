@@ -4,7 +4,7 @@ import { ArrowLeft, Loader2, Mail, Shield, AlertTriangle, LogIn } from 'lucide-r
 
 import { supabase, isSupabaseConfigured } from '../../lib/supabase/client.js'
 import PasswordInput from '../ui/PasswordInput.jsx'
-import { useToast } from '../../lib/toast.jsx'
+import { useToast } from '../../lib/toast'
 
 const AdminAuthContext = createContext(null)
 
