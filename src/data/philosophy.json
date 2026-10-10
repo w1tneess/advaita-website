@@ -1,0 +1,73 @@
+{
+  "intro": "Notes on books I am reading and questions I have not solved yet. When an entry is my own opinion rather than a summary of a source, I mark it.",
+  "description": "Disagreements and corrections are welcome.",
+  "thinkers": [
+    {
+      "id": "thinker-krishnamurti",
+      "name": "J. Krishnamurti",
+      "description": "I am reading Krishnamurti on self-observation and mental habits, specifically his idea that the observer is the observed.",
+      "order": 1
+    },
+    {
+      "id": "thinker-camus",
+      "name": "Albert Camus",
+      "description": "I am reading Camus on the conflict between human expectation and an indifferent universe.",
+      "order": 2
+    },
+    {
+      "id": "thinker-dostoevsky",
+      "name": "Fyodor Dostoevsky",
+      "description": "I read Dostoevsky for his psychological details on guilt, free will, and moral decisions.",
+      "order": 3
+    },
+    {
+      "id": "thinker-ramana",
+      "name": "Ramana Maharshi",
+      "description": "I am interested in Ramana Maharshi's self-inquiry method of asking 'Who am I?' as a practical test rather than a doctrine.",
+      "order": 4
+    },
+    {
+      "id": "thinker-osho",
+      "name": "Osho",
+      "description": "I read Osho to test my own assumptions against strong arguments, even when his historical or factual claims are unreliable.",
+      "order": 5
+    }
+  ],
+  "notesIntro": "Short entries on books, epistemological inquiries, and questions under active examination.",
+  "notesDescription": "Each note records a specific tension between a philosophical premise and practical observation. Corrections and alternative readings are welcome.",
+  "notes": [
+    {
+      "id": "note-krishnamurti-observer",
+      "slug": "krishnamurti-observer",
+      "thinker": "thinker-krishnamurti",
+      "title": "On Krishnamurti and the Mechanics of the Observer",
+      "excerpt": "Reading J. Krishnamurti alongside modern cognitive psychology to explore non-verbal attention and mental habits.",
+      "category": "Epistemology",
+      "status": "published",
+      "published_at": "2025-11-14",
+      "content": "Krishnamurti argues that psychological conflict begins when the observer separates themselves from what is observed—treating fear, envy, or restlessness as an external object to be managed or suppressed.\n\nWhen reading this alongside contemporary cognitive psychology, the central question is whether direct observation without internal verbal commentary is neurologically sustainable, or if the 'silent observer' is simply another sub-network of narrative metacognition.\n\nMy working hypothesis: non-verbal attention does not eliminate mental constructs, but slows the recursive loop of reactive self-justification, allowing one to notice automatic habits before acting on them."
+    },
+    {
+      "id": "note-camus-absurd",
+      "slug": "camus-absurd",
+      "thinker": "thinker-camus",
+      "title": "Camus: The Absurd as an Epistemic Baseline",
+      "excerpt": "In The Myth of Sisyphus, accepting unresolvable ambiguity and missing data as an epistemic discipline rather than despair.",
+      "category": "Existentialism",
+      "status": "published",
+      "published_at": "2025-10-02",
+      "content": "In The Myth of Sisyphus, the absurd is not a property of the universe alone; it is the friction produced when the human longing for clarity collides with an unanswering world. Rather than leaping into metaphysical certainty or cynicism, Camus demands maintaining the tension without illusion.\n\nFor scientific and data work, this serves as a useful discipline: accept the presence of unresolvable ambiguity and missing data without losing the appetite for rigorous, sustained inquiry."
+    },
+    {
+      "id": "note-dostoevsky-underground",
+      "slug": "dostoevsky-underground",
+      "thinker": "thinker-dostoevsky",
+      "title": "Dostoevsky on Rational Egoism and Irrational Will",
+      "excerpt": "Why utilitarian and rational choice models consistently misjudge the human refusal to be treated as an equation.",
+      "category": "Psychology & Ethics",
+      "status": "published",
+      "published_at": "2025-08-19",
+      "content": "Reading Notes from Underground against modern behavioral economics: utilitarian and rational choice models often assume that individuals will act in their enlightened self-interest once adequately informed. Dostoevsky's underground narrator directly attacks this assumption—humans will deliberately choose irrationality, suffering, and spite if that is what preserves their sense of autonomy.\n\nAny computational or institutional system that assumes pure utility maximization consistently misjudges human behavior because it underestimates the human refusal to be treated as a predictable equation."
+    }
+  ]
+}

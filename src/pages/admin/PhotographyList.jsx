@@ -1,0 +1,208 @@
+import { Eye, EyeOff, Pencil, Plus, Trash2 } from 'lucide-react'
+
+import AdminPage from '../../components/admin/AdminPage.jsx'
+import ConfirmDialog from '../../components/admin/ConfirmDialog.jsx'
+import DataTable from '../../components/admin/DataTable.jsx'
+import Field from '../../components/admin/Field.jsx'
+import Button from '@/components/ui/Button'
+import Card from '@/components/ui/Card.jsx'
+import EmptyState from '@/components/ui/EmptyState.jsx'
+import { useConfirm } from '@/hooks/useConfirm.jsx'
+import { useContent } from '@/lib/content.jsx'
+import { useSectionForm } from '@/hooks/useSectionForm.js'
+import { validatePhotographyConfig } from '@/lib/schema.js'
+import { useToast } from '@/lib/toast'
+import { formatDateShort } from '@/lib/format'
+import { removeImage } from '@/lib/supabase/api.js'
+import { sanitizeImageUrl } from '@/lib/url.ts'
+
+export default function PhotographyList() {
+  const { photography, upsertPhotography, removePhotography } = useContent()
+  const toast = useToast()
+  const { confirm, dialogProps } = useConfirm()
+
+  const photos = photography.photos || []
+  
+  const { 
+    draft: configDraft, 
+    set: setConfig, 
+    errors: configErrors, 
+    dirty: configDirty, 
+    submit: submitConfig, 
+    isSubmitting: isConfigSubmitting 
+  } = useSectionForm('photography', photography, validatePhotographyConfig)
+
+  const toggleFeatured = async (photo) => {
+    const next = !photo.featured
+    try {
+      const result = await upsertPhotography({ ...photo, featured: next })
+      if (result && result.ok) {
+        toast.success(next ? 'Added to featured photos.' : 'Removed from featured.')
+      }
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  const requestDelete = async (photo) => {
+    const confirmed = await confirm({
+      title: `Delete “${photo.title}”?`,
+      message:
+        'This removes the photo from Supabase Storage and the database. It cannot be undone.',
+      confirmLabel: 'Delete photo',
+    })
+    if (!confirmed) return
+
+    try {
+      if (photo.storage_path) {
+        await removeImage(photo.storage_path)
+      }
+      const result = await removePhotography(photo.id)
+      if (result && result.ok) {
+        toast.success('Photo deleted.')
+      }
+    } catch (e) {
+      console.error(e)
+      toast.error('Failed to delete photo.')
+    }
+  }
+
+  const columns = [
+    {
+      key: 'image',
+      header: 'Photo',
+      render: (photo) => (
+        <img src={sanitizeImageUrl(photo.image_url)} alt={photo.title || 'Photo'} className="h-16 w-16 object-cover rounded" />
+      ),
+    },
+    {
+      key: 'title',
+      header: 'Details',
+      render: (photo) => (
+        <div className="min-w-0">
+          <p className="font-medium">{photo.title || 'Untitled photo'}</p>
+          <p className="mt-0.5 truncate text-xs text-muted">
+            {photo.category ? `${photo.category} • ` : ''}
+            {photo.caption || 'No caption'}
+          </p>
+        </div>
+      ),
+    },
+    {
+      key: 'date',
+      header: 'Uploaded',
+      render: (photo) => (
+        <div className="text-muted">
+          <p>{formatDateShort(photo.created_at) || '—'}</p>
+        </div>
+      ),
+    },
+    {
+      key: 'actions',
+      header: 'Actions',
+      className: 'sm:w-px sm:whitespace-nowrap',
+      render: (photo) => (
+        <div className="flex flex-wrap gap-2">
+          <Button variant="secondary" size="sm" to={`/admin/photography/${photo.id}`}>
+            <Pencil className="h-3.5 w-3.5" aria-hidden="true" />
+            <span className="sr-only sm:not-sr-only">Edit</span>
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => toggleFeatured(photo)}
+            aria-pressed={Boolean(photo.featured)}
+          >
+            {photo.featured ? (
+              <Eye className="h-3.5 w-3.5 text-accent" aria-hidden="true" />
+            ) : (
+              <EyeOff className="h-3.5 w-3.5" aria-hidden="true" />
+            )}
+            <span className="sr-only">
+              {photo.featured ? `Unfeature ${photo.title}` : `Feature ${photo.title}`}
+            </span>
+          </Button>
+          <Button variant="danger" size="sm" onClick={() => requestDelete(photo)}>
+            <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
+            <span className="sr-only">Delete {photo.title}</span>
+          </Button>
+        </div>
+      ),
+    },
+  ]
+
+  return (
+    <AdminPage
+      title="Photography"
+      description="Manage the photos displayed on the Photography page."
+      actions={
+        <Button to="/admin/photography/new" size="sm">
+          <Plus className="h-4 w-4" aria-hidden="true" />
+          Upload photo
+        </Button>
+      }
+    >
+      <form onSubmit={submitConfig} noValidate className="mb-8">
+        <Card className="p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h2 className="text-base font-semibold">Page Intro</h2>
+              <p className="mt-1 text-sm text-muted">The text shown at the top of the photography page.</p>
+            </div>
+            {configDirty && (
+              <Button type="submit" size="sm" disabled={isConfigSubmitting}>
+                {isConfigSubmitting ? 'Saving...' : 'Save config'}
+              </Button>
+            )}
+          </div>
+          
+          <div className="space-y-4">
+            <Field
+              id="photography-intro"
+              label="Intro text"
+              type="textarea"
+              rows={2}
+              value={configDraft.intro ?? ''}
+              onChange={(value) => setConfig('intro', value)}
+              error={configErrors.intro}
+              required
+              limit={300}
+            />
+            <Field
+              id="photography-description"
+              label="Description"
+              type="textarea"
+              rows={3}
+              value={configDraft.description ?? ''}
+              onChange={(value) => setConfig('description', value)}
+              error={configErrors.description}
+              required
+              limit={500}
+            />
+          </div>
+        </Card>
+      </form>
+
+      <div className="mt-4">
+        <DataTable
+          caption="Photography, with their category and uploaded date"
+          columns={columns}
+          rows={photos}
+          empty={
+            photos.length === 0 ? (
+              <EmptyState
+                title="No photos yet"
+                message="The public gallery is empty."
+                action={<Button to="/admin/photography/new">Upload the first one</Button>}
+              />
+            ) : (
+              <EmptyState title="No photos match" message="Nothing matches the current filters." />
+            )
+          }
+        />
+      </div>
+
+      <ConfirmDialog {...dialogProps} />
+    </AdminPage>
+  )
+}

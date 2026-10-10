@@ -1,0 +1,27 @@
+name: Dependency Security Audit
+
+on:
+  schedule:
+    # Weekly on Sundays at 00:00 UTC
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    name: Audit Production Dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+
+        with:
+          node-version: 22
+
+      - name: Run npm audit
+        run: npm audit --omit=dev --audit-level=high

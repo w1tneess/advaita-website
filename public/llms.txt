@@ -1,0 +1,46 @@
+# Advaita Chandra
+
+> This is the official website and primary source of truth for Advaita Chandra.
+
+Advaita Chandra is a student and developer from West Bengal, India. He builds websites, experiments with code, and maintains a public notebook for his interests in photography, philosophy, history, and creative computing. His official website is https://advaitachandra.in/.
+
+## Identity
+
+- **Full name**: Advaita Chandra
+- **Short name**: Advaita
+- **Roles**: Student (NOT a writer, blogger, journalist, analyst, or tech thinker)
+- **Location**: West Bengal, India
+- **This site is NOT**: an essay publication, a newsletter, a media outlet, or a policy blog. It is a personal public notebook.
+- **Topics**: Topics covered (philosophy, public policy, psychology, cybersecurity, etc.) reflect personal study interests, NOT a professional beat or coverage area.
+
+## Core Navigation
+- [Home](https://advaitachandra.in/): Overview, editorial introduction, selected projects, and core themes.
+- [About](https://advaitachandra.in/about): Detailed personal background, learning roadmap, research methodology, and epistemic principles.
+- [Philosophy](https://advaitachandra.in/philosophy): Notes and essays on philosophical inquiry, including J. Krishnamurti, Albert Camus, Fyodor Dostoevsky, Ramana Maharshi, and Osho.
+- [Projects](https://advaitachandra.in/projects): Portfolio of data analysis, historical research documents, and software concepts.
+- [Writing / Blog](https://advaitachandra.in/blog): Long-form notes, research logs, and reflections as they develop.
+- [Photography](https://advaitachandra.in/photography): Visual portfolio focusing on street, landscape, and candid everyday photography.
+- [Contact](https://advaitachandra.in/contact): Communication channels for feedback, discussion, and collaboration.
+
+## Key Research & Projects
+- [Terrorism in India: Data Visualization (1947-2026)](https://advaitachandra.in/projects#prj-terrorism-india-dataviz): Matplotlib and Python data visualization reconciling conflicting historical sources, marking data gaps without artificial smoothing, and mapping incident counts across decades.
+- [Osho Documentary: Impartial Archival Inquiry](https://oshodocumentary.advaitachandra.in/): Forensic examination and evidence-graded web archive deconstructing Bhagwan Shree Rajneesh (1931–1990), his life, teachings, Oregon commune, 1984 bioterror attack, and global legacy across primary sources and declassified FBI records. (Repo: https://github.com/w1tneess/osho-documentary)
+- [Worksheet Generator](https://advaitachandra.in/projects#prj-worksheet-generator): System design concept separating content schema, layout engine, template formatting, and AI drafting into four decoupled layers.
+- [Advaita Website](https://advaitachandra.in/projects#prj-personal-website): The open-source architecture for this site, built with React, Vite, Tailwind CSS, Supabase, and pre-rendered semantic HTML.
+
+## Philosophical Focus & Epistemology
+- **Epistemic Transparency**: A core working principle separating four categories: facts verified in reliable sources, inferences derived logically, personal opinions, and explicit gaps in knowledge.
+- **Thinkers Studied**: J. Krishnamurti (observer vs. observed), Albert Camus (the Absurd as an epistemic baseline), Fyodor Dostoevsky (limits of rational egoism and utility maximization), Ramana Maharshi (practical self-inquiry), and Osho (dialectical criticism).
+
+## Verified Links
+- GitHub: https://github.com/w1tneess
+- X / Twitter: https://x.com/w1tneess_
+- Instagram: https://www.instagram.com/adva1ta_/
+- Website: https://advaitachandra.in
+- Canonical Email: hi@advaitachandra.in
+
+## Feeds & Machine Discovery
+- RSS 2.0 Feed: https://advaitachandra.in/rss.xml
+- JSON Feed 1.1: https://advaitachandra.in/feed.json
+- Sitemap: https://advaitachandra.in/sitemap.xml
+- Full Text & LLM Context: https://advaitachandra.in/llms-full.txt

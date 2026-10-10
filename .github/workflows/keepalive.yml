@@ -1,0 +1,38 @@
+name: Supabase Keepalive & Health Ping
+
+on:
+  schedule:
+    # Run twice daily (04:00 and 16:00 UTC) so a single network glitch never causes a pause
+    - cron: '0 4,16 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase Database (Real PostgreSQL Query)
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL || secrets.VITE_SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY || secrets.VITE_SUPABASE_ANON_KEY }}
+
+        run: |
+          echo "Executing authenticated SELECT query against site_content table..."
+          
+          # Query site_content with select=id,updated_at to perform an active database read
+          response=$(curl -w "%{http_code}" -s -o /tmp/supabase_res.json --connect-timeout 15 --max-time 30 -X GET "$SUPABASE_URL/rest/v1/site_content?select=id,updated_at&limit=1" \
+            -H "apikey: $SUPABASE_ANON_KEY" \
+            -H "Authorization: Bearer $SUPABASE_ANON_KEY")
+          
+          echo "Supabase HTTP status: $response"
+          cat /tmp/supabase_res.json || true
+          echo ""
+
+          if [ "$response" = "200" ] || [ "$response" = "206" ]; then
+            echo "Success! Supabase PostgreSQL instance is active and queried."
+          else
+            echo "Failed to ping Supabase. HTTP Status: $response"
+            exit 1
+          fi

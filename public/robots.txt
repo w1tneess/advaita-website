@@ -1,0 +1,85 @@
+# robots.txt for https://advaitachandra.in/
+# Welcoming search engines, public crawlers, and modern AI/LLM agents.
+
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+# Explicitly welcome AI assistants, search crawlers, and LLM indexing bots
+User-agent: GPTBot
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+User-agent: Claude-Web
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+User-agent: Applebot-Extended
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+User-agent: cohere-ai
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+User-agent: Amazonbot
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+User-agent: Bytespider
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+User-agent: CCBot
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+User-agent: Meta-ExternalAgent
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+User-agent: Diffbot
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+# Sitemaps & AI Context Endpoints
+Sitemap: https://advaitachandra.in/sitemap.xml
+
+# LLM Standard Definitions:
+# https://advaitachandra.in/llms.txt
+# https://advaitachandra.in/llms-full.txt

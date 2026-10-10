@@ -1,0 +1,79 @@
+[
+  {
+    "id": "int-philosophy",
+    "name": "Philosophy",
+    "icon": "BookOpen",
+    "note": "Epistemology and ethics. How a claim earns proof, and what follows after.",
+    "order": 1
+  },
+  {
+    "id": "int-psychology",
+    "name": "Psychology",
+    "icon": "Brain",
+    "note": "Reasoning and bias. How a conclusion can feel obvious before evidence is checked.",
+    "order": 2
+  },
+  {
+    "id": "int-self-improvement",
+    "name": "Self-improvement",
+    "icon": "TrendingUp",
+    "note": "Practical habits. Checking which daily routines actually hold up over several months.",
+    "order": 3
+  },
+  {
+    "id": "int-technology",
+    "name": "Technology",
+    "icon": "Cpu",
+    "note": "Building things to understand how they work from the inside.",
+    "order": 4
+  },
+  {
+    "id": "int-indian-politics",
+    "name": "Indian politics",
+    "icon": "Landmark",
+    "note": "Institutions, incentives, and how policy moves from announcement to implementation.",
+    "order": 5
+  },
+  {
+    "id": "int-history",
+    "name": "History",
+    "icon": "ScrollText",
+    "note": "Long time horizons, and how choosing a start date shapes the conclusion.",
+    "order": 6
+  },
+  {
+    "id": "int-current-affairs",
+    "name": "Current affairs",
+    "icon": "Newspaper",
+    "note": "Following news events closely enough to notice how early reports change over time.",
+    "order": 7
+  },
+  {
+    "id": "int-public-policy",
+    "name": "Public policy",
+    "icon": "Scale",
+    "note": "Trade-offs. What a policy costs, who pays for it, and what it was measured against.",
+    "order": 8
+  },
+  {
+    "id": "int-data",
+    "name": "Data",
+    "icon": "BarChart3",
+    "note": "Imperfect datasets with missing years, changed definitions, or conflicting sources.",
+    "order": 9
+  },
+  {
+    "id": "int-cybersecurity",
+    "name": "Cybersecurity",
+    "icon": "ShieldCheck",
+    "note": "Fundamentals and defensive security. I am currently learning this and have no working skills yet.",
+    "order": 10
+  },
+  {
+    "id": "int-education",
+    "name": "Education and academic learning",
+    "icon": "GraduationCap",
+    "note": "How study material is structured for learning.",
+    "order": 11
+  }
+]

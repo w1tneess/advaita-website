@@ -1,0 +1,30 @@
+{
+  "name": "Advaita Chandra",
+  "shortName": "Advaita",
+  "tagline": "Official website of Advaita Chandra — Student",
+  "roles": ["Student"],
+  "location": "West Bengal, India",
+  "photo": null,
+  "photoAlt": "Portrait of Advaita Chandra",
+  "bio": "I'm Advaita Chandra, a student based in West Bengal, India. This site is where I keep the things I'm working on: projects, reading notes, photography, and questions I haven't fully worked out yet. This isn't a professional publication or a portfolio built to impress anyone. It's closer to a public notebook.",
+  "learningDirection": "Currently focused on building web applications, experimenting with code, and exploring digital technology, while researching conflicting sources in data and history.",
+  "approach": [
+    {
+      "title": "Narrow the question",
+      "detail": "Most work happens before research starts. I try to narrow questions until they are specific enough to be answered cleanly."
+    },
+    {
+      "title": "Examine evidence",
+      "detail": "I check where figures originate. When sources disagree, I note the difference instead of picking the easiest number."
+    },
+    {
+      "title": "Keep context",
+      "detail": "Definitions, time periods, and counting methods change what numbers mean. They need to stay attached to the data."
+    },
+    {
+      "title": "Explain clearly",
+      "detail": "If I cannot explain something plainly, I do not understand it well enough yet."
+    }
+  ],
+  "epistemicNote": "On this site I try to separate four things: facts from sources, my inferences, my opinions, and things I do not know."
+}

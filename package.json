@@ -1,0 +1,52 @@
+{
+  "name": "advaita-website",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "homepage": "https://advaitachandra.in",
+  "description": "Personal portfolio, public profile and blog for Advaita Chandra.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && node scripts/prerender.js",
+    "prerender": "node scripts/prerender.js",
+    "preview": "vite preview",
+    "content:validate": "node scripts/validate-content.js",
+    "test": "node --experimental-strip-types --test",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --max-warnings 0",
+    "format": "prettier --write \"src/**/*.{js,jsx,json,css}\"",
+    "update:check": "npm outdated",
+    "update:deps": "npm update && npm run lint && npm test && npm run build"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.117.3",
+    "browser-image-compression": "^2.0.2",
+    "cmdk": "^1.1.1",
+    "framer-motion": "^13.5.1",
+    "lenis": "^1.3.26",
+    "lucide-react": "^0.469.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "react-router": "^7.18.4"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.5",
+    "@tailwindcss/vite": "^4.0.0",
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^4.7.0",
+    "dotenv": "^17.4.2",
+    "eslint": "^9.39.5",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.7",
+    "globals": "^17.13.0",
+    "playwright": "^1.64.0",
+    "prettier": "^3.9.10",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^7.0.2",
+    "vite": "^6.4.4"
+  }
+
+}

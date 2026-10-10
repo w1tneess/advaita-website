@@ -1,0 +1,37 @@
+[
+  {
+    "id": "tl-reading",
+    "period": "Earlier",
+    "title": "Reading widely, without a plan",
+    "detail": "Philosophy, history and politics, read out of interest rather than toward anything. Most of the questions I work on now came from this period, badly formed.",
+    "order": 1
+  },
+  {
+    "id": "tl-writing",
+    "period": "Then",
+    "title": "Starting to write it down",
+    "detail": "Writing turned out to be the only reliable way to find out whether I understood something. The Osho research document was the first attempt at that at real length.",
+    "order": 2
+  },
+  {
+    "id": "tl-data",
+    "period": "Then",
+    "title": "Running into the data problem",
+    "detail": "The terrorism visualisation project began as a plotting exercise and became a lesson in how much of research is deciding what a number is allowed to mean.",
+    "order": 3
+  },
+  {
+    "id": "tl-building",
+    "period": "Now",
+    "title": "Building the tools instead of wanting them",
+    "detail": "The worksheet generator design and this website are both attempts to stop treating software as something other people make.",
+    "order": 4
+  },
+  {
+    "id": "tl-next",
+    "period": "Next",
+    "title": "Prototyping, and publishing properly",
+    "detail": "Turning the worksheet generator design into something running, and putting the writing on this site instead of in private files.",
+    "order": 5
+  }
+]

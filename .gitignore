@@ -1,0 +1,88 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Production build output
+dist/
+dist-ssr/
+
+# Local environment files (contains keys/secrets - never commit to public repo)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*.local
+*.env
+!*.env.example
+
+# Credentials, certificates & private keys
+*.pem
+*.key
+*.cert
+*.crt
+
+# Test & coverage artifacts
+coverage/
+.nyc_output/
+
+# Cache directories
+.vite/
+.vercel/
+.turbo/
+*.tsbuildinfo
+.eslintcache
+.prettiercache
+
+# Runtime logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Content backups & temporary exports
+*.content-export.json
+*.bak
+*.tmp
+
+# Python virtual environment (background processing)
+rembg_env/
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+
+# Supabase CLI local state & branches (contain connection strings)
+supabase/.temp/
+supabase/.branches/
+
+# Local tooling, agent skills & audit artifacts
+.audit/
+.claude/
+.agents/
+skills-lock.json
+sandbox/
+sandbox-landing-page/
+audit_scratch/
+
+# Operating System files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+[Dd]esktop.ini
+
+# IDE & Editor settings
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.vscode/*
+!.vscode/extensions.json

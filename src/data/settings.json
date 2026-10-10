@@ -1,0 +1,18 @@
+{
+  "accent": null,
+  "featuredProjectLimit": 3,
+  "latestPostsLimit": 3,
+  "postsPerPage": 6,
+  "showEpistemicLegend": true,
+  "showTimeline": true,
+  "showSkills": true,
+  "blogEmptyState": "No public articles published yet.",
+  "footerNote": "Built and maintained by hand.",
+  "contact": {
+    "heading": "Get in touch",
+    "intro": "I welcome correspondence regarding my research projects, reading inquiries, and potential academic collaborations. If you have questions or constructive feedback, please reach out.",
+    "privacyNote": "Personal contact details are handled respectfully and used strictly for correspondence. I do not share email addresses or use them for any secondary purpose.",
+    "responseNote": "As a student balancing coursework and independent research, I read and reply to incoming messages as quickly as schedule allows.",
+    "corrections": "Constructive critique is how research matures. If you notice a factual discrepancy, citation gap, or methodological error anywhere on this site, please send details and sources."
+  }
+}

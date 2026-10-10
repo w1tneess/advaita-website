@@ -1,0 +1,299 @@
+import AdminPage from '../../components/admin/AdminPage.jsx'
+import Field from '../../components/admin/Field.jsx'
+import Button from '@/components/ui/Button'
+import Callout from '@/components/ui/Callout.jsx'
+import { useContent } from '../../lib/content.jsx'
+import { useSectionForm } from '../../hooks/useSectionForm.js'
+import { useSaveShortcut } from '../../hooks/useSaveShortcut.js'
+import { validateSettings } from '../../lib/schema.js'
+
+/**
+ * Website configuration.
+ *
+ * Not much here — theme, accent colours, feature toggles, limits and messages. The
+ * defaults are set by seed.js; this section is for tweaking the demo behavior only.
+ */
+export default function SettingsEditor() {
+  const { settings } = useContent()
+
+  const { draft, errors, dirty, submit, revert, set, setNested, isSubmitting } = useSectionForm(
+    'settings',
+    settings,
+    validateSettings,
+  )
+
+  useSaveShortcut(submit)
+
+  return (
+    <AdminPage
+      title="Website Settings"
+      description="Configure site-wide preferences, accent highlights, contact information, and homepage limits."
+      actions={
+        dirty && (
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-muted">Unsaved</span>
+            <button
+              type="button"
+              onClick={revert}
+              className="text-xs text-limitation underline hover:text-limitation/80 transition-colors duration-150 ease-[var(--ease-out-quart)] active:opacity-80"
+            >
+              Revert
+            </button>
+          </div>
+        )
+      }
+    >
+      <Callout variant="analysis" title="Site Preferences &amp; Sync">
+        Settings are saved to your browser immediately and synchronized with your Supabase database when connected. You can also export a full JSON backup from Database &amp; Sync.
+      </Callout>
+
+      <form onSubmit={submit} noValidate className="mt-8 space-y-8">
+        {/* Accent colour */}
+        <section aria-labelledby="settings-accent-heading" className="mt-12">
+          <h2 id="settings-accent-heading" className="text-xl font-semibold tracking-tight">
+            Accent colour
+          </h2>
+          <p className="mt-2 text-sm text-muted">
+            A single accent drives the design system. Provide a hex colour.
+          </p>
+          <div className="mt-5 space-y-5">
+            <Field
+              id="settings-accent"
+              label="Theme accent"
+              type="text"
+              value={draft.accent ?? ''}
+              onChange={(value) => set('accent', value)}
+              error={errors.accent}
+              placeholder="#0f6b73"
+              hint="Hex colour for buttons, links and UI highlights. Leave blank for default."
+              limit={20}
+            />
+          </div>
+        </section>
+
+        {/* Limits */}
+        <section aria-labelledby="settings-limits-heading" className="mt-12">
+          <h2 id="settings-limits-heading" className="text-xl font-semibold tracking-tight">
+            Limits
+          </h2>
+          <p className="mt-2 text-sm text-muted">
+            Upper bounds for display items, reading time and pagination. These are only for the demo
+            admin panel; the deployed site can have different values.
+          </p>
+          <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <Field
+              id="settings-featured-project-limit"
+              label="Featured projects on home"
+              type="number"
+              value={draft.featuredProjectLimit ?? ''}
+              onChange={(value) => set('featuredProjectLimit', value)}
+              error={errors.featuredProjectLimit}
+              min={1}
+              max={50}
+              required
+              hint="How many featured projects appear on the homepage."
+            />
+            <Field
+              id="settings-latest-posts-limit"
+              label="Latest posts on home"
+              type="number"
+              value={draft.latestPostsLimit ?? ''}
+              onChange={(value) => set('latestPostsLimit', value)}
+              error={errors.latestPostsLimit}
+              min={1}
+              max={50}
+              required
+              hint="How many recent blog posts appear on the homepage."
+            />
+            <Field
+              id="settings-posts-per-page"
+              label="Posts per blog page"
+              type="number"
+              value={draft.postsPerPage ?? ''}
+              onChange={(value) => set('postsPerPage', value)}
+              error={errors.postsPerPage}
+              min={1}
+              max={50}
+              required
+              hint="Number of articles shown per page in the blog section."
+            />
+          </div>
+        </section>
+
+        {/* Feature toggles */}
+        <section aria-labelledby="settings-toggles-heading" className="mt-12">
+          <h2 id="settings-toggles-heading" className="text-xl font-semibold tracking-tight">
+            Feature toggles
+          </h2>
+          <p className="mt-2 text-sm text-muted">
+            Turn individual features on or off in the demo. These don’t affect the deployed site
+            unless you also export and commit the settings.
+          </p>
+          <div className="mt-5 space-y-4">
+            <Field
+              id="settings-enable-analytics"
+              label="Enable analytics"
+              type="checkbox"
+              value={draft.enableAnalytics ?? false}
+              onChange={(value) => set('enableAnalytics', value)}
+              hint="Show analytics snippet. Useful for demos but not for production."
+            />
+            <Field
+              id="settings-enable-comments"
+              label="Enable comments"
+              type="checkbox"
+              value={draft.enableComments ?? false}
+              onChange={(value) => set('enableComments', value)}
+              hint="Show comment widget. Not a real backend here — this is demo-only."
+            />
+          </div>
+        </section>
+
+        {/* Contact Page Text */}
+        <section aria-labelledby="settings-contact-text-heading" className="mt-12">
+          <h2 id="settings-contact-text-heading" className="text-xl font-semibold tracking-tight">
+            Contact Page Text
+          </h2>
+          <p className="mt-2 text-sm text-muted">
+            The text shown on the public Contact page.
+          </p>
+          <div className="mt-5 space-y-5">
+            <Field
+              id="settings-contact-heading"
+              label="Heading"
+              value={draft.contact?.heading ?? ''}
+              onChange={(value) => setNested('contact', 'heading', value)}
+              error={errors['contact.heading']}
+              limit={120}
+              hint="Main heading for the contact section."
+            />
+            <Field
+              id="settings-contact-intro"
+              label="Intro"
+              type="textarea"
+              rows={2}
+              value={draft.contact?.intro ?? ''}
+              onChange={(value) => setNested('contact', 'intro', value)}
+              error={errors['contact.intro']}
+              limit={300}
+            />
+            <Field
+              id="settings-contact-responseNote"
+              label="Response Note"
+              type="textarea"
+              rows={2}
+              value={draft.contact?.responseNote ?? ''}
+              onChange={(value) => setNested('contact', 'responseNote', value)}
+              error={errors['contact.responseNote']}
+              limit={300}
+            />
+            <Field
+              id="settings-contact-corrections"
+              label="Corrections Text"
+              type="textarea"
+              rows={2}
+              value={draft.contact?.corrections ?? ''}
+              onChange={(value) => setNested('contact', 'corrections', value)}
+              error={errors['contact.corrections']}
+              limit={300}
+            />
+            <Field
+              id="settings-contact-privacyNote"
+              label="Privacy Note"
+              type="textarea"
+              rows={2}
+              value={draft.contact?.privacyNote ?? ''}
+              onChange={(value) => setNested('contact', 'privacyNote', value)}
+              error={errors['contact.privacyNote']}
+              limit={300}
+            />
+          </div>
+        </section>
+
+        {/* Messages */}
+        <section aria-labelledby="settings-messages-heading" className="mt-12">
+          <h2 id="settings-messages-heading" className="text-xl font-semibold tracking-tight">
+            Messages
+          </h2>
+          <p className="mt-2 text-sm text-muted">
+            User-facing text that changes per deployment or locale. These are only demo values.
+          </p>
+          <div className="mt-5 space-y-5">
+            <Field
+              id="settings-blog-empty-state"
+              label="Blog empty state"
+              type="textarea"
+              rows={2}
+              value={draft.blogEmptyState ?? ''}
+              onChange={(value) => set('blogEmptyState', value)}
+              error={errors.blogEmptyState}
+              required
+              limit={200}
+              hint="Shown on the blog page when there are no articles. The default message is set separately."
+            />
+            <Field
+              id="settings-footer-note"
+              label="Footer note"
+              type="textarea"
+              rows={2}
+              value={draft.footerNote ?? ''}
+              onChange={(value) => set('footerNote', value)}
+              limit={120}
+              hint="Optional line that appears in the footer. Use for credits or legal text."
+            />
+            <div className="mt-4">
+              <p className="text-sm font-medium">Contact strings (placeholders only)</p>
+              <p className="mt-1 text-xs text-muted">
+                These appear in the footer contact section. All are placeholders — no real email or
+                handle.
+              </p>
+              <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                <Field
+                  id="settings-contact-email"
+                  label="Email"
+                  value={draft.contact?.email ?? ''}
+                  onChange={(value) => setNested('contact', 'email', value)}
+                  placeholder="example@domain.com"
+                  hint="Shown as a mailto: link. Not used for real mail."
+                />
+                <Field
+                  id="settings-contact-github"
+                  label="GitHub"
+                  value={draft.contact?.github ?? ''}
+                  onChange={(value) => setNested('contact', 'github', value)}
+                  placeholder="/username"
+                  hint="Link to a GitHub profile. No verification."
+                />
+                <Field
+                  id="settings-contact-linkedin"
+                  label="LinkedIn"
+                  value={draft.contact?.linkedin ?? ''}
+                  onChange={(value) => setNested('contact', 'linkedin', value)}
+                  placeholder="/in/username"
+                  hint="Link to a LinkedIn profile. No verification."
+                />
+                <Field
+                  id="settings-contact-x"
+                  label="X (formerly Twitter)"
+                  value={draft.contact?.x ?? ''}
+                  onChange={(value) => setNested('contact', 'x', value)}
+                  placeholder="@handle"
+                  hint="Link to an X/Twitter profile. No verification."
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div className="sticky bottom-0 mt-8 flex flex-wrap items-center gap-3 border-t border-line bg-base/90 py-4 backdrop-blur-sm">
+          <Button type="submit" disabled={!dirty || isSubmitting}>
+            {isSubmitting ? 'Saving...' : 'Save settings'}
+          </Button>
+          <Button type="button" variant="ghost" onClick={revert} disabled={!dirty || isSubmitting}>
+            Discard changes
+          </Button>
+        </div>
+      </form>
+    </AdminPage>
+  )
+}
