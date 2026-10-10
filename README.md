@@ -1,11 +1,12 @@
 # Advaita Chandra — Official Website & Portfolio
 
 [![Website](https://img.shields.io/badge/Website-advaitachandra.in-copper?style=flat-square&logo=google-chrome&logoColor=white)](https://advaitachandra.in/)
+[![CI](https://github.com/w1tneess/advaita-website/actions/workflows/ci.yml/badge.svg?style=flat-square)](https://github.com/w1tneess/advaita-website/actions/workflows/ci.yml)
 [![React](https://img.shields.io/badge/React-19.0-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev/)
 [![Vite](https://img.shields.io/badge/Vite-6.0-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4.0-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-3ECF8E?style=flat-square&logo=supabase&logoColor=white)](https://supabase.com/)
-[![Node Tests](https://img.shields.io/badge/Tests-12%20passing-brightgreen?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org/)
+[![Node Tests](https://img.shields.io/badge/Tests-22%20passing-brightgreen?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org/)
 
 The official repository for [advaitachandra.in](https://advaitachandra.in/) — a personal site, engineering portfolio, and public notebook designed and developed by **Advaita Chandra**, a student and developer from **West Bengal, India**.
 
@@ -153,6 +154,15 @@ This project implements state-of-the-art standards for Large Language Model Opti
 
 ```text
 advaita-website/
+├── .github/
+│   └── workflows/              # Automated CI/CD, keepalive, and security workflows
+│       ├── ci.yml              # Test, lint, typecheck, build validation
+│       ├── keepalive.yml       # Redundant zero-leak Supabase & Vercel keepalive ping
+│       ├── health-check.yml    # Live production endpoint health verification
+│       ├── auto-update.yml     # Automated weekly dependency updates
+│       └── security-audit.yml  # Production dependency vulnerability audit
+├── api/
+│   └── keepalive.js            # Vercel Serverless Function (zero-leak DB touch & cron)
 ├── public/                     # Static assets served at root
 │   ├── llms.txt                # Standardized LLM context file (llmstxt.org)
 │   ├── llms-full.txt           # Comprehensive knowledge base for LLMs
@@ -179,17 +189,22 @@ advaita-website/
 │   │   ├── writing.json
 │   │   └── photos.json
 │   ├── hooks/                  # Custom React hooks (useFilters, usePreloadRoute)
-│   ├── layouts/                # Root layout, Admin layout, and Page wrappers
+│   │   layouts/                # Root layout, Admin layout, and Page wrappers
 │   ├── lib/
 │   │   ├── seo.js              # Schema.org JSON-LD and meta tag builders
 │   │   ├── routes.js           # Route helpers and dynamic URL builders
+│   │   ├── url.ts              # URL sanitization & injection guards
 │   │   └── supabase/           # Supabase client, auth helpers, and data sync
 │   ├── pages/                  # Page route views (Home, About, Projects, Blog, etc.)
 │   ├── index.css               # Design tokens, typography, and base CSS
 │   └── main.jsx                # Application root mount point
+├── supabase/
+│   └── schema.sql              # Hardened PostgreSQL schema, RLS policies & constraints
 ├── test/
-│   └── core.test.js            # Automated unit tests (Node test runner)
-├── vercel.json                 # Deployment routing rules and SPA redirects
+│   ├── core.test.js            # Data parsing, formatting & slug utility tests
+│   ├── security.test.js        # URL injection & scheme sanitizer unit tests
+│   └── keepalive.test.js       # Keepalive method, header & auth isolation tests
+├── vercel.json                 # Routing, crons, caching headers & security rules
 ├── vite.config.js              # Vite bundler configuration
 └── package.json                # Project dependencies and npm scripts
 ```
@@ -218,9 +233,16 @@ npm install
 Create a `.env.local` file in the project root for local Supabase integration (optional — local fallback data will be used automatically if omitted):
 
 ```env
+# 1. Client-Safe Public Supabase Configuration (Exposed via Vite)
 VITE_SUPABASE_URL=https://your-project.supabase.co
 VITE_SUPABASE_ANON_KEY=your-anon-key
+
+# 2. Private Server Secrets (Only set in Vercel & GitHub Secrets — NEVER in client code)
+# CRON_SECRET=your-random-32-byte-hex-or-uuid
 ```
+
+> [!IMPORTANT]
+> **Zero-Leak Rule**: Never place `SUPABASE_SERVICE_ROLE_KEY` or database passwords into `.env` or client bundles. Client operations strictly utilize the public anonymous key protected by database-level Row Level Security (RLS).
 
 ### Available Scripts
 
@@ -230,36 +252,29 @@ VITE_SUPABASE_ANON_KEY=your-anon-key
 | `npm run build` | Compiles the production application bundle and triggers `scripts/prerender.js` to pre-render static HTML routes and machine feeds. |
 | `npm run prerender` | Runs the pre-rendering script standalone without triggering a full Vite rebuild. |
 | `npm run preview` | Spins up a local static server serving the production `dist/` build. |
-| `npm test` | Runs the automated test suite using Node's native test runner (`node:test`). |
+| `npm test` | Runs the automated test suite across all 22 unit & security tests (`node:test`). |
 | `npm run content:validate` | Validates the structural integrity of bundled seed data files. |
+| `npm run typecheck` | Validates TypeScript types across utilities and components. |
 | `npm run lint` | Checks the codebase for JavaScript and React lint issues with ESLint. |
 | `npm run format` | Formats source files using Prettier. |
 
 ---
 
-## Deployment
+## Deployment & Pipeline Architecture
 
-The application is deployed on **Vercel** with automatic continuous delivery:
+The application is deployed on **Vercel** with continuous delivery backed by **GitHub Actions** and **Supabase**:
 
-- Every commit pushed to the `main` branch automatically triggers the build process:
-  ```bash
-  npm run build
-  ```
-- Output files are generated in `dist/` including:
-  - Bundled JS and CSS assets.
-  - Pre-rendered static HTML directories (`about/index.html`, `projects/index.html`, etc.).
-  - Syndication assets: `sitemap.xml`, `rss.xml`, `feed.json`.
-- The `vercel.json` configuration provides clean URL rewrites and fallback handling for Single Page Application routing.
-
----
-
-## Operational Notes
-
-- **Supabase Keepalive:** A GitHub Actions workflow (`.github/workflows/keepalive.yml`) runs twice weekly (Sundays and Wednesdays at 12:00 UTC) to ping the Supabase database. This authenticated REST API call prevents the project from being paused under Supabase's free-tier inactivity policy. The workflow requires `SUPABASE_URL` and `SUPABASE_ANON_KEY` to be set as GitHub Actions secrets.
+- **Continuous Deployment**: Every commit pushed to the `main` branch automatically triggers testing, building, and static pre-rendering on Vercel.
+- **Edge Caching & Security Headers**: Configured in `vercel.json` with strict `Content-Security-Policy`, `X-Frame-Options: DENY`, `Strict-Transport-Security`, and cache prevention on API routes.
+- **Dual Keepalive Architecture (Zero Inactivity Sleep)**:
+  - **Vercel Cron**: Scheduled daily at `04:00 UTC` to invoke `/api/keepalive`.
+  - **GitHub Actions Workflow** (`.github/workflows/keepalive.yml`): Runs twice daily at `04:00 and 16:00 UTC` to perform an authenticated REST read against Supabase and touch the Vercel keepalive endpoint.
+  - **Zero Log Leakage**: Keepalive pings use `-s -o /dev/null -w "%{http_code}"` so response records and tokens are never echoed into public GitHub Actions runner logs.
+  - **Serverless Hardening**: `/api/keepalive` enforces `GET/HEAD` methods, explicit timeouts (8s), anti-caching headers, optional `CRON_SECRET` validation, and sanitized error responses.
 
 ---
 
 ## License & Attributions
 
-- **Code**: The codebase architecture is open-source and available for reference and study.
+- **Code**: The codebase architecture is open-source under the MIT License and available for reference and study.
 - **Content & Media**: Written content, essays, notes, and photographic works are the intellectual property of **Advaita Chandra**.
