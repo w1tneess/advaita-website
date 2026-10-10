@@ -86,3 +86,6 @@ Thumbs.db
 *.sw?
 .vscode/*
 !.vscode/extensions.json
+
+.vercel
+.env*
