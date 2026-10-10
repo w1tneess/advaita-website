@@ -115,15 +115,23 @@ export default function DataManager() {
   }
 
   const handleCopySchemaSql = () => {
-    const sql = `-- Supabase Schema for Advaita Website
+    const sql = `-- Hardened Supabase Schema for Advaita Website
 CREATE TABLE IF NOT EXISTS public.site_content (
   id text PRIMARY KEY,
   data jsonb NOT NULL,
   updated_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
 );
+CREATE INDEX IF NOT EXISTS idx_site_content_updated_at ON public.site_content (updated_at DESC);
 ALTER TABLE public.site_content ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Public read access" ON public.site_content FOR SELECT TO public USING (true);
-CREATE POLICY "Authenticated users can update" ON public.site_content FOR ALL TO authenticated USING (true) WITH CHECK (true);
+ALTER TABLE public.site_content FORCE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Public read access" ON public.site_content;
+DROP POLICY IF EXISTS "Public read site_content" ON public.site_content;
+CREATE POLICY "Public read site_content" ON public.site_content FOR SELECT TO public USING (true);
+DROP POLICY IF EXISTS "Authenticated users can update" ON public.site_content;
+DROP POLICY IF EXISTS "Admin manage site_content" ON public.site_content;
+CREATE POLICY "Admin manage site_content" ON public.site_content FOR ALL TO authenticated
+  USING ((SELECT auth.jwt() ->> 'email') = 'hi@advaitachandra.in' OR (SELECT (auth.jwt() -> 'app_metadata' ->> 'role')) = 'admin')
+  WITH CHECK ((SELECT auth.jwt() ->> 'email') = 'hi@advaitachandra.in' OR (SELECT (auth.jwt() -> 'app_metadata' ->> 'role')) = 'admin');
 
 CREATE TABLE IF NOT EXISTS public.contact_submissions (
   id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -133,9 +141,18 @@ CREATE TABLE IF NOT EXISTS public.contact_submissions (
   message text NOT NULL,
   created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
 );
+CREATE INDEX IF NOT EXISTS idx_contact_submissions_created_at ON public.contact_submissions (created_at DESC);
 ALTER TABLE public.contact_submissions ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Public can insert contact submissions" ON public.contact_submissions FOR INSERT TO anon WITH CHECK (true);
-CREATE POLICY "Authenticated users can manage contact submissions" ON public.contact_submissions FOR ALL TO authenticated USING (true) WITH CHECK (true);
+ALTER TABLE public.contact_submissions FORCE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Public can insert contact submissions" ON public.contact_submissions;
+DROP POLICY IF EXISTS "Public insert contact_submissions" ON public.contact_submissions;
+CREATE POLICY "Public insert contact_submissions" ON public.contact_submissions FOR INSERT TO anon, authenticated
+  WITH CHECK (char_length(trim(name)) > 0 AND char_length(name) <= 200 AND char_length(trim(message)) > 0 AND char_length(message) <= 5000 AND email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$');
+DROP POLICY IF EXISTS "Authenticated users can manage contact submissions" ON public.contact_submissions;
+DROP POLICY IF EXISTS "Admin manage contact_submissions" ON public.contact_submissions;
+CREATE POLICY "Admin manage contact_submissions" ON public.contact_submissions FOR ALL TO authenticated
+  USING ((SELECT auth.jwt() ->> 'email') = 'hi@advaitachandra.in' OR (SELECT (auth.jwt() -> 'app_metadata' ->> 'role')) = 'admin')
+  WITH CHECK ((SELECT auth.jwt() ->> 'email') = 'hi@advaitachandra.in' OR (SELECT (auth.jwt() -> 'app_metadata' ->> 'role')) = 'admin');
 `
     navigator.clipboard.writeText(sql)
     setCopiedSql(true)

@@ -11,6 +11,7 @@ export default defineConfig({
     },
   },
   plugins: [react({ jsxRuntime: 'automatic' }), tailwindcss()],
+  envPrefix: ['VITE_', 'NEXT_PUBLIC_'],
   build: {
     target: 'es2022',
     outDir: 'dist',

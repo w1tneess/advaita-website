@@ -1,9 +1,15 @@
 export default async function handler(req, res) {
   // Allow HEAD/GET requests from cron or uptime monitors
   const supabaseUrl =
-    process.env.VITE_SUPABASE_URL || 'https://efpnrcwxvsvhlxqmvput.supabase.co'
+    process.env.VITE_SUPABASE_URL ||
+    process.env.NEXT_PUBLIC_Backend_SUPABASE_URL ||
+    process.env.Backend_SUPABASE_URL ||
+    'https://efpnrcwxvsvhlxqmvput.supabase.co'
   const anonKey =
     process.env.VITE_SUPABASE_ANON_KEY ||
+    process.env.NEXT_PUBLIC_Backend_SUPABASE_ANON_KEY ||
+    process.env.Backend_SUPABASE_ANON_KEY ||
+    process.env.NEXT_PUBLIC_Backend_SUPABASE_PUBLISHABLE_KEY ||
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVmcG5yY3d4dnN2aGx4cW12cHV0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc2NTY2ODEsImV4cCI6MjEwMzIzMjY4MX0.lTAG1di8VWD0MeRP1U2ZQKHzdDkzvW-RBrjD2I-_VRI'
 
   try {
