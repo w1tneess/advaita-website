@@ -44,8 +44,12 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
     const override = (settings as Record<string, unknown> | undefined)?.accent
     if (override && typeof override === 'string' && override.trim().length > 0) {
-      root.style.setProperty('--color-accent', override)
-      root.style.setProperty('--color-accent-strong', `color-mix(in oklch, ${override} 85%, white)`)
+      const trimmed = override.trim()
+      // Enforce safe CSS color token format to prevent CSS injection (hex, rgb/rgba, hsl/hsla, oklch)
+      if (/^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/.test(trimmed) || /^(?:rgb|rgba|hsl|hsla|oklch)\([^;{}]+\)$/.test(trimmed)) {
+        root.style.setProperty('--color-accent', trimmed)
+        root.style.setProperty('--color-accent-strong', `color-mix(in oklch, ${trimmed} 85%, white)`)
+      }
     } else {
       root.style.removeProperty('--color-accent')
       root.style.removeProperty('--color-accent-strong')

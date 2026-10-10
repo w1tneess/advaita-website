@@ -3,6 +3,7 @@ import { Link } from "react-router"
 import { ArrowRight, ArrowUpRight, Check, Loader2 } from "lucide-react"
 import { useContent } from "@/lib/content.jsx"
 import { submitContactForm } from "@/lib/supabase/api.js"
+import { isSafeUrl } from "@/lib/url.ts"
 import Seo from "@/components/meta/Seo.jsx"
 import { PUBLIC_ROUTES } from "@/config/nav.js"
 
@@ -106,11 +107,6 @@ function SelectedProjects({ featuredProjects }) {
 				{featuredProjects.map((project) => {
 					const category = project.categories?.[0] || project.status || "Project"
 					const rawLink = project.links?.live || project.links?.repository
-					const isSafeUrl = (url) => {
-						if (!url || typeof url !== 'string') return false
-						const trimmed = url.trim().toLowerCase()
-						return trimmed.startsWith('https://') || trimmed.startsWith('http://') || trimmed.startsWith('/')
-					}
 					const link = isSafeUrl(rawLink) ? rawLink : null
 
 					return (

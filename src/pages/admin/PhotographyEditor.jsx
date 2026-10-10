@@ -15,6 +15,7 @@ import { useToast } from '@/lib/toast'
 import { uploadImage } from '@/lib/supabase/api.js'
 import { generateImageVariants, IMAGE_VARIANTS } from '@/lib/imageProcessor'
 import { extractExifFromFile } from '@/lib/exif.js'
+import { isSafeImageUrl, sanitizeImageUrl } from '@/lib/url.ts'
 
 export default function PhotographyEditor() {
   const { id } = useParams()
@@ -50,14 +51,18 @@ export default function PhotographyEditor() {
 
   const handleAddUrl = (e) => {
     if (e && e.preventDefault) e.preventDefault()
-    if (!urlInput.trim()) return
-    const url = urlInput.trim()
+    const trimmed = urlInput.trim()
+    if (!trimmed) return
+    if (!isSafeImageUrl(trimmed)) {
+      toast.error('Please enter a valid HTTP(S) image URL or relative path.')
+      return
+    }
     setItems((prev) => [
       ...prev,
       {
         type: 'existing',
         id: uid('img'),
-        image_url: url,
+        image_url: trimmed,
         storage_path: '',
         variants: [],
         aspectRatio: null,
@@ -319,7 +324,11 @@ export default function PhotographyEditor() {
                 {items.map((item, index) => (
                   <div key={item.id} className="group relative overflow-hidden rounded-lg border border-line aspect-square bg-raised">
                     <img
-                      src={item.type === 'existing' ? item.image_url : item.previewUrl}
+                      src={
+                        item.type === 'existing'
+                          ? sanitizeImageUrl(item.image_url)
+                          : sanitizeImageUrl(item.previewUrl)
+                      }
                       alt="Preview"
                       className="h-full w-full object-cover"
                     />

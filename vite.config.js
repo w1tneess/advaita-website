@@ -12,9 +12,11 @@ export default defineConfig({
   },
   plugins: [react({ jsxRuntime: 'automatic' }), tailwindcss()],
   build: {
+    target: 'es2022',
     outDir: 'dist',
     assetsDir: 'assets',
     sourcemap: false,
+    cssCodeSplit: true,
     // Keep the shell small; the admin panel is lazy-loaded in src/App.jsx.
     chunkSizeWarningLimit: 700,
     rollupOptions: {
@@ -22,6 +24,7 @@ export default defineConfig({
         manualChunks: {
           'framer-motion': ['framer-motion'],
           'supabase': ['@supabase/supabase-js'],
+          'lucide': ['lucide-react'],
         },
       },
     },

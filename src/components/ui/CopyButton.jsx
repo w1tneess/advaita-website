@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Check, Copy } from 'lucide-react'
 import { useToast } from '@/lib/toast'
 
@@ -16,7 +16,14 @@ export default function CopyButton({
   className = '',
 }) {
   const [copied, setCopied] = useState(false)
+  const timerRef = useRef(null)
   const toast = useToast()
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current)
+    }
+  }, [])
 
   const handleCopy = async (e) => {
     e.stopPropagation()
@@ -31,7 +38,10 @@ export default function CopyButton({
         // Fallback for older browsers
         const textarea = document.createElement('textarea')
         textarea.value = contentToCopy
+        textarea.setAttribute('readonly', '')
         textarea.style.position = 'fixed'
+        textarea.style.left = '-9999px'
+        textarea.style.top = '0'
         textarea.style.opacity = '0'
         document.body.appendChild(textarea)
         textarea.focus()
@@ -45,7 +55,8 @@ export default function CopyButton({
         toast.success('Copied to clipboard!')
       }
 
-      setTimeout(() => setCopied(false), 2000)
+      if (timerRef.current) clearTimeout(timerRef.current)
+      timerRef.current = setTimeout(() => setCopied(false), 2000)
     } catch (_err) {
       toast.error('Failed to copy text.')
     }

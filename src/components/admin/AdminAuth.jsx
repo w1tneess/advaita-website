@@ -35,18 +35,31 @@ export default function AdminAuth({ children }) {
       return
     }
 
+    let isMounted = true
+
     async function checkAuth() {
       try {
         const {
           data: { session },
         } = await supabase.auth.getSession()
         if (session) {
-          setSession(session)
+          // Validate session with the server via getUser() to prevent local session spoofing
+          const { data: { user }, error: userError } = await supabase.auth.getUser()
+          if (isMounted) {
+            if (user && !userError) {
+              setSession(session)
+            } else {
+              setSession(null)
+            }
+          }
+        } else if (isMounted) {
+          setSession(null)
         }
       } catch (error) {
         console.error('Auth verification error:', error)
+        if (isMounted) setSession(null)
       } finally {
-        setLoading(false)
+        if (isMounted) setLoading(false)
       }
     }
 
@@ -55,10 +68,15 @@ export default function AdminAuth({ children }) {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session || null)
+      if (isMounted) {
+        setSession(session || null)
+      }
     })
 
-    return () => subscription?.unsubscribe()
+    return () => {
+      isMounted = false
+      subscription?.unsubscribe()
+    }
   }, [isConfigured])
 
   const handleAuthSubmit = async (e) => {

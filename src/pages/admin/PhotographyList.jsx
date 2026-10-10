@@ -14,6 +14,7 @@ import { validatePhotographyConfig } from '@/lib/schema.js'
 import { useToast } from '@/lib/toast'
 import { formatDateShort } from '@/lib/format'
 import { removeImage } from '@/lib/supabase/api.js'
+import { sanitizeImageUrl } from '@/lib/url.ts'
 
 export default function PhotographyList() {
   const { photography, upsertPhotography, removePhotography } = useContent()
@@ -71,7 +72,7 @@ export default function PhotographyList() {
       key: 'image',
       header: 'Photo',
       render: (photo) => (
-        <img src={photo.image_url} alt={photo.title} className="h-16 w-16 object-cover rounded" />
+        <img src={sanitizeImageUrl(photo.image_url)} alt={photo.title || 'Photo'} className="h-16 w-16 object-cover rounded" />
       ),
     },
     {

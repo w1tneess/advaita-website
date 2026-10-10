@@ -1,16 +1,6 @@
 import { ArrowUpRight, Github, Globe } from 'lucide-react'
+import { isSafeUrl } from '@/lib/url.ts'
 import type { Project } from '@/types/content.ts'
-
-// Allow only safe protocols (http, https) or relative paths.
-const isSafeUrl = (url?: string | null): boolean => {
-  if (!url || typeof url !== 'string') return false
-  const trimmed = url.trim().toLowerCase()
-  return (
-    trimmed.startsWith('https://') ||
-    trimmed.startsWith('http://') ||
-    trimmed.startsWith('/')
-  )
-}
 
 interface ProjectCardProps {
   project: Project
