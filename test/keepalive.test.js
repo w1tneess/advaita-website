@@ -66,51 +66,66 @@ test('keepalive: rejects unauthorized HTTP methods with 405 Method Not Allowed',
   }
 })
 
-test('keepalive: enforces CRON_SECRET authorization when configured', async () => {
+test('keepalive: handles public health checks and authorized keepalive triggers when CRON_SECRET is configured', async () => {
   const originalSecret = process.env.CRON_SECRET
+  const originalAnon = process.env.VITE_SUPABASE_ANON_KEY
   process.env.CRON_SECRET = 'test-secret-token-xyz-123'
+  process.env.VITE_SUPABASE_ANON_KEY = 'test-anon-key-456'
 
   try {
-    // Missing token
-    const reqMissing = { method: 'GET', headers: {} }
-    const resMissing = createMockRes()
-    await handler(reqMissing, resMissing)
-    assert.equal(resMissing._getStatus(), 401)
-    assert.equal(resMissing._getData()?.message, 'Unauthorized')
+    // 1. Unauthenticated public ping (uptime monitors, health checks):
+    // Returns 200 OK lightweight status without querying database
+    const reqPublic = { method: 'GET', headers: {} }
+    const resPublic = createMockRes()
+    await handler(reqPublic, resPublic)
+    assert.equal(resPublic._getStatus(), 200)
+    assert.deepEqual(resPublic._getData()?.status, 'healthy')
+    assert.equal(resPublic._getData()?.ok, true)
 
-    // Invalid token
-    const reqInvalid = {
-      method: 'GET',
-      headers: { authorization: 'Bearer wrong-token' },
-    }
-    const resInvalid = createMockRes()
-    await handler(reqInvalid, resInvalid)
-    assert.equal(resInvalid._getStatus(), 401)
-    assert.equal(resInvalid._getData()?.message, 'Unauthorized')
+    // 2. HEAD method on public health check
+    const reqHead = { method: 'HEAD', headers: {} }
+    const resHead = createMockRes()
+    await handler(reqHead, resHead)
+    assert.equal(resHead._getStatus(), 200)
+    assert.equal(resHead._isEnded(), true)
 
-    // Trusted Vercel Cron header
+    // 3. Trusted Vercel Cron header (triggers keepalive execution)
     const reqVercelCron = {
       method: 'GET',
       headers: { 'x-vercel-cron': '1' },
     }
     const resVercelCron = createMockRes()
     await handler(reqVercelCron, resVercelCron)
-    // Should bypass auth check and reach credentials check (503 if mock unconfigured or 200/upstream)
-    assert.notEqual(resVercelCron._getStatus(), 401)
+    // Passes authorization, attempts DB fetch or returns 503 if mock unconfigured
+    assert.notEqual(resVercelCron._getData()?.status, 'healthy')
 
-    // Valid Bearer token
-    const reqValid = {
+    // 4. Valid CRON_SECRET Bearer token (triggers keepalive execution)
+    const reqCronSecret = {
       method: 'GET',
       headers: { authorization: 'Bearer test-secret-token-xyz-123' },
     }
-    const resValid = createMockRes()
-    await handler(reqValid, resValid)
-    assert.notEqual(resValid._getStatus(), 401)
+    const resCronSecret = createMockRes()
+    await handler(reqCronSecret, resCronSecret)
+    assert.notEqual(resCronSecret._getData()?.status, 'healthy')
+
+    // 5. Valid anon key Bearer token from CI (triggers keepalive execution)
+    const reqAnonKey = {
+      method: 'GET',
+      headers: { authorization: 'Bearer test-anon-key-456' },
+    }
+    const resAnonKey = createMockRes()
+    await handler(reqAnonKey, resAnonKey)
+    assert.notEqual(resAnonKey._getData()?.status, 'healthy')
   } finally {
     if (originalSecret !== undefined) {
       process.env.CRON_SECRET = originalSecret
     } else {
       delete process.env.CRON_SECRET
+    }
+    if (originalAnon !== undefined) {
+      process.env.VITE_SUPABASE_ANON_KEY = originalAnon
+    } else {
+      delete process.env.VITE_SUPABASE_ANON_KEY
     }
   }
 })

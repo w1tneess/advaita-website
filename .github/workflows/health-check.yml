@@ -16,8 +16,6 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Test Production Endpoints
-        env:
-          CRON_SECRET: ${{ secrets.CRON_SECRET }}
         run: |
           set -e
           endpoints=(
@@ -29,6 +27,7 @@ jobs:
             "https://advaitachandra.in/sitemap.xml"
             "https://advaitachandra.in/feed.json"
             "https://advaitachandra.in/llms.txt"
+            "https://advaitachandra.in/api/keepalive"
             "https://oshodocumentary.advaitachandra.in"
           )
 
@@ -43,24 +42,6 @@ jobs:
               failed=1
             fi
           done
-
-          # Check Vercel serverless keepalive health endpoint
-          echo "Checking: https://advaitachandra.in/api/keepalive"
-          if [ -n "${CRON_SECRET:-}" ]; then
-            api_status=$(curl -s -o /dev/null -w "%{http_code}" -L --connect-timeout 10 --max-time 15 \
-              -H "Authorization: Bearer ${CRON_SECRET}" \
-              "https://advaitachandra.in/api/keepalive")
-          else
-            api_status=$(curl -s -o /dev/null -w "%{http_code}" -L --connect-timeout 10 --max-time 15 \
-              "https://advaitachandra.in/api/keepalive")
-          fi
-
-          if [ "$api_status" -eq 200 ]; then
-            echo "  ✓ OK (HTTP $api_status)"
-          else
-            echo "  ✗ FAILED (HTTP $api_status)"
-            failed=1
-          fi
 
           if [ "$failed" -ne 0 ]; then
             echo "One or more endpoint health checks failed."

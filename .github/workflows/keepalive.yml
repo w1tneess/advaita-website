@@ -19,7 +19,6 @@ jobs:
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL || secrets.VITE_SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY || secrets.VITE_SUPABASE_ANON_KEY }}
-          CRON_SECRET: ${{ secrets.CRON_SECRET }}
         run: |
           set -euo pipefail
 
@@ -48,9 +47,9 @@ jobs:
 
           # Also ping Vercel Keepalive endpoint
           echo "Pinging Vercel Keepalive endpoint..."
-          if [ -n "${CRON_SECRET:-}" ]; then
+          if [ -n "${SUPABASE_ANON_KEY:-}" ]; then
             VERCEL_STATUS=$(curl -s -o /dev/null -w "%{http_code}" --connect-timeout 15 --max-time 30 \
-              -H "Authorization: Bearer ${CRON_SECRET}" \
+              -H "Authorization: Bearer ${SUPABASE_ANON_KEY}" \
               "https://advaitachandra.in/api/keepalive")
           else
             VERCEL_STATUS=$(curl -s -o /dev/null -w "%{http_code}" --connect-timeout 15 --max-time 30 \
@@ -58,4 +57,5 @@ jobs:
           fi
 
           echo "Vercel Keepalive endpoint HTTP status: ${VERCEL_STATUS}"
+
 
