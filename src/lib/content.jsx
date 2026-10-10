@@ -102,8 +102,9 @@ export function ContentProvider({ children }) {
   const [content, setContent] = useState(initialDoc)
   const contentRef = useRef(initialDoc)
   const initial = useRef({ doc: initialDoc, source: 'local' })
-  const [isLoaded, setIsLoaded] = useState(true)
+  const isLoaded = true
   const [isRemote, setIsRemote] = useState(false)
+
   const [syncStatus, setSyncStatus] = useState('idle')
   const [previewDrafts, setPreviewDrafts] = useState(false)
 
