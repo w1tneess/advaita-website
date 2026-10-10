@@ -2,12 +2,20 @@ export default async function handler(req, res) {
   // Allow HEAD/GET requests from cron or uptime monitors
   const supabaseUrl =
     process.env.VITE_SUPABASE_URL ||
+    process.env.NEXT_PUBLIC_Backend_SUPABASE_URL ||
+    process.env.Backend_SUPABASE_URL ||
     process.env.NEXT_PUBLIC_SUPABASE_URL ||
     process.env.SUPABASE_URL
+
   const anonKey =
     process.env.VITE_SUPABASE_ANON_KEY ||
+    process.env.NEXT_PUBLIC_Backend_SUPABASE_ANON_KEY ||
+    process.env.NEXT_PUBLIC_Backend_SUPABASE_PUBLISHABLE_KEY ||
+    process.env.Backend_SUPABASE_ANON_KEY ||
+    process.env.Backend_SUPABASE_PUBLISHABLE_KEY ||
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
     process.env.SUPABASE_ANON_KEY
+
 
   if (!supabaseUrl || !anonKey) {
     return res.status(500).json({

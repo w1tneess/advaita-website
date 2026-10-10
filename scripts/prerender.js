@@ -517,12 +517,29 @@ function renderJsonFeed({ posts = [], notes = [] }) {
   )
 }
 
-const supabaseUrl = process.env.VITE_SUPABASE_URL
-const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY
+const supabaseUrl =
+  process.env.VITE_SUPABASE_URL ||
+  process.env.NEXT_PUBLIC_Backend_SUPABASE_URL ||
+  process.env.Backend_SUPABASE_URL ||
+  process.env.NEXT_PUBLIC_SUPABASE_URL ||
+  process.env.SUPABASE_URL ||
+  ''
+
+const supabaseAnonKey =
+  process.env.VITE_SUPABASE_ANON_KEY ||
+  process.env.NEXT_PUBLIC_Backend_SUPABASE_ANON_KEY ||
+  process.env.NEXT_PUBLIC_Backend_SUPABASE_PUBLISHABLE_KEY ||
+  process.env.Backend_SUPABASE_ANON_KEY ||
+  process.env.Backend_SUPABASE_PUBLISHABLE_KEY ||
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+  process.env.SUPABASE_ANON_KEY ||
+  ''
+
 const supabase =
   supabaseUrl && supabaseAnonKey && !supabaseUrl.includes('placeholder')
     ? createClient(supabaseUrl, supabaseAnonKey)
     : null
+
 
 async function getPrerenderData() {
   let posts = []
