@@ -75,5 +75,23 @@ export function sanitizeUrl(url?: string | null, fallback = '#'): string {
 export function sanitizeImageUrl(url?: string | null, fallback = ''): string {
   if (!url || typeof url !== 'string') return fallback
   const trimmed = url.trim()
-  return isSafeImageUrl(trimmed) ? trimmed : fallback
+  if (!isSafeImageUrl(trimmed)) return fallback
+
+  if (trimmed.startsWith('data:image/') || trimmed.startsWith('blob:')) {
+    return encodeURI(trimmed)
+  }
+
+  if (trimmed.startsWith('/')) {
+    return encodeURI(trimmed)
+  }
+
+  try {
+    const parsed = new URL(trimmed)
+    if (SAFE_IMAGE_SCHEMES.includes(parsed.protocol)) {
+      return parsed.href
+    }
+    return fallback
+  } catch {
+    return fallback
+  }
 }

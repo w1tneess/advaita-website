@@ -57,12 +57,17 @@ export default function PhotographyEditor() {
       toast.error('Please enter a valid HTTP(S) image URL or relative path.')
       return
     }
+    const safeUrl = sanitizeImageUrl(trimmed)
+    if (!safeUrl) {
+      toast.error('Please enter a valid HTTP(S) image URL or relative path.')
+      return
+    }
     setItems((prev) => [
       ...prev,
       {
         type: 'existing',
         id: uid('img'),
-        image_url: trimmed,
+        image_url: safeUrl,
         storage_path: '',
         variants: [],
         aspectRatio: null,

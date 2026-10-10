@@ -133,7 +133,7 @@ test('projects dataset and site config do not contain legacy GitHub Pages hostin
 
   const projectsRaw = await readFile(join(process.cwd(), 'src/data/projects.json'), 'utf8')
   assert.doesNotMatch(projectsRaw, /GitHub Pages/i, 'projects.json must not reference GitHub Pages')
-  assert.doesNotMatch(projectsRaw, /github\.io/i, 'projects.json must not reference github.io')
+  assert.equal(projectsRaw.toLowerCase().includes('github.io'), false, 'projects.json must not reference github.io')
 
   const projects = JSON.parse(projectsRaw)
   const websitePrj = projects.find((p) => p.id === 'prj-personal-website')
