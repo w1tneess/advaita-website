@@ -11,28 +11,51 @@ permissions:
 
 jobs:
   keepalive:
+    name: Touch Supabase PostgreSQL
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
-      - name: Ping Supabase Database (Real PostgreSQL Query)
+      - name: Ping Supabase PostgreSQL Database (Zero-Leak)
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL || secrets.VITE_SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY || secrets.VITE_SUPABASE_ANON_KEY }}
-
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
         run: |
-          echo "Executing authenticated SELECT query against site_content table..."
-          
-          # Query site_content with select=id,updated_at to perform an active database read
-          response=$(curl -w "%{http_code}" -s -o /tmp/supabase_res.json --connect-timeout 15 --max-time 30 -X GET "$SUPABASE_URL/rest/v1/site_content?select=id,updated_at&limit=1" \
-            -H "apikey: $SUPABASE_ANON_KEY" \
-            -H "Authorization: Bearer $SUPABASE_ANON_KEY")
-          
-          echo "Supabase HTTP status: $response"
-          cat /tmp/supabase_res.json || true
-          echo ""
+          set -euo pipefail
 
-          if [ "$response" = "200" ] || [ "$response" = "206" ]; then
-            echo "Success! Supabase PostgreSQL instance is active and queried."
+          if [ -z "${SUPABASE_URL:-}" ] || [ -z "${SUPABASE_ANON_KEY:-}" ]; then
+            echo "::notice ::Supabase secrets not configured in repository secrets. Skipping direct database ping."
           else
-            echo "Failed to ping Supabase. HTTP Status: $response"
-            exit 1
+            echo "Pinging Supabase PostgreSQL database via authenticated REST query..."
+            
+            # Query site_content with select=id,updated_at to perform an active database read
+            # Zero-leak: do not dump response payload to stdout or disk
+            CLEAN_URL="${SUPABASE_URL%/}"
+            HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" --connect-timeout 15 --max-time 30 \
+              -X GET "${CLEAN_URL}/rest/v1/site_content?select=id,updated_at&limit=1" \
+              -H "apikey: ${SUPABASE_ANON_KEY}" \
+              -H "Authorization: Bearer ${SUPABASE_ANON_KEY}")
+
+            echo "Supabase REST HTTP status: ${HTTP_CODE}"
+
+            if [ "${HTTP_CODE}" = "200" ] || [ "${HTTP_CODE}" = "206" ]; then
+              echo "✓ Success: Supabase PostgreSQL instance is active and queried."
+            else
+              echo "✗ Warning: Supabase returned unexpected HTTP status: ${HTTP_CODE}"
+              exit 1
+            fi
           fi
+
+          # Also ping Vercel Keepalive endpoint
+          echo "Pinging Vercel Keepalive endpoint..."
+          if [ -n "${CRON_SECRET:-}" ]; then
+            VERCEL_STATUS=$(curl -s -o /dev/null -w "%{http_code}" --connect-timeout 15 --max-time 30 \
+              -H "Authorization: Bearer ${CRON_SECRET}" \
+              "https://advaitachandra.in/api/keepalive")
+          else
+            VERCEL_STATUS=$(curl -s -o /dev/null -w "%{http_code}" --connect-timeout 15 --max-time 30 \
+              "https://advaitachandra.in/api/keepalive")
+          fi
+
+          echo "Vercel Keepalive endpoint HTTP status: ${VERCEL_STATUS}"
+

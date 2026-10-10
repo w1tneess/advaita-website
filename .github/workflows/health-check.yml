@@ -13,8 +13,11 @@ jobs:
   health-check:
     name: Verify Live Site Endpoints
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - name: Test Production Endpoints
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
         run: |
           set -e
           endpoints=(
@@ -25,13 +28,14 @@ jobs:
             "https://advaitachandra.in/blog"
             "https://advaitachandra.in/sitemap.xml"
             "https://advaitachandra.in/feed.json"
+            "https://advaitachandra.in/llms.txt"
             "https://oshodocumentary.advaitachandra.in"
           )
 
           failed=0
           for url in "${endpoints[@]}"; do
             echo "Checking: $url"
-            status=$(curl -s -o /dev/null -w "%{http_code}" -L --max-time 15 "$url")
+            status=$(curl -s -o /dev/null -w "%{http_code}" -L --connect-timeout 10 --max-time 15 "$url")
             if [ "$status" -eq 200 ]; then
               echo "  ✓ OK (HTTP $status)"
             else
@@ -39,6 +43,24 @@ jobs:
               failed=1
             fi
           done
+
+          # Check Vercel serverless keepalive health endpoint
+          echo "Checking: https://advaitachandra.in/api/keepalive"
+          if [ -n "${CRON_SECRET:-}" ]; then
+            api_status=$(curl -s -o /dev/null -w "%{http_code}" -L --connect-timeout 10 --max-time 15 \
+              -H "Authorization: Bearer ${CRON_SECRET}" \
+              "https://advaitachandra.in/api/keepalive")
+          else
+            api_status=$(curl -s -o /dev/null -w "%{http_code}" -L --connect-timeout 10 --max-time 15 \
+              "https://advaitachandra.in/api/keepalive")
+          fi
+
+          if [ "$api_status" -eq 200 ]; then
+            echo "  ✓ OK (HTTP $api_status)"
+          else
+            echo "  ✗ FAILED (HTTP $api_status)"
+            failed=1
+          fi
 
           if [ "$failed" -ne 0 ]; then
             echo "One or more endpoint health checks failed."
