@@ -61,12 +61,34 @@ export function useSmoothScroll() {
 
 /**
  * Scroll to the top of the page, using Lenis if available, native otherwise.
+ * @param {object} [options]
+ * @param {boolean} [options.immediate=false]
  */
-export function scrollToTop() {
+export function scrollToTop(options = {}) {
+  const { immediate = false } = options
   if (lenisInstance) {
-    lenisInstance.scrollTo(0, { immediate: true })
+    lenisInstance.scrollTo(0, { immediate })
   } else {
-    window.scrollTo(0, 0)
+    window.scrollTo({ top: 0, behavior: immediate ? 'auto' : 'smooth' })
+  }
+}
+
+/**
+ * Scroll smoothly or immediately to a target element or selector.
+ * @param {string|HTMLElement} target
+ * @param {object} [options]
+ * @param {boolean} [options.immediate=false]
+ * @param {number} [options.offset=0]
+ */
+export function scrollToElement(target, options = {}) {
+  const { immediate = false, offset = 0 } = options
+  if (lenisInstance) {
+    lenisInstance.scrollTo(target, { immediate, offset })
+  } else if (typeof target === 'string') {
+    const el = document.querySelector(target)
+    if (el) el.scrollIntoView({ behavior: immediate ? 'auto' : 'smooth', block: 'start' })
+  } else if (target instanceof HTMLElement) {
+    target.scrollIntoView({ behavior: immediate ? 'auto' : 'smooth', block: 'start' })
   }
 }
 
@@ -83,3 +105,4 @@ export function stopScroll() {
 export function startScroll() {
   lenisInstance?.start()
 }
+

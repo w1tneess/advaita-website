@@ -11,6 +11,7 @@ const routeLoaders: Record<string, () => Promise<unknown>> = {
   '/projects': () => import('../pages/Projects.jsx'),
   '/blog': () => import('../pages/Blog.jsx'),
   '/contact': () => import('../pages/Contact.jsx'),
+  '/art': () => import('../pages/AlgorithmicArt.jsx'),
   '/privacy': () => import('../pages/Privacy.jsx'),
   '/terms': () => import('../pages/Terms.jsx'),
 }

@@ -8,16 +8,7 @@ import { BookOpen } from "lucide-react"
 
 const ROUTE = PUBLIC_ROUTES.find((route) => route.key === 'philosophy')
 
-function formatDate(value) {
-	if (!value) return ""
-	const date = new Date(value)
-	if (Number.isNaN(date.getTime())) return ""
-	return date.toLocaleDateString("en-IN", {
-		day: "numeric",
-		month: "short",
-		year: "numeric",
-	})
-}
+import { formatDate } from "@/lib/format"
 
 export default function Philosophy() {
 	const { philosophy, publicNotes } = useContent()
@@ -105,7 +96,15 @@ export default function Philosophy() {
 										{formatDate(note.published_at || note.noted_on)}
 									</p>
 									<div>
-										<h3 className="text-lg sm:text-xl font-normal text-ink mb-3 text-balance">{note.title}</h3>
+										<h3 className="text-lg sm:text-xl font-normal text-ink mb-3 text-balance">
+											{note.slug ? (
+												<Link to={`/philosophy/${note.slug}`} className="hover:text-muted transition-colors underline decoration-line/60 hover:decoration-line-strong underline-offset-4">
+													{note.title}
+												</Link>
+											) : (
+												note.title
+											)}
+										</h3>
 										{note.content ? (
 											<div className="prose prose-invert prose-p:text-muted prose-p:leading-relaxed prose-p:text-base sm:prose-p:text-lg max-w-none font-sans whitespace-pre-line">
 												{note.content}

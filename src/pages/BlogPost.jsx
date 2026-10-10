@@ -88,7 +88,7 @@ export default function BlogPost() {
           <OpenGraphPreview
             title={post.title}
             description={post.excerpt}
-            url={typeof window !== 'undefined' ? window.location.href : 'https://advaitachandra.in'}
+            url={typeof window !== 'undefined' ? window.location.href : `https://advaitachandra.in/blog/${post.slug}`}
           />
         </div>
 

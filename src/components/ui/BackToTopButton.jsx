@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowUp } from 'lucide-react'
+import { scrollToTop as triggerScrollToTop } from '@/lib/smooth-scroll.js'
 
 /**
  * Floating Back-To-Top button appearing on scroll.
@@ -17,8 +18,8 @@ export default function BackToTopButton() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+  const handleScrollToTop = () => {
+    triggerScrollToTop({ immediate: false })
     const main = document.getElementById('main-content')
     if (main) main.focus({ preventScroll: true })
   }
@@ -28,7 +29,8 @@ export default function BackToTopButton() {
       {show && (
         <motion.button
           type="button"
-          onClick={scrollToTop}
+          onClick={handleScrollToTop}
+
           initial={{ opacity: 0, scale: 0.8, y: 10 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.8, y: 10 }}

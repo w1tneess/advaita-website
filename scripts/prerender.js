@@ -312,6 +312,40 @@ function renderSemanticBody(route, siteData) {
         <h1>Terms of Use</h1>
         <p>Terms of service, intellectual attribution, and licensing of written material.</p>
       </article>`
+  } else if (route.path.startsWith('/philosophy/')) {
+    const noteSlug = route.path.replace('/philosophy/', '')
+    const note = (philosophy.notes || []).find((n) => n.slug === noteSlug || n.id === noteSlug)
+    if (note) {
+      mainContent = `
+        <article>
+          <h1>${e(note.title)}</h1>
+          <p><small>${e(note.category || 'Philosophy')} &bull; Published ${e(note.published_at || '')}</small></p>
+          <div>${e(note.content).replace(/\n\n/g, '</p><p>')}</div>
+        </article>`
+    } else {
+      mainContent = `
+        <article>
+          <h1>${e(route.title || SITE_NAME)}</h1>
+          <p>${e(route.description || '')}</p>
+        </article>`
+    }
+  } else if (route.path.startsWith('/blog/')) {
+    const postSlug = route.path.replace('/blog/', '')
+    const post = (posts || []).find((p) => p.slug === postSlug || p.id === postSlug)
+    if (post) {
+      mainContent = `
+        <article>
+          <h1>${e(post.title)}</h1>
+          <p><small>${e(post.category || 'Note')} &bull; Published ${e(post.published_at || '')}</small></p>
+          <div>${e(post.content).replace(/\n\n/g, '</p><p>')}</div>
+        </article>`
+    } else {
+      mainContent = `
+        <article>
+          <h1>${e(route.title || SITE_NAME)}</h1>
+          <p>${e(route.description || '')}</p>
+        </article>`
+    }
   } else {
     mainContent = `
       <article>
@@ -560,7 +594,7 @@ async function main() {
   const template = await readFile(join(dist, 'index.html'), 'utf8')
   const siteData = await getPrerenderData()
   const { posts, latestUpdate, philosophy } = siteData
-  const routes = allPrerenderRoutes(posts)
+  const routes = allPrerenderRoutes(posts, philosophy.notes || [])
 
   if (latestUpdate) {
     routes.forEach((route) => {

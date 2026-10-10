@@ -9,9 +9,37 @@ import {
   saveDocument,
   syncLocalToSupabase,
   seedIsNewerThan,
+  getStorage,
+  STORAGE_KEY,
+  reconcileWithSeed,
+  migrate,
 } from './store.js'
+import { validateDocument } from './schema.js'
 import { useToast } from './toast'
 import PageFallback from '../components/ui/PageFallback.jsx'
+
+/**
+ * Returns the immediate initial document for zero-delay instant rendering.
+ */
+function getInitialDocument() {
+  const storage = getStorage()
+  if (storage) {
+    try {
+      const localRaw = storage.getItem(STORAGE_KEY)
+      if (localRaw) {
+        const parsed = JSON.parse(localRaw)
+        const { doc: migrated, blockedAt } = migrate(parsed)
+        if (blockedAt === null) {
+          const { ok } = validateDocument(migrated)
+          if (ok) return reconcileWithSeed(migrated)
+        }
+      }
+    } catch (_) {
+      // Storage read fallback
+    }
+  }
+  return createSeedDocument()
+}
 
 /**
  * The content store shared by the public site and the local admin editor.
@@ -70,57 +98,46 @@ function recordActivity(document, action, type, item) {
 export function ContentProvider({ children }) {
   const toast = useToast()
 
-  const [isLoaded, setIsLoaded] = useState(false)
-  const initial = useRef(null)
-
-  const [content, setContent] = useState(null)
-  const contentRef = useRef(null)
+  const [initialDoc] = useState(getInitialDocument)
+  const [content, setContent] = useState(initialDoc)
+  const contentRef = useRef(initialDoc)
+  const initial = useRef({ doc: initialDoc, source: 'local' })
+  const [isLoaded, setIsLoaded] = useState(true)
   const [isRemote, setIsRemote] = useState(false)
-  const [syncStatus, setSyncStatus] = useState('idle') // 'synced' | 'local_only' | 'error'
+  const [syncStatus, setSyncStatus] = useState('idle')
   const [previewDrafts, setPreviewDrafts] = useState(false)
 
   const warningShown = useRef(false)
 
+  // Revalidate with remote Supabase in background without blocking initial render
   useEffect(() => {
-    async function init() {
+    let isMounted = true
+
+    async function revalidate() {
       try {
         const state = await loadDocument()
+        if (!isMounted) return
         initial.current = state
         contentRef.current = state.doc
         setContent(state.doc)
         setIsRemote(state.source === 'remote')
         setSyncStatus(state.source === 'remote' ? 'synced' : 'local_only')
-        setIsLoaded(true)
 
         if (!warningShown.current && state.warning) {
           warningShown.current = true
           toast.info(state.warning)
         }
       } catch (error) {
-        console.error('Failed to load content', error)
-        
-        let errorMessage = 'Failed to connect to database. Using fallback content.'
-        if (error.isTimeout) {
-          errorMessage = 'Database connection timed out. Using fallback content.'
-        } else if (error.isAuth) {
-          errorMessage = 'Database authentication failed. Check credentials.'
-        } else if (error.message) {
-          errorMessage = `Database error: ${error.message}`
-        }
-        
-        toast.error(errorMessage)
-        
-        // Fallback to local seed content so the app doesn't hang
-        const seed = createSeedDocument()
-        initial.current = { doc: seed, source: 'seed', warning: errorMessage }
-        contentRef.current = seed
-        setContent(seed)
-        setIsRemote(false)
-        setSyncStatus('local_only')
-        setIsLoaded(true)
+        if (!isMounted) return
+        console.warn('Revalidation fallback to local seed:', error)
       }
     }
-    init()
+
+    revalidate()
+
+    return () => {
+      isMounted = false
+    }
   }, [toast])
 
   const commit = useCallback(async (updater) => {

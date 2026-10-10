@@ -283,7 +283,7 @@ export default function AlgorithmicArt() {
         <div className="relative p-1.5 rounded-[2.5rem] bg-surface/40 border border-line shadow-raised w-full h-[65vh] min-h-[480px] max-h-[780px]">
           <div
             ref={containerRef}
-            className="relative w-full h-full rounded-[calc(2.5rem-0.375rem)] border border-white/5 bg-canvas overflow-hidden shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] group"
+            className="relative w-full h-full rounded-[calc(2.5rem-0.375rem)] border border-white/5 bg-canvas overflow-hidden shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] group touch-none"
             onMouseMove={(e) => {
               const rect = canvasRef.current?.getBoundingClientRect()
               if (!rect) return
@@ -298,14 +298,44 @@ export default function AlgorithmicArt() {
               mouseRef.current.y = -1000
               mouseRef.current.isDown = false
             }}
+            onTouchStart={(e) => {
+              const touch = e.touches[0]
+              if (!touch) return
+              const rect = canvasRef.current?.getBoundingClientRect()
+              if (!rect) return
+              const dpr = Math.min(window.devicePixelRatio || 1, 2)
+              mouseRef.current.x = (touch.clientX - rect.left) * dpr
+              mouseRef.current.y = (touch.clientY - rect.top) * dpr
+              mouseRef.current.isDown = true
+            }}
+            onTouchMove={(e) => {
+              const touch = e.touches[0]
+              if (!touch) return
+              const rect = canvasRef.current?.getBoundingClientRect()
+              if (!rect) return
+              const dpr = Math.min(window.devicePixelRatio || 1, 2)
+              mouseRef.current.x = (touch.clientX - rect.left) * dpr
+              mouseRef.current.y = (touch.clientY - rect.top) * dpr
+            }}
+            onTouchEnd={() => {
+              mouseRef.current.x = -1000
+              mouseRef.current.y = -1000
+              mouseRef.current.isDown = false
+            }}
+            onTouchCancel={() => {
+              mouseRef.current.x = -1000
+              mouseRef.current.y = -1000
+              mouseRef.current.isDown = false
+            }}
           >
-            <canvas ref={canvasRef} className="block w-full h-full cursor-crosshair" />
+            <canvas ref={canvasRef} className="block w-full h-full cursor-crosshair touch-none" />
 
             {/* Interactive Hint Banner (Fades on hover) */}
             <div className="absolute top-5 left-5 pointer-events-none flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-black/40 backdrop-blur-md font-mono text-[11px] text-muted opacity-80 group-hover:opacity-100 transition-opacity duration-500">
               <Sparkles className="h-3.5 w-3.5 text-accent" />
-              <span>Move cursor to bend field lines • Click to deflect particles</span>
+              <span>Move cursor or touch to bend field lines • Tap or click to deflect</span>
             </div>
+
 
             {/* Seed indicator pill */}
             <div className="absolute top-5 right-5 pointer-events-none flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-black/40 backdrop-blur-md font-mono text-[11px] text-muted opacity-80 group-hover:opacity-100 transition-opacity duration-500">

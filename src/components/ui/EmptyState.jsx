@@ -5,7 +5,16 @@ import { motion } from 'framer-motion'
  * Honest empty state. Used wherever a collection is genuinely empty — most visibly on
  * the blog, photography, or filtered searches.
  */
-export default function EmptyState({ icon: Icon = Inbox, title, message, action, className = '' }) {
+export default function EmptyState({
+  icon: Icon = Inbox,
+  title,
+  message,
+  description,
+  action,
+  className = '',
+}) {
+  const content = message || description
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
@@ -23,13 +32,14 @@ export default function EmptyState({ icon: Icon = Inbox, title, message, action,
           {title}
         </h3>
       )}
-      {message && (
-        <p className="mx-auto mt-2 max-w-md text-sm text-muted/90 leading-relaxed">
-          {message}
-        </p>
+      {content && (
+        <div className="mx-auto mt-2 max-w-md text-sm text-muted/90 leading-relaxed">
+          {content}
+        </div>
       )}
       {action && <div className="mt-5 flex justify-center">{action}</div>}
     </motion.div>
   )
 }
+
 

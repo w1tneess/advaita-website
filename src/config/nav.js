@@ -136,10 +136,11 @@ export const NAV_ITEMS = PUBLIC_ROUTES.filter((route) => route.nav).map(({ path,
 }))
 
 /**
- * Every route to pre-render, given the published posts.
+ * Every route to pre-render, given the published posts and philosophy notes.
  * @param {Array<object>} publishedPosts
+ * @param {Array<object>} publishedNotes
  */
-export function allPrerenderRoutes(publishedPosts = []) {
+export function allPrerenderRoutes(publishedPosts = [], publishedNotes = []) {
   return [
     ...PUBLIC_ROUTES,
     ...publishedPosts.map((post) => ({
@@ -152,5 +153,17 @@ export function allPrerenderRoutes(publishedPosts = []) {
       lastmod: post.updated_at || post.updatedAt || post.published_at || post.publishedAt || undefined,
       type: 'article',
     })),
+    ...publishedNotes
+      .filter((note) => note.slug)
+      .map((note) => ({
+        path: `/philosophy/${note.slug}`,
+        key: `note:${note.slug}`,
+        title: note.title,
+        description: note.excerpt || note.title,
+        changefreq: 'monthly',
+        priority: '0.7',
+        lastmod: note.updated_at || note.published_at || undefined,
+        type: 'article',
+      })),
   ]
 }

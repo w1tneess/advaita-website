@@ -87,7 +87,7 @@ export default function NotePost() {
           <OpenGraphPreview
             title={note.title}
             description={note.excerpt || note.title}
-            url={typeof window !== 'undefined' ? window.location.href : 'https://advaitachandra.in'}
+            url={typeof window !== 'undefined' ? window.location.href : `https://advaitachandra.in/philosophy/${note.slug}`}
           />
         </div>
       </article>

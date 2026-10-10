@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, ChevronRight, X, Info, ZoomIn, ZoomOut, Aperture, Camera, Compass } from 'lucide-react'
 import { lightboxOverlay } from '@/lib/animations'
 import { getOptimizedImageProps } from '@/lib/image.js'
+import { stopScroll, startScroll } from '@/lib/smooth-scroll.js'
+
 
 // Swipe confidence threshold
 const swipeConfidenceThreshold = 10000
@@ -126,17 +128,21 @@ export default function Lightbox({ photos = [], index, onClose, onChange }) {
     return () => document.removeEventListener('keydown', handleKey)
   }, [isOpen, onClose, goPrev, goNext])
 
-  // Lock body scroll when open
+  // Lock body scroll and pause Lenis smooth scroll when open
   useEffect(() => {
     if (isOpen) {
+      stopScroll()
       document.body.style.overflow = 'hidden'
     } else {
       document.body.style.overflow = ''
+      startScroll()
     }
     return () => {
       document.body.style.overflow = ''
+      startScroll()
     }
   }, [isOpen])
+
 
   const hasExif = Boolean(
     photo?.camera ||

@@ -1,6 +1,11 @@
 import { createClient } from '@supabase/supabase-js'
 
-const env = typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : {}
+const env =
+  typeof import.meta !== 'undefined' && import.meta.env
+    ? import.meta.env
+    : typeof process !== 'undefined' && process.env
+      ? process.env
+      : {}
 
 // Resolve Supabase project URL from standard Vite env or Vercel integration prefixes
 const supabaseUrl =
@@ -20,9 +25,12 @@ const supabaseAnonKey =
   env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
   ''
 
-if (!supabaseUrl || !supabaseAnonKey || supabaseUrl.includes('placeholder')) {
-  console.warn(
-    'Supabase credentials missing or invalid. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in environment variables.',
+if (
+  (!supabaseUrl || !supabaseAnonKey || supabaseUrl.includes('placeholder')) &&
+  (env.VITE_SUPABASE_DEBUG === 'true' || env.DEV)
+) {
+  console.info(
+    'Supabase credentials unconfigured. Local storage fallback active.',
   )
 }
 

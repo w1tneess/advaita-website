@@ -65,12 +65,12 @@ export function useDerivedContent(content, previewDrafts) {
   )
 
   const findBlogPostBySlug = useCallback(
-    (slug) => publicBlogPosts.find((post) => post.slug === slug) ?? null,
+    (slug) => publicBlogPosts.find((post) => post.slug === slug || post.id === slug) ?? null,
     [publicBlogPosts],
   )
 
   const findNoteBySlug = useCallback(
-    (slug) => publicNotes.find((note) => note.slug === slug) ?? null,
+    (slug) => publicNotes.find((note) => note.slug === slug || note.id === slug) ?? null,
     [publicNotes],
   )
 

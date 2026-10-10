@@ -121,6 +121,8 @@ export const ICON_NAMES = Object.keys(ICON_REGISTRY)
  * in the data never crashes the page.
  */
 export default function Icon({ name, fallback = 'Globe', ...rest }) {
-  const Component = ICON_REGISTRY[name] ?? ICON_REGISTRY[fallback]
+  const Component = ICON_REGISTRY[name] ?? ICON_REGISTRY[fallback] ?? Globe
+  if (!Component) return null
   return <Component aria-hidden="true" {...rest} />
 }
+

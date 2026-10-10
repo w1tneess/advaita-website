@@ -21,15 +21,14 @@
 import { createSeedDocument, SCHEMA_VERSION, SEED_VERSION } from '../data/seed.js'
 import { validateDocument } from './schema.js'
 
-const STORAGE_KEY = 'advaita-site.content.v1'
-
+export const STORAGE_KEY = 'advaita-site.content.v1'
 
 /* --------------------------------------------------------------------------
    Safe storage access — localStorage throws in some private-browsing modes,
    and is absent entirely during the Node pre-render build.
    -------------------------------------------------------------------------- */
 
-function getStorage() {
+export function getStorage() {
   try {
     if (typeof window === 'undefined' || !window.localStorage) return null
     // Probe: Safari private mode allows the property but throws on write.
@@ -83,7 +82,7 @@ const MIGRATIONS = {
   3: (doc) => ({ ...doc, blog: doc.blog || [] }),
 }
 
-function migrate(doc) {
+export function migrate(doc) {
   let current = doc
   let guard = 0
 
@@ -117,7 +116,7 @@ import { isSupabaseConfigured } from './supabase/client.js'
  * Reconciles a loaded document with the deployed seed to ensure that new seed
  * versions (with updated projects, links, and content) take precedence over stale stores.
  */
-function reconcileWithSeed(doc) {
+export function reconcileWithSeed(doc) {
   const seed = createSeedDocument()
   if (!doc) return seed
 
@@ -137,6 +136,36 @@ function reconcileWithSeed(doc) {
       },
       seedVersion: SEED_VERSION,
       schemaVersion: SCHEMA_VERSION,
+    }
+  }
+
+  // Ensure philosophy notes always have slugs, thinkers, and excerpts
+  if (doc.philosophy && Array.isArray(doc.philosophy.notes)) {
+    const updatedNotes = doc.philosophy.notes.map((note) => {
+      const seedNote = seed.philosophy?.notes?.find(
+        (sn) => sn.id === note.id || sn.title === note.title,
+      )
+      return {
+        ...note,
+        slug:
+          note.slug ||
+          seedNote?.slug ||
+          (note.title
+            ? note.title
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/^-|-$/g, '')
+            : note.id),
+        thinker: note.thinker || seedNote?.thinker || null,
+        excerpt: note.excerpt || seedNote?.excerpt || '',
+      }
+    })
+    doc = {
+      ...doc,
+      philosophy: {
+        ...doc.philosophy,
+        notes: updatedNotes,
+      },
     }
   }
 

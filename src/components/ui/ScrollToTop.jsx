@@ -13,7 +13,7 @@ import { useLocation } from 'react-router'
  * hash, the target element is scrolled into view instead — a browser does this natively
  * for a real page load, but not for a client-side navigation.
  */
-import { scrollToTop } from '../../lib/smooth-scroll.js'
+import { scrollToTop, scrollToElement } from '../../lib/smooth-scroll.js'
 
 export default function ScrollToTop() {
   const { pathname, hash } = useLocation()
@@ -29,19 +29,19 @@ export default function ScrollToTop() {
       const id = decodeURIComponent(hash.slice(1))
       const target = document.getElementById(id)
       if (target) {
-        target.scrollIntoView({ block: 'start' })
+        scrollToElement(target)
         return
       }
       const timer = setTimeout(() => {
         const delayedTarget = document.getElementById(id)
         if (delayedTarget) {
-          delayedTarget.scrollIntoView({ block: 'start' })
+          scrollToElement(delayedTarget)
         }
       }, 100)
       return () => clearTimeout(timer)
     }
 
-    scrollToTop()
+    scrollToTop({ immediate: true })
 
     const focusTimer = setTimeout(() => {
       const main = document.getElementById('main-content')
@@ -50,6 +50,7 @@ export default function ScrollToTop() {
 
     return () => clearTimeout(focusTimer)
   }, [pathname, hash])
+
 
   return null
 }
