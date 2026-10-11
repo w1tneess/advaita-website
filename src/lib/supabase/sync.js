@@ -74,13 +74,26 @@ export async function saveContentToSupabase(contentDocument) {
   }
 
   try {
-    const { error } = await supabase.from('site_content').upsert({
-      id: 'main',
-      data: contentDocument,
-      updated_at: new Date().toISOString(),
-    })
+    const { data, error } = await supabase
+      .from('site_content')
+      .upsert({
+        id: 'main',
+        data: contentDocument,
+        updated_at: new Date().toISOString(),
+      })
+      .select('id, updated_at')
 
     if (error) throw error
+
+    // Guard against silent RLS authorization filtering
+    if (!data || data.length === 0) {
+      return {
+        ok: false,
+        error:
+          'Supabase permission check: 0 rows modified. Please verify you are logged in to the admin studio with an authorized administrator account.',
+      }
+    }
+
     return { ok: true, error: null }
   } catch (error) {
     console.error('Error saving content to Supabase:', error)
@@ -97,9 +110,22 @@ export async function clearContentInSupabase() {
   }
 
   try {
-    const { error } = await supabase.from('site_content').delete().eq('id', 'main')
+    const { data, error } = await supabase
+      .from('site_content')
+      .delete()
+      .eq('id', 'main')
+      .select('id')
 
     if (error) throw error
+
+    if (!data || data.length === 0) {
+      return {
+        ok: false,
+        error:
+          'Supabase permission check: 0 rows deleted. Please verify you are logged in to the admin studio with an authorized administrator account.',
+      }
+    }
+
     return { ok: true, error: null }
   } catch (error) {
     console.error('Error clearing content in Supabase:', error)

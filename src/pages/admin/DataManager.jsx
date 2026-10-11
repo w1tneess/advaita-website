@@ -130,8 +130,8 @@ CREATE POLICY "Public read site_content" ON public.site_content FOR SELECT TO pu
 DROP POLICY IF EXISTS "Authenticated users can update" ON public.site_content;
 DROP POLICY IF EXISTS "Admin manage site_content" ON public.site_content;
 CREATE POLICY "Admin manage site_content" ON public.site_content FOR ALL TO authenticated
-  USING ((SELECT auth.jwt() ->> 'email') = 'hi@advaitachandra.in' OR (SELECT (auth.jwt() -> 'app_metadata' ->> 'role')) = 'admin')
-  WITH CHECK ((SELECT auth.jwt() ->> 'email') = 'hi@advaitachandra.in' OR (SELECT (auth.jwt() -> 'app_metadata' ->> 'role')) = 'admin');
+  USING ((SELECT auth.jwt() ->> 'email') IN ('hi@advaitachandra.in', 'advaita974@gmail.com') OR (SELECT (auth.jwt() -> 'app_metadata' ->> 'role')) = 'admin')
+  WITH CHECK ((SELECT auth.jwt() ->> 'email') IN ('hi@advaitachandra.in', 'advaita974@gmail.com') OR (SELECT (auth.jwt() -> 'app_metadata' ->> 'role')) = 'admin');
 
 CREATE TABLE IF NOT EXISTS public.contact_submissions (
   id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -151,8 +151,8 @@ CREATE POLICY "Public insert contact_submissions" ON public.contact_submissions 
 DROP POLICY IF EXISTS "Authenticated users can manage contact submissions" ON public.contact_submissions;
 DROP POLICY IF EXISTS "Admin manage contact_submissions" ON public.contact_submissions;
 CREATE POLICY "Admin manage contact_submissions" ON public.contact_submissions FOR ALL TO authenticated
-  USING ((SELECT auth.jwt() ->> 'email') = 'hi@advaitachandra.in' OR (SELECT (auth.jwt() -> 'app_metadata' ->> 'role')) = 'admin')
-  WITH CHECK ((SELECT auth.jwt() ->> 'email') = 'hi@advaitachandra.in' OR (SELECT (auth.jwt() -> 'app_metadata' ->> 'role')) = 'admin');
+  USING ((SELECT auth.jwt() ->> 'email') IN ('hi@advaitachandra.in', 'advaita974@gmail.com') OR (SELECT (auth.jwt() -> 'app_metadata' ->> 'role')) = 'admin')
+  WITH CHECK ((SELECT auth.jwt() ->> 'email') IN ('hi@advaitachandra.in', 'advaita974@gmail.com') OR (SELECT (auth.jwt() -> 'app_metadata' ->> 'role')) = 'admin');
 `
     navigator.clipboard.writeText(sql)
     setCopiedSql(true)

@@ -652,7 +652,9 @@ async function getPrerenderData() {
         }
       }
       if (data?.data?.projects && Array.isArray(data.data.projects) && data.data.projects.length > 0) {
-        projects = data.data.projects
+        const remoteProjects = data.data.projects
+        const remoteIds = new Set(remoteProjects.map((p) => p.id))
+        projects = [...remoteProjects, ...projects.filter((p) => !remoteIds.has(p.id))]
       }
       if (data?.updated_at) {
         latestUpdate = new Date(data.updated_at).toISOString()

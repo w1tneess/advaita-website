@@ -39,11 +39,11 @@ CREATE POLICY "Admin manage site_content" ON public.site_content
   FOR ALL
   TO authenticated
   USING (
-    (SELECT auth.jwt() ->> 'email') = 'hi@advaitachandra.in'
+    (SELECT auth.jwt() ->> 'email') IN ('hi@advaitachandra.in', 'advaita974@gmail.com')
     OR (SELECT (auth.jwt() -> 'app_metadata' ->> 'role')) = 'admin'
   )
   WITH CHECK (
-    (SELECT auth.jwt() ->> 'email') = 'hi@advaitachandra.in'
+    (SELECT auth.jwt() ->> 'email') IN ('hi@advaitachandra.in', 'advaita974@gmail.com')
     OR (SELECT (auth.jwt() -> 'app_metadata' ->> 'role')) = 'admin'
   );
 
@@ -113,11 +113,11 @@ CREATE POLICY "Admin manage contact_submissions" ON public.contact_submissions
   FOR ALL
   TO authenticated
   USING (
-    (SELECT auth.jwt() ->> 'email') = 'hi@advaitachandra.in'
+    (SELECT auth.jwt() ->> 'email') IN ('hi@advaitachandra.in', 'advaita974@gmail.com')
     OR (SELECT (auth.jwt() -> 'app_metadata' ->> 'role')) = 'admin'
   )
   WITH CHECK (
-    (SELECT auth.jwt() ->> 'email') = 'hi@advaitachandra.in'
+    (SELECT auth.jwt() ->> 'email') IN ('hi@advaitachandra.in', 'advaita974@gmail.com')
     OR (SELECT (auth.jwt() -> 'app_metadata' ->> 'role')) = 'admin'
   );
 
@@ -145,7 +145,7 @@ CREATE POLICY "Admin upload images"
   WITH CHECK (
     bucket_id = 'images'
     AND (
-      (SELECT auth.jwt() ->> 'email') = 'hi@advaitachandra.in'
+      (SELECT auth.jwt() ->> 'email') IN ('hi@advaitachandra.in', 'advaita974@gmail.com')
       OR (SELECT (auth.jwt() -> 'app_metadata' ->> 'role')) = 'admin'
     )
   );
@@ -159,14 +159,14 @@ CREATE POLICY "Admin update images"
   USING (
     bucket_id = 'images'
     AND (
-      (SELECT auth.jwt() ->> 'email') = 'hi@advaitachandra.in'
+      (SELECT auth.jwt() ->> 'email') IN ('hi@advaitachandra.in', 'advaita974@gmail.com')
       OR (SELECT (auth.jwt() -> 'app_metadata' ->> 'role')) = 'admin'
     )
   )
   WITH CHECK (
     bucket_id = 'images'
     AND (
-      (SELECT auth.jwt() ->> 'email') = 'hi@advaitachandra.in'
+      (SELECT auth.jwt() ->> 'email') IN ('hi@advaitachandra.in', 'advaita974@gmail.com')
       OR (SELECT (auth.jwt() -> 'app_metadata' ->> 'role')) = 'admin'
     )
   );
@@ -180,7 +180,7 @@ CREATE POLICY "Admin delete images"
   USING (
     bucket_id = 'images'
     AND (
-      (SELECT auth.jwt() ->> 'email') = 'hi@advaitachandra.in'
+      (SELECT auth.jwt() ->> 'email') IN ('hi@advaitachandra.in', 'advaita974@gmail.com')
       OR (SELECT (auth.jwt() -> 'app_metadata' ->> 'role')) = 'admin'
     )
   );
