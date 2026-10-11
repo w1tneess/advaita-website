@@ -93,7 +93,7 @@ export default function PublicLayout() {
         id="main-content"
         tabIndex={-1}
         className="flex-1 focus:outline-none"
-        initial={{ opacity: 0 }}
+        initial={false}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
       >

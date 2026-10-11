@@ -4,7 +4,7 @@
  */
 
 const routeLoaders: Record<string, () => Promise<unknown>> = {
-  '/': () => import('../pages/Home.jsx'),
+  '/': () => Promise.resolve(),
   '/about': () => import('../pages/About.jsx'),
   '/philosophy': () => import('../pages/Philosophy.jsx'),
   '/photography': () => import('../pages/Photography.jsx'),

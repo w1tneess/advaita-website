@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router'
-import { motion, MotionConfig } from 'framer-motion'
+import { MotionConfig } from 'framer-motion'
 
 import ScrollToTop from './components/ui/ScrollToTop.jsx'
 import ToastViewport from './components/ui/ToastViewport.jsx'
@@ -33,9 +33,9 @@ function lazyWithRetry(componentImport) {
   })
 }
 
+import Home from './pages/Home.jsx'
 const About = lazyWithRetry(() => import('./pages/About.jsx'))
 const Contact = lazyWithRetry(() => import('./pages/Contact.jsx'))
-const Home = lazyWithRetry(() => import('./pages/Home.jsx'))
 const NotFound = lazyWithRetry(() => import('./pages/NotFound.jsx'))
 const Philosophy = lazyWithRetry(() => import('./pages/Philosophy.jsx'))
 const Photography = lazyWithRetry(() => import('./pages/Photography.jsx'))
@@ -50,8 +50,9 @@ const Terms = lazyWithRetry(() => import('./pages/Terms.jsx'))
 /**
  * Route table.
  *
- * Public pages are lazy-loaded to reduce initial bundle size as requested by the user.
- * The admin panel is lazy — no visitor should download an editor they will never open.
+ * Public secondary pages and the admin panel are lazy-loaded.
+ * The Home route is imported eagerly so initial page load renders instantly without
+ * a secondary network waterfall or blank Suspense fallback.
  *
  * `basename` comes from Vite's BASE_URL so the build works cleanly at the domain root.
  * See vite.config.js.
@@ -59,20 +60,16 @@ const Terms = lazyWithRetry(() => import('./pages/Terms.jsx'))
 
 const AdminApp = lazyWithRetry(() => import('./pages/admin/AdminApp.jsx'))
 
-
-
 function AdminFallback() {
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
+    <div
       className="flex min-h-dvh items-center justify-center bg-canvas px-6 text-ink"
     >
       <div className="flex flex-col items-center gap-4">
         <div className="h-8 w-8 animate-spin rounded-full border-2 border-line border-t-accent" role="status" aria-label="Loading admin" />
         <p className="text-sm text-muted">Loading the admin panel…</p>
       </div>
-    </motion.div>
+    </div>
   )
 }
 

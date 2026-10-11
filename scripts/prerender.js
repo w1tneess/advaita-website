@@ -66,9 +66,12 @@ function renderSemanticBody(route, siteData) {
   const e = escapeHtml
   const { profile = {}, philosophy = {}, projects = [], posts = [] } = siteData
 
-  const navLinks = NAV_ITEMS.map(
-    (item) => `<li><a href="${item.path}">${e(item.label)}</a></li>`,
-  ).join('\n        ')
+  const navLinks = NAV_ITEMS.filter((item) => item.path !== '/' && item.path !== '/contact')
+    .map(
+      (item) =>
+        `<li><a href="${item.path}" class="text-[13.5px] font-sans text-muted hover:text-ink transition-colors">${e(item.label)}</a></li>`,
+    )
+    .join('\n            ')
 
   let mainContent = ''
 
@@ -78,51 +81,105 @@ function renderSemanticBody(route, siteData) {
 
   if (route.path === '/') {
     mainContent = `
-      <section>
-        <h1>Advaita Chandra</h1>
-        <p><strong>Student and developer from West Bengal, India</strong></p>
-        <p>${e(displayBio)}</p>
-        <p><strong>Official website:</strong> <a href="https://advaitachandra.in/">https://advaitachandra.in/</a></p>
+      <section class="shell relative pt-[clamp(7.5rem,13vw,11.5rem)] pb-[clamp(2.5rem,5vw,4.5rem)] overflow-hidden">
+        <div class="ambient-glow top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(48rem,95vw)] h-[min(48rem,95vw)] opacity-20" aria-hidden="true"></div>
+        <div class="relative z-10 w-full">
+          <div class="inline-flex items-center gap-2.5 px-3.5 py-1 rounded-full border border-line bg-surface/60 text-muted font-mono text-[11px] mb-6 sm:mb-8 backdrop-blur-sm">
+            <span class="h-1.5 w-1.5 rounded-full bg-accent"></span>
+            <span class="text-ink font-medium">${e(profile?.name || "Advaita Chandra")}</span>
+            <span class="text-line">•</span>
+            <span>Archive &amp; Notebook</span>
+          </div>
+
+          <div class="max-w-5xl">
+            <h1 class="text-[length:var(--text-hero)] font-normal tracking-tight text-ink mb-[var(--spacing-fluid-sm)] leading-[1.12] text-balance">
+              I am someone who notices, thinks, builds, photographs, reads, and writes.
+            </h1>
+            
+            <p class="text-[length:var(--text-lg)] text-muted leading-relaxed mb-[var(--spacing-fluid-md)] max-w-3xl">
+              Working drafts, code experiments, and study notes tracking my interests in creative computing, philosophy, history, and internet infrastructure.
+            </p>
+
+            <div class="flex flex-wrap items-center gap-4 sm:gap-6 mb-[var(--spacing-fluid-lg)]">
+              <a
+                href="/projects"
+                class="inline-flex items-center gap-3 px-6 py-2.5 rounded-full bg-accent text-canvas text-sm font-semibold shadow-subtle"
+              >
+                <span>Explore Projects &rarr;</span>
+              </a>
+              <a
+                href="#inquiries"
+                class="inline-flex items-center gap-3 px-6 py-2.5 rounded-full border border-line bg-surface/50 text-muted text-sm font-semibold"
+              >
+                <span>Reading Archive &darr;</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="pt-8 border-t border-line grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 w-full">
+            <a href="/philosophy" class="p-4 sm:p-6 rounded-xl border border-line/60 bg-surface/30 flex flex-col justify-between">
+              <span class="font-mono text-xs text-ink font-medium mb-2">Philosophy</span>
+              <p class="text-xs text-muted leading-relaxed">Krishnamurti, Camus, inquiry notes</p>
+            </a>
+            <a href="/projects" class="p-4 sm:p-6 rounded-xl border border-line/60 bg-surface/30 flex flex-col justify-between">
+              <span class="font-mono text-xs text-ink font-medium mb-2">Projects &amp; Tools</span>
+              <p class="text-xs text-muted leading-relaxed">Data analysis, code experiments</p>
+            </a>
+            <a href="/photography" class="p-4 sm:p-6 rounded-xl border border-line/60 bg-surface/30 flex flex-col justify-between">
+              <span class="font-mono text-xs text-ink font-medium mb-2">Photography</span>
+              <p class="text-xs text-muted leading-relaxed">Visual documentation &amp; geometry</p>
+            </a>
+            <a href="/blog" class="p-4 sm:p-6 rounded-xl border border-line/60 bg-surface/30 flex flex-col justify-between">
+              <span class="font-mono text-xs text-ink font-medium mb-2">Notes &amp; Logs</span>
+              <p class="text-xs text-muted leading-relaxed">Working essays &amp; observations</p>
+            </a>
+          </div>
+        </div>
       </section>
 
-      <section>
-        <h2>Core Epistemic Principles</h2>
-        <p>${e(profile.epistemicNote || '')}</p>
-      </section>
-
-      <section>
-        <h2>Featured Projects</h2>
-        <ul>
+      <section class="shell pt-[var(--spacing-fluid-section)] border-t border-line" id="projects">
+        <div class="flex flex-wrap items-end justify-between gap-6 mb-8">
+          <h2 class="text-2xl sm:text-3xl font-normal text-ink text-balance">Currently building</h2>
+          <a href="/projects" class="font-mono text-xs tracking-wide text-ink border-b border-line pb-1">View all projects &rarr;</a>
+        </div>
+        <div class="divide-y divide-line border-t border-b border-line">
           ${projects
             .filter((p) => p.published)
             .map(
               (p) => `
-            <li>
-              <h3>${e(p.title)}</h3>
-              <p>${e(p.summary || p.description)}</p>
-              <p><em>Tools: ${(p.tools || []).join(', ')}</em></p>
-            </li>`,
+            <article class="py-6 sm:py-8 grid gap-4 sm:grid-cols-[1fr_2fr] items-baseline">
+              <div class="font-mono text-xs tracking-widest uppercase text-muted font-medium">
+                ${e(p.categories?.[0] || p.status || 'Project')}
+              </div>
+              <div>
+                <h3 class="text-lg sm:text-xl font-normal text-ink leading-snug mb-2">${e(p.title)}</h3>
+                <p class="text-base sm:text-lg text-muted font-sans leading-relaxed max-w-2xl">${e(p.summary || p.description)}</p>
+              </div>
+            </article>`,
             )
             .join('\n')}
-        </ul>
+        </div>
       </section>
 
-      <section>
-        <h2>Philosophy Notes &amp; Inquiry</h2>
-        <p>${e(philosophy.intro || '')}</p>
-        <ul>
+      <section class="shell pt-[var(--spacing-fluid-section)]" id="inquiries">
+        <div class="border-b border-line pb-6 mb-8">
+          <h2 class="text-2xl sm:text-3xl font-normal text-ink">Currently studying &amp; reading</h2>
+        </div>
+        <div class="divide-y divide-line border-t border-b border-line">
           ${(philosophy.notes || [])
             .filter((n) => n.status === 'published')
             .map(
               (n) => `
-            <li>
-              <h3>${e(n.title)}</h3>
-              <p><small>${e(n.category)} | ${e(n.published_at)}</small></p>
-              <p>${e(n.content)}</p>
-            </li>`,
+            <article class="py-8 sm:py-10 grid gap-4 sm:grid-cols-[1fr_2fr] items-baseline">
+              <div class="font-mono text-xs tracking-widest uppercase text-muted font-medium">${e(n.category)}</div>
+              <div>
+                <h3 class="text-2xl font-normal text-ink mb-3">${e(n.title)}</h3>
+                <p class="text-lg text-muted font-sans leading-relaxed max-w-2xl">${e(n.excerpt || (n.content ? n.content.slice(0, 200) : ''))}</p>
+              </div>
+            </article>`,
             )
             .join('\n')}
-        </ul>
+        </div>
       </section>`
   } else if (route.path === '/about') {
     mainContent = `
@@ -355,26 +412,38 @@ function renderSemanticBody(route, siteData) {
   }
 
   return `
-    <div id="prerendered-content">
-      <header>
-        <nav aria-label="Main Navigation">
-          <ul>
-            ${navLinks}
-          </ul>
-        </nav>
+    <div id="prerendered-content" class="flex min-h-dvh flex-col bg-canvas text-ink">
+      <header class="fixed top-0 inset-x-0 z-50 bg-transparent pt-[max(0.75rem,env(safe-area-inset-top))] sm:pt-5 pb-2">
+        <div class="shell flex h-12 sm:h-14 items-center justify-between gap-[var(--spacing-fluid-md)]">
+          <a href="/" class="flex items-center gap-2.5 sm:gap-3 text-ink select-none font-display text-[1.15rem] sm:text-[1.3rem] font-normal tracking-[-0.015em]" aria-label="${e(profile.name || SITE_NAME)}, home">
+            <span>${e(profile.name || SITE_NAME)}</span>
+            <span aria-hidden="true" class="h-1.5 w-1.5 rounded-full bg-accent shadow-[0_0_8px_rgba(194,149,106,0.55)]"></span>
+          </a>
+          <nav aria-label="Primary" class="hidden items-center gap-6 lg:gap-7 md:flex">
+            <ul class="flex items-center gap-6 list-none p-0 m-0">
+              ${navLinks}
+            </ul>
+          </nav>
+          <div class="hidden sm:flex items-center gap-3">
+            <a href="/contact" class="inline-flex items-center gap-2 px-4 py-1 text-[13px] font-sans font-medium rounded-full border border-line text-muted hover:text-ink">
+              <span>Contact</span>
+            </a>
+          </div>
+        </div>
       </header>
-      <main>
-        ${mainContent}
+      <main id="main-content" class="flex-1">
+        ${route.path === '/' ? mainContent : `<div class="shell pt-[clamp(7.5rem,13vw,11.5rem)] pb-16 prose-body">${mainContent}</div>`}
       </main>
-      <footer>
-        <p>&copy; ${new Date().getFullYear()} ${e(SITE_NAME)}. All rights reserved.</p>
-        <p>
-          <a href="/llms.txt">LLM Summary (llms.txt)</a> &bull;
-          <a href="/llms-full.txt">LLM Full Context</a> &bull;
-          <a href="/rss.xml">RSS Feed</a> &bull;
-          <a href="/feed.json">JSON Feed</a> &bull;
-          <a href="/sitemap.xml">Sitemap</a>
-        </p>
+      <footer class="mt-auto border-t border-line py-12 text-sm text-muted">
+        <div class="shell flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p>&copy; ${new Date().getFullYear()} ${e(SITE_NAME)}. All rights reserved.</p>
+          <p class="flex flex-wrap gap-4">
+            <a href="/llms.txt" class="underline underline-offset-4 hover:text-ink">LLM Summary</a>
+            <a href="/rss.xml" class="underline underline-offset-4 hover:text-ink">RSS Feed</a>
+            <a href="/feed.json" class="underline underline-offset-4 hover:text-ink">JSON Feed</a>
+            <a href="/sitemap.xml" class="underline underline-offset-4 hover:text-ink">Sitemap</a>
+          </p>
+        </div>
       </footer>
     </div>`
 }
