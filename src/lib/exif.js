@@ -167,5 +167,8 @@ function readTagValue(view, tiffOffset, valueOffset, type, count, isLittleEndian
 }
 
 function cleanString(str) {
-  return typeof str === 'string' ? str.trim().replace(/\0+$/, '') : ''
+  if (typeof str !== 'string') return ''
+  return str.replace(/[^\x20-\x7E\t\n\r]/g, '').trim()
 }
+
+

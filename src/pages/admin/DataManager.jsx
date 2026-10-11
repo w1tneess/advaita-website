@@ -74,6 +74,12 @@ export default function DataManager() {
     const file = event.target.files?.[0]
     if (!file) return
 
+    if (file.size > 20 * 1024 * 1024) {
+      toast.error('Imported file exceeds maximum allowed size of 20MB.')
+      event.target.value = ''
+      return
+    }
+
     const reader = new FileReader()
     reader.onload = async (e) => {
       setImportStatus('Validating imported file...')

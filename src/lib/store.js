@@ -376,11 +376,11 @@ export function documentToJson(doc) {
   return JSON.stringify(doc, null, 2)
 }
 
-/**
- * Parse and validate an uploaded export file.
- * @returns {{ok: boolean, doc: object|null, problems: string[]}}
- */
 export function parseImportedJson(text) {
+  if (typeof text !== 'string' || text.length > 20 * 1024 * 1024) {
+    return { ok: false, doc: null, problems: ['Import content exceeds maximum allowed size of 20MB.'] }
+  }
+
   let parsed
   try {
     parsed = JSON.parse(text)
