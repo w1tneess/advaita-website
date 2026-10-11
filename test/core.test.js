@@ -189,5 +189,48 @@ test('photo gallery index finder handles mixed string and number post IDs safely
   assert.equal(findIdx({ id: 99 }), -1)
 })
 
+test('matchesQuery filters multi-token queries across titles and tools', async () => {
+  const { matchesQuery } = await import('../src/lib/format.ts')
 
+  const project = {
+    title: 'Terrorism in India: Data Visualisation',
+    description: 'Collecting and visualising historical records from 1947 to 2026',
+    tools: ['Python', 'Matplotlib', 'Pandas'],
+    categories: ['History & Data Analysis'],
+  }
 
+  assert.equal(matchesQuery(project, 'python', ['title', 'tools', 'description']), true)
+  assert.equal(matchesQuery(project, '1947', ['title', 'tools', 'description']), true)
+  assert.equal(matchesQuery(project, 'visualisation', ['title', 'tools', 'description']), true)
+  assert.equal(matchesQuery(project, 'unknown-stack', ['title', 'tools', 'description']), false)
+})
+
+test('modular feature architecture has all core module files present', async () => {
+  const fs = await import('node:fs')
+  const path = await import('node:path')
+
+  const files = [
+    'src/components/features/index.js',
+    'src/components/features/home/index.js',
+    'src/components/features/home/HeroSection.jsx',
+    'src/components/features/home/SelectedProjectsSection.jsx',
+    'src/components/features/home/ActiveInquiriesSection.jsx',
+    'src/components/features/home/CorrespondenceSection.jsx',
+    'src/components/features/projects/index.js',
+    'src/components/features/projects/ProjectCard.tsx',
+    'src/components/features/projects/ProjectFilter.jsx',
+    'src/components/features/notes/index.js',
+    'src/components/features/notes/ReadingProgressBar.jsx',
+    'src/components/features/notes/RelatedNotes.jsx',
+    'src/components/features/photography/index.js',
+    'src/components/features/photography/Lightbox.jsx',
+    'src/components/features/contact/index.js',
+    'src/components/features/contact/ContactForm.jsx',
+    'src/components/ui/index.js',
+  ]
+
+  for (const file of files) {
+    const fullPath = path.resolve(file)
+    assert.equal(fs.existsSync(fullPath), true, `Expected file to exist: ${file}`)
+  }
+})

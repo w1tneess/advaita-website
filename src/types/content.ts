@@ -163,3 +163,20 @@ export interface LoadDocumentResult {
   source: 'seed' | 'local' | 'remote'
   warning: string | null
 }
+
+export interface SearchResultItem {
+  id: string
+  title: string
+  category?: string
+  description?: string
+  type: 'page' | 'project' | 'blog' | 'philosophy' | 'photography'
+  path: string
+  external?: boolean
+}
+
+export interface CategoryFilterOption {
+  id: string
+  label: string
+  count?: number
+}
+

@@ -1,12 +1,12 @@
 import { useParams, Link } from 'react-router'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, Clock } from 'lucide-react'
 import NotFound from '@/pages/NotFound.jsx'
 import CopyButton from '@/components/ui/CopyButton.jsx'
 import OpenGraphPreview from '@/components/ui/OpenGraphPreview.jsx'
-import RelatedNotes from '@/components/ui/RelatedNotes.jsx'
+import { RelatedNotes, ReadingProgressBar } from '@/components/features/notes'
 import Seo from '@/components/meta/Seo.jsx'
 import { useContent } from '@/lib/content.jsx'
-import { formatDate } from '@/lib/format'
+import { formatDate, readingMinutes } from '@/lib/format'
 
 export default function BlogPost() {
   const { slug } = useParams()
@@ -18,8 +18,11 @@ export default function BlogPost() {
     return <NotFound />
   }
 
+  const estMinutes = readingMinutes(post.content || post.excerpt || '')
+
   return (
     <>
+      <ReadingProgressBar />
       <Seo
         title={post.title}
         description={post.excerpt}
@@ -37,7 +40,7 @@ export default function BlogPost() {
             className="inline-flex items-center gap-2 font-utility text-muted hover:text-ink transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />
-            <span>Return to Notes & Logs</span>
+            <span>Return to Notes &amp; Logs</span>
           </Link>
         </div>
 
@@ -49,6 +52,11 @@ export default function BlogPost() {
             <span>|</span>
             <span className="border border-line bg-surface px-2.5 py-0.5 text-ink">
               {post.category || 'Note'}
+            </span>
+            <span>|</span>
+            <span className="inline-flex items-center gap-1.5 text-xs text-muted">
+              <Clock className="h-3.5 w-3.5" />
+              <span>{estMinutes} min read</span>
             </span>
           </div>
 
@@ -73,22 +81,28 @@ export default function BlogPost() {
         {/* Colophon & Share Registry */}
         <div className="mt-16 border-t border-line pt-8 space-y-6 font-utility">
           <div className="flex flex-wrap items-center justify-between gap-4">
-            <span className="text-muted">
-              CITATION & PROVENANCE
-            </span>
+            <span className="text-muted">CITATION &amp; PROVENANCE</span>
             <CopyButton
-              getText={() => (typeof window !== 'undefined' ? window.location.href : `https://advaitachandra.in/blog/${post.slug}`)}
+              getText={() =>
+                typeof window !== 'undefined'
+                  ? window.location.href
+                  : `https://advaitachandra.in/blog/${post.slug}`
+              }
               label="Copy URL"
               copiedLabel="URL Copied!"
               showText={true}
-              className="py-1 px-3 border border-line bg-surface text-muted hover:text-ink"
+              className="py-1 px-3 border border-line bg-surface text-muted hover:text-ink rounded-lg"
             />
           </div>
 
           <OpenGraphPreview
             title={post.title}
             description={post.excerpt}
-            url={typeof window !== 'undefined' ? window.location.href : `https://advaitachandra.in/blog/${post.slug}`}
+            url={
+              typeof window !== 'undefined'
+                ? window.location.href
+                : `https://advaitachandra.in/blog/${post.slug}`
+            }
           />
         </div>
 
