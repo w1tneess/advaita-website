@@ -73,6 +73,27 @@ export async function saveContentToSupabase(contentDocument) {
     return { ok: false, error: 'Cannot save invalid or empty content document.' }
   }
 
+  // Pre-validate authenticated session to prevent sending unauthenticated mutations
+  let currentEmail = ''
+  try {
+    const {
+      data: { session },
+      error: sessionError,
+    } = await supabase.auth.getSession()
+
+    if (sessionError || !session) {
+      return {
+        ok: false,
+        isAuthError: true,
+        error:
+          'Admin session is inactive or expired. Please sign in to the studio to save changes to Supabase.',
+      }
+    }
+    currentEmail = session.user?.email || ''
+  } catch (authErr) {
+    console.warn('Could not verify session prior to save:', authErr)
+  }
+
   try {
     const { data, error } = await supabase
       .from('site_content')
@@ -83,7 +104,16 @@ export async function saveContentToSupabase(contentDocument) {
       })
       .select('id, updated_at')
 
-    if (error) throw error
+    if (error) {
+      if (error.code === '42501' || error.message?.includes('row-level security')) {
+        return {
+          ok: false,
+          isAuthError: true,
+          error: `Supabase RLS Policy check failed${currentEmail ? ` for ${currentEmail}` : ''}. Please apply the updated RLS policy from Database & Sync in your Supabase SQL Editor.`,
+        }
+      }
+      throw error
+    }
 
     // Guard against silent RLS authorization filtering
     if (!data || data.length === 0) {

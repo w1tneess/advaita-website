@@ -1,4 +1,4 @@
-import { Eye, EyeOff, Pencil, Plus, Trash2 } from 'lucide-react'
+import { Copy, Eye, EyeOff, Pencil, Plus, Trash2 } from 'lucide-react'
 import { useMemo } from 'react'
 
 import AdminPage from '../../components/admin/AdminPage.jsx'
@@ -14,7 +14,7 @@ import { useDebouncedValue } from '@/hooks/useDebouncedValue.js'
 import { useFilters } from '@/hooks/useFilters.js'
 import { useContent } from '@/lib/content.jsx'
 import { formatDateShort, matchesQuery } from '@/lib/format'
-import { POST_STATUSES, todayIso } from '@/lib/schema.js'
+import { createBlogPost, POST_STATUSES, todayIso } from '@/lib/schema.js'
 import { useToast } from '@/lib/toast'
 
 const INITIAL_FILTERS = { query: '', status: 'all' }
@@ -73,6 +73,27 @@ export default function BlogList() {
     }
   }
 
+  const duplicate = async (post) => {
+    const { id: _sourceId, ...postFields } = post
+    const baseSlug = `${post.slug}-copy`
+    let copySlug = baseSlug
+    let suffix = 2
+    while (blog.some((item) => item.slug === copySlug)) {
+      copySlug = `${baseSlug}-${suffix}`
+      suffix += 1
+    }
+    const copy = createBlogPost({
+      ...postFields,
+      title: `${post.title} (copy)`,
+      slug: copySlug,
+      status: 'draft',
+    })
+    const res = await upsertItem('blog', copy)
+    if (res && res.ok) {
+      toast.success('Draft copy created.')
+    }
+  }
+
   const columns = [
     {
       key: 'title',
@@ -113,6 +134,10 @@ export default function BlogList() {
             <Pencil className="h-3.5 w-3.5" aria-hidden="true" />
             <span className="sr-only sm:not-sr-only">Edit</span>
           </Button>
+          <Button variant="ghost" size="sm" onClick={() => duplicate(post)} title="Duplicate post">
+            <Copy className="h-3.5 w-3.5" aria-hidden="true" />
+            <span className="sr-only">Duplicate {post.title}</span>
+          </Button>
           <Button
             variant="ghost"
             size="sm"
@@ -120,7 +145,7 @@ export default function BlogList() {
             aria-pressed={post.status === 'published'}
           >
             {post.status === 'published' ? (
-              <Eye className="h-3.5 w-3.5" aria-hidden="true" />
+              <Eye className="h-3.5 w-3.5 text-accent" aria-hidden="true" />
             ) : (
               <EyeOff className="h-3.5 w-3.5" aria-hidden="true" />
             )}

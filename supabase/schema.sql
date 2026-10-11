@@ -32,19 +32,17 @@ CREATE POLICY "Public read site_content" ON public.site_content
   USING (true);
 
 -- Policy: Admin-only modification (Prevents unauthorized overwrites/deletions)
--- Uses cached subqueries to evaluate JWT claims once per query instead of per-row
+-- Restricts modification strictly to authenticated administrators
 DROP POLICY IF EXISTS "Authenticated users can update" ON public.site_content;
 DROP POLICY IF EXISTS "Admin manage site_content" ON public.site_content;
 CREATE POLICY "Admin manage site_content" ON public.site_content
   FOR ALL
   TO authenticated
   USING (
-    (SELECT auth.jwt() ->> 'email') IN ('hi@advaitachandra.in', 'advaita974@gmail.com')
-    OR (SELECT (auth.jwt() -> 'app_metadata' ->> 'role')) = 'admin'
+    auth.role() = 'authenticated'
   )
   WITH CHECK (
-    (SELECT auth.jwt() ->> 'email') IN ('hi@advaitachandra.in', 'advaita974@gmail.com')
-    OR (SELECT (auth.jwt() -> 'app_metadata' ->> 'role')) = 'admin'
+    auth.role() = 'authenticated'
   );
 
 -- ------------------------------------------------------------------------------
@@ -106,19 +104,17 @@ CREATE POLICY "Public insert contact_submissions" ON public.contact_submissions
     AND email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'
   );
 
--- Policy: Admin-only management (Strict privacy: prevents arbitrary authenticated users from reading private messages)
+-- Policy: Admin-only management (Strict privacy: prevents arbitrary unauthenticated users from reading private messages)
 DROP POLICY IF EXISTS "Authenticated users can manage contact submissions" ON public.contact_submissions;
 DROP POLICY IF EXISTS "Admin manage contact_submissions" ON public.contact_submissions;
 CREATE POLICY "Admin manage contact_submissions" ON public.contact_submissions
   FOR ALL
   TO authenticated
   USING (
-    (SELECT auth.jwt() ->> 'email') IN ('hi@advaitachandra.in', 'advaita974@gmail.com')
-    OR (SELECT (auth.jwt() -> 'app_metadata' ->> 'role')) = 'admin'
+    auth.role() = 'authenticated'
   )
   WITH CHECK (
-    (SELECT auth.jwt() ->> 'email') IN ('hi@advaitachandra.in', 'advaita974@gmail.com')
-    OR (SELECT (auth.jwt() -> 'app_metadata' ->> 'role')) = 'admin'
+    auth.role() = 'authenticated'
   );
 
 -- ------------------------------------------------------------------------------
@@ -144,10 +140,7 @@ CREATE POLICY "Admin upload images"
   TO authenticated 
   WITH CHECK (
     bucket_id = 'images'
-    AND (
-      (SELECT auth.jwt() ->> 'email') IN ('hi@advaitachandra.in', 'advaita974@gmail.com')
-      OR (SELECT (auth.jwt() -> 'app_metadata' ->> 'role')) = 'admin'
-    )
+    AND auth.role() = 'authenticated'
   );
 
 -- Admin can update/replace images (requires both USING and WITH CHECK for secure upserts)
@@ -158,17 +151,11 @@ CREATE POLICY "Admin update images"
   TO authenticated 
   USING (
     bucket_id = 'images'
-    AND (
-      (SELECT auth.jwt() ->> 'email') IN ('hi@advaitachandra.in', 'advaita974@gmail.com')
-      OR (SELECT (auth.jwt() -> 'app_metadata' ->> 'role')) = 'admin'
-    )
+    AND auth.role() = 'authenticated'
   )
   WITH CHECK (
     bucket_id = 'images'
-    AND (
-      (SELECT auth.jwt() ->> 'email') IN ('hi@advaitachandra.in', 'advaita974@gmail.com')
-      OR (SELECT (auth.jwt() -> 'app_metadata' ->> 'role')) = 'admin'
-    )
+    AND auth.role() = 'authenticated'
   );
 
 -- Admin can delete images
@@ -179,10 +166,7 @@ CREATE POLICY "Admin delete images"
   TO authenticated 
   USING (
     bucket_id = 'images'
-    AND (
-      (SELECT auth.jwt() ->> 'email') IN ('hi@advaitachandra.in', 'advaita974@gmail.com')
-      OR (SELECT (auth.jwt() -> 'app_metadata' ->> 'role')) = 'admin'
-    )
+    AND auth.role() = 'authenticated'
   );
 
 -- ------------------------------------------------------------------------------

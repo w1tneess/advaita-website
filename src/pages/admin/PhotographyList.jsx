@@ -1,4 +1,5 @@
-import { Eye, EyeOff, Pencil, Plus, Trash2 } from 'lucide-react'
+import { useState, useMemo } from 'react'
+import { Eye, EyeOff, Pencil, Plus, Trash2, Search } from 'lucide-react'
 
 import AdminPage from '../../components/admin/AdminPage.jsx'
 import ConfirmDialog from '../../components/admin/ConfirmDialog.jsx'
@@ -21,7 +22,35 @@ export default function PhotographyList() {
   const toast = useToast()
   const { confirm, dialogProps } = useConfirm()
 
+  const [query, setQuery] = useState('')
+  const [selectedCategory, setSelectedCategory] = useState('all')
+
   const photos = photography.photos || []
+
+  const categories = useMemo(() => {
+    const set = new Set()
+    photos.forEach((p) => {
+      if (p.category) set.add(p.category)
+    })
+    return Array.from(set)
+  }, [photos])
+
+  const filteredPhotos = useMemo(() => {
+    const q = query.trim().toLowerCase()
+    return photos.filter((p) => {
+      const matchesQuery =
+        !q ||
+        (p.title || '').toLowerCase().includes(q) ||
+        (p.caption || '').toLowerCase().includes(q) ||
+        (p.category || '').toLowerCase().includes(q) ||
+        (p.tags || []).some((t) => t.toLowerCase().includes(q))
+
+      const matchesCategory =
+        selectedCategory === 'all' || p.category === selectedCategory
+
+      return matchesQuery && matchesCategory
+    })
+  }, [photos, query, selectedCategory])
   
   const { 
     draft: configDraft, 
@@ -43,6 +72,7 @@ export default function PhotographyList() {
       console.error(e)
     }
   }
+
 
   const requestDelete = async (photo) => {
     const confirmed = await confirm({
@@ -183,11 +213,44 @@ export default function PhotographyList() {
         </Card>
       </form>
 
-      <div className="mt-4">
+      <div className="mt-8 space-y-4">
+        {photos.length > 0 && (
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="relative flex-1 max-w-md">
+              <Search className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-500" />
+              <input
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search photos by title, caption, tags..."
+                className="w-full rounded-xl border border-line bg-surface/60 py-2 pl-10 pr-4 text-xs font-sans text-ink placeholder:text-neutral-500 focus:border-accent focus:outline-none transition-all duration-200"
+              />
+            </div>
+
+            {categories.length > 0 && (
+              <div className="flex items-center gap-2">
+                <span className="font-mono text-xs text-muted">Category:</span>
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  className="rounded-xl border border-line bg-surface/80 px-3 py-1.5 font-mono text-xs text-ink focus:border-accent focus:outline-none cursor-pointer"
+                >
+                  <option value="all">All Categories ({photos.length})</option>
+                  {categories.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+          </div>
+        )}
+
         <DataTable
           caption="Photography, with their category and uploaded date"
           columns={columns}
-          rows={photos}
+          rows={filteredPhotos}
           empty={
             photos.length === 0 ? (
               <EmptyState

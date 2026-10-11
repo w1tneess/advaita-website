@@ -1,4 +1,4 @@
-import { Eye, EyeOff, Pencil, Plus, Trash2 } from 'lucide-react'
+import { Copy, Eye, EyeOff, Pencil, Plus, Trash2 } from 'lucide-react'
 import { useMemo } from 'react'
 
 import AdminPage from '../../components/admin/AdminPage.jsx'
@@ -14,7 +14,7 @@ import { useDebouncedValue } from '@/hooks/useDebouncedValue.js'
 import { useFilters } from '@/hooks/useFilters.js'
 import { useContent } from '@/lib/content.jsx'
 import { formatDateShort, matchesQuery } from '@/lib/format'
-import { NOTE_STATUSES, todayIso } from '@/lib/schema.js'
+import { createNote, NOTE_STATUSES, todayIso } from '@/lib/schema.js'
 import { useToast } from '@/lib/toast'
 
 /**
@@ -73,6 +73,29 @@ export default function NotesList() {
     }
   }
 
+  const duplicate = async (note) => {
+    const { id: _sourceId, ...noteFields } = note
+    const baseSlug = `${note.slug}-copy`
+    let copySlug = baseSlug
+    let suffix = 2
+    while (notes.some((item) => item.slug === copySlug)) {
+      copySlug = `${baseSlug}-${suffix}`
+      suffix += 1
+    }
+    const copy = createNote({
+      ...noteFields,
+      title: `${note.title} (copy)`,
+      slug: copySlug,
+      status: 'draft',
+    })
+    try {
+      await upsertNote(copy)
+      toast.success('Draft copy created.')
+    } catch (_e) {
+      // handled
+    }
+  }
+
   const columns = [
     {
       key: 'title',
@@ -113,6 +136,10 @@ export default function NotesList() {
             <Pencil className="h-3.5 w-3.5" aria-hidden="true" />
             <span className="sr-only sm:not-sr-only">Edit</span>
           </Button>
+          <Button variant="ghost" size="sm" onClick={() => duplicate(note)} title="Duplicate note">
+            <Copy className="h-3.5 w-3.5" aria-hidden="true" />
+            <span className="sr-only">Duplicate {note.title}</span>
+          </Button>
           <Button
             variant="ghost"
             size="sm"
@@ -120,7 +147,7 @@ export default function NotesList() {
             aria-pressed={note.status === 'published'}
           >
             {note.status === 'published' ? (
-              <Eye className="h-3.5 w-3.5" aria-hidden="true" />
+              <Eye className="h-3.5 w-3.5 text-accent" aria-hidden="true" />
             ) : (
               <EyeOff className="h-3.5 w-3.5" aria-hidden="true" />
             )}

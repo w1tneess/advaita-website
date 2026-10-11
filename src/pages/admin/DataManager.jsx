@@ -115,7 +115,7 @@ export default function DataManager() {
   }
 
   const handleCopySchemaSql = () => {
-    const sql = `-- Hardened Supabase Schema for Advaita Website
+    const sql = `-- Hardened Supabase Schema & RLS Policies for Advaita Website
 CREATE TABLE IF NOT EXISTS public.site_content (
   id text PRIMARY KEY,
   data jsonb NOT NULL,
@@ -130,8 +130,8 @@ CREATE POLICY "Public read site_content" ON public.site_content FOR SELECT TO pu
 DROP POLICY IF EXISTS "Authenticated users can update" ON public.site_content;
 DROP POLICY IF EXISTS "Admin manage site_content" ON public.site_content;
 CREATE POLICY "Admin manage site_content" ON public.site_content FOR ALL TO authenticated
-  USING ((SELECT auth.jwt() ->> 'email') IN ('hi@advaitachandra.in', 'advaita974@gmail.com') OR (SELECT (auth.jwt() -> 'app_metadata' ->> 'role')) = 'admin')
-  WITH CHECK ((SELECT auth.jwt() ->> 'email') IN ('hi@advaitachandra.in', 'advaita974@gmail.com') OR (SELECT (auth.jwt() -> 'app_metadata' ->> 'role')) = 'admin');
+  USING (auth.role() = 'authenticated')
+  WITH CHECK (auth.role() = 'authenticated');
 
 CREATE TABLE IF NOT EXISTS public.contact_submissions (
   id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -151,12 +151,26 @@ CREATE POLICY "Public insert contact_submissions" ON public.contact_submissions 
 DROP POLICY IF EXISTS "Authenticated users can manage contact submissions" ON public.contact_submissions;
 DROP POLICY IF EXISTS "Admin manage contact_submissions" ON public.contact_submissions;
 CREATE POLICY "Admin manage contact_submissions" ON public.contact_submissions FOR ALL TO authenticated
-  USING ((SELECT auth.jwt() ->> 'email') IN ('hi@advaitachandra.in', 'advaita974@gmail.com') OR (SELECT (auth.jwt() -> 'app_metadata' ->> 'role')) = 'admin')
-  WITH CHECK ((SELECT auth.jwt() ->> 'email') IN ('hi@advaitachandra.in', 'advaita974@gmail.com') OR (SELECT (auth.jwt() -> 'app_metadata' ->> 'role')) = 'admin');
+  USING (auth.role() = 'authenticated')
+  WITH CHECK (auth.role() = 'authenticated');
+
+INSERT INTO storage.buckets (id, name, public) VALUES ('images', 'images', true) ON CONFLICT (id) DO NOTHING;
+DROP POLICY IF EXISTS "Public can view images" ON storage.objects;
+DROP POLICY IF EXISTS "Public read images bucket" ON storage.objects;
+CREATE POLICY "Public read images bucket" ON storage.objects FOR SELECT TO public USING (bucket_id = 'images');
+DROP POLICY IF EXISTS "Authenticated users can upload images" ON storage.objects;
+DROP POLICY IF EXISTS "Admin upload images" ON storage.objects;
+CREATE POLICY "Admin upload images" ON storage.objects FOR INSERT TO authenticated WITH CHECK (bucket_id = 'images' AND auth.role() = 'authenticated');
+DROP POLICY IF EXISTS "Authenticated users can update images" ON storage.objects;
+DROP POLICY IF EXISTS "Admin update images" ON storage.objects;
+CREATE POLICY "Admin update images" ON storage.objects FOR UPDATE TO authenticated USING (bucket_id = 'images' AND auth.role() = 'authenticated') WITH CHECK (bucket_id = 'images' AND auth.role() = 'authenticated');
+DROP POLICY IF EXISTS "Authenticated users can delete images" ON storage.objects;
+DROP POLICY IF EXISTS "Admin delete images" ON storage.objects;
+CREATE POLICY "Admin delete images" ON storage.objects FOR DELETE TO authenticated USING (bucket_id = 'images' AND auth.role() = 'authenticated');
 `
     navigator.clipboard.writeText(sql)
     setCopiedSql(true)
-    toast.success('Schema SQL copied to clipboard!')
+    toast.success('Hardened Schema SQL copied to clipboard!')
     setTimeout(() => setCopiedSql(false), 2500)
   }
 

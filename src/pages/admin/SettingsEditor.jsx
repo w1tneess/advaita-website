@@ -1,11 +1,16 @@
+import { useState } from 'react'
+
 import AdminPage from '../../components/admin/AdminPage.jsx'
 import Field from '../../components/admin/Field.jsx'
 import Button from '@/components/ui/Button'
 import Callout from '@/components/ui/Callout.jsx'
+import PasswordInput from '../../components/ui/PasswordInput.jsx'
+import { useAdminAuth } from '../../components/admin/AdminAuth.jsx'
 import { useContent } from '../../lib/content.jsx'
 import { useSectionForm } from '../../hooks/useSectionForm.js'
 import { useSaveShortcut } from '../../hooks/useSaveShortcut.js'
 import { validateSettings } from '../../lib/schema.js'
+import { useToast } from '../../lib/toast'
 
 /**
  * Website configuration.
@@ -15,6 +20,12 @@ import { validateSettings } from '../../lib/schema.js'
  */
 export default function SettingsEditor() {
   const { settings } = useContent()
+  const { session, updatePassword } = useAdminAuth()
+  const toast = useToast()
+
+  const [newPassword, setNewPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [updatingPassword, setUpdatingPassword] = useState(false)
 
   const { draft, errors, dirty, submit, revert, set, setNested, isSubmitting } = useSectionForm(
     'settings',
@@ -23,6 +34,30 @@ export default function SettingsEditor() {
   )
 
   useSaveShortcut(submit)
+
+  const handlePasswordChange = async (e) => {
+    e?.preventDefault()
+    if (!newPassword || newPassword.length < 8) {
+      toast.error('Password must be at least 8 characters long.')
+      return
+    }
+    if (newPassword !== confirmPassword) {
+      toast.error('Passwords do not match.')
+      return
+    }
+
+    setUpdatingPassword(true)
+    try {
+      await updatePassword(newPassword)
+      toast.success('Admin password updated successfully!')
+      setNewPassword('')
+      setConfirmPassword('')
+    } catch (err) {
+      toast.error('Failed to update password: ' + (err.message || 'unknown error'))
+    } finally {
+      setUpdatingPassword(false)
+    }
+  }
 
   return (
     <AdminPage
@@ -283,6 +318,75 @@ export default function SettingsEditor() {
               </div>
             </div>
           </div>
+        </section>
+
+        {/* Security & Credentials */}
+        <section aria-labelledby="settings-security-heading" className="mt-12 rounded-2xl border border-line bg-surface/50 p-6 shadow-subtle">
+          <h2 id="settings-security-heading" className="text-xl font-semibold tracking-tight">
+            Admin Security &amp; Credentials
+          </h2>
+          <p className="mt-2 text-sm text-muted">
+            Manage your authenticated administrator access. Changing your password updates your Supabase authentication record immediately.
+          </p>
+
+          <div className="mt-4 rounded-xl border border-line/60 bg-surface/40 p-4">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <p className="text-xs font-mono uppercase tracking-wider text-neutral-400">Current Admin Account</p>
+                <p className="mt-0.5 text-sm font-medium text-ink">{session?.user?.email || 'Local Offline Mode'}</p>
+              </div>
+              <span className="rounded-md border border-accent/40 bg-accent/10 px-2.5 py-1 font-mono text-[11px] text-accent font-semibold">
+                {session ? 'Verified Session' : 'Offline'}
+              </span>
+            </div>
+          </div>
+
+          {session && (
+            <div className="mt-6 space-y-4 max-w-lg">
+              <div>
+                <label
+                  htmlFor="new-admin-password"
+                  className="block font-mono text-[11px] uppercase tracking-wider text-neutral-400 mb-1.5"
+                >
+                  New Password
+                </label>
+                <PasswordInput
+                  id="new-admin-password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  placeholder="••••••••"
+                  disabled={updatingPassword}
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="confirm-admin-password"
+                  className="block font-mono text-[11px] uppercase tracking-wider text-neutral-400 mb-1.5"
+                >
+                  Confirm New Password
+                </label>
+                <PasswordInput
+                  id="confirm-admin-password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="••••••••"
+                  disabled={updatingPassword}
+                />
+              </div>
+
+              <div className="pt-2">
+                <Button
+                  type="button"
+                  variant="secondary"
+                  disabled={updatingPassword || !newPassword}
+                  onClick={handlePasswordChange}
+                >
+                  {updatingPassword ? 'Updating Password...' : 'Update Admin Password'}
+                </Button>
+              </div>
+            </div>
+          )}
         </section>
 
         <div className="sticky bottom-0 mt-8 flex flex-wrap items-center gap-3 border-t border-line bg-base/90 py-4 backdrop-blur-sm">
