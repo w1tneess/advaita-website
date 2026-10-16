@@ -99,6 +99,8 @@ export default function Footer() {
             <Link to="/privacy" className="hover:text-ink transition-colors">Privacy Policy</Link>
             <span className="text-line">•</span>
             <Link to="/terms" className="hover:text-ink transition-colors">Terms of Use</Link>
+            <span className="text-line">•</span>
+            <a href="https://support.advaitachandra.in" target="_blank" rel="noopener noreferrer" className="hover:text-ink transition-colors">Support</a>
           </div>
           
           <div className="font-mono text-[10px] sm:text-[11px] text-muted">
