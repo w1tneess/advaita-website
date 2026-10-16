@@ -17,8 +17,17 @@ updates:
       prefix: "chore(deps)"
     labels:
       - "dependencies"
+    # eslint 10 is unsupported by eslint-plugin-react; revisit when it is
+    ignore:
+      - dependency-name: "eslint"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@eslint/js"
+        update-types: ["version-update:semver-major"]
     groups:
       dependencies:
+        update-types:
+          - "minor"
+          - "patch"
         patterns:
           - "*"
 
