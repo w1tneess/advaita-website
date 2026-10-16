@@ -22,10 +22,14 @@ export default defineConfig({
     chunkSizeWarningLimit: 700,
     rollupOptions: {
       output: {
-        manualChunks: {
-          'framer-motion': ['framer-motion'],
-          'supabase': ['@supabase/supabase-js'],
-          'lucide': ['lucide-react'],
+        // Vite 8 / Rolldown expects manualChunks to be a function.
+        // Return a chunk name when a module matches the given package path.
+        manualChunks(id) {
+          if (!id) return undefined
+          if (id.includes('node_modules/framer-motion')) return 'framer-motion'
+          if (id.includes('node_modules/@supabase/supabase-js')) return 'supabase'
+          if (id.includes('node_modules/lucide-react')) return 'lucide'
+          return undefined
         },
       },
     },
