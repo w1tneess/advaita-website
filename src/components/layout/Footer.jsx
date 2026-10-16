@@ -6,6 +6,10 @@ import { useContent } from '@/lib/content.jsx'
 import { NAV_ITEMS } from '@/config/nav.js'
 import { getRoutePreloadProps } from '@/lib/preload'
 
+/**
+ * Renders the site footer with contact, navigation, legal, and support links.
+ * @returns {import('react').JSX.Element} The site footer.
+ */
 export default function Footer() {
   const { profile, publicSocialLinks } = useContent()
   const configured = publicSocialLinks.filter((link) => link.url)
