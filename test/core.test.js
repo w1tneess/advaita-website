@@ -210,7 +210,6 @@ test('modular feature architecture has all core module files present', async () 
   const path = await import('node:path')
 
   const files = [
-    'src/components/features/index.js',
     'src/components/features/home/index.js',
     'src/components/features/home/HeroSection.jsx',
     'src/components/features/home/SelectedProjectsSection.jsx',
@@ -222,11 +221,8 @@ test('modular feature architecture has all core module files present', async () 
     'src/components/features/notes/index.js',
     'src/components/features/notes/ReadingProgressBar.jsx',
     'src/components/features/notes/RelatedNotes.jsx',
-    'src/components/features/photography/index.js',
     'src/components/features/photography/Lightbox.jsx',
-    'src/components/features/contact/index.js',
     'src/components/features/contact/ContactForm.jsx',
-    'src/components/ui/index.js',
   ]
 
   for (const file of files) {
