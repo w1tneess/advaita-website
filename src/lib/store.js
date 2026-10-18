@@ -105,11 +105,8 @@ export function migrate(doc) {
    Load / save / clear
    -------------------------------------------------------------------------- */
 
-import {
-  fetchContentFromSupabase,
-  saveContentToSupabase,
-  clearContentInSupabase,
-} from './supabase/sync.js'
+// The supabase-js client (~55 KB gzip) is loaded only for admin reads and writes, never for visitors.
+const loadSync = () => import('./supabase/sync.js')
 import { isSupabaseConfigured } from './supabase/config.js'
 import { fetchPublicContent, PUBLIC_COPY_SAVE_ERROR } from './supabase/public.js'
 
@@ -192,7 +189,9 @@ export async function loadDocument({ full = false } = {}) {
   // 1. If Supabase is configured, attempt remote fetch
   if (isSupabaseConfigured()) {
     try {
-      const { data: raw, error } = full ? await fetchContentFromSupabase(2) : await fetchPublicContent()
+      const { data: raw, error } = full
+        ? await (await loadSync()).fetchContentFromSupabase(2)
+        : await fetchPublicContent()
 
       if (!error && raw) {
         const { doc: migrated, blockedAt } = migrate(raw)
@@ -242,9 +241,8 @@ export async function loadDocument({ full = false } = {}) {
             return {
               doc: finalDoc,
               source: 'local',
-              warning: isSupabaseConfigured()
-                ? 'Using cached local edits (offline mode).'
-                : null,
+              // Visitors just see the cached copy; only the admin needs to know it is not live.
+              warning: full && isSupabaseConfigured() ? 'Using cached local edits (offline mode).' : null,
             }
           }
         }
@@ -286,7 +284,7 @@ export async function saveDocument(doc) {
   // 2. If Supabase is configured, attempt remote sync
   if (isSupabaseConfigured()) {
     try {
-      const remoteRes = await saveContentToSupabase(doc)
+      const remoteRes = await (await loadSync()).saveContentToSupabase(doc)
       if (remoteRes && remoteRes.ok) {
         return { ok: true, synced: true, source: 'remote', error: null }
       }
@@ -325,7 +323,7 @@ export async function syncLocalToSupabase(doc) {
   if (!isSupabaseConfigured()) {
     return { ok: false, error: 'Supabase is not configured in .env.local.' }
   }
-  return await saveContentToSupabase(doc)
+  return await (await loadSync()).saveContentToSupabase(doc)
 }
 
 /** Discard both local and remote edits so the deployed seed is used again. */
@@ -340,7 +338,7 @@ export async function clearDocument() {
   }
 
   if (isSupabaseConfigured()) {
-    return await clearContentInSupabase()
+    return await (await loadSync()).clearContentInSupabase()
   }
   return { ok: true, error: null }
 }
