@@ -103,8 +103,8 @@ export default function CorrespondenceSection({ publicSocialLinks = [] }) {
         err?.hint === 'rate_limited'
           ? err.message
           : isNetworkErr
-          ? 'Notice: Could not connect to transmission service (possibly blocked by an adblocker or privacy shield). You can write directly to advaita974@gmail.com.'
-          : 'Notice: Message could not be sent right now. You can also reach me directly at advaita974@gmail.com.',
+          ? 'Notice: Could not connect to transmission service (possibly blocked by an adblocker or privacy shield). You can write directly to hi@advaitachandra.in.'
+          : 'Notice: Message could not be sent right now. You can also reach me directly at hi@advaitachandra.in.',
       )
     }
   }
