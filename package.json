@@ -12,6 +12,7 @@
     "preview": "vite preview",
     "content:validate": "node scripts/validate-content.js",
     "content:sync": "node scripts/sync-seed-to-supabase.js",
+    "security:rls": "node scripts/rls-check.js",
     "test": "node --experimental-strip-types --test",
     "typecheck": "tsc --noEmit",
     "lint": "eslint . --max-warnings 0",
