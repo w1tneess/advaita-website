@@ -19,6 +19,9 @@ jobs:
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL || secrets.VITE_SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY || secrets.VITE_SUPABASE_ANON_KEY }}
+          # Optional. With it the Vercel ping runs the real database check; without it the
+          # endpoint only answers its static health response.
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
         run: |
           set -euo pipefail
 
@@ -47,15 +50,24 @@ jobs:
 
           # Also ping Vercel Keepalive endpoint
           echo "Pinging Vercel Keepalive endpoint..."
-          if [ -n "${SUPABASE_ANON_KEY:-}" ]; then
-            VERCEL_STATUS=$(curl -s -o /dev/null -w "%{http_code}" --connect-timeout 15 --max-time 30 \
-              -H "Authorization: Bearer ${SUPABASE_ANON_KEY}" \
-              "https://advaitachandra.in/api/keepalive")
-          else
-            VERCEL_STATUS=$(curl -s -o /dev/null -w "%{http_code}" --connect-timeout 15 --max-time 30 \
-              "https://advaitachandra.in/api/keepalive")
+          AUTH_HEADER=()
+          if [ -n "${CRON_SECRET:-}" ]; then
+            AUTH_HEADER=(-H "Authorization: Bearer ${CRON_SECRET}")
           fi
+          # Canonical host: the apex 308-redirects to www, which would never reach the function
+          # (and curl does not forward the bearer token across hosts). curl reports 000 when it
+          # cannot connect, which also fails the check below.
+          VERCEL_STATUS=$(curl -s -o /dev/null -w "%{http_code}" --connect-timeout 15 --max-time 30 \
+            "${AUTH_HEADER[@]}" "https://www.advaitachandra.in/api/keepalive" || true)
 
           echo "Vercel Keepalive endpoint HTTP status: ${VERCEL_STATUS}"
+
+          case "${VERCEL_STATUS}" in
+            2??) echo "✓ Success: Vercel keepalive endpoint responded." ;;
+            *)
+              echo "::error ::Vercel keepalive endpoint returned HTTP ${VERCEL_STATUS}, expected 2xx."
+              exit 1
+              ;;
+          esac
 
 

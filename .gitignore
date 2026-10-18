@@ -9,11 +9,7 @@ dist-ssr/
 
 # Local environment files (contains keys/secrets - never commit to public repo)
 .env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-.env.*.local
+.env.*
 *.env
 !*.env.example
 
@@ -42,7 +38,8 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# Content backups & temporary exports
+# Content backups & temporary exports (backups/ holds full live documents incl. drafts)
+backups/
 *.content-export.json
 *.bak
 *.tmp
@@ -88,4 +85,3 @@ Thumbs.db
 !.vscode/extensions.json
 
 .vercel
-.env*

@@ -160,7 +160,6 @@ advaita-website/
 │       ├── ci.yml              # Test, lint, typecheck, build validation
 │       ├── keepalive.yml       # Redundant zero-leak Supabase & Vercel keepalive ping
 │       ├── health-check.yml    # Live production endpoint health verification
-│       ├── auto-update.yml     # Automated weekly dependency updates
 │       └── security-audit.yml  # Production dependency vulnerability audit
 ├── api/
 │   └── keepalive.js            # Vercel Serverless Function (zero-leak DB touch & cron)
@@ -260,9 +259,10 @@ VITE_SUPABASE_ANON_KEY=your-anon-key
 | `npm run build` | Compiles the production application bundle and triggers `scripts/prerender.js` to pre-render static HTML routes and machine feeds. |
 | `npm run prerender` | Runs the pre-rendering script standalone without triggering a full Vite rebuild. |
 | `npm run preview` | Spins up a local static server serving the production `dist/` build. |
-| `npm test` | Runs the automated test suite across all 37 unit & security tests (`node:test`). |
+| `npm test` | Runs the automated test suite across all 44 unit & security tests (`node:test`). |
 | `npm run security:rls` | Read-only check of Supabase RLS with the anon key: tries reads/writes on every table, RPC and bucket and reports PASS/FAIL. Never writes (see `scripts/rls-check.js`). |
 | `npm run content:validate` | Validates the structural integrity of bundled seed data files. |
+| `npm run content:sync` | **Overwrites the live `site_content` row with the bundled seed**, replacing everything edited in `/admin`. Dry run by default: prints what would change. `-- --yes` saves the live document to `backups/` (gitignored) and then overwrites it. Authenticate with `SUPABASE_SERVICE_ROLE_KEY`, or `SUPABASE_ADMIN_EMAIL` / `SUPABASE_ADMIN_PASSWORD` (or answer the prompts; the password is hidden). Passwords are not accepted as arguments. |
 | `npm run typecheck` | Validates TypeScript types across utilities and components. |
 | `npm run lint` | Checks the codebase for JavaScript and React lint issues with ESLint. |
 | `npm run format` | Formats source files using Prettier. |
@@ -278,13 +278,17 @@ The application is deployed on **Vercel** with continuous delivery backed by **G
 - **Edge Caching & Security Headers**: Configured in `vercel.json` with strict `Content-Security-Policy` (no `unsafe-inline` scripts), `X-Frame-Options: DENY`, `Strict-Transport-Security`, and cache prevention on API routes.
 - **Dual Keepalive Architecture (Zero Inactivity Sleep)**:
   - **Vercel Cron**: Scheduled daily at `04:00 UTC` to invoke `/api/keepalive`.
-  - **GitHub Actions Workflow** (`.github/workflows/keepalive.yml`): Runs twice daily at `04:00 and 16:00 UTC` to perform an authenticated REST read against Supabase and touch the Vercel keepalive endpoint.
+  - **GitHub Actions Workflow** (`.github/workflows/keepalive.yml`): Runs twice daily at `04:00 and 16:00 UTC` to perform an authenticated REST read against Supabase and touch the Vercel keepalive endpoint. The job fails on any non-2xx from either. Add `CRON_SECRET` as a repository secret so the Vercel ping runs the real database check instead of only the health response.
   - **Zero Log Leakage**: Keepalive pings use `-s -o /dev/null -w "%{http_code}"` so response records and tokens are never echoed into public GitHub Actions runner logs.
-  - **Serverless Hardening**: `/api/keepalive` enforces `GET/HEAD` methods, explicit timeouts (8s), anti-caching headers, optional `CRON_SECRET` validation, and sanitized error responses.
+  - **Serverless Hardening**: `/api/keepalive` enforces `GET/HEAD` methods, explicit timeouts (8s), anti-caching headers, and sanitized error responses. Only `Authorization: Bearer $CRON_SECRET` (sent automatically by Vercel Cron once `CRON_SECRET` is set in the project) triggers the database query; every other request, including all of them while `CRON_SECRET` is unset, gets a static health response. The anon key and the `x-vercel-cron` header are not credentials.
 
 ### Supabase setup
 
 Run in the Supabase SQL editor, in order: `supabase/schema.sql` (fresh project only), `supabase/fix_rls.sql`, `supabase/public_content.sql`, `supabase/contact_rate_limit.sql`. Then add your admin account to `public.admin_users` (see the comment in `fix_rls.sql`) and disable public sign-ups under Authentication. Verify with `npm run security:rls`.
+
+Deleting contact messages older than 6 months needs the `pg_cron` extension (Database > Extensions). If `schema.sql` printed a NOTICE about it, enable it and re-run the block in section 3. Confirm the job exists with `SELECT jobname, schedule, active FROM cron.job WHERE jobname = 'delete_old_contact_submissions';`.
+
+`public_content.sql` is idempotent, so re-running it on an existing project is also its migration. Visitors only receive top-level keys named in its allowlist, and projects / social links / posts are public only when explicitly flagged (`published`, `visible`, `status = 'published'`). A new top-level key in the document stays private until you add it to the allowlist. Read the file's header (pre-flight query and rollback) before applying it to a live project.
 
 ---
 

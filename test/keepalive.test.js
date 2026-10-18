@@ -38,6 +38,47 @@ function createMockRes() {
   return res
 }
 
+const SECRET = 'test-secret-token-xyz-123'
+const ANON = 'test-anon-key-456'
+const SUPABASE_ENV = { VITE_SUPABASE_URL: 'https://example.supabase.co', VITE_SUPABASE_ANON_KEY: ANON }
+
+/**
+ * Runs `fn` with the given env vars (undefined deletes one), a stubbed fetch that answers
+ * 200 and records its calls, and a captured console.warn. Everything is restored after.
+ */
+async function withStubs(env, fn) {
+  const saved = Object.fromEntries(Object.keys(env).map((key) => [key, process.env[key]]))
+  const realFetch = globalThis.fetch
+  const realWarn = console.warn
+  const fetchCalls = []
+  const warnings = []
+  for (const [key, value] of Object.entries(env)) {
+    if (value === undefined) delete process.env[key]
+    else process.env[key] = value
+  }
+  globalThis.fetch = async (url, init) => {
+    fetchCalls.push({ url, init })
+    return { ok: true, status: 200 }
+  }
+  console.warn = (message) => warnings.push(message)
+  try {
+    await fn({ fetchCalls, warnings })
+  } finally {
+    globalThis.fetch = realFetch
+    console.warn = realWarn
+    for (const [key, value] of Object.entries(saved)) {
+      if (value === undefined) delete process.env[key]
+      else process.env[key] = value
+    }
+  }
+}
+
+async function call(headers = {}, method = 'GET') {
+  const res = createMockRes()
+  await handler({ method, headers }, res)
+  return res
+}
+
 test('keepalive: sets strict anti-caching and security headers on every request', async () => {
   const req = { method: 'GET', headers: {} }
   const res = createMockRes()
@@ -66,81 +107,90 @@ test('keepalive: rejects unauthorized HTTP methods with 405 Method Not Allowed',
   }
 })
 
-test('keepalive: handles public health checks and authorized keepalive triggers when CRON_SECRET is configured', async () => {
-  const originalSecret = process.env.CRON_SECRET
-  const originalAnon = process.env.VITE_SUPABASE_ANON_KEY
-  process.env.CRON_SECRET = 'test-secret-token-xyz-123'
-  process.env.VITE_SUPABASE_ANON_KEY = 'test-anon-key-456'
+test('keepalive: the CRON_SECRET bearer token triggers the database ping', async () => {
+  await withStubs({ ...SUPABASE_ENV, CRON_SECRET: SECRET }, async ({ fetchCalls }) => {
+    const res = await call({ authorization: `Bearer ${SECRET}` })
 
-  try {
-    // 1. Unauthenticated public ping (uptime monitors, health checks):
-    // Returns 200 OK lightweight status without querying database
-    const reqPublic = { method: 'GET', headers: {} }
-    const resPublic = createMockRes()
-    await handler(reqPublic, resPublic)
-    assert.equal(resPublic._getStatus(), 200)
-    assert.deepEqual(resPublic._getData()?.status, 'healthy')
-    assert.equal(resPublic._getData()?.ok, true)
+    assert.equal(res._getStatus(), 200)
+    assert.equal(res._getData().status, 'active')
+    assert.equal(fetchCalls.length, 1)
+    assert.match(fetchCalls[0].url, /^https:\/\/example\.supabase\.co\/rest\/v1\/site_content/)
 
-    // 2. HEAD method on public health check
-    const reqHead = { method: 'HEAD', headers: {} }
-    const resHead = createMockRes()
-    await handler(reqHead, resHead)
-    assert.equal(resHead._getStatus(), 200)
-    assert.equal(resHead._isEnded(), true)
+    const head = await call({ authorization: `Bearer ${SECRET}` }, 'HEAD')
+    assert.equal(head._getStatus(), 200)
+    assert.equal(fetchCalls.length, 2)
+  })
+})
 
-    // 3. Trusted Vercel Cron header (triggers keepalive execution)
-    const reqVercelCron = {
-      method: 'GET',
-      headers: { 'x-vercel-cron': '1' },
-    }
-    const resVercelCron = createMockRes()
-    await handler(reqVercelCron, resVercelCron)
-    // Passes authorization, attempts DB fetch or returns 503 if mock unconfigured
-    assert.notEqual(resVercelCron._getData()?.status, 'healthy')
-
-    // 4. Valid CRON_SECRET Bearer token (triggers keepalive execution)
-    const reqCronSecret = {
-      method: 'GET',
-      headers: { authorization: 'Bearer test-secret-token-xyz-123' },
-    }
-    const resCronSecret = createMockRes()
-    await handler(reqCronSecret, resCronSecret)
-    assert.notEqual(resCronSecret._getData()?.status, 'healthy')
-
-    // 5. Valid anon key Bearer token from CI (triggers keepalive execution)
-    const reqAnonKey = {
-      method: 'GET',
-      headers: { authorization: 'Bearer test-anon-key-456' },
-    }
-    const resAnonKey = createMockRes()
-    await handler(reqAnonKey, resAnonKey)
-    assert.notEqual(resAnonKey._getData()?.status, 'healthy')
-  } finally {
-    if (originalSecret !== undefined) {
-      process.env.CRON_SECRET = originalSecret
-    } else {
-      delete process.env.CRON_SECRET
-    }
-    if (originalAnon !== undefined) {
-      process.env.VITE_SUPABASE_ANON_KEY = originalAnon
-    } else {
-      delete process.env.VITE_SUPABASE_ANON_KEY
-    }
+test('keepalive: requests without the CRON_SECRET only get the health check and never query the database', async () => {
+  const impostors = {
+    'no credentials': {},
+    'public anon key as bearer': { authorization: `Bearer ${ANON}` },
+    'x-vercel-cron header alone': { 'x-vercel-cron': '1' },
+    'wrong secret, same length': { authorization: `Bearer ${SECRET.replace(/.$/, 'X')}` },
+    'wrong secret, different length': { authorization: 'Bearer nope' },
+    'secret without the Bearer prefix': { authorization: SECRET },
   }
+
+  await withStubs({ ...SUPABASE_ENV, CRON_SECRET: SECRET }, async ({ fetchCalls }) => {
+    for (const [name, headers] of Object.entries(impostors)) {
+      const res = await call(headers)
+      assert.equal(res._getStatus(), 200, name)
+      assert.equal(res._getData().status, 'healthy', name)
+      assert.equal(res._getData().ok, true, name)
+    }
+
+    const head = await call({}, 'HEAD')
+    assert.equal(head._getStatus(), 200)
+    assert.equal(head._isEnded(), true)
+
+    assert.equal(fetchCalls.length, 0, 'no request may reach Supabase without the secret')
+  })
+})
+
+test('keepalive: with CRON_SECRET unset nothing is authorized, whatever the headers say', async () => {
+  await withStubs({ ...SUPABASE_ENV, CRON_SECRET: undefined }, async ({ fetchCalls }) => {
+    for (const headers of [{}, { authorization: `Bearer ${ANON}` }, { authorization: 'Bearer undefined' }, { authorization: 'Bearer ' }, { 'x-vercel-cron': '1' }]) {
+      const res = await call(headers)
+      assert.equal(res._getData().status, 'healthy', JSON.stringify(headers))
+    }
+    assert.equal(fetchCalls.length, 0)
+  })
+})
+
+test('keepalive: a rejected cron-style request logs a warning, an ordinary ping does not', async () => {
+  await withStubs({ ...SUPABASE_ENV, CRON_SECRET: SECRET }, async ({ warnings }) => {
+    await call({})
+    assert.equal(warnings.length, 0)
+
+    await call({ 'x-vercel-cron': '1' })
+    assert.equal(warnings.length, 1)
+    assert.match(warnings[0], /CRON_SECRET/)
+
+    await call({ 'x-vercel-cron': '1', authorization: `Bearer ${SECRET}` })
+    assert.equal(warnings.length, 1, 'an authorized cron call must not warn')
+  })
 })
 
 test('keepalive: returns 503 without leaking credentials if Supabase is unconfigured', async () => {
-  const origUrl = process.env.VITE_SUPABASE_URL
-  const origKey = process.env.VITE_SUPABASE_ANON_KEY
-  delete process.env.VITE_SUPABASE_URL
-  delete process.env.VITE_SUPABASE_ANON_KEY
+  const env = {
+    CRON_SECRET: SECRET,
+    VITE_SUPABASE_URL: undefined,
+    VITE_SUPABASE_ANON_KEY: undefined,
+    NEXT_PUBLIC_Backend_SUPABASE_URL: undefined,
+    Backend_SUPABASE_URL: undefined,
+    NEXT_PUBLIC_SUPABASE_URL: undefined,
+    SUPABASE_URL: undefined,
+    NEXT_PUBLIC_Backend_SUPABASE_ANON_KEY: undefined,
+    NEXT_PUBLIC_Backend_SUPABASE_PUBLISHABLE_KEY: undefined,
+    Backend_SUPABASE_ANON_KEY: undefined,
+    Backend_SUPABASE_PUBLISHABLE_KEY: undefined,
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: undefined,
+    SUPABASE_ANON_KEY: undefined,
+  }
 
-  try {
-    const req = { method: 'GET', headers: {} }
-    const res = createMockRes()
-
-    await handler(req, res)
+  await withStubs(env, async ({ fetchCalls }) => {
+    const res = await call({ authorization: `Bearer ${SECRET}` })
 
     assert.equal(res._getStatus(), 503)
     const data = res._getData()
@@ -151,8 +201,6 @@ test('keepalive: returns 503 without leaking credentials if Supabase is unconfig
     assert.equal(data.key, undefined)
     assert.equal(data.url, undefined)
     assert.equal(data.anonKey, undefined)
-  } finally {
-    if (origUrl !== undefined) process.env.VITE_SUPABASE_URL = origUrl
-    if (origKey !== undefined) process.env.VITE_SUPABASE_ANON_KEY = origKey
-  }
+    assert.equal(fetchCalls.length, 0)
+  })
 })

@@ -69,6 +69,10 @@ ALTER TABLE public.contact_submissions FORCE ROW LEVEL SECURITY;
 
 -- ------------------------------------------------------------------------------
 -- 3. Maintenance: Automated Cleanup (pg_cron)
+-- Enable the extension first (Dashboard > Database > Extensions > pg_cron), then run
+-- this block again if it printed the NOTICE below. Any other failure now aborts loudly.
+-- Confirm the job exists:
+--   SELECT jobname, schedule, active FROM cron.job WHERE jobname = 'delete_old_contact_submissions';
 -- ------------------------------------------------------------------------------
 DO $$
 BEGIN
@@ -81,8 +85,7 @@ BEGIN
       '0 0 * * *',
       'DELETE FROM public.contact_submissions WHERE created_at < now() - interval ''6 months'';'
     );
+  ELSE
+    RAISE NOTICE 'pg_cron is not enabled: contact_submissions older than 6 months will NOT be deleted until it is.';
   END IF;
-EXCEPTION
-  WHEN OTHERS THEN
-    NULL;
 END $$;
