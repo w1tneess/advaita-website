@@ -20,7 +20,7 @@ import { fileURLToPath } from 'node:url'
 import dotenv from 'dotenv'
 
 import { allPrerenderRoutes, NAV_ITEMS } from '../src/config/nav.js'
-import { SITE_NAME, SITE_URL } from '../src/config/site.js'
+import { CONTACT_EMAIL, SITE_NAME, SITE_URL } from '../src/config/site.js'
 import { buildMeta, renderMetaTags, escapeHtml, projectCollection } from '../src/lib/seo.js'
 import { isSupabaseConfigured } from '../src/lib/supabase/config.js'
 import { fetchPublicContent } from '../src/lib/supabase/public.js'
@@ -203,7 +203,7 @@ function renderSemanticBody(route, siteData) {
           <li>GitHub: <a href="https://github.com/w1tneess">https://github.com/w1tneess</a></li>
           <li>X (Twitter): <a href="https://x.com/w1tneess_">https://x.com/w1tneess_</a></li>
           <li>Instagram: <a href="https://www.instagram.com/adva1ta_/">https://www.instagram.com/adva1ta_/</a></li>
-          <li>Email: <a href="mailto:hi@advaitachandra.in">hi@advaitachandra.in</a></li>
+          <li>Email: <a href="mailto:${CONTACT_EMAIL}">${CONTACT_EMAIL}</a></li>
         </ul>
 
         <h2>Technologies &amp; Developer Toolkit</h2>
@@ -353,7 +353,7 @@ function renderSemanticBody(route, siteData) {
         <h1>Contact Advaita Chandra</h1>
         <p>Reach out for inquiries, scholarly feedback, or collaboration.</p>
         <ul>
-          <li>Email: <a href="mailto:hi@advaitachandra.in">hi@advaitachandra.in</a></li>
+          <li>Email: <a href="mailto:${CONTACT_EMAIL}">${CONTACT_EMAIL}</a></li>
           <li>GitHub: <a href="https://github.com/w1tneess">https://github.com/w1tneess</a></li>
           <li>X (Twitter): <a href="https://x.com/w1tneess_">https://x.com/w1tneess_</a></li>
           <li>Instagram: <a href="https://www.instagram.com/adva1ta_/">https://www.instagram.com/adva1ta_/</a></li>
@@ -502,7 +502,7 @@ function renderRssFeed({ posts = [], notes = [] }) {
       <guid isPermaLink="true">${SITE_URL}/blog/${post.slug}</guid>
       <pubDate>${pubDate}</pubDate>
       <description><![CDATA[${post.excerpt || post.content || ''}]]></description>
-      <author>hi@advaitachandra.in (Advaita Chandra)</author>
+      <author>${CONTACT_EMAIL} (Advaita Chandra)</author>
     </item>`)
   }
 
@@ -517,7 +517,7 @@ function renderRssFeed({ posts = [], notes = [] }) {
       <pubDate>${pubDate}</pubDate>
       <category><![CDATA[${note.category || 'Philosophy'}]]></category>
       <description><![CDATA[${note.content}]]></description>
-      <author>hi@advaitachandra.in (Advaita Chandra)</author>
+      <author>${CONTACT_EMAIL} (Advaita Chandra)</author>
     </item>`)
   }
 

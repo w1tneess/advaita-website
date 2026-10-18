@@ -1,4 +1,5 @@
 import { ArrowRight, ArrowUpRight } from 'lucide-react'
+import { CONTACT_EMAIL } from '@/config/site.js'
 import { Link } from 'react-router'
 import PageHeader from '@/components/ui/PageHeader.jsx'
 import Seo from '@/components/meta/Seo.jsx'
@@ -121,10 +122,10 @@ export default function About() {
                 <li className="flex items-center justify-between gap-4 pt-1">
                   <span className="text-muted">Email:</span>
                   <a
-                    href="mailto:hi@advaitachandra.in"
+                    href={`mailto:${CONTACT_EMAIL}`}
                     className="text-ink hover:text-muted active:opacity-80 transition-colors duration-150 ease-[var(--ease-out-quart)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas rounded-sm"
                   >
-                    hi@advaitachandra.in
+                    {CONTACT_EMAIL}
                   </a>
                 </li>
               </ul>

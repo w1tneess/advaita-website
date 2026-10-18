@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { CONTACT_EMAIL } from '@/config/site.js'
 import { Link } from 'react-router'
 import { ArrowRight, ArrowUpRight, Check, Loader2 } from 'lucide-react'
 import { submitContactForm } from '@/lib/supabase/api.js'
@@ -102,8 +103,8 @@ export default function CorrespondenceSection({ publicSocialLinks = [] }) {
         err?.hint === 'rate_limited'
           ? err.message
           : isNetworkErr
-          ? 'Notice: Could not connect to transmission service (possibly blocked by an adblocker or privacy shield). You can write directly to hi@advaitachandra.in.'
-          : 'Notice: Message could not be sent right now. You can also reach me directly at hi@advaitachandra.in.',
+          ? `Notice: Could not connect to transmission service (possibly blocked by an adblocker or privacy shield). You can write directly to ${CONTACT_EMAIL}.`
+          : `Notice: Message could not be sent right now. You can also reach me directly at ${CONTACT_EMAIL}.`,
       )
     }
   }
