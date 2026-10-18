@@ -475,8 +475,6 @@ function renderSitemap(routes) {
       return [
         '  <url>',
         `    <loc>${meta.canonical}</loc>${lastmod}`,
-        `    <changefreq>${route.changefreq || 'monthly'}</changefreq>`,
-        `    <priority>${route.priority || '0.5'}</priority>`,
         '  </url>',
       ].join('\n')
     })
@@ -484,6 +482,9 @@ function renderSitemap(routes) {
 
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`
 }
+
+/** Notes without a slug have no page of their own, only an anchor on /philosophy. */
+const noteUrl = (note) => (note.slug ? `${SITE_URL}/philosophy/${note.slug}` : `${SITE_URL}/philosophy#${note.id}`)
 
 /** Render RSS 2.0 Feed combining notes and blog posts. */
 function renderRssFeed({ posts = [], notes = [] }) {
@@ -509,8 +510,8 @@ function renderRssFeed({ posts = [], notes = [] }) {
     items.push(`
     <item>
       <title><![CDATA[${note.title}]]></title>
-      <link>${SITE_URL}/philosophy#${note.id}</link>
-      <guid isPermaLink="false">${SITE_URL}/philosophy#${note.id}</guid>
+      <link>${noteUrl(note)}</link>
+      <guid isPermaLink="false">${noteUrl(note)}</guid>
       <pubDate>${pubDate}</pubDate>
       <category><![CDATA[${note.category || 'Philosophy'}]]></category>
       <description><![CDATA[${note.content}]]></description>
@@ -553,8 +554,8 @@ function renderJsonFeed({ posts = [], notes = [] }) {
 
   for (const note of notes) {
     feedItems.push({
-      id: `${SITE_URL}/philosophy#${note.id}`,
-      url: `${SITE_URL}/philosophy#${note.id}`,
+      id: noteUrl(note),
+      url: noteUrl(note),
       title: note.title,
       content_text: note.content,
       tags: [note.category],
