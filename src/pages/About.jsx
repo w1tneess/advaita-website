@@ -69,7 +69,7 @@ export default function About() {
 
             <div className="pt-8 border-t border-line lg:border-t-0 lg:pt-0 lg:pl-10 lg:border-l space-y-5">
               <h3 className="font-mono text-xs uppercase tracking-wider text-ink border-b border-line pb-3">
-                Verified Profiles
+                Profiles
               </h3>
               <ul className="space-y-3 font-mono text-xs tracking-wide">
                 <li className="flex items-center justify-between gap-4 border-b border-line pb-3">

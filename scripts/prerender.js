@@ -196,7 +196,7 @@ function renderSemanticBody(route, siteData) {
           <li><strong>Official Website:</strong> <a href="https://advaitachandra.in/">https://advaitachandra.in/</a></li>
         </ul>
 
-        <h2>Verified Profiles &amp; Networks</h2>
+        <h2>Profiles &amp; Networks</h2>
         <ul>
           <li>GitHub: <a href="https://github.com/w1tneess">https://github.com/w1tneess</a></li>
           <li>X (Twitter): <a href="https://x.com/w1tneess_">https://x.com/w1tneess_</a></li>
@@ -652,10 +652,9 @@ async function getPrerenderData() {
               : philosophy.notes || [],
         }
       }
-      if (data?.data?.projects && Array.isArray(data.data.projects) && data.data.projects.length > 0) {
-        const remoteProjects = data.data.projects
-        const remoteIds = new Set(remoteProjects.map((p) => p.id))
-        projects = [...remoteProjects, ...projects.filter((p) => !remoteIds.has(p.id))]
+      // Supabase is authoritative: merging seed projects back in resurrected ones deleted in admin.
+      if (Array.isArray(data?.data?.projects) && data.data.projects.length > 0) {
+        projects = data.data.projects
       }
       if (data?.updated_at) {
         latestUpdate = new Date(data.updated_at).toISOString()
