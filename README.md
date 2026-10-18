@@ -281,7 +281,7 @@ The application is deployed on **Vercel** with continuous delivery backed by **G
   - **Vercel Cron**: Scheduled daily at `04:00 UTC` to invoke `/api/keepalive`.
   - **GitHub Actions Workflow** (`.github/workflows/keepalive.yml`): Runs twice daily at `04:00 and 16:00 UTC` to perform an authenticated REST read against Supabase and touch the Vercel keepalive endpoint.
   - **Zero Log Leakage**: Keepalive pings use `-s -o /dev/null -w "%{http_code}"` so response records and tokens are never echoed into public GitHub Actions runner logs.
-  - **Serverless Hardening**: `/api/keepalive` enforces `GET/HEAD` methods, explicit timeouts (8s), anti-caching headers, optional `CRON_SECRET` validation, and sanitized error responses.
+  - **Serverless Hardening**: `/api/keepalive` enforces `GET/HEAD` methods, explicit timeouts (8s), anti-caching headers, and sanitized error responses. Only `Authorization: Bearer $CRON_SECRET` (sent automatically by Vercel Cron once `CRON_SECRET` is set in the project) triggers the database query; every other request, including all of them while `CRON_SECRET` is unset, gets a static health response. The anon key and the `x-vercel-cron` header are not credentials.
 
 ### Supabase setup
 

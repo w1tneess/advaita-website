@@ -6,11 +6,23 @@
  *
  * Security & Zero-Leak Guarantees:
  * - Only GET and HEAD methods permitted.
- * - If CRON_SECRET is set in environment, enforces Bearer token or Vercel Cron header validation.
+ * - The database is queried only for `Authorization: Bearer $CRON_SECRET` (Vercel Cron sends it
+ *   automatically once CRON_SECRET is set). Everyone else, including every request while
+ *   CRON_SECRET is unset, gets a static health response. The public anon key is not a
+ *   credential, and the spoofable x-vercel-cron header is only a hint used for a warning.
  * - Never leaks upstream Supabase response bodies, schema errors, or environment keys.
  * - Sets strict no-cache headers to prevent proxy/CDN memoization.
  * - Employs an explicit AbortSignal timeout to prevent hung executions.
  */
+
+import { timingSafeEqual } from 'node:crypto'
+
+/** Constant-time check of an Authorization header against `Bearer <secret>`. */
+function isBearer(header, secret) {
+  const given = Buffer.from(header)
+  const expected = Buffer.from(`Bearer ${secret}`)
+  return given.length === expected.length && timingSafeEqual(given, expected)
+}
 
 export default async function handler(req, res) {
   // 1. Set anti-caching & security headers
@@ -47,16 +59,16 @@ export default async function handler(req, res) {
 
   // 4. Check authorization for active PostgreSQL database keepalive execution
   const cronSecret = process.env.CRON_SECRET
-  const authHeader = req.headers?.authorization || ''
-  const isVercelCron = req.headers?.['x-vercel-cron'] === '1'
-  const isCronSecretValid = Boolean(cronSecret && authHeader === `Bearer ${cronSecret}`)
-  const isAnonKeyValid = Boolean(anonKey && authHeader === `Bearer ${anonKey}`)
-  const isKeepaliveAuthorized = isVercelCron || isCronSecretValid || isAnonKeyValid
+  const isKeepaliveAuthorized = Boolean(cronSecret) && isBearer(req.headers?.authorization || '', cronSecret)
 
-  // If CRON_SECRET is configured and this request is an unauthenticated public ping,
-  // serve a lightweight 200 OK health check immediately so uptime monitors and CI pass
+  // Anyone else gets a lightweight 200 OK health check so uptime monitors and CI pass
   // without triggering database query load or leaking any internal state.
-  if (cronSecret && !isKeepaliveAuthorized) {
+  if (!isKeepaliveAuthorized) {
+    // A rejected "cron" call means CRON_SECRET is missing or wrong in Vercel; without this
+    // line the 200 below would make that misconfiguration look like a working keepalive.
+    if (req.headers?.['x-vercel-cron']) {
+      console.warn('keepalive: cron request rejected; set CRON_SECRET in the Vercel project')
+    }
     if (req.method === 'HEAD') {
       return res.status(200).end()
     }
