@@ -441,9 +441,9 @@ export default function AlgorithmicArt() {
                         {preset.particleCount} ptcls
                       </span>
                     </div>
-                    <h3 className="font-sans text-base text-ink font-medium mb-1.5">
+                    <h2 className="font-sans text-base text-ink font-medium mb-1.5">
                       {preset.name}
-                    </h3>
+                    </h2>
                     <p className="text-xs text-muted leading-relaxed">
                       {preset.description}
                     </p>

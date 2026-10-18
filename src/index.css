@@ -61,7 +61,7 @@
   --color-surface-3: var(--color-raised);
   --color-text: var(--color-ink);
   --color-text-2: var(--color-muted);
-  --color-text-3: #7C766F; /* 3.5:1 on canvas – decorative only */
+  --color-text-3: #8A847D; /* ≥4.6:1 on canvas, surface and raised (WCAG AA) */
   --color-copper: var(--color-accent);
   --color-copper-strong: var(--color-accent-strong);
   --color-copper-deep: #5E3C2C;
@@ -110,7 +110,7 @@
   --color-accent: #c2956a;
   --color-accent-strong: #d4a87d;
   --color-on-accent: #F8F6F0;
-  --color-text-3: #7C766F;
+  --color-text-3: #8A847D;
   --color-line-strong: rgba(248, 246, 240, 0.15);
 }
 

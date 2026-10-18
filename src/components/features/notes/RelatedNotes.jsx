@@ -11,9 +11,9 @@ export default function RelatedNotes({ currentSlug, posts = [] }) {
 
   return (
     <div className="mt-16 border-t border-line pt-8">
-      <h3 className="font-mono text-xs text-muted uppercase tracking-wider mb-6">
+      <h2 className="font-mono text-xs text-muted uppercase tracking-wider mb-6">
         Related Notes &amp; Projects
-      </h3>
+      </h2>
       <div className="grid sm:grid-cols-2 gap-4">
         {related.map((post) => (
           <Link
@@ -24,9 +24,9 @@ export default function RelatedNotes({ currentSlug, posts = [] }) {
             <div className="flex items-center gap-2 font-mono text-[10px] text-muted mb-2 uppercase tracking-wider">
               <span>{post.category || 'Monograph'}</span>
             </div>
-            <h4 className="font-display text-lg text-ink group-hover:text-muted transition-colors leading-tight mb-2">
+            <h3 className="font-display text-lg text-ink group-hover:text-muted transition-colors leading-tight mb-2">
               {post.title}
-            </h4>
+            </h3>
             <div className="flex items-center gap-1.5 text-xs text-muted group-hover:text-ink transition-colors">
               <span>Read note</span>
               <ArrowRight className="h-3 w-3" />

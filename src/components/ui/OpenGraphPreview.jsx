@@ -78,9 +78,9 @@ export default function OpenGraphPreview({
             <Globe className="h-3 w-3" />
             {hostName}
           </p>
-          <h4 className="font-display text-base font-semibold tracking-tight text-ink line-clamp-1">
+          <p className="font-display text-base font-semibold leading-[1.1] tracking-tight text-ink line-clamp-1 text-balance">
             {title}
-          </h4>
+          </p>
           <p className="text-xs text-muted line-clamp-2 leading-normal">
             {description}
           </p>
