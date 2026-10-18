@@ -93,6 +93,16 @@ REVOKE ALL ON public.contact_submissions FROM anon;
 GRANT INSERT ON public.contact_submissions TO anon;
 REVOKE ALL ON public.admin_users FROM anon, authenticated;
 
+-- Supabase's own "auto-enable RLS" event-trigger helper is flagged by the linter as
+-- callable through /rest/v1/rpc. Event triggers fire without an EXECUTE check, so
+-- revoking is safe. Guarded: the function only exists when that setting is on.
+DO $$
+BEGIN
+  IF to_regprocedure('public.rls_auto_enable()') IS NOT NULL THEN
+    REVOKE EXECUTE ON FUNCTION public.rls_auto_enable() FROM public, anon, authenticated;
+  END IF;
+END $$;
+
 -- ------------------------------------------------------------------------------
 -- 4. storage.objects (images bucket)
 -- ------------------------------------------------------------------------------
