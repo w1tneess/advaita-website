@@ -261,6 +261,9 @@ export function renderMetaTags(meta) {
     `<meta property="og:url" content="${e(meta.canonical)}" />`,
     `<meta property="og:image" content="${e(meta.image)}" />`,
     `<meta property="og:image:alt" content="${e(meta.title)}" />`,
+    ...(meta.image === DEFAULT_OG_IMAGE
+      ? ['<meta property="og:image:width" content="1200" />', '<meta property="og:image:height" content="630" />']
+      : []),
     `<meta name="twitter:card" content="summary_large_image" />`,
     `<meta name="twitter:site" content="${TWITTER_HANDLE}" />`,
     `<meta name="twitter:creator" content="${TWITTER_HANDLE}" />`,
