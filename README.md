@@ -160,7 +160,6 @@ advaita-website/
 │       ├── ci.yml              # Test, lint, typecheck, build validation
 │       ├── keepalive.yml       # Redundant zero-leak Supabase & Vercel keepalive ping
 │       ├── health-check.yml    # Live production endpoint health verification
-│       ├── auto-update.yml     # Automated weekly dependency updates
 │       └── security-audit.yml  # Production dependency vulnerability audit
 ├── api/
 │   └── keepalive.js            # Vercel Serverless Function (zero-leak DB touch & cron)
