@@ -54,9 +54,11 @@ jobs:
           if [ -n "${CRON_SECRET:-}" ]; then
             AUTH_HEADER=(-H "Authorization: Bearer ${CRON_SECRET}")
           fi
-          # curl reports 000 when it cannot connect, which also fails the check below.
+          # Canonical host: the apex 308-redirects to www, which would never reach the function
+          # (and curl does not forward the bearer token across hosts). curl reports 000 when it
+          # cannot connect, which also fails the check below.
           VERCEL_STATUS=$(curl -s -o /dev/null -w "%{http_code}" --connect-timeout 15 --max-time 30 \
-            "${AUTH_HEADER[@]}" "https://advaitachandra.in/api/keepalive" || true)
+            "${AUTH_HEADER[@]}" "https://www.advaitachandra.in/api/keepalive" || true)
 
           echo "Vercel Keepalive endpoint HTTP status: ${VERCEL_STATUS}"
 
