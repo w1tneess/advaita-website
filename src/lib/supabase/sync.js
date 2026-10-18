@@ -1,4 +1,5 @@
 import { supabase, isSupabaseConfigured } from './client.js'
+import { PUBLIC_COPY_SAVE_ERROR } from './public.js'
 
 /**
  * Fetch the entire site content document from Supabase.
@@ -71,6 +72,10 @@ export async function saveContentToSupabase(contentDocument) {
 
   if (!contentDocument || typeof contentDocument !== 'object' || Array.isArray(contentDocument)) {
     return { ok: false, error: 'Cannot save invalid or empty content document.' }
+  }
+
+  if (contentDocument.publicCopy) {
+    return { ok: false, error: PUBLIC_COPY_SAVE_ERROR }
   }
 
   // Pre-validate authenticated session to prevent sending unauthenticated mutations

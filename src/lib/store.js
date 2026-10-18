@@ -110,7 +110,8 @@ import {
   saveContentToSupabase,
   clearContentInSupabase,
 } from './supabase/sync.js'
-import { isSupabaseConfigured } from './supabase/client.js'
+import { isSupabaseConfigured } from './supabase/config.js'
+import { fetchPublicContent, PUBLIC_COPY_SAVE_ERROR } from './supabase/public.js'
 
 /**
  * Reconciles a loaded document with the deployed seed to ensure that new seed
@@ -198,16 +199,17 @@ export function reconcileWithSeed(doc) {
 /**
  * Load the active content document asynchronously.
  * Tries Supabase first; falls back gracefully to localStorage or seed.
+ * Visitors get the draft-free public copy; `full` (admin only, enforced by RLS) reads the real row.
  *
  * @returns {Promise<{doc: object, source: 'seed'|'local'|'remote', warning: string|null}>}
  */
-export async function loadDocument() {
+export async function loadDocument({ full = false } = {}) {
   const storage = getStorage()
 
   // 1. If Supabase is configured, attempt remote fetch
   if (isSupabaseConfigured()) {
     try {
-      const { data: raw, error } = await fetchContentFromSupabase(2)
+      const { data: raw, error } = full ? await fetchContentFromSupabase(2) : await fetchPublicContent()
 
       if (!error && raw) {
         const { doc: migrated, blockedAt } = migrate(raw)
@@ -281,6 +283,10 @@ export async function loadDocument() {
  * @returns {Promise<{ok: boolean, synced: boolean, source: 'remote'|'local', error: string|null, warning?: string}>}
  */
 export async function saveDocument(doc) {
+  if (doc?.publicCopy) {
+    return { ok: false, synced: false, source: 'local', error: PUBLIC_COPY_SAVE_ERROR }
+  }
+
   const storage = getStorage()
   let localSaved = false
 

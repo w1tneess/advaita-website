@@ -110,14 +110,14 @@ export function ContentProvider({ children }) {
 
   const warningShown = useRef(false)
 
-  // Revalidate with remote Supabase in background without blocking initial render
-  useEffect(() => {
-    let isMounted = true
+  const isMounted = useRef(true)
 
-    async function revalidate() {
+  /** Re-read from Supabase. `full` loads the admin's complete document instead of the public copy. */
+  const reloadContent = useCallback(
+    async ({ full = false } = {}) => {
       try {
-        const state = await loadDocument()
-        if (!isMounted) return
+        const state = await loadDocument({ full })
+        if (!isMounted.current) return
         initial.current = state
         contentRef.current = state.doc
         setContent(state.doc)
@@ -129,17 +129,21 @@ export function ContentProvider({ children }) {
           toast.info(state.warning)
         }
       } catch (error) {
-        if (!isMounted) return
+        if (!isMounted.current) return
         console.warn('Revalidation fallback to local seed:', error)
       }
-    }
+    },
+    [toast],
+  )
 
-    revalidate()
-
+  // Revalidate with remote Supabase in background without blocking initial render
+  useEffect(() => {
+    isMounted.current = true
+    reloadContent()
     return () => {
-      isMounted = false
+      isMounted.current = false
     }
-  }, [toast])
+  }, [reloadContent])
 
   const commit = useCallback(async (updater) => {
     try {
@@ -334,6 +338,7 @@ export function ContentProvider({ children }) {
       removeNote: (id) => removeItem('philosophy.notes', id),
 
       // Storage state.
+      reloadContent,
       isRemote,
       isLocal: !isRemote,
       syncStatus,
@@ -356,6 +361,7 @@ export function ContentProvider({ children }) {
       setSection,
       replaceDocument,
       resetDocument,
+      reloadContent,
       isRemote,
       syncStatus,
       syncToRemote,

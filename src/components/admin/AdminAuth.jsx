@@ -5,6 +5,7 @@ import { ArrowLeft, Loader2, Mail, Shield, AlertTriangle, LogIn, KeyRound, Check
 import { supabase, isSupabaseConfigured } from '../../lib/supabase/client.js'
 import PasswordInput from '../ui/PasswordInput.jsx'
 import { useToast } from '../../lib/toast'
+import { useContent } from '../../lib/content.jsx'
 
 const AdminAuthContext = createContext(null)
 
@@ -18,6 +19,7 @@ export function useAdminAuth() {
 
 export default function AdminAuth({ children }) {
   const toast = useToast()
+  const { reloadContent } = useContent()
 
   const [session, setSession] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -99,6 +101,12 @@ export default function AdminAuth({ children }) {
       subscription?.unsubscribe()
     }
   }, [isConfigured])
+
+  // Visitors hold the draft-free public copy; once signed in, load the full row to edit.
+  const userId = session?.user?.id
+  useEffect(() => {
+    if (userId) reloadContent({ full: true })
+  }, [userId, reloadContent])
 
   const handleAuthSubmit = async (e) => {
     e.preventDefault()

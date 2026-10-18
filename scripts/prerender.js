@@ -17,12 +17,13 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { createClient } from '@supabase/supabase-js'
 import dotenv from 'dotenv'
 
 import { allPrerenderRoutes, NAV_ITEMS } from '../src/config/nav.js'
 import { SITE_NAME, SITE_URL } from '../src/config/site.js'
 import { buildMeta, renderMetaTags, escapeHtml } from '../src/lib/seo.js'
+import { isSupabaseConfigured } from '../src/lib/supabase/config.js'
+import { fetchPublicContent } from '../src/lib/supabase/public.js'
 
 dotenv.config()
 dotenv.config({ path: '.env.local' })
@@ -587,30 +588,6 @@ function renderJsonFeed({ posts = [], notes = [] }) {
   )
 }
 
-const supabaseUrl =
-  process.env.VITE_SUPABASE_URL ||
-  process.env.NEXT_PUBLIC_Backend_SUPABASE_URL ||
-  process.env.Backend_SUPABASE_URL ||
-  process.env.NEXT_PUBLIC_SUPABASE_URL ||
-  process.env.SUPABASE_URL ||
-  ''
-
-const supabaseAnonKey =
-  process.env.VITE_SUPABASE_ANON_KEY ||
-  process.env.NEXT_PUBLIC_Backend_SUPABASE_ANON_KEY ||
-  process.env.NEXT_PUBLIC_Backend_SUPABASE_PUBLISHABLE_KEY ||
-  process.env.Backend_SUPABASE_ANON_KEY ||
-  process.env.Backend_SUPABASE_PUBLISHABLE_KEY ||
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-  process.env.SUPABASE_ANON_KEY ||
-  ''
-
-const supabase =
-  supabaseUrl && supabaseAnonKey && !supabaseUrl.includes('placeholder')
-    ? createClient(supabaseUrl, supabaseAnonKey)
-    : null
-
-
 async function getPrerenderData() {
   let posts = []
   let latestUpdate = null
@@ -631,39 +608,35 @@ async function getPrerenderData() {
     console.warn('Warning reading local data files:', e.message)
   }
 
-  if (supabase) {
-    try {
-      const { data } = await supabase
-        .from('site_content')
-        .select('data, updated_at')
-        .eq('id', 'main')
-        .single()
-
-      if (data?.data?.blog && Array.isArray(data.data.blog)) {
-        posts = data.data.blog.filter((p) => p.status === 'published')
+  // The same draft-free public copy visitors get (supabase/public_content.sql).
+  const remote = await fetchPublicContent()
+  if (remote.error && isSupabaseConfigured()) {
+    console.warn(`Pre-render: Supabase unavailable (${remote.error.message}); using bundled content.`)
+  }
+  const data = remote.data ? { data: remote.data, updated_at: remote.updatedAt } : null
+  if (data) {
+    if (data?.data?.blog && Array.isArray(data.data.blog)) {
+      posts = data.data.blog.filter((p) => p.status === 'published')
+    }
+    if (data?.data?.profile) profile = { ...profile, ...data.data.profile }
+    if (data?.data?.photography) photography = data.data.photography
+    if (data?.data?.philosophy) {
+      const remoteNotes = data.data.philosophy.notes
+      philosophy = {
+        ...philosophy,
+        ...data.data.philosophy,
+        notes:
+          Array.isArray(remoteNotes) && remoteNotes.length > 0
+            ? remoteNotes
+            : philosophy.notes || [],
       }
-      if (data?.data?.profile) profile = { ...profile, ...data.data.profile }
-      if (data?.data?.photography) photography = data.data.photography
-      if (data?.data?.philosophy) {
-        const remoteNotes = data.data.philosophy.notes
-        philosophy = {
-          ...philosophy,
-          ...data.data.philosophy,
-          notes:
-            Array.isArray(remoteNotes) && remoteNotes.length > 0
-              ? remoteNotes
-              : philosophy.notes || [],
-        }
-      }
-      // Supabase is authoritative: merging seed projects back in resurrected ones deleted in admin.
-      if (Array.isArray(data?.data?.projects) && data.data.projects.length > 0) {
-        projects = data.data.projects
-      }
-      if (data?.updated_at) {
-        latestUpdate = new Date(data.updated_at).toISOString()
-      }
-    } catch (_e) {
-      // Fallback to local files
+    }
+    // Supabase is authoritative: merging seed projects back in resurrected ones deleted in admin.
+    if (Array.isArray(data?.data?.projects) && data.data.projects.length > 0) {
+      projects = data.data.projects
+    }
+    if (data?.updated_at) {
+      latestUpdate = new Date(data.updated_at).toISOString()
     }
   }
 
