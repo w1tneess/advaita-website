@@ -355,3 +355,46 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* Articles print as plain pages: paper-white, dark ink, link targets spelled out.
+   Site chrome is removed with print:hidden in the layout. */
+@media print {
+  :root {
+    --color-canvas: #fff;
+    --color-surface: #fff;
+    --color-raised: #fff;
+    --color-ink: #111;
+    --color-muted: #444;
+    --color-text-3: #555;
+    --color-line: #ccc;
+    --color-line-strong: #999;
+    --color-accent: #5e3c2c;
+  }
+  html,
+  body {
+    background: #fff !important;
+    color: #111 !important;
+  }
+  main {
+    padding-top: 0 !important;
+  }
+  button {
+    display: none !important;
+  }
+  article a[href^='http']::after {
+    content: ' (' attr(href) ')';
+    font-size: 0.85em;
+    word-break: break-all;
+  }
+  h1,
+  h2,
+  h3 {
+    break-after: avoid;
+  }
+  p,
+  li,
+  blockquote {
+    orphans: 3;
+    widows: 3;
+  }
+}

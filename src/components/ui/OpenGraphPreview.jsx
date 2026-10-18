@@ -22,7 +22,7 @@ export default function OpenGraphPreview({
   })()
 
   return (
-    <div className="rounded-2xl border border-line bg-surface/80 p-5 shadow-sm space-y-4 max-w-lg">
+    <div className="rounded-2xl border border-line bg-surface/80 p-5 shadow-sm space-y-4 max-w-lg print:hidden">
       <div className="flex items-center justify-between border-b border-line/40 pb-3">
         <div className="flex items-center gap-2 text-xs font-semibold text-muted uppercase tracking-wider">
           <Share2 className="h-4 w-4 text-accent" aria-hidden="true" />

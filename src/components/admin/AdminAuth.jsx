@@ -500,7 +500,7 @@ export default function AdminAuth({ children }) {
                     <button
                       type="button"
                       onClick={() => setMode('forgot')}
-                      className="font-mono text-xs text-neutral-500 hover:text-[#c2956a] transition-colors duration-150 ease-[var(--ease-out-quart)] active:opacity-80 cursor-pointer"
+                      className="font-mono text-xs text-neutral-400 hover:text-[#c2956a] transition-colors duration-150 ease-[var(--ease-out-quart)] active:opacity-80 cursor-pointer"
                     >
                       Forgot Password?
                     </button>
@@ -532,7 +532,7 @@ export default function AdminAuth({ children }) {
 
           <Link
             to="/"
-            className="group mt-8 inline-flex items-center gap-2 font-mono text-xs text-neutral-500 hover:text-[#E8E6E1] transition-colors duration-150 ease-[var(--ease-out-quart)] active:opacity-80"
+            className="group mt-8 inline-flex items-center gap-2 font-mono text-xs text-neutral-400 hover:text-[#E8E6E1] transition-colors duration-150 ease-[var(--ease-out-quart)] active:opacity-80"
           >
             <ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-1" />
             Return to public site

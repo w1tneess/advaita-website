@@ -433,7 +433,7 @@ function renderSemanticBody(route, siteData) {
           </div>
         </div>
       </header>
-      <main id="main-content" class="flex-1">
+      <main id="main-content" class="flex-1 min-h-dvh">
         ${route.path === '/' ? mainContent : `<div class="shell pt-[clamp(7.5rem,13vw,11.5rem)] pb-16 prose-body">${mainContent}</div>`}
       </main>
       <footer class="mt-auto border-t border-line py-12 text-sm text-muted">

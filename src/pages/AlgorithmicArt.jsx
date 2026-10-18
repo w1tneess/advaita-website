@@ -82,11 +82,17 @@ class FastNoise {
   }
 }
 
+const STILL_STEPS = 180
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' && Boolean(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)
+
 export default function AlgorithmicArt() {
   const canvasRef = useRef(null)
   const containerRef = useRef(null)
   const animationFrameRef = useRef(null)
-  const [isRunning, setIsRunning] = useState(true)
+  // Reduced-motion visitors get a finished still and a paused canvas; Play still animates.
+  const [isRunning, setIsRunning] = useState(() => !prefersReducedMotion())
+  const settleRef = useRef(false)
   const [selectedPreset, setSelectedPreset] = useState(PRESETS[0])
   const [seed, setSeed] = useState(42069)
   const [particleCount, setParticleCount] = useState(PRESETS[0].particleCount)
@@ -123,6 +129,7 @@ export default function AlgorithmicArt() {
     const ctx = canvas.getContext('2d')
     ctx.fillStyle = '#0F0E0D'
     ctx.fillRect(0, 0, width, height)
+    settleRef.current = prefersReducedMotion()
   }, [particleCount, selectedPreset.palette.length, seed])
 
   // Resize canvas to container
@@ -158,74 +165,82 @@ export default function AlgorithmicArt() {
     const loop = () => {
       if (!active) return
 
-      if (isRunning && canvasRef.current) {
-        const canvas = canvasRef.current
-        const ctx = canvas.getContext('2d')
-        const width = canvas.width
-        const height = canvas.height
-        const particles = particlesRef.current
-        const noise = noiseGenRef.current
+      // A reduced-motion still is drawn by running many steps within a single frame.
+      const settling = settleRef.current
+      if ((isRunning || settling) && canvasRef.current) {
+        for (let step = 0; step < (settling ? STILL_STEPS : 1); step++) {
+          const canvas = canvasRef.current
+          const ctx = canvas.getContext('2d')
+          const width = canvas.width
+          const height = canvas.height
+          const particles = particlesRef.current
+          const noise = noiseGenRef.current
 
-        // Fade background for motion trails
-        ctx.fillStyle = `rgba(15, 14, 13, ${selectedPreset.trailAlpha})`
-        ctx.fillRect(0, 0, width, height)
+          // Fade background for motion trails
+          ctx.fillStyle = `rgba(15, 14, 13, ${selectedPreset.trailAlpha})`
+          ctx.fillRect(0, 0, width, height)
 
-        const mouse = mouseRef.current
-        const scale = selectedPreset.noiseScale
-        const palette = selectedPreset.palette
+          const mouse = mouseRef.current
+          const scale = selectedPreset.noiseScale
+          const palette = selectedPreset.palette
 
-        for (let i = 0; i < particles.length; i++) {
-          const p = particles[i]
+          for (let i = 0; i < particles.length; i++) {
+            const p = particles[i]
 
-          // Angle computed from smooth mathematical noise
-          let angle = noise.smoothNoise(p.x * scale, p.y * scale) * Math.PI * 4
+            // Angle computed from smooth mathematical noise
+            let angle = noise.smoothNoise(p.x * scale, p.y * scale) * Math.PI * 4
 
-          // Attractor / repulsion from mouse cursor
-          const dx = mouse.x - p.x
-          const dy = mouse.y - p.y
-          const distSq = dx * dx + dy * dy
-          if (distSq < 90000 && distSq > 100) {
-            const dist = Math.sqrt(distSq)
-            const force = (1 - dist / 300) * (mouse.isDown ? -2.5 : 1.5)
-            angle += Math.atan2(dy, dx) * force
+            // Attractor / repulsion from mouse cursor
+            const dx = mouse.x - p.x
+            const dy = mouse.y - p.y
+            const distSq = dx * dx + dy * dy
+            if (distSq < 90000 && distSq > 100) {
+              const dist = Math.sqrt(distSq)
+              const force = (1 - dist / 300) * (mouse.isDown ? -2.5 : 1.5)
+              angle += Math.atan2(dy, dx) * force
+            }
+
+            // Move
+            p.vx += Math.cos(angle) * 0.4 * speed
+            p.vy += Math.sin(angle) * 0.4 * speed
+
+            // Friction damping
+            p.vx *= 0.94
+            p.vy *= 0.94
+
+            const prevX = p.x
+            const prevY = p.y
+            p.x += p.vx
+            p.y += p.vy
+
+            // Draw trail segment
+            ctx.beginPath()
+            ctx.moveTo(prevX, prevY)
+            ctx.lineTo(p.x, p.y)
+            ctx.strokeStyle = palette[p.colorIndex]
+            ctx.lineWidth = 1.15
+            ctx.stroke()
+
+            p.age += 1
+            // Reset bounds or age
+            if (
+              p.x < 0 ||
+              p.x > width ||
+              p.y < 0 ||
+              p.y > height ||
+              p.age > p.maxAge
+            ) {
+              p.x = Math.random() * width
+              p.y = Math.random() * height
+              p.vx = 0
+              p.vy = 0
+              p.age = 0
+            }
           }
-
-          // Move
-          p.vx += Math.cos(angle) * 0.4 * speed
-          p.vy += Math.sin(angle) * 0.4 * speed
-
-          // Friction damping
-          p.vx *= 0.94
-          p.vy *= 0.94
-
-          const prevX = p.x
-          const prevY = p.y
-          p.x += p.vx
-          p.y += p.vy
-
-          // Draw trail segment
-          ctx.beginPath()
-          ctx.moveTo(prevX, prevY)
-          ctx.lineTo(p.x, p.y)
-          ctx.strokeStyle = palette[p.colorIndex]
-          ctx.lineWidth = 1.15
-          ctx.stroke()
-
-          p.age += 1
-          // Reset bounds or age
-          if (
-            p.x < 0 ||
-            p.x > width ||
-            p.y < 0 ||
-            p.y > height ||
-            p.age > p.maxAge
-          ) {
-            p.x = Math.random() * width
-            p.y = Math.random() * height
-            p.vx = 0
-            p.vy = 0
-            p.age = 0
-          }
+        }
+        if (settling) {
+          settleRef.current = false
+          setIsRunning(false)
         }
       }
 
@@ -348,6 +363,7 @@ export default function AlgorithmicArt() {
               <button
                 type="button"
                 onClick={() => setIsRunning((r) => !r)}
+                aria-label={isRunning ? 'Pause simulation' : 'Play simulation'}
                 className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-ink hover:bg-white/20 active:scale-[0.96] transition-all duration-300 ease-[var(--ease-spring)] cursor-pointer"
                 title={isRunning ? 'Pause simulation' : 'Resume simulation'}
               >

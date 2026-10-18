@@ -10,7 +10,7 @@ export default function RelatedNotes({ currentSlug, posts = [] }) {
   const related = otherPosts.slice(0, 2)
 
   return (
-    <div className="mt-16 border-t border-line pt-8">
+    <div className="mt-16 border-t border-line pt-8 print:hidden">
       <h2 className="font-mono text-xs text-muted uppercase tracking-wider mb-6">
         Related Notes &amp; Projects
       </h2>
