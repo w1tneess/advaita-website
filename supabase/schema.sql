@@ -2,10 +2,39 @@
 -- Supabase Hardened Security & Performance Schema for Advaita Website
 -- Compliant with:
 -- 1. Principle of Least Privilege
--- 2. Anti-BOLA / IDOR Protection (Role + Identity Verification)
+-- 2. Anti-BOLA / IDOR Protection (writes require an allowlisted admin, see public.admin_users)
 -- 3. High-Performance Subquery Caching for RLS Policies
 -- 4. Storage Upsert Completeness (INSERT + SELECT + UPDATE with CHECK)
 -- ==============================================================================
+
+-- ------------------------------------------------------------------------------
+-- 0. Admin allowlist
+-- ------------------------------------------------------------------------------
+-- Being signed in is NOT enough to be admin: Supabase Auth allows public sign-ups
+-- unless disabled, so every write policy below checks this allowlist instead.
+CREATE TABLE IF NOT EXISTS public.admin_users (
+  user_id uuid PRIMARY KEY REFERENCES auth.users (id) ON DELETE CASCADE
+);
+-- RLS on with no policies: the table is invisible to anon and authenticated clients.
+ALTER TABLE public.admin_users ENABLE ROW LEVEL SECURITY;
+
+CREATE OR REPLACE FUNCTION public.is_admin()
+RETURNS boolean
+LANGUAGE sql
+STABLE
+SECURITY DEFINER
+SET search_path = ''
+AS $$
+  SELECT EXISTS (SELECT 1 FROM public.admin_users WHERE user_id = auth.uid());
+$$;
+REVOKE EXECUTE ON FUNCTION public.is_admin() FROM public, anon;
+GRANT EXECUTE ON FUNCTION public.is_admin() TO authenticated;
+
+-- REQUIRED, once: allowlist your own admin account (edit the email before running).
+-- Until this row exists, admin saves and uploads are rejected.
+-- INSERT INTO public.admin_users (user_id)
+--   SELECT id FROM auth.users WHERE email = '<your-admin-login-email>'
+--   ON CONFLICT DO NOTHING;
 
 -- ------------------------------------------------------------------------------
 -- 1. Table: public.site_content
@@ -39,10 +68,10 @@ CREATE POLICY "Admin manage site_content" ON public.site_content
   FOR ALL
   TO authenticated
   USING (
-    auth.role() = 'authenticated'
+    (SELECT public.is_admin())
   )
   WITH CHECK (
-    auth.role() = 'authenticated'
+    (SELECT public.is_admin())
   );
 
 -- ------------------------------------------------------------------------------
@@ -111,10 +140,10 @@ CREATE POLICY "Admin manage contact_submissions" ON public.contact_submissions
   FOR ALL
   TO authenticated
   USING (
-    auth.role() = 'authenticated'
+    (SELECT public.is_admin())
   )
   WITH CHECK (
-    auth.role() = 'authenticated'
+    (SELECT public.is_admin())
   );
 
 -- ------------------------------------------------------------------------------
@@ -140,7 +169,7 @@ CREATE POLICY "Admin upload images"
   TO authenticated 
   WITH CHECK (
     bucket_id = 'images'
-    AND auth.role() = 'authenticated'
+    AND (SELECT public.is_admin())
   );
 
 -- Admin can update/replace images (requires both USING and WITH CHECK for secure upserts)
@@ -151,11 +180,11 @@ CREATE POLICY "Admin update images"
   TO authenticated 
   USING (
     bucket_id = 'images'
-    AND auth.role() = 'authenticated'
+    AND (SELECT public.is_admin())
   )
   WITH CHECK (
     bucket_id = 'images'
-    AND auth.role() = 'authenticated'
+    AND (SELECT public.is_admin())
   );
 
 -- Admin can delete images
@@ -166,7 +195,7 @@ CREATE POLICY "Admin delete images"
   TO authenticated 
   USING (
     bucket_id = 'images'
-    AND auth.role() = 'authenticated'
+    AND (SELECT public.is_admin())
   );
 
 -- ------------------------------------------------------------------------------
