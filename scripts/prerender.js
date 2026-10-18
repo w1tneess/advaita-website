@@ -696,6 +696,15 @@ async function main() {
     'utf8',
   )
 
+  // Admin shell: a real file so /admin answers 200 (vercel.json rewrites /admin/* to it).
+  // Head only, no pre-rendered body: the app mounts the admin panel into an empty #root.
+  await mkdir(join(dist, 'admin'), { recursive: true })
+  await writeFile(
+    join(dist, 'admin/index.html'),
+    injectMeta(template, { path: '/admin', title: 'Admin', description: 'Site administration.', noindex: true }),
+    'utf8',
+  )
+
   // Sitemap
   const indexable = routes.filter((route) => !route.noindex)
   await writeFile(join(dist, 'sitemap.xml'), renderSitemap(indexable), 'utf8')
@@ -724,6 +733,7 @@ async function main() {
       `Pre-rendered ${written.length} route${written.length === 1 ? '' : 's'} at base "${basePath}":`,
       ...written.map((file) => `  ${file}`),
       `  404.html`,
+      `  admin/index.html (noindex shell)`,
       `  sitemap.xml (${indexable.length} URLs)`,
       `  rss.xml (${posts.length + notes.length} entries)`,
       `  feed.json (${posts.length + notes.length} entries)`,
