@@ -9,6 +9,7 @@ import Header from '../components/layout/Header.jsx'
 import SkipLink from '../components/layout/SkipLink.jsx'
 import BackToTopButton from '../components/ui/BackToTopButton.jsx'
 import CookieBanner from '../components/ui/CookieBanner.jsx'
+import ErrorBoundary from '../components/ui/ErrorBoundary.jsx'
 import PageFallback from '../components/ui/PageFallback.jsx'
 import { useContent } from '../lib/content.jsx'
 import { useSmoothScroll } from '../lib/smooth-scroll.js'
@@ -100,9 +101,12 @@ export default function PublicLayout() {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
       >
-        <Suspense fallback={<PageFallback />}>
-          <Outlet />
-        </Suspense>
+        {/* One broken page keeps the header and footer; keyed so navigating away recovers. */}
+        <ErrorBoundary key={location.pathname}>
+          <Suspense fallback={<PageFallback />}>
+            <Outlet />
+          </Suspense>
+        </ErrorBoundary>
       </motion.main>
 
       <div className="contents print:hidden">

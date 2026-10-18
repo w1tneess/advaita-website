@@ -91,7 +91,6 @@ export default function CorrespondenceSection({ publicSocialLinks = [] }) {
         hp_check: '',
       })
     } catch (err) {
-      console.error(err)
       setStatus('error')
       const isNetworkErr =
         err?.message?.includes('Failed to fetch') ||
