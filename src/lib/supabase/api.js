@@ -16,7 +16,7 @@ export async function submitContactForm({ name, email, topic, message }) {
   if (cleanMessage.length > 3000) {
     throw new Error('Message exceeds the maximum allowed length of 3000 characters.')
   }
-  if (cleanEmail && cleanEmail !== 'reader@local') {
+  if (cleanEmail) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
     if (!emailRegex.test(cleanEmail)) {
       throw new Error('Please provide a valid email address.')
@@ -25,7 +25,7 @@ export async function submitContactForm({ name, email, topic, message }) {
 
   const { error } = await supabase.from('contact_submissions').insert({
     name: cleanName || 'Anonymous',
-    email: cleanEmail || 'unspecified@local',
+    email: cleanEmail, // '' when the sender left it blank (allowed by the RLS policy)
     topic: cleanTopic,
     message: cleanMessage,
   })

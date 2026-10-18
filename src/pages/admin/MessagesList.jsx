@@ -211,24 +211,30 @@ export default function MessagesList() {
               </div>
 
               <div className="mb-3 flex flex-wrap items-center gap-2 text-xs text-muted">
-                <a
-                  href={`mailto:${encodeURIComponent(msg.email)}`}
-                  className="text-accent hover:underline transition-colors"
-                >
-                  {msg.email}
-                </a>
-                <button
-                  type="button"
-                  onClick={() => handleCopyEmail(msg)}
-                  title="Copy email address"
-                  className="inline-flex items-center text-neutral-500 hover:text-ink transition-colors cursor-pointer"
-                >
-                  {copiedId === msg.id ? (
-                    <Check className="h-3 w-3 text-emerald-400" />
-                  ) : (
-                    <Copy className="h-3 w-3" />
-                  )}
-                </button>
+                {msg.email ? (
+                  <>
+                    <a
+                      href={`mailto:${encodeURIComponent(msg.email)}`}
+                      className="text-accent hover:underline transition-colors"
+                    >
+                      {msg.email}
+                    </a>
+                    <button
+                      type="button"
+                      onClick={() => handleCopyEmail(msg)}
+                      title="Copy email address"
+                      className="inline-flex items-center text-neutral-500 hover:text-ink transition-colors cursor-pointer"
+                    >
+                      {copiedId === msg.id ? (
+                        <Check className="h-3 w-3 text-emerald-400" />
+                      ) : (
+                        <Copy className="h-3 w-3" />
+                      )}
+                    </button>
+                  </>
+                ) : (
+                  <span className="text-neutral-500">No email given</span>
+                )}
                 {msg.topic && (
                   <>
                     <span className="text-neutral-600">•</span>
@@ -244,13 +250,15 @@ export default function MessagesList() {
               </div>
 
               <div className="mt-4 flex flex-wrap items-center justify-between gap-2">
-                <a
-                  href={`mailto:${encodeURIComponent(msg.email)}?subject=${encodeURIComponent(msg.topic ? `Re: ${msg.topic}` : 'Inquiry response from Advaita Chandra')}`}
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-line bg-surface px-3 py-1.5 font-mono text-xs text-neutral-300 hover:border-accent hover:text-accent transition-all duration-150"
-                >
-                  <Mail className="h-3.5 w-3.5" />
-                  Reply via Email
-                </a>
+                {msg.email && (
+                  <a
+                    href={`mailto:${encodeURIComponent(msg.email)}?subject=${encodeURIComponent(msg.topic ? `Re: ${msg.topic}` : 'Inquiry response from Advaita Chandra')}`}
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-line bg-surface px-3 py-1.5 font-mono text-xs text-neutral-300 hover:border-accent hover:text-accent transition-all duration-150"
+                  >
+                    <Mail className="h-3.5 w-3.5" />
+                    Reply via Email
+                  </a>
+                )}
 
                 <Button variant="danger" size="sm" onClick={() => handleDelete(msg)}>
                   <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />

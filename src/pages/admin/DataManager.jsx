@@ -11,6 +11,12 @@ import { checkSupabaseHealth } from '../../lib/supabase/sync.js'
 import { useToast } from '../../lib/toast'
 // Single source of truth so the copied SQL never drifts from the hardened policies.
 import schemaSql from '../../../supabase/schema.sql?raw'
+import rlsSql from '../../../supabase/fix_rls.sql?raw'
+import publicContentSql from '../../../supabase/public_content.sql?raw'
+import rateLimitSql from '../../../supabase/contact_rate_limit.sql?raw'
+
+// Run order for a fresh project; each file is idempotent.
+const fullSchemaSql = [schemaSql, rlsSql, publicContentSql, rateLimitSql].join('\n\n')
 
 export default function DataManager() {
   const {
@@ -123,7 +129,7 @@ export default function DataManager() {
   }
 
   const handleCopySchemaSql = () => {
-    navigator.clipboard.writeText(schemaSql)
+    navigator.clipboard.writeText(fullSchemaSql)
     setCopiedSql(true)
     toast.success('Hardened Schema SQL copied to clipboard!')
     setTimeout(() => setCopiedSql(false), 2500)

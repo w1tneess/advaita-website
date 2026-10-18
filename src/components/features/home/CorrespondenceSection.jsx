@@ -69,7 +69,7 @@ export default function CorrespondenceSection({ publicSocialLinks = [] }) {
 
       await submitContactForm({
         name: form.name.trim() || 'Anonymous Reader',
-        email: form.email.trim() || 'reader@local',
+        email: form.email.trim(),
         topic: form.topic,
         message: finalMessage,
       })
@@ -100,7 +100,9 @@ export default function CorrespondenceSection({ publicSocialLinks = [] }) {
         err?.name === 'TypeError'
 
       setFeedback(
-        isNetworkErr
+        err?.hint === 'rate_limited'
+          ? err.message
+          : isNetworkErr
           ? 'Notice: Could not connect to transmission service (possibly blocked by an adblocker or privacy shield). You can write directly to advaita974@gmail.com.'
           : 'Notice: Message could not be sent right now. You can also reach me directly at advaita974@gmail.com.',
       )
