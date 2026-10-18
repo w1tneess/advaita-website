@@ -10,9 +10,9 @@
  * merge, so the deleted item reappears on the next reload. Storing the whole
  * document makes deletion mean deletion.
  *
- * The read path NEVER writes. A local document is created only by the first admin
- * mutation. So an ordinary visitor, who never opens /admin, always sees the freshly
- * deployed seed — which is what keeps the public site correct after every deploy.
+ * Supabase is the source of truth. Each successful load mirrors the remote document into
+ * localStorage so the next visit renders instantly; the bundled seed is used only when
+ * there is neither a remote nor a cached copy. Visitors cache the draft-free public copy.
  *
  * Nothing here is secure and nothing here is private. localStorage is plain text,
  * readable by any script on this origin. Only public site content belongs in it.
@@ -114,31 +114,14 @@ import { isSupabaseConfigured } from './supabase/config.js'
 import { fetchPublicContent, PUBLIC_COPY_SAVE_ERROR } from './supabase/public.js'
 
 /**
- * Reconciles a loaded document with the deployed seed to ensure that new seed
- * versions (with updated projects, links, and content) take precedence over stale stores.
+ * Fills fields a loaded document is missing (note slugs/excerpts, project links) from the
+ * deployed seed. It never replaces content: raising SEED_VERSION only shows the admin a
+ * notice (seedIsNewerThan), because a reset here would overwrite live Supabase data on
+ * the admin's next save.
  */
 export function reconcileWithSeed(doc) {
   const seed = createSeedDocument()
   if (!doc) return seed
-
-  // If the stored document has an older seedVersion than the codebase,
-  // upgrade to the fresh seed while preserving any user-added items and activity.
-  if ((doc.seedVersion ?? 0) < SEED_VERSION) {
-    return {
-      ...seed,
-      activity: doc.activity || [],
-      blog: Array.isArray(doc.blog) && doc.blog.length > 0 ? doc.blog : seed.blog,
-      photography: {
-        ...seed.photography,
-        photos:
-          Array.isArray(doc.photography?.photos) && doc.photography.photos.length > 0
-            ? doc.photography.photos
-            : seed.photography.photos,
-      },
-      seedVersion: SEED_VERSION,
-      schemaVersion: SCHEMA_VERSION,
-    }
-  }
 
   // Ensure philosophy notes always have slugs, thinkers, and excerpts
   if (doc.philosophy && Array.isArray(doc.philosophy.notes)) {
@@ -227,7 +210,7 @@ export async function loadDocument({ full = false } = {}) {
             }
             return {
               doc: finalDoc,
-              source: (migrated.seedVersion ?? 0) < SEED_VERSION ? 'seed' : 'remote',
+              source: 'remote',
               warning: null,
             }
           }
@@ -258,7 +241,7 @@ export async function loadDocument({ full = false } = {}) {
             }
             return {
               doc: finalDoc,
-              source: (migrated.seedVersion ?? 0) < SEED_VERSION ? 'seed' : 'local',
+              source: 'local',
               warning: isSupabaseConfigured()
                 ? 'Using cached local edits (offline mode).'
                 : null,

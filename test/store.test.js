@@ -2,7 +2,7 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 
 import { createSeedDocument } from '../src/data/seed.js'
-import { loadDocument, saveDocument } from '../src/lib/store.js'
+import { loadDocument, reconcileWithSeed, saveDocument } from '../src/lib/store.js'
 import { fetchPublicContent } from '../src/lib/supabase/public.js'
 
 const json = (status, body) => ({ ok: status < 400, status, json: async () => body })
@@ -67,6 +67,25 @@ test('loadDocument falls back to the bundled seed when Supabase is down', async 
       const { doc, source } = await loadDocument()
       assert.equal(source, 'seed')
       assert.deepEqual(doc.projects, createSeedDocument().projects)
+    },
+  )
+})
+
+test('an older seedVersion never replaces live content with the bundled seed', () => {
+  const live = { ...createSeedDocument(), seedVersion: 0, projects: [{ id: 'live-only', slug: 'live-only', title: 'Live project' }] }
+  const result = reconcileWithSeed(live)
+  assert.deepEqual(result.projects.map((project) => project.id), ['live-only'])
+  assert.equal(result.seedVersion, 0)
+})
+
+test('loadDocument keeps a remote document with an old seedVersion as the remote source', async () => {
+  const remote = { ...createSeedDocument(), seedVersion: 0, projects: [{ id: 'live-only', slug: 'live-only', title: 'Live project' }] }
+  await withSupabase(
+    async () => json(200, [{ data: remote, updated_at: null }]),
+    async () => {
+      const { doc, source } = await loadDocument()
+      assert.equal(source, 'remote')
+      assert.deepEqual(doc.projects.map((project) => project.id), ['live-only'])
     },
   )
 })
