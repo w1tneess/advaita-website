@@ -100,9 +100,13 @@ export default function App() {
         <Route
           path="admin/*"
           element={
-            <Suspense fallback={<AdminFallback />}>
-              <AdminApp />
-            </Suspense>
+            <>
+              <title>Admin — Advaita Chandra</title>
+              <meta name="robots" content="noindex, nofollow" />
+              <Suspense fallback={<AdminFallback />}>
+                <AdminApp />
+              </Suspense>
+            </>
           }
         />
       </Routes>

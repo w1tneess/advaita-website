@@ -1,5 +1,5 @@
 import { buildMeta, generateJsonLd, TWITTER_HANDLE } from '@/lib/seo.js'
-import { SITE_NAME } from '@/config/site.js'
+import { DEFAULT_OG_IMAGE, SITE_NAME } from '@/config/site.js'
 
 /**
  * Per-page document metadata.
@@ -20,9 +20,10 @@ export default function Seo({
   noindex = false,
   publishedAt,
   updatedAt,
+  collection,
 }) {
   const meta = buildMeta(
-    { title, description, path, image, type, noindex, publishedAt, updatedAt },
+    { title, description, path, image, type, noindex, publishedAt, updatedAt, collection },
     import.meta.env.BASE_URL,
   )
   const jsonLd = generateJsonLd(meta)
@@ -60,6 +61,8 @@ export default function Seo({
       <meta property="og:url" content={meta.canonical} />
       <meta property="og:image" content={meta.image} />
       <meta property="og:image:alt" content={meta.title} />
+      {meta.image === DEFAULT_OG_IMAGE && <meta property="og:image:width" content="1200" />}
+      {meta.image === DEFAULT_OG_IMAGE && <meta property="og:image:height" content="630" />}
 
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:site" content={TWITTER_HANDLE} />

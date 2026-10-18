@@ -25,7 +25,7 @@ export default function Privacy() {
               <EyeOff className="h-4 w-4" aria-hidden="true" />
               <span>Zero Trackers</span>
             </div>
-            <h3 className="text-2xl text-ink font-normal">No Commercial Analytics</h3>
+            <h2 className="text-2xl text-ink font-normal">No Commercial Analytics</h2>
             <p className="mt-4 text-base font-sans text-muted leading-relaxed">
               This website does not load Google Analytics, Meta Pixel, tracking beacons, or cross-site fingerprinting scripts.
             </p>
@@ -36,7 +36,7 @@ export default function Privacy() {
               <Lock className="h-4 w-4" aria-hidden="true" />
               <span>Encrypted Transit</span>
             </div>
-            <h3 className="text-2xl text-ink font-normal">Strict HTTPS Enforced</h3>
+            <h2 className="text-2xl text-ink font-normal">Strict HTTPS Enforced</h2>
             <p className="mt-4 text-base font-sans text-muted leading-relaxed">
               All transmissions, assets, and correspondence dispatches are protected in transit with high-grade TLS encryption and HSTS headers.
             </p>
@@ -47,7 +47,7 @@ export default function Privacy() {
               <Shield className="h-4 w-4" aria-hidden="true" />
               <span>Data Sovereignty</span>
             </div>
-            <h3 className="text-2xl text-ink font-normal">No Secondary Sales</h3>
+            <h2 className="text-2xl text-ink font-normal">No Secondary Sales</h2>
             <p className="mt-4 text-base font-sans text-muted leading-relaxed">
               Your email address and correspondence are never sold, rented, monetized, or fed into automated marketing funnels.
             </p>

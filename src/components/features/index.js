@@ -1,7 +1,0 @@
-export * from './home/index.js'
-export * from './projects/index.js'
-export * from './photography/index.js'
-export * from './notes/index.js'
-export * from './contact/index.js'
-export { default as SearchInput } from './SearchInput.jsx'
-export { default as ProjectCard } from './projects/ProjectCard.tsx'

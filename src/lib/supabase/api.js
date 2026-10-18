@@ -1,7 +1,10 @@
-import { supabase, isSupabaseConfigured } from './client.js'
+import { isSupabaseConfigured } from './config.js'
+
+// Loaded on first use, so the home page contact form does not put supabase-js on every page.
+const getClient = async () => (await import('./client.js')).supabase
 
 export async function submitContactForm({ name, email, topic, message }) {
-  if (!isSupabaseConfigured() || !supabase) {
+  if (!isSupabaseConfigured()) {
     throw new Error('Supabase is not configured. Unable to submit contact form.')
   }
 
@@ -16,16 +19,17 @@ export async function submitContactForm({ name, email, topic, message }) {
   if (cleanMessage.length > 3000) {
     throw new Error('Message exceeds the maximum allowed length of 3000 characters.')
   }
-  if (cleanEmail && cleanEmail !== 'reader@local') {
+  if (cleanEmail) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
     if (!emailRegex.test(cleanEmail)) {
       throw new Error('Please provide a valid email address.')
     }
   }
 
+  const supabase = await getClient()
   const { error } = await supabase.from('contact_submissions').insert({
     name: cleanName || 'Anonymous',
-    email: cleanEmail || 'unspecified@local',
+    email: cleanEmail, // '' when the sender left it blank (allowed by the RLS policy)
     topic: cleanTopic,
     message: cleanMessage,
   })
@@ -46,7 +50,7 @@ const ALLOWED_IMAGE_TYPES = new Set([
 const MAX_IMAGE_SIZE_BYTES = 15 * 1024 * 1024 // 15 MB
 
 export async function uploadImage(file, path) {
-  if (!isSupabaseConfigured() || !supabase) {
+  if (!isSupabaseConfigured()) {
     throw new Error('Supabase is not configured. Unable to upload images.')
   }
 
@@ -74,6 +78,7 @@ export async function uploadImage(file, path) {
     throw new Error('Invalid upload destination path.')
   }
 
+  const supabase = await getClient()
   const { data, error } = await supabase.storage.from('images').upload(cleanPath, file, {
     cacheControl: '3600',
     upsert: true,
@@ -89,7 +94,7 @@ export async function uploadImage(file, path) {
 }
 
 export async function removeImage(path) {
-  if (!isSupabaseConfigured() || !supabase) {
+  if (!isSupabaseConfigured()) {
     throw new Error('Supabase is not configured. Unable to remove image.')
   }
 
@@ -102,6 +107,7 @@ export async function removeImage(path) {
     throw new Error('Invalid image path for deletion.')
   }
 
+  const supabase = await getClient()
   const { error } = await supabase.storage.from('images').remove([cleanPath])
   if (error) throw error
   return true

@@ -3,10 +3,10 @@
 [![Website](https://img.shields.io/badge/Website-advaitachandra.in-copper?style=flat-square&logo=google-chrome&logoColor=white)](https://advaitachandra.in/)
 [![CI](https://github.com/w1tneess/advaita-website/actions/workflows/ci.yml/badge.svg?style=flat-square)](https://github.com/w1tneess/advaita-website/actions/workflows/ci.yml)
 [![React](https://img.shields.io/badge/React-19.0-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev/)
-[![Vite](https://img.shields.io/badge/Vite-6.0-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Vite](https://img.shields.io/badge/Vite-8-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4.0-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-3ECF8E?style=flat-square&logo=supabase&logoColor=white)](https://supabase.com/)
-[![Node Tests](https://img.shields.io/badge/Tests-22%20passing-brightgreen?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org/)
+[![Node Tests](https://img.shields.io/badge/Tests-37%20passing-brightgreen?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org/)
 
 The official repository for [advaitachandra.in](https://advaitachandra.in/) — a personal site, engineering portfolio, and public notebook designed and developed by **Advaita Chandra**, a student and developer from **West Bengal, India**.
 
@@ -77,7 +77,7 @@ A cornerstone of this site is intellectual honesty and epistemic transparency:
 - **Interactive Command Menu (`Cmd+K` / `Ctrl+K`)**:
   - Global modal palette powered by `cmdk` allowing keyboard-first navigation across all pages, external profiles, and themes.
 - **Admin Studio & CMS (`/admin`)**:
-  - Secure management dashboard protected by Supabase Auth with Row-Level Security (RLS).
+  - Secure management dashboard protected by Supabase Auth; RLS limits writes to accounts in `public.admin_users`.
   - Client-side image compression via `browser-image-compression` to optimize uploads directly into Supabase Storage.
 - **Fluid Visual Design & Typography**:
   - Bespoke dark palette with refined copper and ivory accent tokens.
@@ -105,10 +105,11 @@ graph TD
 
 1. **Pre-rendering Engine (`scripts/prerender.js`)**:
    - Executes immediately post-build in pure Node.js.
-   - Extracts route definitions from `src/config/nav.js` and injects complete semantic HTML bodies into `#root` for all 9 public routes.
+   - Extracts route definitions from `src/config/nav.js` and injects complete semantic HTML bodies into `#root` for every public route and published article.
    - Allows search engines, web archive bots, and zero-JS clients to index full page text without executing JavaScript.
 2. **Resilient Data Layer**:
-   - Primary data loads dynamically from Supabase Postgres (`site_content` table).
+   - Content is one JSON document in Supabase Postgres (`site_content`, row `main`). Visitors and the pre-render read a draft-free copy through `get_public_site_content()` (no drafts, hidden items or admin activity log) with plain `fetch`; supabase-js is loaded only for the admin panel and contact submissions.
+   - The admin panel loads the full row after sign-in; saving a public copy is refused so drafts can never be overwritten.
    - If Supabase credentials are not configured or network requests fail, the application gracefully falls back to bundled seed JSON files (`src/data/seed.js`), ensuring zero downtime.
 
 ---
@@ -119,17 +120,17 @@ This project implements state-of-the-art standards for Large Language Model Opti
 
 - **Standardized Machine Context**:
   - `/llms.txt`: Compact manifest conforming to the [llmstxt.org](https://llmstxt.org) standard for LLM query engines.
-  - `/llms-full.txt`: Dense, authoritative context document containing biography, corrected identity guidelines, project summaries, and verified external links.
+  - `/llms-full.txt`: Dense context document (its project and note sections are regenerated from published content at build time by `scripts/llms.js`) containing biography, corrected identity guidelines, project summaries, and verified external links.
 - **Permissive Agent Access (`public/robots.txt`)**:
   - Explicit directives granting access to major AI search agents (`GPTBot`, `ClaudeBot`, `PerplexityBot`, `Google-Extended`, `Applebot-Extended`, `Amazonbot`, `Meta-ExternalAgent`).
-  - Blocks administrative endpoints (`/admin`) to maintain security.
+  - Disallows `/admin` (which also sends `X-Robots-Tag: noindex`). This only steers crawlers; access control is enforced by Supabase RLS.
 - **Rich Schema.org Linked Data**:
   - Dynamic `@graph` containing structured entities: `Person`, `WebSite`, `ProfilePage`, `CollectionPage`, `BlogPosting`, and `BreadcrumbList`.
 - **Syndication Feeds**:
   - RSS 2.0 feed at `/rss.xml`.
   - JSON Feed 1.1 at `/feed.json`.
   - Auto-generated XML sitemap at `/sitemap.xml`.
-- **Edge Cache Headers (`public/_headers` / `vercel.json`)**:
+- **Edge Cache Headers (`vercel.json`)**:
   - Optimized `Content-Type` headers (`text/plain; charset=utf-8`) and caching directives for `/llms.txt` and machine feeds.
 
 ---
@@ -139,7 +140,7 @@ This project implements state-of-the-art standards for Large Language Model Opti
 | Layer | Technology | Purpose |
 |---|---|---|
 | **Framework** | React 19 + React Router 7 | Core component UI and client routing |
-| **Bundler** | Vite 6 | Development server and tree-shaken builds |
+| **Bundler** | Vite 8 | Development server and tree-shaken builds |
 | **Styling** | Tailwind CSS v4 + Vanilla CSS | Atomic styling, custom design tokens, responsive layouts |
 | **Backend & Auth** | Supabase (PostgreSQL) | Database, RLS authentication, and media storage |
 | **Animation** | Framer Motion + Lenis | Page transitions, reveals, and smooth scrolling |
@@ -167,10 +168,12 @@ advaita-website/
 │   ├── llms.txt                # Standardized LLM context file (llmstxt.org)
 │   ├── llms-full.txt           # Comprehensive knowledge base for LLMs
 │   ├── robots.txt              # Crawler permissions & AI bot directives
-│   ├── _headers                # Edge header rules (content-type, caching)
-│   └── og-placeholder.svg      # Default Open Graph preview image
+│   └── og-image.png            # Default Open Graph preview image (1200x630)
 ├── scripts/
-│   ├── prerender.js            # Build-time pre-render engine (HTML, sitemaps, feeds)
+│   ├── prerender.js            # Build-time pre-render engine (HTML, sitemaps, feeds, admin shell)
+│   ├── llms.js                 # Regenerates llms.txt / llms-full.txt content sections
+│   ├── rls-check.js            # Read-only Supabase RLS probe (npm run security:rls)
+│   ├── sync-seed-to-supabase.js # Pushes bundled seed JSON to Supabase (npm run content:sync)
 │   └── validate-content.js     # Seed content integrity validation
 ├── src/
 │   ├── components/
@@ -199,9 +202,14 @@ advaita-website/
 │   ├── index.css               # Design tokens, typography, and base CSS
 │   └── main.jsx                # Application root mount point
 ├── supabase/
-│   └── schema.sql              # Hardened PostgreSQL schema, RLS policies & constraints
+│   ├── schema.sql              # Tables & constraints (fresh project only)
+│   ├── fix_rls.sql             # RLS, admin allowlist (public.admin_users), grants, storage policies
+│   ├── public_content.sql      # get_public_site_content(): draft-free copy for visitors
+│   └── contact_rate_limit.sql  # Database-side rate limit on contact messages
 ├── test/
 │   ├── core.test.js            # Data parsing, formatting & slug utility tests
+│   ├── store.test.js           # Content loading fallbacks, public-copy save guard, seed-version safety
+│   ├── seo.test.js             # llms.txt sync, article dates, JSON-LD graph shape
 │   ├── security.test.js        # URL injection & scheme sanitizer unit tests
 │   └── keepalive.test.js       # Keepalive method, header & auth isolation tests
 ├── vercel.json                 # Routing, crons, caching headers & security rules
@@ -252,7 +260,8 @@ VITE_SUPABASE_ANON_KEY=your-anon-key
 | `npm run build` | Compiles the production application bundle and triggers `scripts/prerender.js` to pre-render static HTML routes and machine feeds. |
 | `npm run prerender` | Runs the pre-rendering script standalone without triggering a full Vite rebuild. |
 | `npm run preview` | Spins up a local static server serving the production `dist/` build. |
-| `npm test` | Runs the automated test suite across all 22 unit & security tests (`node:test`). |
+| `npm test` | Runs the automated test suite across all 37 unit & security tests (`node:test`). |
+| `npm run security:rls` | Read-only check of Supabase RLS with the anon key: tries reads/writes on every table, RPC and bucket and reports PASS/FAIL. Never writes (see `scripts/rls-check.js`). |
 | `npm run content:validate` | Validates the structural integrity of bundled seed data files. |
 | `npm run typecheck` | Validates TypeScript types across utilities and components. |
 | `npm run lint` | Checks the codebase for JavaScript and React lint issues with ESLint. |
@@ -265,12 +274,17 @@ VITE_SUPABASE_ANON_KEY=your-anon-key
 The application is deployed on **Vercel** with continuous delivery backed by **GitHub Actions** and **Supabase**:
 
 - **Continuous Deployment**: Every commit pushed to the `main` branch automatically triggers testing, building, and static pre-rendering on Vercel.
-- **Edge Caching & Security Headers**: Configured in `vercel.json` with strict `Content-Security-Policy`, `X-Frame-Options: DENY`, `Strict-Transport-Security`, and cache prevention on API routes.
+- **Routing**: `cleanUrls` serves the pre-rendered `index.html` of each route; unknown URLs get `404.html` with a real 404 status. `/admin` is a pre-rendered noindex shell, and `/admin/*` is rewritten to it.
+- **Edge Caching & Security Headers**: Configured in `vercel.json` with strict `Content-Security-Policy` (no `unsafe-inline` scripts), `X-Frame-Options: DENY`, `Strict-Transport-Security`, and cache prevention on API routes.
 - **Dual Keepalive Architecture (Zero Inactivity Sleep)**:
   - **Vercel Cron**: Scheduled daily at `04:00 UTC` to invoke `/api/keepalive`.
   - **GitHub Actions Workflow** (`.github/workflows/keepalive.yml`): Runs twice daily at `04:00 and 16:00 UTC` to perform an authenticated REST read against Supabase and touch the Vercel keepalive endpoint.
   - **Zero Log Leakage**: Keepalive pings use `-s -o /dev/null -w "%{http_code}"` so response records and tokens are never echoed into public GitHub Actions runner logs.
   - **Serverless Hardening**: `/api/keepalive` enforces `GET/HEAD` methods, explicit timeouts (8s), anti-caching headers, optional `CRON_SECRET` validation, and sanitized error responses.
+
+### Supabase setup
+
+Run in the Supabase SQL editor, in order: `supabase/schema.sql` (fresh project only), `supabase/fix_rls.sql`, `supabase/public_content.sql`, `supabase/contact_rate_limit.sql`. Then add your admin account to `public.admin_users` (see the comment in `fix_rls.sql`) and disable public sign-ups under Authentication. Verify with `npm run security:rls`.
 
 ---
 

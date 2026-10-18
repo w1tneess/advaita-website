@@ -8,7 +8,7 @@ import { Globe, Share2, Twitter, Facebook } from 'lucide-react'
 export default function OpenGraphPreview({
   title = 'Advaita — Personal Portfolio & Writing',
   description = 'Exploring philosophy, technology, software development, and visual arts.',
-  image = '/og-placeholder.svg',
+  image = '/og-image.png',
   url = 'https://advaitachandra.in',
 }) {
   const [platform, setPlatform] = useState('twitter') // 'twitter' | 'facebook'
@@ -22,7 +22,7 @@ export default function OpenGraphPreview({
   })()
 
   return (
-    <div className="rounded-2xl border border-line bg-surface/80 p-5 shadow-sm space-y-4 max-w-lg">
+    <div className="rounded-2xl border border-line bg-surface/80 p-5 shadow-sm space-y-4 max-w-lg print:hidden">
       <div className="flex items-center justify-between border-b border-line/40 pb-3">
         <div className="flex items-center gap-2 text-xs font-semibold text-muted uppercase tracking-wider">
           <Share2 className="h-4 w-4 text-accent" aria-hidden="true" />
@@ -78,9 +78,9 @@ export default function OpenGraphPreview({
             <Globe className="h-3 w-3" />
             {hostName}
           </p>
-          <h4 className="font-display text-base font-semibold tracking-tight text-ink line-clamp-1">
+          <p className="font-display text-base font-semibold leading-[1.1] tracking-tight text-ink line-clamp-1 text-balance">
             {title}
-          </h4>
+          </p>
           <p className="text-xs text-muted line-clamp-2 leading-normal">
             {description}
           </p>

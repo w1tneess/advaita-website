@@ -6,6 +6,7 @@ import { useContent } from '@/lib/content.jsx'
 import Seo from '@/components/meta/Seo.jsx'
 import { PUBLIC_ROUTES } from '@/config/nav.js'
 import { matchesQuery } from '@/lib/format'
+import { projectCollection } from '@/lib/seo.js'
 
 const ROUTE = PUBLIC_ROUTES.find((route) => route.key === 'projects')
 
@@ -52,7 +53,12 @@ export default function Projects() {
 
   return (
     <>
-      <Seo title={ROUTE.title} description={ROUTE.description} path="/projects" />
+      <Seo
+        title={ROUTE.title}
+        description={ROUTE.description}
+        path="/projects"
+        collection={projectCollection(publicProjects)}
+      />
 
       <PageHeader
         eyebrow="Projects"
@@ -78,9 +84,9 @@ export default function Projects() {
               <span className="h-1.5 w-1.5 rounded-full bg-muted animate-pulse" />
               <span>Creative Computing // Procedural Sandbox</span>
             </div>
-            <h3 className="font-sans text-base sm:text-lg font-medium text-ink group-hover:text-muted transition-colors duration-150 ease-[var(--ease-out-quart)]">
+            <h2 className="font-sans text-base sm:text-lg font-medium text-ink group-hover:text-muted transition-colors duration-150 ease-[var(--ease-out-quart)]">
               Algorithmic Art &amp; Vector Flow Fields
-            </h3>
+            </h2>
             <p className="text-xs sm:text-sm text-muted mt-1 leading-relaxed max-w-xl">
               Interactive GPU-accelerated mathematical vector simulations, chaotic orbital
               attractors, and seeded generative geometry.

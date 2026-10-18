@@ -16,6 +16,7 @@ import { useToast } from '@/lib/toast'
 import { formatDateShort } from '@/lib/format'
 import { removeImage } from '@/lib/supabase/api.js'
 import { sanitizeImageUrl } from '@/lib/url.ts'
+import { photoStoragePaths } from '@/lib/image.js'
 
 export default function PhotographyList() {
   const { photography, upsertPhotography, removePhotography } = useContent()
@@ -84,8 +85,8 @@ export default function PhotographyList() {
     if (!confirmed) return
 
     try {
-      if (photo.storage_path) {
-        await removeImage(photo.storage_path)
+      for (const path of photoStoragePaths(photo)) {
+        await removeImage(path)
       }
       const result = await removePhotography(photo.id)
       if (result && result.ok) {

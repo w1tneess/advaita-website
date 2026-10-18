@@ -1,4 +1,5 @@
 import { ArrowRight, ArrowUpRight } from 'lucide-react'
+import { CONTACT_EMAIL } from '@/config/site.js'
 import { Link } from 'react-router'
 import PageHeader from '@/components/ui/PageHeader.jsx'
 import Seo from '@/components/meta/Seo.jsx'
@@ -69,7 +70,7 @@ export default function About() {
 
             <div className="pt-8 border-t border-line lg:border-t-0 lg:pt-0 lg:pl-10 lg:border-l space-y-5">
               <h3 className="font-mono text-xs uppercase tracking-wider text-ink border-b border-line pb-3">
-                Verified Profiles
+                Profiles
               </h3>
               <ul className="space-y-3 font-mono text-xs tracking-wide">
                 <li className="flex items-center justify-between gap-4 border-b border-line pb-3">
@@ -121,10 +122,10 @@ export default function About() {
                 <li className="flex items-center justify-between gap-4 pt-1">
                   <span className="text-muted">Email:</span>
                   <a
-                    href="mailto:hi@advaitachandra.in"
+                    href={`mailto:${CONTACT_EMAIL}`}
                     className="text-ink hover:text-muted active:opacity-80 transition-colors duration-150 ease-[var(--ease-out-quart)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas rounded-sm"
                   >
-                    hi@advaitachandra.in
+                    {CONTACT_EMAIL}
                   </a>
                 </li>
               </ul>

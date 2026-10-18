@@ -31,8 +31,6 @@ export const PUBLIC_ROUTES = [
     nav: true,
     title: 'Advaita Chandra',
     description: 'Personal site and public notebook of Advaita Chandra, a student, learner, and explorer. Notes on philosophy, data, technology, and coding projects.',
-    priority: '1.0',
-    changefreq: 'monthly',
   },
   {
     path: '/philosophy',
@@ -42,8 +40,6 @@ export const PUBLIC_ROUTES = [
     title: 'Philosophy',
     description:
       'Notes on books I am reading and questions I have not solved yet.',
-    priority: '0.8',
-    changefreq: 'monthly',
   },
   {
     path: '/photography',
@@ -52,8 +48,6 @@ export const PUBLIC_ROUTES = [
     nav: true,
     title: 'Photography',
     description: 'Street, landscape, and everyday photography.',
-    priority: '0.8',
-    changefreq: 'monthly',
   },
   {
     path: '/blog',
@@ -62,8 +56,6 @@ export const PUBLIC_ROUTES = [
     nav: true,
     title: 'Writing / Blog',
     description: 'Public notebook of notes, research, and ideas as a learner and explorer.',
-    priority: '0.9',
-    changefreq: 'weekly',
   },
   {
     path: '/projects',
@@ -72,8 +64,6 @@ export const PUBLIC_ROUTES = [
     nav: true,
     title: 'Projects',
     description: 'My coding projects, data architecture experiments, and source code.',
-    priority: '0.9',
-    changefreq: 'monthly',
   },
   {
     path: '/about',
@@ -82,8 +72,6 @@ export const PUBLIC_ROUTES = [
     nav: true,
     title: 'About',
     description: 'Background, learning direction, and how I approach questions.',
-    priority: '0.8',
-    changefreq: 'monthly',
   },
   {
     path: '/contact',
@@ -92,8 +80,6 @@ export const PUBLIC_ROUTES = [
     nav: true,
     title: 'Contact',
     description: 'Get in touch about projects, feedback, or collaboration.',
-    priority: '0.6',
-    changefreq: 'yearly',
   },
   {
     path: '/art',
@@ -102,8 +88,6 @@ export const PUBLIC_ROUTES = [
     nav: false,
     title: 'Algorithmic Art & Creative Computing',
     description: 'Interactive computational aesthetics, mathematical flow fields, and particle dynamics.',
-    priority: '0.8',
-    changefreq: 'monthly',
   },
   {
     path: '/privacy',
@@ -112,8 +96,6 @@ export const PUBLIC_ROUTES = [
     nav: false,
     title: 'Privacy Policy',
     description: 'Privacy notice, data practices, and correspondence handling policy.',
-    priority: '0.3',
-    changefreq: 'yearly',
   },
   {
     path: '/terms',
@@ -122,8 +104,6 @@ export const PUBLIC_ROUTES = [
     nav: false,
     title: 'Terms of Use',
     description: 'Terms and conditions, scholarly attribution, and licensing of materials.',
-    priority: '0.3',
-    changefreq: 'yearly',
   },
 ]
 
@@ -148,9 +128,9 @@ export function allPrerenderRoutes(publishedPosts = [], publishedNotes = []) {
       key: `post:${post.slug}`,
       title: post.title,
       description: post.excerpt || 'An article by Advaita Chandra.',
-      changefreq: 'monthly',
-      priority: '0.7',
       lastmod: post.updated_at || post.updatedAt || post.published_at || post.publishedAt || undefined,
+      publishedAt: post.published_at || post.publishedAt,
+      updatedAt: post.updated_at || post.updatedAt,
       type: 'article',
     })),
     ...publishedNotes
@@ -160,9 +140,9 @@ export function allPrerenderRoutes(publishedPosts = [], publishedNotes = []) {
         key: `note:${note.slug}`,
         title: note.title,
         description: note.excerpt || note.title,
-        changefreq: 'monthly',
-        priority: '0.7',
         lastmod: note.updated_at || note.published_at || undefined,
+        publishedAt: note.published_at,
+        updatedAt: note.updated_at,
         type: 'article',
       })),
   ]

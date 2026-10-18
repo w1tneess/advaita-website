@@ -83,7 +83,7 @@ export default function Photography() {
 
   return (
     <>
-      <Seo title={ROUTE.title} description={ROUTE.description} path="/photography" />
+      <Seo title={ROUTE.title} description={ROUTE.description} path="/photography" noindex={photos.length === 0} />
 
       <PageHeader
         eyebrow="Photography"
@@ -182,13 +182,11 @@ export default function Photography() {
             })}
           </div>
         ) : (
-          <div className="bg-surface p-12 text-center font-utility text-muted">
-            <EmptyState
-              icon={Camera}
-              title="No photographs yet"
-              message="Photographs and visual notes will appear here once added."
-            />
-          </div>
+          <EmptyState
+            icon={Camera}
+            title="No photographs yet"
+            message="Photographs and visual notes will appear here once added."
+          />
         )}
       </section>
 

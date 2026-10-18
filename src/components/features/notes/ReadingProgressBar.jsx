@@ -26,7 +26,7 @@ export default function ReadingProgressBar() {
 
   return (
     <div
-      className="fixed top-0 left-0 right-0 z-50 h-[2px] bg-transparent pointer-events-none"
+      className="fixed top-0 left-0 right-0 z-50 h-[2px] bg-transparent pointer-events-none print:hidden"
       role="progressbar"
       aria-label="Article reading progress"
       aria-valuenow={Math.round(progress)}

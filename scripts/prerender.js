@@ -17,12 +17,14 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { createClient } from '@supabase/supabase-js'
 import dotenv from 'dotenv'
 
 import { allPrerenderRoutes, NAV_ITEMS } from '../src/config/nav.js'
-import { SITE_NAME, SITE_URL } from '../src/config/site.js'
-import { buildMeta, renderMetaTags, escapeHtml } from '../src/lib/seo.js'
+import { CONTACT_EMAIL, SITE_NAME, SITE_URL } from '../src/config/site.js'
+import { buildMeta, renderMetaTags, escapeHtml, projectCollection } from '../src/lib/seo.js'
+import { isSupabaseConfigured } from '../src/lib/supabase/config.js'
+import { fetchPublicContent } from '../src/lib/supabase/public.js'
+import { syncLlmsFull, syncLlmsTxt } from './llms.js'
 
 dotenv.config()
 dotenv.config({ path: '.env.local' })
@@ -196,12 +198,12 @@ function renderSemanticBody(route, siteData) {
           <li><strong>Official Website:</strong> <a href="https://advaitachandra.in/">https://advaitachandra.in/</a></li>
         </ul>
 
-        <h2>Verified Profiles &amp; Networks</h2>
+        <h2>Profiles &amp; Networks</h2>
         <ul>
           <li>GitHub: <a href="https://github.com/w1tneess">https://github.com/w1tneess</a></li>
           <li>X (Twitter): <a href="https://x.com/w1tneess_">https://x.com/w1tneess_</a></li>
           <li>Instagram: <a href="https://www.instagram.com/adva1ta_/">https://www.instagram.com/adva1ta_/</a></li>
-          <li>Email: <a href="mailto:hi@advaitachandra.in">hi@advaitachandra.in</a></li>
+          <li>Email: <a href="mailto:${CONTACT_EMAIL}">${CONTACT_EMAIL}</a></li>
         </ul>
 
         <h2>Technologies &amp; Developer Toolkit</h2>
@@ -335,7 +337,7 @@ function renderSemanticBody(route, siteData) {
     mainContent = `
       <article>
         <h1>${e(route.title)}</h1>
-        <p><small>Published by Advaita Chandra on ${e(route.lastmod || '')}</small></p>
+        <p><small>Published by Advaita Chandra on ${e(route.publishedAt || '')}</small></p>
         <div>${e(route.description)}</div>
       </article>`
   } else if (route.path === '/photography') {
@@ -351,7 +353,7 @@ function renderSemanticBody(route, siteData) {
         <h1>Contact Advaita Chandra</h1>
         <p>Reach out for inquiries, scholarly feedback, or collaboration.</p>
         <ul>
-          <li>Email: <a href="mailto:hi@advaitachandra.in">hi@advaitachandra.in</a></li>
+          <li>Email: <a href="mailto:${CONTACT_EMAIL}">${CONTACT_EMAIL}</a></li>
           <li>GitHub: <a href="https://github.com/w1tneess">https://github.com/w1tneess</a></li>
           <li>X (Twitter): <a href="https://x.com/w1tneess_">https://x.com/w1tneess_</a></li>
           <li>Instagram: <a href="https://www.instagram.com/adva1ta_/">https://www.instagram.com/adva1ta_/</a></li>
@@ -431,7 +433,7 @@ function renderSemanticBody(route, siteData) {
           </div>
         </div>
       </header>
-      <main id="main-content" class="flex-1">
+      <main id="main-content" class="flex-1 min-h-dvh">
         ${route.path === '/' ? mainContent : `<div class="shell pt-[clamp(7.5rem,13vw,11.5rem)] pb-16 prose-body">${mainContent}</div>`}
       </main>
       <footer class="mt-auto border-t border-line py-12 text-sm text-muted">
@@ -475,8 +477,6 @@ function renderSitemap(routes) {
       return [
         '  <url>',
         `    <loc>${meta.canonical}</loc>${lastmod}`,
-        `    <changefreq>${route.changefreq || 'monthly'}</changefreq>`,
-        `    <priority>${route.priority || '0.5'}</priority>`,
         '  </url>',
       ].join('\n')
     })
@@ -484,6 +484,9 @@ function renderSitemap(routes) {
 
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`
 }
+
+/** Notes without a slug have no page of their own, only an anchor on /philosophy. */
+const noteUrl = (note) => (note.slug ? `${SITE_URL}/philosophy/${note.slug}` : `${SITE_URL}/philosophy#${note.id}`)
 
 /** Render RSS 2.0 Feed combining notes and blog posts. */
 function renderRssFeed({ posts = [], notes = [] }) {
@@ -499,7 +502,7 @@ function renderRssFeed({ posts = [], notes = [] }) {
       <guid isPermaLink="true">${SITE_URL}/blog/${post.slug}</guid>
       <pubDate>${pubDate}</pubDate>
       <description><![CDATA[${post.excerpt || post.content || ''}]]></description>
-      <author>hi@advaitachandra.in (Advaita Chandra)</author>
+      <author>${CONTACT_EMAIL} (Advaita Chandra)</author>
     </item>`)
   }
 
@@ -509,12 +512,12 @@ function renderRssFeed({ posts = [], notes = [] }) {
     items.push(`
     <item>
       <title><![CDATA[${note.title}]]></title>
-      <link>${SITE_URL}/philosophy#${note.id}</link>
-      <guid isPermaLink="false">${SITE_URL}/philosophy#${note.id}</guid>
+      <link>${noteUrl(note)}</link>
+      <guid isPermaLink="false">${noteUrl(note)}</guid>
       <pubDate>${pubDate}</pubDate>
       <category><![CDATA[${note.category || 'Philosophy'}]]></category>
       <description><![CDATA[${note.content}]]></description>
-      <author>hi@advaitachandra.in (Advaita Chandra)</author>
+      <author>${CONTACT_EMAIL} (Advaita Chandra)</author>
     </item>`)
   }
 
@@ -553,8 +556,8 @@ function renderJsonFeed({ posts = [], notes = [] }) {
 
   for (const note of notes) {
     feedItems.push({
-      id: `${SITE_URL}/philosophy#${note.id}`,
-      url: `${SITE_URL}/philosophy#${note.id}`,
+      id: noteUrl(note),
+      url: noteUrl(note),
       title: note.title,
       content_text: note.content,
       tags: [note.category],
@@ -586,37 +589,13 @@ function renderJsonFeed({ posts = [], notes = [] }) {
   )
 }
 
-const supabaseUrl =
-  process.env.VITE_SUPABASE_URL ||
-  process.env.NEXT_PUBLIC_Backend_SUPABASE_URL ||
-  process.env.Backend_SUPABASE_URL ||
-  process.env.NEXT_PUBLIC_SUPABASE_URL ||
-  process.env.SUPABASE_URL ||
-  ''
-
-const supabaseAnonKey =
-  process.env.VITE_SUPABASE_ANON_KEY ||
-  process.env.NEXT_PUBLIC_Backend_SUPABASE_ANON_KEY ||
-  process.env.NEXT_PUBLIC_Backend_SUPABASE_PUBLISHABLE_KEY ||
-  process.env.Backend_SUPABASE_ANON_KEY ||
-  process.env.Backend_SUPABASE_PUBLISHABLE_KEY ||
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-  process.env.SUPABASE_ANON_KEY ||
-  ''
-
-const supabase =
-  supabaseUrl && supabaseAnonKey && !supabaseUrl.includes('placeholder')
-    ? createClient(supabaseUrl, supabaseAnonKey)
-    : null
-
-
 async function getPrerenderData() {
   let posts = []
-  let latestUpdate = null
   let profile = {}
   let philosophy = {}
   let projects = []
   let social = []
+  let photography = {}
 
   // Load local data as baseline
   try {
@@ -624,43 +603,37 @@ async function getPrerenderData() {
     philosophy = JSON.parse(await readFile(join(root, 'src/data/philosophy.json'), 'utf8'))
     projects = JSON.parse(await readFile(join(root, 'src/data/projects.json'), 'utf8'))
     social = JSON.parse(await readFile(join(root, 'src/data/social.json'), 'utf8'))
+    photography = JSON.parse(await readFile(join(root, 'src/data/photography.json'), 'utf8'))
   } catch (e) {
     console.warn('Warning reading local data files:', e.message)
   }
 
-  if (supabase) {
-    try {
-      const { data } = await supabase
-        .from('site_content')
-        .select('data, updated_at')
-        .eq('id', 'main')
-        .single()
-
-      if (data?.data?.blog && Array.isArray(data.data.blog)) {
-        posts = data.data.blog.filter((p) => p.status === 'published')
+  // The same draft-free public copy visitors get (supabase/public_content.sql).
+  const remote = await fetchPublicContent()
+  if (remote.error && isSupabaseConfigured()) {
+    console.warn(`Pre-render: Supabase unavailable (${remote.error.message}); using bundled content.`)
+  }
+  const data = remote.data ? { data: remote.data, updated_at: remote.updatedAt } : null
+  if (data) {
+    if (data?.data?.blog && Array.isArray(data.data.blog)) {
+      posts = data.data.blog.filter((p) => p.status === 'published')
+    }
+    if (data?.data?.profile) profile = { ...profile, ...data.data.profile }
+    if (data?.data?.photography) photography = data.data.photography
+    if (data?.data?.philosophy) {
+      const remoteNotes = data.data.philosophy.notes
+      philosophy = {
+        ...philosophy,
+        ...data.data.philosophy,
+        notes:
+          Array.isArray(remoteNotes) && remoteNotes.length > 0
+            ? remoteNotes
+            : philosophy.notes || [],
       }
-      if (data?.data?.profile) profile = { ...profile, ...data.data.profile }
-      if (data?.data?.philosophy) {
-        const remoteNotes = data.data.philosophy.notes
-        philosophy = {
-          ...philosophy,
-          ...data.data.philosophy,
-          notes:
-            Array.isArray(remoteNotes) && remoteNotes.length > 0
-              ? remoteNotes
-              : philosophy.notes || [],
-        }
-      }
-      if (data?.data?.projects && Array.isArray(data.data.projects) && data.data.projects.length > 0) {
-        const remoteProjects = data.data.projects
-        const remoteIds = new Set(remoteProjects.map((p) => p.id))
-        projects = [...remoteProjects, ...projects.filter((p) => !remoteIds.has(p.id))]
-      }
-      if (data?.updated_at) {
-        latestUpdate = new Date(data.updated_at).toISOString()
-      }
-    } catch (_e) {
-      // Fallback to local files
+    }
+    // Supabase is authoritative: merging seed projects back in resurrected ones deleted in admin.
+    if (Array.isArray(data?.data?.projects) && data.data.projects.length > 0) {
+      projects = data.data.projects
     }
   }
 
@@ -675,22 +648,31 @@ async function getPrerenderData() {
     }
   }
 
-  return { posts, latestUpdate, profile, philosophy, projects, social }
+  return { posts, profile, philosophy, projects, social, photography }
 }
 
 async function main() {
   const template = await readFile(join(dist, 'index.html'), 'utf8')
   const siteData = await getPrerenderData()
-  const { posts, latestUpdate, philosophy } = siteData
-  const routes = allPrerenderRoutes(posts, philosophy.notes || [])
+  const { posts, philosophy } = siteData
+  const notes = (philosophy.notes || []).filter((n) => n.status === 'published')
+  const projects = (siteData.projects || []).filter((p) => p.published !== false)
+  const routes = allPrerenderRoutes(posts, notes)
 
-  if (latestUpdate) {
-    routes.forEach((route) => {
-      // Set lastmod on dynamic pages if they are updated
-      if (['projects', 'philosophy', 'blog'].includes(route.key)) {
-        route.lastmod = latestUpdate
-      }
-    })
+  // Empty sections stay out of the index (and sitemap) until they have content; mirrors <Seo noindex>.
+  const photoCount = siteData.photography?.photos?.length || 0
+  for (const route of routes) {
+    if ((route.key === 'blog' && posts.length === 0) || (route.key === 'photography' && photoCount === 0)) route.noindex = true
+  }
+
+  const projectsRoute = routes.find((route) => route.key === 'projects')
+  if (projectsRoute) projectsRoute.collection = projectCollection(projects)
+
+  // lastmod only from real content dates: a section is as new as its newest article.
+  const newest = (items) => items.map((i) => i.updated_at || i.published_at || i.publishedAt).filter(Boolean).sort().at(-1)
+  for (const route of routes) {
+    if (route.key === 'philosophy') route.lastmod = newest(notes)
+    if (route.key === 'blog') route.lastmod = newest(posts)
   }
 
   const written = []
@@ -714,13 +696,29 @@ async function main() {
     'utf8',
   )
 
+  // Admin shell: a real file so /admin answers 200 (vercel.json rewrites /admin/* to it).
+  // Head only, no pre-rendered body: the app mounts the admin panel into an empty #root.
+  await mkdir(join(dist, 'admin'), { recursive: true })
+  await writeFile(
+    join(dist, 'admin/index.html'),
+    injectMeta(template, { path: '/admin', title: 'Admin', description: 'Site administration.', noindex: true }),
+    'utf8',
+  )
+
   // Sitemap
-  await writeFile(join(dist, 'sitemap.xml'), renderSitemap(routes), 'utf8')
+  const indexable = routes.filter((route) => !route.noindex)
+  await writeFile(join(dist, 'sitemap.xml'), renderSitemap(indexable), 'utf8')
 
   // Feeds
-  const notes = (philosophy.notes || []).filter((n) => n.status === 'published')
   await writeFile(join(dist, 'rss.xml'), renderRssFeed({ posts, notes }), 'utf8')
   await writeFile(join(dist, 'feed.json'), renderJsonFeed({ posts, notes }), 'utf8')
+
+  // llms.txt / llms-full.txt: regenerate the project and note sections from content
+  const llmsData = { projects, notes }
+  for (const [file, sync] of [['llms.txt', syncLlmsTxt], ['llms-full.txt', syncLlmsFull]]) {
+    const path = join(dist, file)
+    await writeFile(path, sync(await readFile(path, 'utf8'), llmsData), 'utf8')
+  }
 
   // robots.txt rewrite sitemap if needed
   const robotsPath = join(dist, 'robots.txt')
@@ -741,8 +739,10 @@ async function main() {
       `Pre-rendered ${written.length} route${written.length === 1 ? '' : 's'} at base "${basePath}":`,
       ...written.map((file) => `  ${file}`),
       `  404.html`,
-      `  sitemap.xml (${routes.length} URLs)`,
+      `  admin/index.html (noindex shell)`,
+      `  sitemap.xml (${indexable.length} URLs)`,
       `  rss.xml (${posts.length + notes.length} entries)`,
+      `  llms.txt + llms-full.txt (${projects.length} projects, ${notes.length} notes)`,
       `  feed.json (${posts.length + notes.length} entries)`,
     ].join('\n'),
   )

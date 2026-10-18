@@ -135,7 +135,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
             )}
           </div>
         ) : (
-          <span className="text-muted/60 text-[10px] tracking-wider uppercase font-mono">
+          <span className="text-text-3 text-[10px] tracking-wider uppercase font-mono">
             {status === 'concept' ? 'Design Concept' : 'Internal Archive'}
           </span>
         )}

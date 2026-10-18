@@ -25,7 +25,7 @@ export default function Terms() {
               <BookOpen className="h-4 w-4" aria-hidden="true" />
               <span>Written Notes</span>
             </div>
-            <h3 className="text-2xl text-ink font-normal">Original Writing</h3>
+            <h2 className="text-2xl text-ink font-normal">Original Writing</h2>
             <p className="mt-4 text-base font-sans text-muted leading-relaxed">
               Notes, reflections, and historical research are copyrighted by Advaita Chandra, with open citation permitted.
             </p>
@@ -36,7 +36,7 @@ export default function Terms() {
               <Camera className="h-4 w-4" aria-hidden="true" />
               <span>Optical Archives</span>
             </div>
-            <h3 className="text-2xl text-ink font-normal">Photography Plates</h3>
+            <h2 className="text-2xl text-ink font-normal">Photography Plates</h2>
             <p className="mt-4 text-base font-sans text-muted leading-relaxed">
               Visual contact sheets and photographic works are protected original media. Personal non-commercial display only.
             </p>
@@ -47,7 +47,7 @@ export default function Terms() {
               <Code2 className="h-4 w-4" aria-hidden="true" />
               <span>Software Code</span>
             </div>
-            <h3 className="text-2xl text-ink font-normal">Open Source Tools</h3>
+            <h2 className="text-2xl text-ink font-normal">Open Source Tools</h2>
             <p className="mt-4 text-base font-sans text-muted leading-relaxed">
               Software tools and computational scripts linked to GitHub repositories are governed by their respective open-source licenses.
             </p>

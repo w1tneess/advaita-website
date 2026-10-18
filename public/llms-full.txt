@@ -125,15 +125,12 @@ Advaita operates under an explicit framework designed to prevent bias and mainta
   - Accounts of Osho and Rajneeshpuram are heavily polarized across memoirs, state prosecutions, and sannyasin perspectives.
   - Secondary sources carry significant institutional biases; primary legal and audio evidence is given precedence.
 
-### Project 3: Worksheet Generator (System Concept)
-- **Categories**: System Design, Education, Technology
-- **Summary**: Architectural specification for generating classroom educational worksheets through a four-layer separation of concerns.
-- **Architecture**:
-  1. *Content Layer*: Stores question banks, answers, and educational taxonomies as pure structured data without formatting assumptions.
-  2. *Layout Engine*: Computes page geometry, density, break points, and print margins.
-  3. *Template Engine*: Encapsulates visual design, school branding, and typographic hierarchy.
-  4. *Optional AI Assistance Layer*: Generates iterative question variations while leaving the core engine decoupled.
-- **Status**: Theoretical specification and design document.
+### Project 3: Declutter (Windows Desktop App)
+- **Live**: https://declutter.advaitachandra.in/
+- **Repository**: https://github.com/w1tneess/declutter
+- **Summary**: A Windows desktop app that tidies messy folders safely: sorts files by type, finds duplicates, removes empty folders, and reclaims disk space. It previews every change and never permanently deletes.
+- **Process**: Built through an AI-assisted, prompt-driven ("vibe-coded") workflow with Claude; the work focused on product direction, iterative prompting, UI curation, and debugging.
+- **Status**: In progress.
 
 ### Project 4: advaitachandra.in (Personal Portfolio & Web Architecture)
 - **Categories**: Web Engineering, Open Source

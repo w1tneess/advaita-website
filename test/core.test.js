@@ -210,7 +210,6 @@ test('modular feature architecture has all core module files present', async () 
   const path = await import('node:path')
 
   const files = [
-    'src/components/features/index.js',
     'src/components/features/home/index.js',
     'src/components/features/home/HeroSection.jsx',
     'src/components/features/home/SelectedProjectsSection.jsx',
@@ -222,15 +221,32 @@ test('modular feature architecture has all core module files present', async () 
     'src/components/features/notes/index.js',
     'src/components/features/notes/ReadingProgressBar.jsx',
     'src/components/features/notes/RelatedNotes.jsx',
-    'src/components/features/photography/index.js',
     'src/components/features/photography/Lightbox.jsx',
-    'src/components/features/contact/index.js',
     'src/components/features/contact/ContactForm.jsx',
-    'src/components/ui/index.js',
   ]
 
   for (const file of files) {
     const fullPath = path.resolve(file)
     assert.equal(fs.existsSync(fullPath), true, `Expected file to exist: ${file}`)
   }
+})
+
+test('photoStoragePaths covers originals and every resized variant', async () => {
+  const { photoStoragePaths } = await import('../src/lib/image.js')
+  const single = { storage_path: 'pht-a-img1.jpg', variants: [400, 800, 1600] }
+  assert.deepEqual(photoStoragePaths(single), [
+    'pht-a-img1.jpg',
+    'pht-a-img1-400w.jpg',
+    'pht-a-img1-800w.jpg',
+    'pht-a-img1-1600w.jpg',
+  ])
+  const gallery = {
+    storage_path: 'pht-a-img1.jpg',
+    gallery: [
+      { storage_path: 'pht-a-img1.jpg', variants: [400] },
+      { storage_path: 'pht-a-img2.png', variants: [] },
+    ],
+  }
+  assert.deepEqual(photoStoragePaths(gallery), ['pht-a-img1.jpg', 'pht-a-img1-400w.jpg', 'pht-a-img2.png'])
+  assert.deepEqual(photoStoragePaths({ image_url: 'https://example.com/x.jpg' }), [])
 })

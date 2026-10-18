@@ -10,9 +10,9 @@
  * merge, so the deleted item reappears on the next reload. Storing the whole
  * document makes deletion mean deletion.
  *
- * The read path NEVER writes. A local document is created only by the first admin
- * mutation. So an ordinary visitor, who never opens /admin, always sees the freshly
- * deployed seed — which is what keeps the public site correct after every deploy.
+ * Supabase is the source of truth. Each successful load mirrors the remote document into
+ * localStorage so the next visit renders instantly; the bundled seed is used only when
+ * there is neither a remote nor a cached copy. Visitors cache the draft-free public copy.
  *
  * Nothing here is secure and nothing here is private. localStorage is plain text,
  * readable by any script on this origin. Only public site content belongs in it.
@@ -105,39 +105,20 @@ export function migrate(doc) {
    Load / save / clear
    -------------------------------------------------------------------------- */
 
-import {
-  fetchContentFromSupabase,
-  saveContentToSupabase,
-  clearContentInSupabase,
-} from './supabase/sync.js'
-import { isSupabaseConfigured } from './supabase/client.js'
+// The supabase-js client (~55 KB gzip) is loaded only for admin reads and writes, never for visitors.
+const loadSync = () => import('./supabase/sync.js')
+import { isSupabaseConfigured } from './supabase/config.js'
+import { fetchPublicContent, PUBLIC_COPY_SAVE_ERROR } from './supabase/public.js'
 
 /**
- * Reconciles a loaded document with the deployed seed to ensure that new seed
- * versions (with updated projects, links, and content) take precedence over stale stores.
+ * Fills fields a loaded document is missing (note slugs/excerpts, project links) from the
+ * deployed seed. It never replaces content: raising SEED_VERSION only shows the admin a
+ * notice (seedIsNewerThan), because a reset here would overwrite live Supabase data on
+ * the admin's next save.
  */
 export function reconcileWithSeed(doc) {
   const seed = createSeedDocument()
   if (!doc) return seed
-
-  // If the stored document has an older seedVersion than the codebase,
-  // upgrade to the fresh seed while preserving any user-added items and activity.
-  if ((doc.seedVersion ?? 0) < SEED_VERSION) {
-    return {
-      ...seed,
-      activity: doc.activity || [],
-      blog: Array.isArray(doc.blog) && doc.blog.length > 0 ? doc.blog : seed.blog,
-      photography: {
-        ...seed.photography,
-        photos:
-          Array.isArray(doc.photography?.photos) && doc.photography.photos.length > 0
-            ? doc.photography.photos
-            : seed.photography.photos,
-      },
-      seedVersion: SEED_VERSION,
-      schemaVersion: SCHEMA_VERSION,
-    }
-  }
 
   // Ensure philosophy notes always have slugs, thinkers, and excerpts
   if (doc.philosophy && Array.isArray(doc.philosophy.notes)) {
@@ -198,16 +179,19 @@ export function reconcileWithSeed(doc) {
 /**
  * Load the active content document asynchronously.
  * Tries Supabase first; falls back gracefully to localStorage or seed.
+ * Visitors get the draft-free public copy; `full` (admin only, enforced by RLS) reads the real row.
  *
  * @returns {Promise<{doc: object, source: 'seed'|'local'|'remote', warning: string|null}>}
  */
-export async function loadDocument() {
+export async function loadDocument({ full = false } = {}) {
   const storage = getStorage()
 
   // 1. If Supabase is configured, attempt remote fetch
   if (isSupabaseConfigured()) {
     try {
-      const { data: raw, error } = await fetchContentFromSupabase(2)
+      const { data: raw, error } = full
+        ? await (await loadSync()).fetchContentFromSupabase(2)
+        : await fetchPublicContent()
 
       if (!error && raw) {
         const { doc: migrated, blockedAt } = migrate(raw)
@@ -225,7 +209,7 @@ export async function loadDocument() {
             }
             return {
               doc: finalDoc,
-              source: (migrated.seedVersion ?? 0) < SEED_VERSION ? 'seed' : 'remote',
+              source: 'remote',
               warning: null,
             }
           }
@@ -256,10 +240,9 @@ export async function loadDocument() {
             }
             return {
               doc: finalDoc,
-              source: (migrated.seedVersion ?? 0) < SEED_VERSION ? 'seed' : 'local',
-              warning: isSupabaseConfigured()
-                ? 'Using cached local edits (offline mode).'
-                : null,
+              source: 'local',
+              // Visitors just see the cached copy; only the admin needs to know it is not live.
+              warning: full && isSupabaseConfigured() ? 'Using cached local edits (offline mode).' : null,
             }
           }
         }
@@ -281,6 +264,10 @@ export async function loadDocument() {
  * @returns {Promise<{ok: boolean, synced: boolean, source: 'remote'|'local', error: string|null, warning?: string}>}
  */
 export async function saveDocument(doc) {
+  if (doc?.publicCopy) {
+    return { ok: false, synced: false, source: 'local', error: PUBLIC_COPY_SAVE_ERROR }
+  }
+
   const storage = getStorage()
   let localSaved = false
 
@@ -297,7 +284,7 @@ export async function saveDocument(doc) {
   // 2. If Supabase is configured, attempt remote sync
   if (isSupabaseConfigured()) {
     try {
-      const remoteRes = await saveContentToSupabase(doc)
+      const remoteRes = await (await loadSync()).saveContentToSupabase(doc)
       if (remoteRes && remoteRes.ok) {
         return { ok: true, synced: true, source: 'remote', error: null }
       }
@@ -336,7 +323,7 @@ export async function syncLocalToSupabase(doc) {
   if (!isSupabaseConfigured()) {
     return { ok: false, error: 'Supabase is not configured in .env.local.' }
   }
-  return await saveContentToSupabase(doc)
+  return await (await loadSync()).saveContentToSupabase(doc)
 }
 
 /** Discard both local and remote edits so the deployed seed is used again. */
@@ -351,7 +338,7 @@ export async function clearDocument() {
   }
 
   if (isSupabaseConfigured()) {
-    return await clearContentInSupabase()
+    return await (await loadSync()).clearContentInSupabase()
   }
   return { ok: true, error: null }
 }

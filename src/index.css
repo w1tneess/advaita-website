@@ -61,7 +61,7 @@
   --color-surface-3: var(--color-raised);
   --color-text: var(--color-ink);
   --color-text-2: var(--color-muted);
-  --color-text-3: #7C766F; /* 3.5:1 on canvas – decorative only */
+  --color-text-3: #8A847D; /* ≥4.6:1 on canvas, surface and raised (WCAG AA) */
   --color-copper: var(--color-accent);
   --color-copper-strong: var(--color-accent-strong);
   --color-copper-deep: #5E3C2C;
@@ -110,7 +110,7 @@
   --color-accent: #c2956a;
   --color-accent-strong: #d4a87d;
   --color-on-accent: #F8F6F0;
-  --color-text-3: #7C766F;
+  --color-text-3: #8A847D;
   --color-line-strong: rgba(248, 246, 240, 0.15);
 }
 
@@ -353,5 +353,48 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* Articles print as plain pages: paper-white, dark ink, link targets spelled out.
+   Site chrome is removed with print:hidden in the layout. */
+@media print {
+  :root {
+    --color-canvas: #fff;
+    --color-surface: #fff;
+    --color-raised: #fff;
+    --color-ink: #111;
+    --color-muted: #444;
+    --color-text-3: #555;
+    --color-line: #ccc;
+    --color-line-strong: #999;
+    --color-accent: #5e3c2c;
+  }
+  html,
+  body {
+    background: #fff !important;
+    color: #111 !important;
+  }
+  main {
+    padding-top: 0 !important;
+  }
+  button {
+    display: none !important;
+  }
+  article a[href^='http']::after {
+    content: ' (' attr(href) ')';
+    font-size: 0.85em;
+    word-break: break-all;
+  }
+  h1,
+  h2,
+  h3 {
+    break-after: avoid;
+  }
+  p,
+  li,
+  blockquote {
+    orphans: 3;
+    widows: 3;
   }
 }

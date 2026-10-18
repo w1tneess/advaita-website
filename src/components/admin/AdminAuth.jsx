@@ -5,6 +5,7 @@ import { ArrowLeft, Loader2, Mail, Shield, AlertTriangle, LogIn, KeyRound, Check
 import { supabase, isSupabaseConfigured } from '../../lib/supabase/client.js'
 import PasswordInput from '../ui/PasswordInput.jsx'
 import { useToast } from '../../lib/toast'
+import { useContent } from '../../lib/content.jsx'
 
 const AdminAuthContext = createContext(null)
 
@@ -18,6 +19,7 @@ export function useAdminAuth() {
 
 export default function AdminAuth({ children }) {
   const toast = useToast()
+  const { reloadContent } = useContent()
 
   const [session, setSession] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -99,6 +101,12 @@ export default function AdminAuth({ children }) {
       subscription?.unsubscribe()
     }
   }, [isConfigured])
+
+  // Visitors hold the draft-free public copy; once signed in, load the full row to edit.
+  const userId = session?.user?.id
+  useEffect(() => {
+    if (userId) reloadContent({ full: true })
+  }, [userId, reloadContent])
 
   const handleAuthSubmit = async (e) => {
     e.preventDefault()
@@ -492,7 +500,7 @@ export default function AdminAuth({ children }) {
                     <button
                       type="button"
                       onClick={() => setMode('forgot')}
-                      className="font-mono text-xs text-neutral-500 hover:text-[#c2956a] transition-colors duration-150 ease-[var(--ease-out-quart)] active:opacity-80 cursor-pointer"
+                      className="font-mono text-xs text-neutral-400 hover:text-[#c2956a] transition-colors duration-150 ease-[var(--ease-out-quart)] active:opacity-80 cursor-pointer"
                     >
                       Forgot Password?
                     </button>
@@ -524,7 +532,7 @@ export default function AdminAuth({ children }) {
 
           <Link
             to="/"
-            className="group mt-8 inline-flex items-center gap-2 font-mono text-xs text-neutral-500 hover:text-[#E8E6E1] transition-colors duration-150 ease-[var(--ease-out-quart)] active:opacity-80"
+            className="group mt-8 inline-flex items-center gap-2 font-mono text-xs text-neutral-400 hover:text-[#E8E6E1] transition-colors duration-150 ease-[var(--ease-out-quart)] active:opacity-80"
           >
             <ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-1" />
             Return to public site

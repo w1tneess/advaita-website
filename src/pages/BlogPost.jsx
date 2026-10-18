@@ -34,7 +34,7 @@ export default function BlogPost() {
 
       <article className="shell max-w-[52rem] mx-auto pt-10 pb-20 md:pt-16 md:pb-28">
         {/* Back Link */}
-        <div className="mb-8">
+        <div className="mb-8 print:hidden">
           <Link
             to="/blog"
             className="inline-flex items-center gap-2 font-utility text-muted hover:text-ink transition-colors"

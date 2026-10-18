@@ -59,3 +59,22 @@ export function getOptimizedImageProps(url, variants = []) {
   return { src: safeUrl }
 }
 
+
+/**
+ * Every Storage path a photo occupies: each gallery image's original plus its resized
+ * variants (named `<original base>-<width>w.<ext>`, the same scheme as the srcSet above).
+ * Deleting only `storage_path` used to leave the variants behind as public orphans.
+ */
+export function photoStoragePaths(photo) {
+  const items = photo?.gallery?.length ? photo.gallery : [photo]
+  const paths = items.flatMap((item) => {
+    const original = item?.storage_path
+    if (!original) return []
+    const dot = original.lastIndexOf('.')
+    if (dot === -1) return [original]
+    const base = original.slice(0, dot)
+    const ext = original.slice(dot)
+    return [original, ...(item.variants || []).map((width) => `${base}-${width}w${ext}`)]
+  })
+  return [...new Set(paths)]
+}

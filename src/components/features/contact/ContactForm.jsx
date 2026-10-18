@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect } from 'react'
+import { CONTACT_EMAIL } from '@/config/site.js'
 import { motion } from 'framer-motion'
 import { Send, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
 import { submitContactForm } from '@/lib/supabase/api.js'
@@ -155,9 +156,10 @@ export default function ContactForm() {
 
         setErrorMessage(
           isNetworkErr
-            ? 'Connection to the message service could not be established (this is often caused by an adblocker or strict privacy shield). You can also write directly to advaita974@gmail.com.'
-            : err?.message ||
-                'Something went wrong. Please try again or reach out directly at advaita974@gmail.com.',
+            ? `Connection to the message service could not be established (this is often caused by an adblocker or strict privacy shield). You can also write directly to ${CONTACT_EMAIL}.`
+            : err?.hint === 'rate_limited'
+              ? err.message
+              : `Something went wrong. Please try again or reach out directly at ${CONTACT_EMAIL}.`,
         )
       }
     },

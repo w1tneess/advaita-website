@@ -25,14 +25,14 @@ Advaita Chandra is a student and developer from West Bengal, India. He builds we
 ## Key Research & Projects
 - [Terrorism in India: Data Visualization (1947-2026)](https://advaitachandra.in/projects#prj-terrorism-india-dataviz): Matplotlib and Python data visualization reconciling conflicting historical sources, marking data gaps without artificial smoothing, and mapping incident counts across decades.
 - [Osho Documentary: Impartial Archival Inquiry](https://oshodocumentary.advaitachandra.in/): Forensic examination and evidence-graded web archive deconstructing Bhagwan Shree Rajneesh (1931–1990), his life, teachings, Oregon commune, 1984 bioterror attack, and global legacy across primary sources and declassified FBI records. (Repo: https://github.com/w1tneess/osho-documentary)
-- [Worksheet Generator](https://advaitachandra.in/projects#prj-worksheet-generator): System design concept separating content schema, layout engine, template formatting, and AI drafting into four decoupled layers.
+- [Declutter](https://declutter.advaitachandra.in/): Windows desktop app that tidies messy folders: sorts files by type, finds duplicates, removes empty folders, and previews every change instead of permanently deleting. Built through an AI-assisted, prompt-driven workflow with Claude. In progress. (Repo: https://github.com/w1tneess/declutter)
 - [Advaita Website](https://advaitachandra.in/projects#prj-personal-website): The open-source architecture for this site, built with React, Vite, Tailwind CSS, Supabase, and pre-rendered semantic HTML.
 
 ## Philosophical Focus & Epistemology
 - **Epistemic Transparency**: A core working principle separating four categories: facts verified in reliable sources, inferences derived logically, personal opinions, and explicit gaps in knowledge.
 - **Thinkers Studied**: J. Krishnamurti (observer vs. observed), Albert Camus (the Absurd as an epistemic baseline), Fyodor Dostoevsky (limits of rational egoism and utility maximization), Ramana Maharshi (practical self-inquiry), and Osho (dialectical criticism).
 
-## Verified Links
+## Links
 - GitHub: https://github.com/w1tneess
 - X / Twitter: https://x.com/w1tneess_
 - Instagram: https://www.instagram.com/adva1ta_/
