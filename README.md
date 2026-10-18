@@ -129,7 +129,7 @@ This project implements state-of-the-art standards for Large Language Model Opti
   - RSS 2.0 feed at `/rss.xml`.
   - JSON Feed 1.1 at `/feed.json`.
   - Auto-generated XML sitemap at `/sitemap.xml`.
-- **Edge Cache Headers (`vercel.json`; Vercel ignores `public/_headers`)**:
+- **Edge Cache Headers (`vercel.json`)**:
   - Optimized `Content-Type` headers (`text/plain; charset=utf-8`) and caching directives for `/llms.txt` and machine feeds.
 
 ---
@@ -167,8 +167,7 @@ advaita-website/
 │   ├── llms.txt                # Standardized LLM context file (llmstxt.org)
 │   ├── llms-full.txt           # Comprehensive knowledge base for LLMs
 │   ├── robots.txt              # Crawler permissions & AI bot directives
-│   ├── _headers                # Netlify-style header rules, NOT read by Vercel (see vercel.json)
-│   └── og-placeholder.svg      # Default Open Graph preview image
+│   └── og-image.png            # Default Open Graph preview image (1200x630)
 ├── scripts/
 │   ├── prerender.js            # Build-time pre-render engine (HTML, sitemaps, feeds)
 │   └── validate-content.js     # Seed content integrity validation
