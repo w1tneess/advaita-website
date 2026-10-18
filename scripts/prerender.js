@@ -21,9 +21,10 @@ import dotenv from 'dotenv'
 
 import { allPrerenderRoutes, NAV_ITEMS } from '../src/config/nav.js'
 import { SITE_NAME, SITE_URL } from '../src/config/site.js'
-import { buildMeta, renderMetaTags, escapeHtml } from '../src/lib/seo.js'
+import { buildMeta, renderMetaTags, escapeHtml, projectCollection } from '../src/lib/seo.js'
 import { isSupabaseConfigured } from '../src/lib/supabase/config.js'
 import { fetchPublicContent } from '../src/lib/supabase/public.js'
+import { syncLlmsFull, syncLlmsTxt } from './llms.js'
 
 dotenv.config()
 dotenv.config({ path: '.env.local' })
@@ -336,7 +337,7 @@ function renderSemanticBody(route, siteData) {
     mainContent = `
       <article>
         <h1>${e(route.title)}</h1>
-        <p><small>Published by Advaita Chandra on ${e(route.lastmod || '')}</small></p>
+        <p><small>Published by Advaita Chandra on ${e(route.publishedAt || '')}</small></p>
         <div>${e(route.description)}</div>
       </article>`
   } else if (route.path === '/photography') {
@@ -590,7 +591,6 @@ function renderJsonFeed({ posts = [], notes = [] }) {
 
 async function getPrerenderData() {
   let posts = []
-  let latestUpdate = null
   let profile = {}
   let philosophy = {}
   let projects = []
@@ -635,9 +635,6 @@ async function getPrerenderData() {
     if (Array.isArray(data?.data?.projects) && data.data.projects.length > 0) {
       projects = data.data.projects
     }
-    if (data?.updated_at) {
-      latestUpdate = new Date(data.updated_at).toISOString()
-    }
   }
 
   if (posts.length === 0) {
@@ -651,14 +648,16 @@ async function getPrerenderData() {
     }
   }
 
-  return { posts, latestUpdate, profile, philosophy, projects, social, photography }
+  return { posts, profile, philosophy, projects, social, photography }
 }
 
 async function main() {
   const template = await readFile(join(dist, 'index.html'), 'utf8')
   const siteData = await getPrerenderData()
-  const { posts, latestUpdate, philosophy } = siteData
-  const routes = allPrerenderRoutes(posts, philosophy.notes || [])
+  const { posts, philosophy } = siteData
+  const notes = (philosophy.notes || []).filter((n) => n.status === 'published')
+  const projects = (siteData.projects || []).filter((p) => p.published !== false)
+  const routes = allPrerenderRoutes(posts, notes)
 
   // Empty sections stay out of the index (and sitemap) until they have content; mirrors <Seo noindex>.
   const photoCount = siteData.photography?.photos?.length || 0
@@ -666,13 +665,14 @@ async function main() {
     if ((route.key === 'blog' && posts.length === 0) || (route.key === 'photography' && photoCount === 0)) route.noindex = true
   }
 
-  if (latestUpdate) {
-    routes.forEach((route) => {
-      // Set lastmod on dynamic pages if they are updated
-      if (['projects', 'philosophy', 'blog'].includes(route.key)) {
-        route.lastmod = latestUpdate
-      }
-    })
+  const projectsRoute = routes.find((route) => route.key === 'projects')
+  if (projectsRoute) projectsRoute.collection = projectCollection(projects)
+
+  // lastmod only from real content dates: a section is as new as its newest article.
+  const newest = (items) => items.map((i) => i.updated_at || i.published_at || i.publishedAt).filter(Boolean).sort().at(-1)
+  for (const route of routes) {
+    if (route.key === 'philosophy') route.lastmod = newest(notes)
+    if (route.key === 'blog') route.lastmod = newest(posts)
   }
 
   const written = []
@@ -710,9 +710,15 @@ async function main() {
   await writeFile(join(dist, 'sitemap.xml'), renderSitemap(indexable), 'utf8')
 
   // Feeds
-  const notes = (philosophy.notes || []).filter((n) => n.status === 'published')
   await writeFile(join(dist, 'rss.xml'), renderRssFeed({ posts, notes }), 'utf8')
   await writeFile(join(dist, 'feed.json'), renderJsonFeed({ posts, notes }), 'utf8')
+
+  // llms.txt / llms-full.txt: regenerate the project and note sections from content
+  const llmsData = { projects, notes }
+  for (const [file, sync] of [['llms.txt', syncLlmsTxt], ['llms-full.txt', syncLlmsFull]]) {
+    const path = join(dist, file)
+    await writeFile(path, sync(await readFile(path, 'utf8'), llmsData), 'utf8')
+  }
 
   // robots.txt rewrite sitemap if needed
   const robotsPath = join(dist, 'robots.txt')
@@ -736,6 +742,7 @@ async function main() {
       `  admin/index.html (noindex shell)`,
       `  sitemap.xml (${indexable.length} URLs)`,
       `  rss.xml (${posts.length + notes.length} entries)`,
+      `  llms.txt + llms-full.txt (${projects.length} projects, ${notes.length} notes)`,
       `  feed.json (${posts.length + notes.length} entries)`,
     ].join('\n'),
   )

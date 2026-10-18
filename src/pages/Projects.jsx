@@ -6,6 +6,7 @@ import { useContent } from '@/lib/content.jsx'
 import Seo from '@/components/meta/Seo.jsx'
 import { PUBLIC_ROUTES } from '@/config/nav.js'
 import { matchesQuery } from '@/lib/format'
+import { projectCollection } from '@/lib/seo.js'
 
 const ROUTE = PUBLIC_ROUTES.find((route) => route.key === 'projects')
 
@@ -52,7 +53,12 @@ export default function Projects() {
 
   return (
     <>
-      <Seo title={ROUTE.title} description={ROUTE.description} path="/projects" />
+      <Seo
+        title={ROUTE.title}
+        description={ROUTE.description}
+        path="/projects"
+        collection={projectCollection(publicProjects)}
+      />
 
       <PageHeader
         eyebrow="Projects"

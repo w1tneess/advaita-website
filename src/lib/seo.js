@@ -66,9 +66,20 @@ export function buildMeta(route = {}, basePath = '/') {
     noindex: Boolean(route.noindex),
     publishedAt: route.publishedAt || route.published_at,
     updatedAt: route.updatedAt || route.updated_at,
+    collection: route.collection,
     path,
     pageType,
   }
+}
+
+/** Published projects as CreativeWork list items for the /projects page graph. */
+export function projectCollection(projects = []) {
+  return projects.map((project) => ({
+    name: project.title,
+    description: project.summary || project.description,
+    url: project.links?.live || `${SITE_URL}/projects#${project.id}`,
+    codeRepository: project.links?.repository || undefined,
+  }))
 }
 
 /** Escape a string for safe interpolation into an HTML attribute. */
@@ -209,6 +220,17 @@ export function generateJsonLd(meta) {
         'History',
         'Creative computing',
       ],
+    }
+  }
+
+  if (meta.collection?.length) {
+    webpageEntity.mainEntity = {
+      '@type': 'ItemList',
+      itemListElement: meta.collection.map((work, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        item: { '@type': 'CreativeWork', ...work, creator: { '@id': personId } },
+      })),
     }
   }
 

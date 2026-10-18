@@ -129,6 +129,8 @@ export function allPrerenderRoutes(publishedPosts = [], publishedNotes = []) {
       title: post.title,
       description: post.excerpt || 'An article by Advaita Chandra.',
       lastmod: post.updated_at || post.updatedAt || post.published_at || post.publishedAt || undefined,
+      publishedAt: post.published_at || post.publishedAt,
+      updatedAt: post.updated_at || post.updatedAt,
       type: 'article',
     })),
     ...publishedNotes
@@ -139,6 +141,8 @@ export function allPrerenderRoutes(publishedPosts = [], publishedNotes = []) {
         title: note.title,
         description: note.excerpt || note.title,
         lastmod: note.updated_at || note.published_at || undefined,
+        publishedAt: note.published_at,
+        updatedAt: note.updated_at,
         type: 'article',
       })),
   ]

@@ -20,9 +20,10 @@ export default function Seo({
   noindex = false,
   publishedAt,
   updatedAt,
+  collection,
 }) {
   const meta = buildMeta(
-    { title, description, path, image, type, noindex, publishedAt, updatedAt },
+    { title, description, path, image, type, noindex, publishedAt, updatedAt, collection },
     import.meta.env.BASE_URL,
   )
   const jsonLd = generateJsonLd(meta)
