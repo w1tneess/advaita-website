@@ -263,6 +263,7 @@ VITE_SUPABASE_ANON_KEY=your-anon-key
 | `npm test` | Runs the automated test suite across all 37 unit & security tests (`node:test`). |
 | `npm run security:rls` | Read-only check of Supabase RLS with the anon key: tries reads/writes on every table, RPC and bucket and reports PASS/FAIL. Never writes (see `scripts/rls-check.js`). |
 | `npm run content:validate` | Validates the structural integrity of bundled seed data files. |
+| `npm run content:sync` | **Overwrites the live `site_content` row with the bundled seed**, replacing everything edited in `/admin`. Dry run by default: prints what would change. `-- --yes` saves the live document to `backups/` (gitignored) and then overwrites it. Authenticate with `SUPABASE_SERVICE_ROLE_KEY`, or `SUPABASE_ADMIN_EMAIL` / `SUPABASE_ADMIN_PASSWORD` (or answer the prompts; the password is hidden). Passwords are not accepted as arguments. |
 | `npm run typecheck` | Validates TypeScript types across utilities and components. |
 | `npm run lint` | Checks the codebase for JavaScript and React lint issues with ESLint. |
 | `npm run format` | Formats source files using Prettier. |

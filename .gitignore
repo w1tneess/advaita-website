@@ -38,7 +38,8 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# Content backups & temporary exports
+# Content backups & temporary exports (backups/ holds full live documents incl. drafts)
+backups/
 *.content-export.json
 *.bak
 *.tmp
