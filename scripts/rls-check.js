@@ -15,6 +15,7 @@
 
 import dotenv from 'dotenv'
 
+import { createSeedDocument } from '../src/data/seed.js'
 import { supabaseConfig } from '../src/lib/supabase/config.js'
 
 dotenv.config({ quiet: true })
@@ -110,13 +111,18 @@ for (const fn of ['is_admin', 'enforce_contact_rate_limit']) {
     record('rpc get_public_site_content', 'execute', false, 'not deployed: run supabase/public_content.sql')
   } else {
     const doc = r.json?.[0]?.data
+    // The seed's keys are the intended public document; the function adds only publicCopy.
+    const known = createSeedDocument()
+    const extraKeys = doc ? Object.keys(doc).filter((key) => !(key in known) && key !== 'publicCopy') : []
     const leaks = !doc
       ? ['no document']
       : [
           (doc.activity ?? []).length > 0 && 'activity log',
           (doc.blog ?? []).some((p) => p.status !== 'published') && 'draft posts',
           (doc.philosophy?.notes ?? []).some((n) => n.status !== 'published') && 'draft notes',
-          (doc.projects ?? []).some((p) => p.published === false) && 'unpublished projects',
+          (doc.projects ?? []).some((p) => p.published !== true) && 'unpublished projects',
+          (doc.social ?? []).some((s) => s.visible !== true) && 'hidden social links',
+          extraKeys.length > 0 && `unlisted keys (${extraKeys.join(', ')})`,
         ].filter(Boolean)
     record('rpc get_public_site_content', 'read', leaks.length === 0, leaks.length ? `exposes: ${leaks.join(', ')}` : 'public copy only')
   }

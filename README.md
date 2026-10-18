@@ -287,6 +287,8 @@ The application is deployed on **Vercel** with continuous delivery backed by **G
 
 Run in the Supabase SQL editor, in order: `supabase/schema.sql` (fresh project only), `supabase/fix_rls.sql`, `supabase/public_content.sql`, `supabase/contact_rate_limit.sql`. Then add your admin account to `public.admin_users` (see the comment in `fix_rls.sql`) and disable public sign-ups under Authentication. Verify with `npm run security:rls`.
 
+`public_content.sql` is idempotent, so re-running it on an existing project is also its migration. Visitors only receive top-level keys named in its allowlist, and projects / social links / posts are public only when explicitly flagged (`published`, `visible`, `status = 'published'`). A new top-level key in the document stays private until you add it to the allowlist. Read the file's header (pre-flight query and rollback) before applying it to a live project.
+
 ---
 
 ## License & Attributions
