@@ -618,6 +618,7 @@ async function getPrerenderData() {
   let philosophy = {}
   let projects = []
   let social = []
+  let photography = {}
 
   // Load local data as baseline
   try {
@@ -625,6 +626,7 @@ async function getPrerenderData() {
     philosophy = JSON.parse(await readFile(join(root, 'src/data/philosophy.json'), 'utf8'))
     projects = JSON.parse(await readFile(join(root, 'src/data/projects.json'), 'utf8'))
     social = JSON.parse(await readFile(join(root, 'src/data/social.json'), 'utf8'))
+    photography = JSON.parse(await readFile(join(root, 'src/data/photography.json'), 'utf8'))
   } catch (e) {
     console.warn('Warning reading local data files:', e.message)
   }
@@ -641,6 +643,7 @@ async function getPrerenderData() {
         posts = data.data.blog.filter((p) => p.status === 'published')
       }
       if (data?.data?.profile) profile = { ...profile, ...data.data.profile }
+      if (data?.data?.photography) photography = data.data.photography
       if (data?.data?.philosophy) {
         const remoteNotes = data.data.philosophy.notes
         philosophy = {
@@ -675,7 +678,7 @@ async function getPrerenderData() {
     }
   }
 
-  return { posts, latestUpdate, profile, philosophy, projects, social }
+  return { posts, latestUpdate, profile, philosophy, projects, social, photography }
 }
 
 async function main() {
@@ -683,6 +686,12 @@ async function main() {
   const siteData = await getPrerenderData()
   const { posts, latestUpdate, philosophy } = siteData
   const routes = allPrerenderRoutes(posts, philosophy.notes || [])
+
+  // Empty sections stay out of the index (and sitemap) until they have content; mirrors <Seo noindex>.
+  const photoCount = siteData.photography?.photos?.length || 0
+  for (const route of routes) {
+    if ((route.key === 'blog' && posts.length === 0) || (route.key === 'photography' && photoCount === 0)) route.noindex = true
+  }
 
   if (latestUpdate) {
     routes.forEach((route) => {
@@ -715,7 +724,8 @@ async function main() {
   )
 
   // Sitemap
-  await writeFile(join(dist, 'sitemap.xml'), renderSitemap(routes), 'utf8')
+  const indexable = routes.filter((route) => !route.noindex)
+  await writeFile(join(dist, 'sitemap.xml'), renderSitemap(indexable), 'utf8')
 
   // Feeds
   const notes = (philosophy.notes || []).filter((n) => n.status === 'published')
@@ -741,7 +751,7 @@ async function main() {
       `Pre-rendered ${written.length} route${written.length === 1 ? '' : 's'} at base "${basePath}":`,
       ...written.map((file) => `  ${file}`),
       `  404.html`,
-      `  sitemap.xml (${routes.length} URLs)`,
+      `  sitemap.xml (${indexable.length} URLs)`,
       `  rss.xml (${posts.length + notes.length} entries)`,
       `  feed.json (${posts.length + notes.length} entries)`,
     ].join('\n'),

@@ -40,7 +40,7 @@ export default function Blog() {
 
   return (
     <>
-      <Seo title={ROUTE.title} description={ROUTE.description} path="/blog" />
+      <Seo title={ROUTE.title} description={ROUTE.description} path="/blog" noindex={publicBlogPosts.length === 0} />
 
       <PageHeader
         eyebrow="Writing"

@@ -83,7 +83,7 @@ export default function Photography() {
 
   return (
     <>
-      <Seo title={ROUTE.title} description={ROUTE.description} path="/photography" />
+      <Seo title={ROUTE.title} description={ROUTE.description} path="/photography" noindex={photos.length === 0} />
 
       <PageHeader
         eyebrow="Photography"
