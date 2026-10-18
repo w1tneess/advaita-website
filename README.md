@@ -260,7 +260,7 @@ VITE_SUPABASE_ANON_KEY=your-anon-key
 | `npm run build` | Compiles the production application bundle and triggers `scripts/prerender.js` to pre-render static HTML routes and machine feeds. |
 | `npm run prerender` | Runs the pre-rendering script standalone without triggering a full Vite rebuild. |
 | `npm run preview` | Spins up a local static server serving the production `dist/` build. |
-| `npm test` | Runs the automated test suite across all 37 unit & security tests (`node:test`). |
+| `npm test` | Runs the automated test suite across all 44 unit & security tests (`node:test`). |
 | `npm run security:rls` | Read-only check of Supabase RLS with the anon key: tries reads/writes on every table, RPC and bucket and reports PASS/FAIL. Never writes (see `scripts/rls-check.js`). |
 | `npm run content:validate` | Validates the structural integrity of bundled seed data files. |
 | `npm run content:sync` | **Overwrites the live `site_content` row with the bundled seed**, replacing everything edited in `/admin`. Dry run by default: prints what would change. `-- --yes` saves the live document to `backups/` (gitignored) and then overwrites it. Authenticate with `SUPABASE_SERVICE_ROLE_KEY`, or `SUPABASE_ADMIN_EMAIL` / `SUPABASE_ADMIN_PASSWORD` (or answer the prompts; the password is hidden). Passwords are not accepted as arguments. |
