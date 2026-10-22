@@ -44,20 +44,21 @@ test('fetchPublicContent reads the public RPC', async () => {
   assert.match(calls[0], /\/rest\/v1\/rpc\/get_public_site_content$/)
 })
 
-test('fetchPublicContent falls back to the table when the RPC is not deployed yet', async () => {
+test('fetchPublicContent never reads the raw table when the RPC fails', async () => {
   const calls = []
   await withSupabase(
     async (url) => {
       calls.push(url)
-      return url.includes('/rpc/') ? json(404, {}) : json(200, [{ data: { legacy: true }, updated_at: null }])
+      return json(404, {})
     },
     async () => {
       const result = await fetchPublicContent({ retries: 1 })
-      assert.deepEqual(result.data, { legacy: true })
-      assert.equal(result.error, null)
+      assert.equal(result.data, null)
+      assert.match(result.error.message, /HTTP 404/)
     },
   )
-  assert.match(calls[1], /\/rest\/v1\/site_content\?id=eq\.main/)
+  assert.equal(calls.length, 1)
+  assert.match(calls[0], /\/rpc\/get_public_site_content$/)
 })
 
 test('loadDocument falls back to the bundled seed when Supabase is down', async () => {

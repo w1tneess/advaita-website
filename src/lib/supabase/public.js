@@ -10,11 +10,7 @@ async function getJson(path, signal) {
     headers: { apikey: anonKey, Authorization: `Bearer ${anonKey}` },
     signal,
   })
-  if (!response.ok) {
-    const error = new Error(`Supabase responded with HTTP ${response.status}`)
-    error.status = response.status
-    throw error
-  }
+  if (!response.ok) throw new Error(`Supabase responded with HTTP ${response.status}`)
   return response.json()
 }
 
@@ -34,15 +30,7 @@ export async function fetchPublicContent({ retries = 2, timeoutMs = 3500 } = {})
     const controller = new AbortController()
     const timer = setTimeout(() => controller.abort(), timeoutMs)
     try {
-      let rows
-      try {
-        rows = await getJson('rpc/get_public_site_content', controller.signal)
-      } catch (error) {
-        // shortcut: the function 404s until public_content.sql is applied, so read the table
-        // as before; remove this fallback once that SQL is live.
-        if (error.status !== 404) throw error
-        rows = await getJson('site_content?id=eq.main&select=data,updated_at', controller.signal)
-      }
+      const rows = await getJson('rpc/get_public_site_content', controller.signal)
       return { data: rows?.[0]?.data ?? null, updatedAt: rows?.[0]?.updated_at ?? null, error: null }
     } catch (error) {
       if (attempt >= retries) return { data: null, updatedAt: null, error }
