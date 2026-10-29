@@ -63,7 +63,7 @@ export default function CookieBanner() {
               </div>
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <span className="font-mono text-[10px] text-copper uppercase tracking-widest font-semibold">
+                  <span className="font-mono text-[0.75rem] text-copper uppercase tracking-widest font-semibold">
                     SYS.NOTICE // PRIVACY
                   </span>
                 </div>
@@ -95,14 +95,14 @@ export default function CookieBanner() {
             <button
               type="button"
               onClick={() => handleChoice('essential')}
-              className="border border-line bg-surface px-3 py-1.5 font-mono text-[11px] text-text-3 hover:text-text hover:border-line-strong transition-colors cursor-pointer"
+              className="border border-line bg-surface px-3 py-1.5 font-mono text-[0.75rem] text-text-3 hover:text-text hover:border-line-strong transition-colors cursor-pointer"
             >
               Essential Only
             </button>
             <button
               type="button"
               onClick={() => handleChoice('acknowledged')}
-              className="inline-flex items-center gap-1.5 border border-copper bg-copper px-3.5 py-1.5 font-mono text-[11px] font-semibold text-black hover:bg-copper-strong transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 border border-copper bg-copper px-3.5 py-1.5 font-mono text-[0.75rem] font-semibold text-black hover:bg-copper-strong transition cursor-pointer"
             >
               <Check className="h-3 w-3" aria-hidden="true" />
               <span>Acknowledge</span>

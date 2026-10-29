@@ -99,7 +99,7 @@ export default function Photography() {
             <button
               type="button"
               onClick={() => setValue('category', [])}
-              className={`px-4 py-2 min-h-[36px] text-xs transition-all duration-150 ease-[var(--ease-out-quart)] cursor-pointer rounded-full active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas ${
+              className={`px-4 py-2 min-h-[36px] text-xs transition duration-150 ease-[var(--ease-out-quart)] cursor-pointer rounded-full active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas ${
                 activeCategories.length === 0
                   ? "bg-ink text-canvas font-medium shadow-subtle"
                   : "bg-surface border border-line/60 text-muted hover:text-ink hover:border-line-strong hover:bg-surface/80"
@@ -112,7 +112,7 @@ export default function Photography() {
                 key={cat.id}
                 type="button"
                 onClick={() => toggleValue('category', cat.slug)}
-                className={`px-4 py-2 min-h-[36px] text-xs transition-all duration-150 ease-[var(--ease-out-quart)] cursor-pointer rounded-full active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas ${
+                className={`px-4 py-2 min-h-[36px] text-xs transition duration-150 ease-[var(--ease-out-quart)] cursor-pointer rounded-full active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas ${
                   activeCategories.includes(cat.slug)
                     ? "bg-ink text-canvas font-medium shadow-subtle"
                     : "bg-surface border border-line/60 text-muted hover:text-ink hover:border-line-strong hover:bg-surface/80"
@@ -140,7 +140,7 @@ export default function Photography() {
               return (
                 <figure
                   key={photo.id}
-                  className="relative break-inside-avoid border border-line/60 bg-surface/30 p-2 sm:p-3 rounded-xl transition-all duration-250 ease-[var(--ease-out-quart)] hover:bg-surface/60 hover:border-line-strong hover:-translate-y-0.5 hover:shadow-subtle active:scale-[0.98] group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas"
+                  className="relative break-inside-avoid border border-line/60 bg-surface/30 p-2 sm:p-3 rounded-xl transition duration-250 ease-[var(--ease-out-quart)] hover:bg-surface/60 hover:border-line-strong hover:-translate-y-0.5 hover:shadow-subtle active:scale-[0.98] group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas"
                   onClick={() => openLightbox(photo)}
                   role="button"
                   tabIndex={0}

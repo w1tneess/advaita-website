@@ -41,7 +41,7 @@ export default function Footer() {
                 <a 
                   key={link.id || link.label}
                   href={hrefFor(link)} 
-                  className="w-10 h-10 sm:w-11 sm:h-11 rounded-full border border-line bg-surface flex items-center justify-center text-muted hover:text-accent hover:border-accent/60 hover:bg-accent/10 active:scale-95 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                  className="w-10 h-10 sm:w-11 sm:h-11 rounded-full border border-line bg-surface flex items-center justify-center text-muted hover:text-accent hover:border-accent/60 hover:bg-accent/10 active:scale-95 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                   {...(link.kind === 'email' ? {} : { target: '_blank', rel: 'me noopener noreferrer' })}
                   aria-label={link.label}
                 >
@@ -53,7 +53,7 @@ export default function Footer() {
 
           {/* Middle Column - Navigation */}
           <div className="md:col-span-4 space-y-[clamp(0.5rem,1.5vw,1rem)]">
-            <h3 className="font-mono text-[10px] sm:text-[11px] uppercase tracking-widest text-accent font-semibold">
+            <h3 className="font-mono text-[0.75rem] sm:text-[0.75rem] uppercase tracking-widest text-accent font-semibold">
               Directory
             </h3>
             <ul className="grid grid-cols-2 gap-y-2 sm:gap-y-3 gap-x-4 sm:gap-x-6">
@@ -65,7 +65,7 @@ export default function Footer() {
                     className="group relative inline-flex items-center text-muted hover:text-ink transition-colors py-0.5"
                   >
                     <span className="text-xs sm:text-sm font-normal tracking-wide">{item.label}</span>
-                    <ArrowUpRight className="ml-1 w-3 h-3 sm:w-3.5 sm:h-3.5 text-accent opacity-0 -translate-x-1 translate-y-1 group-hover:opacity-100 group-hover:translate-x-0 group-hover:translate-y-0 transition-all duration-200" />
+                    <ArrowUpRight className="ml-1 w-3 h-3 sm:w-3.5 sm:h-3.5 text-accent opacity-0 -translate-x-1 translate-y-1 group-hover:opacity-100 group-hover:translate-x-0 group-hover:translate-y-0 transition duration-200" />
                   </Link>
                 </li>
               ))}
@@ -74,7 +74,7 @@ export default function Footer() {
 
           {/* Right Column - Location & Dispatch */}
           <div className="md:col-span-3 space-y-[clamp(0.5rem,1.5vw,1rem)] text-xs sm:text-sm">
-            <h3 className="font-mono text-[10px] sm:text-[11px] uppercase tracking-widest text-accent font-semibold">
+            <h3 className="font-mono text-[0.75rem] sm:text-[0.75rem] uppercase tracking-widest text-accent font-semibold">
               Location & Reach
             </h3>
             <div className="space-y-1.5 text-muted">
@@ -82,13 +82,13 @@ export default function Footer() {
                 <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" />
                 <span>West Bengal, India</span>
               </div>
-              <p className="text-[11px] text-muted">Timezone: IST (UTC+5:30)</p>
+              <p className="text-[0.75rem] text-muted">Timezone: IST (UTC+5:30)</p>
             </div>
             {profile?.email && (
               <div className="pt-1">
                 <a
                   href={`mailto:${profile.email}`}
-                  className="font-mono text-[11px] sm:text-xs text-ink border-b border-line hover:border-accent hover:text-accent transition-colors"
+                  className="font-mono text-[0.75rem] sm:text-xs text-ink border-b border-line hover:border-accent hover:text-accent transition-colors"
                 >
                   {profile.email}
                 </a>
@@ -99,7 +99,7 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="pt-[clamp(1rem,2.5vw,1.75rem)] border-t border-line flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 font-mono text-[10px] sm:text-[11px] text-muted">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 font-mono text-[0.75rem] sm:text-[0.75rem] text-muted">
             <Link to="/privacy" className="hover:text-ink transition-colors">Privacy Policy</Link>
             <span className="text-line">•</span>
             <Link to="/terms" className="hover:text-ink transition-colors">Terms of Use</Link>
@@ -107,7 +107,7 @@ export default function Footer() {
             <a href="https://support.advaitachandra.in" target="_blank" rel="noopener noreferrer" className="hover:text-ink transition-colors">Support</a>
           </div>
           
-          <div className="font-mono text-[10px] sm:text-[11px] text-muted">
+          <div className="font-mono text-[0.75rem] sm:text-[0.75rem] text-muted">
             &copy; {year} {profile.name || 'Advaita Chandra'}. Built with care.
           </div>
         </div>

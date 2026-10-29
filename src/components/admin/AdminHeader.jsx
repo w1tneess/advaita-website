@@ -38,7 +38,7 @@ function LiveClock() {
   }, [])
 
   return (
-    <div className="hidden lg:flex items-center gap-1.5 px-3 py-1 rounded-full border border-line bg-surface/60 text-[11px] font-mono text-muted backdrop-blur-sm">
+    <div className="hidden lg:flex items-center gap-1.5 px-3 py-1 rounded-full border border-line bg-surface/60 text-[0.75rem] font-mono text-muted backdrop-blur-sm">
       <Clock className="h-3 w-3 text-accent" />
       <span>
         {time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -72,7 +72,7 @@ function CreateDropdown() {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="inline-flex h-8 w-8 items-center justify-center rounded-xl border border-accent/40 bg-accent/10 text-accent hover:bg-accent/20 active:scale-[0.97] transition-all duration-250 ease-[var(--ease-out-quart)] cursor-pointer shadow-sm"
+        className="inline-flex h-8 w-8 items-center justify-center rounded-xl border border-accent/40 bg-accent/10 text-accent hover:bg-accent/20 active:scale-[0.97] transition duration-250 ease-[var(--ease-out-quart)] cursor-pointer shadow-sm"
         aria-label="Create new"
         title="Create new item"
       >
@@ -88,7 +88,7 @@ function CreateDropdown() {
             transition={{ duration: 0.15, ease: 'easeOut' }}
             className="absolute right-0 mt-2 w-48 rounded-2xl border border-line-strong bg-surface/95 backdrop-blur-2xl p-1.5 shadow-2xl z-50"
           >
-            <div className="px-2.5 py-1 text-[10px] font-mono font-semibold text-muted uppercase tracking-widest mb-1">
+            <div className="px-2.5 py-1 text-[0.75rem] font-mono font-semibold text-muted uppercase tracking-widest mb-1">
               Create Document
             </div>
             {actions.map((action) => (
@@ -148,13 +148,13 @@ export default function AdminHeader({ onOpenSidebar }) {
         <div className="flex-1 max-w-lg mx-auto px-4 hidden sm:block">
           <button
             onClick={openSearch}
-            className="flex w-full items-center justify-between gap-2 rounded-full border border-line bg-surface/60 hover:bg-surface hover:border-line-strong px-3.5 py-1.5 text-[13px] font-sans text-muted transition-all duration-250 ease-[var(--ease-out-quart)] active:scale-[0.97] cursor-pointer shadow-subtle"
+            className="flex w-full items-center justify-between gap-2 rounded-full border border-line bg-surface/60 hover:bg-surface hover:border-line-strong px-3.5 py-1.5 text-[0.8125rem] font-sans text-muted transition duration-250 ease-[var(--ease-out-quart)] active:scale-[0.97] cursor-pointer shadow-subtle"
           >
             <div className="flex items-center gap-2">
               <Search className="h-3.5 w-3.5 text-accent" />
               <span>Search documents &amp; tools...</span>
             </div>
-            <kbd className="hidden sm:inline-flex h-5 items-center gap-1 rounded-md border border-line bg-canvas px-1.5 font-mono text-[9px] text-muted">
+            <kbd className="hidden sm:inline-flex h-5 items-center gap-1 rounded-md border border-line bg-canvas px-1.5 font-mono text-[0.75rem] text-muted">
               <span>⌘</span>K
             </kbd>
           </button>
@@ -174,7 +174,7 @@ export default function AdminHeader({ onOpenSidebar }) {
         <div className="flex items-center gap-2 sm:gap-3 ml-auto">
           {/* Cloud Sync Status Pill */}
           {isRemote && syncStatus === 'synced' ? (
-            <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full border border-emerald-900/40 bg-emerald-950/25 text-emerald-400 text-[11px] font-mono">
+            <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full border border-emerald-900/40 bg-emerald-950/25 text-emerald-400 text-[0.75rem] font-mono">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
               <span>Cloud Synced</span>
             </div>
@@ -182,7 +182,7 @@ export default function AdminHeader({ onOpenSidebar }) {
             <button
               onClick={handleManualSync}
               disabled={syncing}
-              className="flex items-center gap-1.5 px-3 py-1 rounded-full border border-accent/40 bg-accent/10 text-accent text-[11px] font-mono hover:bg-accent/20 active:scale-[0.97] transition-all duration-250 ease-[var(--ease-out-quart)] cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1 rounded-full border border-accent/40 bg-accent/10 text-accent text-[0.75rem] font-mono hover:bg-accent/20 active:scale-[0.97] transition duration-250 ease-[var(--ease-out-quart)] cursor-pointer"
               title="Click to sync local changes to Supabase"
             >
               {syncing ? (
@@ -202,7 +202,7 @@ export default function AdminHeader({ onOpenSidebar }) {
             href="/"
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden sm:inline-flex items-center gap-1.5 rounded-xl border border-line/60 bg-surface/40 hover:bg-surface px-2.5 py-1.5 text-xs font-sans font-medium text-neutral-400 hover:text-[#f8f6f0] active:scale-[0.97] transition-all duration-250 ease-[var(--ease-out-quart)]"
+            className="hidden sm:inline-flex items-center gap-1.5 rounded-xl border border-line/60 bg-surface/40 hover:bg-surface px-2.5 py-1.5 text-xs font-sans font-medium text-neutral-400 hover:text-[#f8f6f0] active:scale-[0.97] transition duration-250 ease-[var(--ease-out-quart)]"
           >
             <ExternalLink className="h-3.5 w-3.5 text-accent" aria-hidden="true" />
             <span className="hidden lg:inline">Site</span>
@@ -212,7 +212,7 @@ export default function AdminHeader({ onOpenSidebar }) {
             type="button"
             onClick={() => setPreviewDrafts(!previewDrafts)}
             aria-pressed={previewDrafts}
-            className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-sans font-medium transition-all duration-250 ease-[var(--ease-out-quart)] active:scale-[0.97] shrink-0 cursor-pointer ${
+            className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-sans font-medium transition duration-250 ease-[var(--ease-out-quart)] active:scale-[0.97] shrink-0 cursor-pointer ${
               previewDrafts
                 ? 'border-accent bg-accent/15 text-accent shadow-sm'
                 : 'border-line bg-surface/60 text-neutral-400 hover:text-[#f8f6f0] hover:bg-surface'

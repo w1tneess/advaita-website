@@ -67,7 +67,7 @@ export const NAV_GROUPS = [
 ]
 
 function itemClasses({ isActive }) {
-  return `group flex items-center gap-2.5 rounded-xl px-3 py-2 text-[13px] font-sans font-medium tracking-tight transition-all duration-250 ease-[var(--ease-out-quart)] hover:translate-x-0.5 active:scale-[0.97] ${
+  return `group flex items-center gap-2.5 rounded-xl px-3 py-2 text-[0.8125rem] font-sans font-medium tracking-tight transition duration-250 ease-[var(--ease-out-quart)] hover:translate-x-0.5 active:scale-[0.97] ${
     isActive 
       ? 'bg-[#c2956a]/15 text-[#f8f6f0] shadow-sm font-semibold' 
       : 'text-neutral-400 hover:bg-[#181716] hover:text-[#f8f6f0]'
@@ -114,18 +114,18 @@ export default function AdminSidebar({ open, onClose }) {
         <div className="flex items-center justify-between gap-2 border-b border-[#242220] px-5 py-4 shrink-0 bg-[#121110]">
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-display text-[15px] font-normal text-[#f8f6f0] tracking-tight">
+              <span className="font-display text-[0.9375rem] font-normal text-[#f8f6f0] tracking-tight">
                 Advaita Studio
               </span>
               <span className="h-1.5 w-1.5 rounded-full bg-accent shadow-[0_0_6px_rgba(194,149,106,0.6)]" />
             </div>
             <div className="flex items-center gap-1.5 mt-0.5">
               {isRemote ? (
-                <span className="inline-flex items-center gap-1 text-[10px] font-mono text-emerald-400">
+                <span className="inline-flex items-center gap-1 text-[0.75rem] font-mono text-emerald-400">
                   <Cloud className="h-2.5 w-2.5" /> Supabase Synced
                 </span>
               ) : (
-                <span className="inline-flex items-center gap-1 text-[10px] font-mono text-neutral-500">
+                <span className="inline-flex items-center gap-1 text-[0.75rem] font-mono text-neutral-500">
                   Local Mode
                 </span>
               )}
@@ -135,7 +135,7 @@ export default function AdminSidebar({ open, onClose }) {
             type="button"
             onClick={onClose}
             aria-label="Close navigation"
-            className="rounded-lg border border-[#242220] p-1.5 text-neutral-400 hover:text-[#f8f6f0] lg:hidden cursor-pointer active:scale-[0.97] transition-all duration-250 ease-[var(--ease-out-quart)]"
+            className="rounded-lg border border-[#242220] p-1.5 text-neutral-400 hover:text-[#f8f6f0] lg:hidden cursor-pointer active:scale-[0.97] transition duration-250 ease-[var(--ease-out-quart)]"
           >
             <X className="h-4 w-4" aria-hidden="true" />
           </button>
@@ -147,7 +147,7 @@ export default function AdminSidebar({ open, onClose }) {
             <button
               type="button"
               onClick={() => setQuickAddOpen(!quickAddOpen)}
-              className="flex w-full items-center justify-between rounded-xl border border-[#c2956a]/30 bg-[#c2956a]/10 px-3.5 py-2 text-xs font-sans font-medium tracking-tight text-[#c2956a] transition-all duration-250 ease-[var(--ease-out-quart)] hover:bg-[#c2956a]/20 active:scale-[0.97] cursor-pointer shadow-sm"
+              className="flex w-full items-center justify-between rounded-xl border border-[#c2956a]/30 bg-[#c2956a]/10 px-3.5 py-2 text-xs font-sans font-medium tracking-tight text-[#c2956a] transition duration-250 ease-[var(--ease-out-quart)] hover:bg-[#c2956a]/20 active:scale-[0.97] cursor-pointer shadow-sm"
             >
               <div className="flex items-center gap-2">
                 <Plus className="h-3.5 w-3.5" />
@@ -193,7 +193,7 @@ export default function AdminSidebar({ open, onClose }) {
           <nav aria-label="Admin sections" className="space-y-4">
             {NAV_GROUPS.map((group) => (
               <div key={group.title}>
-                <h2 className="mb-1.5 px-3 text-[10px] font-mono font-semibold tracking-wider text-neutral-500 uppercase">
+                <h2 className="mb-1.5 px-3 text-[0.75rem] font-mono font-semibold tracking-wider text-neutral-500 uppercase">
                   {group.title}
                 </h2>
                 <ul className="space-y-0.5">
@@ -234,7 +234,7 @@ export default function AdminSidebar({ open, onClose }) {
               <ExternalLink className="h-3.5 w-3.5 text-[#c2956a]" aria-hidden="true" />
               <span>View Public Site</span>
             </span>
-            <span className="font-mono text-[10px] text-neutral-500">↗</span>
+            <span className="font-mono text-[0.75rem] text-neutral-500">↗</span>
           </Link>
           
           <div className="flex items-center justify-between rounded-xl border border-[#242220] p-2.5 bg-[#181716]/90 backdrop-blur-sm">
@@ -246,7 +246,7 @@ export default function AdminSidebar({ open, onClose }) {
               </div>
               <div className="min-w-0 flex-1">
                 <p className="text-xs font-sans font-medium text-[#f8f6f0] truncate">{displayName}</p>
-                <p className="text-[10px] font-mono text-neutral-500 truncate">
+                <p className="text-[0.75rem] font-mono text-neutral-500 truncate">
                   {session?.user?.email}
                 </p>
               </div>
@@ -257,7 +257,7 @@ export default function AdminSidebar({ open, onClose }) {
               onClick={logout}
               aria-label="Sign out"
               title="Sign out"
-              className="h-7 w-7 inline-flex items-center justify-center rounded-lg text-neutral-400 hover:bg-[#22201d] hover:text-[#f8f6f0] active:scale-[0.97] transition-all duration-250 ease-[var(--ease-out-quart)] shrink-0 cursor-pointer"
+              className="h-7 w-7 inline-flex items-center justify-center rounded-lg text-neutral-400 hover:bg-[#22201d] hover:text-[#f8f6f0] active:scale-[0.97] transition duration-250 ease-[var(--ease-out-quart)] shrink-0 cursor-pointer"
             >
               <LogOut className="h-3.5 w-3.5" aria-hidden="true" />
             </button>

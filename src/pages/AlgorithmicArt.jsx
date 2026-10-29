@@ -276,7 +276,7 @@ export default function AlgorithmicArt() {
       <div className="premium-noise" />
 
       <PageHeader
-        eyebrow={<span className="text-[10px] uppercase tracking-[0.2em] font-medium px-3 py-1 rounded-full bg-white/5 border border-white/10 text-muted">Creative Computing</span>}
+        eyebrow={<span className="text-[0.75rem] uppercase tracking-[0.2em] font-medium px-3 py-1 rounded-full bg-white/5 border border-white/10 text-muted">Creative Computing</span>}
         title={<span className="text-[clamp(2.5rem,5vw,5rem)] leading-none block py-2">Algorithmic Art</span>}
         lead="Interactive procedural systems, vector noise fields, and emergent dynamics exploring computational beauty."
       >
@@ -346,14 +346,14 @@ export default function AlgorithmicArt() {
             <canvas ref={canvasRef} className="block w-full h-full cursor-crosshair touch-none" />
 
             {/* Interactive Hint Banner (Fades on hover) */}
-            <div className="absolute top-5 left-5 pointer-events-none flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-black/40 backdrop-blur-md font-mono text-[11px] text-muted opacity-80 group-hover:opacity-100 transition-opacity duration-500">
+            <div className="absolute top-5 left-5 pointer-events-none flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-black/40 backdrop-blur-md font-mono text-[0.75rem] text-muted opacity-80 group-hover:opacity-100 transition-opacity duration-500">
               <Sparkles className="h-3.5 w-3.5 text-accent" />
               <span>Move cursor or touch to bend field lines • Tap or click to deflect</span>
             </div>
 
 
             {/* Seed indicator pill */}
-            <div className="absolute top-5 right-5 pointer-events-none flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-black/40 backdrop-blur-md font-mono text-[11px] text-muted opacity-80 group-hover:opacity-100 transition-opacity duration-500">
+            <div className="absolute top-5 right-5 pointer-events-none flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-black/40 backdrop-blur-md font-mono text-[0.75rem] text-muted opacity-80 group-hover:opacity-100 transition-opacity duration-500">
               <span>SEED:</span>
               <span className="text-accent font-semibold">#{seed}</span>
             </div>
@@ -364,7 +364,7 @@ export default function AlgorithmicArt() {
                 type="button"
                 onClick={() => setIsRunning((r) => !r)}
                 aria-label={isRunning ? 'Pause simulation' : 'Play simulation'}
-                className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-ink hover:bg-white/20 active:scale-[0.96] transition-all duration-300 ease-[var(--ease-spring)] cursor-pointer"
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-ink hover:bg-white/20 active:scale-[0.96] transition duration-300 ease-[var(--ease-spring)] cursor-pointer"
                 title={isRunning ? 'Pause simulation' : 'Resume simulation'}
               >
                 {isRunning ? <Pause className="h-4 w-4 fill-current" /> : <Play className="h-4 w-4 fill-current" />}
@@ -373,7 +373,7 @@ export default function AlgorithmicArt() {
               <button
                 type="button"
                 onClick={initSimulation}
-                className="flex h-11 w-11 items-center justify-center rounded-full bg-transparent border border-white/10 hover:bg-white/5 text-muted hover:text-ink active:scale-[0.96] transition-all duration-300 ease-[var(--ease-spring)] cursor-pointer"
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-transparent border border-white/10 hover:bg-white/5 text-muted hover:text-ink active:scale-[0.96] transition duration-300 ease-[var(--ease-spring)] cursor-pointer"
                 title="Reset Canvas"
               >
                 <RotateCcw className="h-4 w-4" />
@@ -385,7 +385,7 @@ export default function AlgorithmicArt() {
                   const nextSeed = Math.floor(Math.random() * 900000) + 100000
                   setSeed(nextSeed)
                 }}
-                className="flex items-center gap-2 px-4 h-11 rounded-full bg-transparent border border-white/10 hover:bg-white/5 text-muted hover:text-ink font-mono text-xs active:scale-[0.96] transition-all duration-300 ease-[var(--ease-spring)] cursor-pointer"
+                className="flex items-center gap-2 px-4 h-11 rounded-full bg-transparent border border-white/10 hover:bg-white/5 text-muted hover:text-ink font-mono text-xs active:scale-[0.96] transition duration-300 ease-[var(--ease-spring)] cursor-pointer"
                 title="Generate new pseudo-random mathematical seed"
               >
                 <Sparkles className="h-3.5 w-3.5 text-accent" />
@@ -398,11 +398,11 @@ export default function AlgorithmicArt() {
               <button
                 type="button"
                 onClick={exportImage}
-                className="group flex items-center gap-3 pl-5 pr-1.5 h-11 rounded-full bg-ink text-canvas font-mono text-xs font-semibold hover:bg-ink/90 active:scale-[0.96] transition-all duration-300 ease-[var(--ease-spring)] cursor-pointer shadow-subtle"
+                className="group flex items-center gap-3 pl-5 pr-1.5 h-11 rounded-full bg-ink text-canvas font-mono text-xs font-semibold hover:bg-ink/90 active:scale-[0.96] transition duration-300 ease-[var(--ease-spring)] cursor-pointer shadow-subtle"
                 title="Export high-resolution PNG snapshot"
               >
                 <span>Save PNG</span>
-                <div className="w-8 h-8 rounded-full bg-canvas/10 flex items-center justify-center group-hover:bg-canvas/20 group-hover:scale-105 group-hover:translate-x-[2px] transition-all duration-300">
+                <div className="w-8 h-8 rounded-full bg-canvas/10 flex items-center justify-center group-hover:bg-canvas/20 group-hover:scale-105 group-hover:translate-x-[2px] transition duration-300">
                   <Download className="h-3.5 w-3.5" />
                 </div>
               </button>
@@ -433,7 +433,7 @@ export default function AlgorithmicArt() {
                 key={preset.id}
                 type="button"
                 onClick={() => applyPreset(preset)}
-                className={`group p-1.5 rounded-[2rem] border text-left cursor-pointer flex flex-col justify-between transition-all duration-500 ease-[var(--ease-out-quart)] active:scale-[0.98] ${
+                className={`group p-1.5 rounded-[2rem] border text-left cursor-pointer flex flex-col justify-between transition duration-500 ease-[var(--ease-out-quart)] active:scale-[0.98] ${
                   isSelected
                     ? 'border-accent/40 bg-accent/5 shadow-subtle'
                     : 'border-line bg-surface/30 hover:bg-surface/60'
@@ -453,7 +453,7 @@ export default function AlgorithmicArt() {
                       >
                         <Icon className="h-4 w-4" />
                       </span>
-                      <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-muted">
+                      <span className="font-mono text-[0.75rem] uppercase tracking-[0.1em] text-muted">
                         {preset.particleCount} ptcls
                       </span>
                     </div>

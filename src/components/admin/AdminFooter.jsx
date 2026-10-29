@@ -6,7 +6,7 @@ export default function AdminFooter() {
   const { isRemote } = useContent()
 
   return (
-    <footer className="w-full shrink-0 h-10 border-t border-line bg-[#0c0b0a]/90 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between text-[11px] font-mono text-muted z-10 select-none">
+    <footer className="w-full shrink-0 h-10 border-t border-line bg-[#0c0b0a]/90 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between text-[0.75rem] font-mono text-muted z-10 select-none">
       {/* Left Gateway & Sync Status */}
       <div className="flex items-center gap-3">
         <span className="flex items-center gap-1.5 text-muted">
@@ -32,17 +32,17 @@ export default function AdminFooter() {
 
       {/* Center Shortcuts */}
       <div className="hidden md:flex items-center gap-4 text-muted">
-        <Link to="/admin/settings" className="hover:text-ink transition-all duration-150 ease-[var(--ease-out-quart)] active:opacity-80 flex items-center gap-1">
+        <Link to="/admin/settings" className="hover:text-ink transition duration-150 ease-[var(--ease-out-quart)] active:opacity-80 flex items-center gap-1">
           <Settings className="h-3 w-3 text-accent" />
           Settings
         </Link>
         <span className="text-neutral-700">•</span>
-        <Link to="/admin/data" className="hover:text-ink transition-all duration-150 ease-[var(--ease-out-quart)] active:opacity-80 flex items-center gap-1">
+        <Link to="/admin/data" className="hover:text-ink transition duration-150 ease-[var(--ease-out-quart)] active:opacity-80 flex items-center gap-1">
           <Database className="h-3 w-3 text-accent" />
           Sync &amp; Backups
         </Link>
         <span className="text-neutral-700">•</span>
-        <a href="/" target="_blank" rel="noopener noreferrer" className="hover:text-ink transition-all duration-150 ease-[var(--ease-out-quart)] active:opacity-80 flex items-center gap-1">
+        <a href="/" target="_blank" rel="noopener noreferrer" className="hover:text-ink transition duration-150 ease-[var(--ease-out-quart)] active:opacity-80 flex items-center gap-1">
           <ExternalLink className="h-3 w-3 text-accent" />
           Public Site
         </a>
