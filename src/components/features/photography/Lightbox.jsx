@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, ChevronRight, X, Info, ZoomIn, ZoomOut, Aperture, Camera, Compass } from 'lucide-react'
-import { lightboxOverlay } from '@/lib/animations'
+import { lightboxOverlay, SPRING, SPRING_MOMENTUM, project } from '@/lib/animations'
 import { getOptimizedImageProps } from '@/lib/image.js'
 import { stopScroll, startScroll } from '@/lib/smooth-scroll.js'
 
@@ -178,7 +178,7 @@ export default function Lightbox({ photos = [], index, onClose, onChange }) {
             animate={showControls ? 'visible' : 'hidden'}
           >
             {/* Film Frame Counter Capsule */}
-            <div className="flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-xl font-mono text-[11px] text-white/80 shadow-raised">
+            <div className="flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-xl font-mono text-[0.75rem] text-white/80 shadow-raised">
               <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" />
               <span className="font-semibold text-accent">FRAME {String(index + 1).padStart(2, '0')}</span>
               <span className="text-white/20">/</span>
@@ -190,7 +190,7 @@ export default function Lightbox({ photos = [], index, onClose, onChange }) {
               <button
                 type="button"
                 onClick={() => setIsZoomed((z) => !z)}
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/80 backdrop-blur-xl transition-all hover:bg-white/15 hover:text-white active:scale-95 cursor-pointer"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/80 backdrop-blur-xl transition hover:bg-white/15 hover:text-white active:scale-95 cursor-pointer"
                 aria-label={isZoomed ? 'Zoom out' : 'Zoom in'}
                 title="Toggle Zoom (Z)"
               >
@@ -200,7 +200,7 @@ export default function Lightbox({ photos = [], index, onClose, onChange }) {
               <button
                 type="button"
                 onClick={() => setShowExif((s) => !s)}
-                className={`flex h-10 w-10 items-center justify-center rounded-full border transition-all active:scale-95 cursor-pointer backdrop-blur-xl ${
+                className={`flex h-10 w-10 items-center justify-center rounded-full border transition active:scale-95 cursor-pointer backdrop-blur-xl ${
                   showExif
                     ? 'border-accent bg-accent/20 text-accent'
                     : 'border-white/10 bg-white/5 text-white/80 hover:bg-white/15 hover:text-white'
@@ -214,7 +214,7 @@ export default function Lightbox({ photos = [], index, onClose, onChange }) {
               <button
                 type="button"
                 onClick={onClose}
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/80 backdrop-blur-xl transition-all hover:bg-white/15 hover:text-white active:scale-95 cursor-pointer ml-1"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/80 backdrop-blur-xl transition hover:bg-white/15 hover:text-white active:scale-95 cursor-pointer ml-1"
                 aria-label="Close lightbox (Esc)"
               >
                 <X className="h-4 w-4" />
@@ -239,7 +239,7 @@ export default function Lightbox({ photos = [], index, onClose, onChange }) {
                       Exposure & Optics
                     </span>
                   </div>
-                  <span className="font-mono text-[10px] text-white/40 uppercase">EXIF</span>
+                  <span className="font-mono text-[0.75rem] text-white/40 uppercase">EXIF</span>
                 </div>
 
                 {hasExif ? (
@@ -318,7 +318,7 @@ export default function Lightbox({ photos = [], index, onClose, onChange }) {
                   animate="center"
                   exit="exit"
                   transition={{
-                    x: { type: 'spring', stiffness: 320, damping: 32 },
+                    x: SPRING_MOMENTUM,
                     opacity: { duration: 0.2 },
                   }}
                   className="relative flex items-center justify-center max-h-full max-w-full"
@@ -331,13 +331,19 @@ export default function Lightbox({ photos = [], index, onClose, onChange }) {
                       scale: isZoomed ? 1.6 : 1,
                       cursor: isZoomed ? 'zoom-out' : 'zoom-in',
                     }}
-                    transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                    transition={SPRING}
                     onClick={() => setIsZoomed((z) => !z)}
-                    drag={!isZoomed ? 'x' : true}
+                    drag
+                    dragDirectionLock={!isZoomed}
                     dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
                     dragElastic={0.6}
                     onDragEnd={(e, { offset, velocity }) => {
                       if (isZoomed) return
+                      // Flick up/down past the projected rest point dismisses, like iOS Photos.
+                      if (Math.abs(offset.y) > Math.abs(offset.x)) {
+                        if (Math.abs(offset.y + project(velocity.y)) > 240) onClose()
+                        return
+                      }
                       const swipe = swipePower(offset.x, velocity.x)
                       if (swipe < -swipeConfidenceThreshold) {
                         goNext()
@@ -345,7 +351,7 @@ export default function Lightbox({ photos = [], index, onClose, onChange }) {
                         goPrev()
                       }
                     }}
-                    className="max-h-[82vh] max-w-[90vw] object-contain rounded-md shadow-2xl transition-all"
+                    className="max-h-[82vh] max-w-[90vw] object-contain rounded-md shadow-2xl transition"
                   />
                 </motion.div>
               )}
@@ -371,7 +377,7 @@ export default function Lightbox({ photos = [], index, onClose, onChange }) {
               )}
               {/* Micro exposure caption summary */}
               {(photo.camera || photo.aperture) && (
-                <div className="mt-2.5 flex items-center gap-2 font-mono text-[10px] text-accent/90">
+                <div className="mt-2.5 flex items-center gap-2 font-mono text-[0.75rem] text-accent/90">
                   {photo.camera && <span>{photo.camera}</span>}
                   {photo.camera && photo.aperture && <span>•</span>}
                   {photo.aperture && <span>{photo.aperture}</span>}
@@ -389,7 +395,7 @@ export default function Lightbox({ photos = [], index, onClose, onChange }) {
               onClick={goPrev}
               variants={controlsVariants}
               animate={showControls ? 'visible' : 'hidden'}
-              className="absolute left-3 sm:left-6 md:left-8 top-1/2 z-40 flex h-11 w-11 sm:h-12 sm:w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white backdrop-blur-xl transition-all hover:scale-105 hover:bg-white/20 active:scale-95 cursor-pointer shadow-raised"
+              className="absolute left-3 sm:left-6 md:left-8 top-1/2 z-40 flex h-11 w-11 sm:h-12 sm:w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white backdrop-blur-xl transition hover:scale-105 hover:bg-white/20 active:scale-95 cursor-pointer shadow-raised"
               aria-label="Previous photo (←)"
             >
               <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
@@ -402,7 +408,7 @@ export default function Lightbox({ photos = [], index, onClose, onChange }) {
               onClick={goNext}
               variants={controlsVariants}
               animate={showControls ? 'visible' : 'hidden'}
-              className="absolute right-3 sm:right-6 md:right-8 top-1/2 z-40 flex h-11 w-11 sm:h-12 sm:w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white backdrop-blur-xl transition-all hover:scale-105 hover:bg-white/20 active:scale-95 cursor-pointer shadow-raised"
+              className="absolute right-3 sm:right-6 md:right-8 top-1/2 z-40 flex h-11 w-11 sm:h-12 sm:w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white backdrop-blur-xl transition hover:scale-105 hover:bg-white/20 active:scale-95 cursor-pointer shadow-raised"
               aria-label="Next photo (→)"
             >
               <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />

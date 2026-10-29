@@ -148,7 +148,7 @@ export default function CorrespondenceSection({ publicSocialLinks = [] }) {
                   href={link.url}
                   target="_blank"
                   rel="me noopener noreferrer"
-                  className="text-ink border-b border-line hover:border-ink hover:text-muted active:opacity-80 transition-all duration-150 ease-[var(--ease-out-quart)] flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas pb-1"
+                  className="text-ink border-b border-line hover:border-ink hover:text-muted active:opacity-80 transition duration-150 ease-[var(--ease-out-quart)] flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas pb-1"
                 >
                   <span>{link.label}</span>
                   <ArrowUpRight className="h-3 w-3" />
@@ -156,7 +156,7 @@ export default function CorrespondenceSection({ publicSocialLinks = [] }) {
               ))}
               <Link
                 to="/contact"
-                className="text-ink border-b border-line hover:border-ink hover:text-muted active:opacity-80 transition-all duration-150 ease-[var(--ease-out-quart)] flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas pb-1"
+                className="text-ink border-b border-line hover:border-ink hover:text-muted active:opacity-80 transition duration-150 ease-[var(--ease-out-quart)] flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas pb-1"
               >
                 <span>Full Form</span>
                 <ArrowRight className="h-3 w-3" />
@@ -292,7 +292,7 @@ export default function CorrespondenceSection({ publicSocialLinks = [] }) {
               <button
                 type="submit"
                 disabled={status === 'submitting'}
-                className="inline-flex items-center gap-2 bg-ink text-canvas px-8 py-3 rounded-md font-utility hover:bg-white/20 hover:text-ink active:scale-[0.97] active:opacity-80 disabled:opacity-50 transition-all duration-250 ease-[var(--ease-out-quart)] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas shadow-subtle"
+                className="inline-flex items-center gap-2 bg-ink text-canvas px-8 py-3 rounded-md font-utility hover:bg-white/20 hover:text-ink active:scale-[0.97] active:opacity-80 disabled:opacity-50 transition duration-250 ease-[var(--ease-out-quart)] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas shadow-subtle"
               >
                 {status === 'submitting' ? (
                   <>

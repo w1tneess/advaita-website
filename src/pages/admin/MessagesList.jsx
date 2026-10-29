@@ -178,7 +178,7 @@ export default function MessagesList() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search sender, email, topic, or content..."
-              className="w-full rounded-xl border border-line bg-surface/60 py-2 pl-10 pr-4 text-xs font-sans text-ink placeholder:text-neutral-500 focus:border-accent focus:outline-none transition-all duration-200"
+              className="w-full rounded-xl border border-line bg-surface/60 py-2 pl-10 pr-4 text-xs font-sans text-ink placeholder:text-neutral-500 focus:border-accent focus:outline-none transition duration-200"
             />
           </div>
           <span className="font-mono text-xs text-muted">
@@ -196,7 +196,7 @@ export default function MessagesList() {
           </p>
         ) : (
           filteredMessages.map((msg) => (
-            <div key={msg.id} className="rounded-2xl border border-line bg-surface/60 p-5 shadow-subtle hover:border-line/80 transition-all duration-200">
+            <div key={msg.id} className="rounded-2xl border border-line bg-surface/60 p-5 shadow-subtle hover:border-line/80 transition duration-200">
               <div className="mb-2 flex flex-wrap items-baseline justify-between gap-2">
                 <div className="font-medium text-ink text-sm tracking-tight">{msg.name}</div>
                 <div className="font-mono text-xs text-muted">
@@ -238,7 +238,7 @@ export default function MessagesList() {
                 {msg.topic && (
                   <>
                     <span className="text-neutral-600">•</span>
-                    <span className="rounded-md border border-line bg-surface px-2 py-0.5 font-mono text-[11px] text-neutral-300">
+                    <span className="rounded-md border border-line bg-surface px-2 py-0.5 font-mono text-[0.75rem] text-neutral-300">
                       {msg.topic}
                     </span>
                   </>
@@ -253,7 +253,7 @@ export default function MessagesList() {
                 {msg.email && (
                   <a
                     href={`mailto:${encodeURIComponent(msg.email)}?subject=${encodeURIComponent(msg.topic ? `Re: ${msg.topic}` : 'Inquiry response from Advaita Chandra')}`}
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-line bg-surface px-3 py-1.5 font-mono text-xs text-neutral-300 hover:border-accent hover:text-accent transition-all duration-150"
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-line bg-surface px-3 py-1.5 font-mono text-xs text-neutral-300 hover:border-accent hover:text-accent transition duration-150"
                   >
                     <Mail className="h-3.5 w-3.5" />
                     Reply via Email

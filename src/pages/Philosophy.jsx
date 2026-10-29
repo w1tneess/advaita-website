@@ -41,7 +41,7 @@ export default function Philosophy() {
 					{thinkers.map((thinker) => {
 						const thinkerNotes = notesByThinker.get(thinker.id) ?? []
 						return (
-							<article key={thinker.id || thinker.name} className="py-8 sm:py-10 grid gap-4 sm:grid-cols-[1fr_2.2fr] items-baseline -mx-4 px-4 sm:-mx-6 sm:px-6 rounded-xl hover:bg-surface/60 transition-all duration-250 ease-[var(--ease-out-quart)] first:pt-4">
+							<article key={thinker.id || thinker.name} className="py-8 sm:py-10 grid gap-4 sm:grid-cols-[1fr_2.2fr] items-baseline -mx-4 px-4 sm:-mx-6 sm:px-6 rounded-xl hover:bg-surface/60 transition duration-250 ease-[var(--ease-out-quart)] first:pt-4">
 								<div className="font-mono text-xs tracking-widest uppercase text-muted font-medium">
 									{thinker.name}
 								</div>
@@ -56,7 +56,7 @@ export default function Philosophy() {
 												{thinkerNotes.map((note) => (
 													<li key={note.id} className="group">
 														{note.slug ? (
-															<Link to={`/philosophy/${note.slug}`} className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas rounded-md hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-250 ease-[var(--ease-out-quart)]">
+															<Link to={`/philosophy/${note.slug}`} className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas rounded-md hover:-translate-y-0.5 active:scale-[0.98] transition duration-250 ease-[var(--ease-out-quart)]">
 																<p className="text-base sm:text-lg text-ink leading-snug group-hover:text-muted transition-colors duration-150 ease-[var(--ease-out-quart)] text-balance underline decoration-line hover:decoration-line-strong underline-offset-4">{note.title}</p>
 															</Link>
 														) : (

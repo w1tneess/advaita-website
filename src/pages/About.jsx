@@ -168,7 +168,7 @@ export default function About() {
               {publicProjects.map((project) => (
                 <div
                   key={project.id}
-                  className="py-6 sm:py-8 grid gap-4 sm:gap-6 sm:grid-cols-[1fr_2.5fr] items-baseline group -mx-4 px-4 sm:-mx-6 sm:px-6 rounded-xl hover:bg-surface/40 hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-250 ease-[var(--ease-out-quart)] first:pt-4"
+                  className="py-6 sm:py-8 grid gap-4 sm:gap-6 sm:grid-cols-[1fr_2.5fr] items-baseline group -mx-4 px-4 sm:-mx-6 sm:px-6 rounded-xl hover:bg-surface/40 hover:-translate-y-0.5 active:scale-[0.98] transition duration-250 ease-[var(--ease-out-quart)] first:pt-4"
                 >
                   <div className="font-mono text-xs tracking-wider uppercase text-muted font-medium">
                     {project.categories?.join(' / ') || 'Project'}
@@ -177,7 +177,7 @@ export default function About() {
                     <h3 className="text-lg sm:text-xl font-normal text-ink mb-2 group-hover:text-muted transition-colors duration-150 ease-[var(--ease-out-quart)] text-balance">
                       <Link to="/projects" className="inline-flex items-baseline gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas rounded-sm">
                         <span>{project.title}</span>
-                        <ArrowUpRight className="h-4 w-4 opacity-50 group-hover:opacity-100 transition-all duration-150 ease-[var(--ease-out-quart)] text-muted" />
+                        <ArrowUpRight className="h-4 w-4 opacity-50 group-hover:opacity-100 transition duration-150 ease-[var(--ease-out-quart)] text-muted" />
                       </Link>
                     </h3>
                     <p className="text-sm sm:text-base text-muted leading-relaxed mb-4 max-w-2xl">
@@ -220,7 +220,7 @@ export default function About() {
                           <div className="min-w-0 flex-1">
                             <div className="flex flex-wrap items-center gap-2.5 font-sans">
                               <span className="text-ink text-sm sm:text-base">{skill.name}</span>
-                              <span className="text-[10px] font-mono text-muted uppercase tracking-wider px-2 py-0.5 border border-line rounded bg-surface">
+                              <span className="text-[0.75rem] font-mono text-muted uppercase tracking-wider px-2 py-0.5 border border-line rounded bg-surface">
                                 {skill.level?.replace('-', ' ')}
                               </span>
                             </div>
@@ -271,14 +271,14 @@ export default function About() {
               return (
                 <div
                   key={interest.id || idx}
-                  className="p-6 sm:p-8 rounded-2xl border border-line/60 bg-surface/30 hover:bg-surface/60 hover:-translate-y-1 hover:border-line-strong hover:shadow-subtle active:scale-[0.98] transition-all duration-250 ease-[var(--ease-out-quart)] flex flex-col justify-between group"
+                  className="p-6 sm:p-8 rounded-2xl border border-line/60 bg-surface/30 hover:bg-surface/60 hover:-translate-y-1 hover:border-line-strong hover:shadow-subtle active:scale-[0.98] transition duration-250 ease-[var(--ease-out-quart)] flex flex-col justify-between group"
                 >
                   <div>
                     <div className="flex items-center justify-between gap-3 mb-4">
                       <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-line/60 bg-surface text-muted group-hover:border-line-strong group-hover:bg-surface transition-colors duration-150 ease-[var(--ease-out-quart)] shadow-subtle">
                         <Icon name={iconName} className="h-5 w-5" />
                       </span>
-                      <span className="font-mono text-[10px] text-muted/80 bg-raised px-2 py-0.5 rounded border border-line/50">
+                      <span className="font-mono text-[0.75rem] text-muted/80 bg-raised px-2 py-0.5 rounded border border-line/50">
                         {String(interest.order || idx + 1).padStart(2, '0')}
                       </span>
                     </div>
@@ -374,14 +374,14 @@ export default function About() {
               <div className="mt-8 pt-6 border-t border-line flex flex-wrap items-center gap-4">
                 <Link
                   to="/contact"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-md bg-ink text-canvas font-mono text-xs uppercase tracking-wider font-semibold hover:bg-white/20 hover:text-ink active:scale-[0.97] active:opacity-80 transition-all duration-250 ease-[var(--ease-out-quart)] shadow-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-md bg-ink text-canvas font-mono text-xs uppercase tracking-wider font-semibold hover:bg-white/20 hover:text-ink active:scale-[0.97] active:opacity-80 transition duration-250 ease-[var(--ease-out-quart)] shadow-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas"
                 >
                   <span>Send Message</span>
                   <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
                 <Link
                   to="/projects"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-md border border-line bg-surface/50 text-muted hover:text-ink hover:border-line-strong hover:bg-surface active:scale-[0.97] active:opacity-80 transition-all duration-250 ease-[var(--ease-out-quart)] font-mono text-xs uppercase tracking-wider focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-md border border-line bg-surface/50 text-muted hover:text-ink hover:border-line-strong hover:bg-surface active:scale-[0.97] active:opacity-80 transition duration-250 ease-[var(--ease-out-quart)] font-mono text-xs uppercase tracking-wider focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas"
                 >
                   <span>View Projects</span>
                 </Link>

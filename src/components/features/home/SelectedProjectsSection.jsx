@@ -11,7 +11,7 @@ export default function SelectedProjectsSection({ featuredProjects = [] }) {
         </h2>
         <Link
           to="/projects"
-          className="font-mono text-xs tracking-wide text-ink border-b border-line hover:text-muted hover:border-muted active:opacity-80 transition-all duration-150 ease-[var(--ease-out-quart)] pb-1"
+          className="font-mono text-xs tracking-wide text-ink border-b border-line hover:text-muted hover:border-muted active:opacity-80 transition duration-150 ease-[var(--ease-out-quart)] pb-1"
         >
           View all projects &rarr;
         </Link>
@@ -26,7 +26,7 @@ export default function SelectedProjectsSection({ featuredProjects = [] }) {
           return (
             <article
               key={project.id}
-              className="group py-6 sm:py-8 grid gap-4 sm:grid-cols-[1fr_2fr] items-baseline transition-all duration-250 ease-[var(--ease-out-quart)] hover:bg-surface/50 -mx-4 px-4 sm:-mx-6 sm:px-6 rounded-xl hover:-translate-y-0.5 hover:shadow-subtle active:scale-[0.98]"
+              className="group py-6 sm:py-8 grid gap-4 sm:grid-cols-[1fr_2fr] items-baseline transition duration-250 ease-[var(--ease-out-quart)] hover:bg-surface/50 -mx-4 px-4 sm:-mx-6 sm:px-6 rounded-xl hover:-translate-y-0.5 hover:shadow-subtle active:scale-[0.98]"
             >
               <div className="space-y-2">
                 <div className="font-mono text-xs tracking-widest uppercase text-muted font-medium">

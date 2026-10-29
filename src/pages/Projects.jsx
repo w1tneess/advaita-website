@@ -78,9 +78,9 @@ export default function Projects() {
 
       <section className="shell py-[var(--spacing-fluid-section)] pb-24">
         {/* Interactive Algorithmic Computing Showcase Banner */}
-        <div className="mb-12 p-6 sm:p-8 rounded-2xl border border-line/60 bg-surface/30 hover:bg-surface/60 hover:-translate-y-1 hover:border-line-strong hover:shadow-subtle active:scale-[0.98] transition-all duration-250 ease-[var(--ease-out-quart)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 backdrop-blur-md group">
+        <div className="mb-12 p-6 sm:p-8 rounded-2xl border border-line/60 bg-surface/30 hover:bg-surface/60 hover:-translate-y-1 hover:border-line-strong hover:shadow-subtle active:scale-[0.98] transition duration-250 ease-[var(--ease-out-quart)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 backdrop-blur-md group">
           <div>
-            <div className="flex items-center gap-2 font-mono text-[11px] text-muted uppercase tracking-wider mb-2">
+            <div className="flex items-center gap-2 font-mono text-[0.75rem] text-muted uppercase tracking-wider mb-2">
               <span className="h-1.5 w-1.5 rounded-full bg-muted animate-pulse" />
               <span>Creative Computing // Procedural Sandbox</span>
             </div>
@@ -94,7 +94,7 @@ export default function Projects() {
           </div>
           <Link
             to="/art"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-md bg-accent text-canvas font-mono text-xs uppercase tracking-wider font-semibold hover:bg-white/20 hover:text-ink active:scale-[0.97] active:opacity-80 transition-all duration-250 ease-[var(--ease-out-quart)] shadow-subtle shrink-0"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-md bg-accent text-canvas font-mono text-xs uppercase tracking-wider font-semibold hover:bg-white/20 hover:text-ink active:scale-[0.97] active:opacity-80 transition duration-250 ease-[var(--ease-out-quart)] shadow-subtle shrink-0"
           >
             <span>Launch Canvas &rarr;</span>
           </Link>
