@@ -53,7 +53,7 @@ export default function OpenGraphPreview({
       </div>
 
       {/* Card Preview Box */}
-      <div className="overflow-hidden rounded-xl border border-line/70 bg-canvas shadow-md transition-all hover:border-line">
+      <div className="overflow-hidden rounded-xl border border-line/70 bg-canvas shadow-md transition hover:border-line">
         {/* Card Image */}
         <div className="relative aspect-[1200/630] w-full overflow-hidden bg-raised">
           {image ? (
@@ -74,7 +74,7 @@ export default function OpenGraphPreview({
 
         {/* Content Body */}
         <div className="p-4 space-y-1.5">
-          <p className="text-[11px] font-mono uppercase tracking-wider text-muted flex items-center gap-1">
+          <p className="text-[0.75rem] font-mono uppercase tracking-wider text-muted flex items-center gap-1">
             <Globe className="h-3 w-3" />
             {hostName}
           </p>

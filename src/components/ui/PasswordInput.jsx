@@ -39,7 +39,7 @@ export default function PasswordInput({
             {label}
           </label>
           {capsLockOn && (
-            <span className="flex items-center gap-1 text-[11px] font-medium text-opinion">
+            <span className="flex items-center gap-1 text-[0.75rem] font-medium text-opinion">
               <AlertCircle className="h-3 w-3" aria-hidden="true" />
               Caps Lock is ON
             </span>
@@ -63,7 +63,7 @@ export default function PasswordInput({
           placeholder={placeholder}
           required={required}
           disabled={disabled}
-          className="block w-full rounded-xl border border-line bg-canvas/50 py-3.5 pl-12 pr-12 text-sm text-ink placeholder:text-muted/40 transition-all hover:border-line/80 focus:border-accent focus:bg-canvas focus:outline-none focus:ring-2 focus:ring-accent/20 disabled:opacity-50 shadow-inner"
+          className="block w-full rounded-xl border border-line bg-canvas/50 py-3.5 pl-12 pr-12 text-sm text-ink placeholder:text-muted/40 transition hover:border-line/80 focus:border-accent focus:bg-canvas focus:outline-none focus:ring-2 focus:ring-accent/20 disabled:opacity-50 shadow-inner"
           {...props}
         />
 

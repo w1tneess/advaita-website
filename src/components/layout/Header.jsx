@@ -7,6 +7,7 @@ import { NAV_ITEMS } from '@/config/nav.js'
 import { useContent } from '@/lib/content.jsx'
 import { getRoutePreloadProps } from '@/lib/preload'
 import { stopScroll, startScroll } from '@/lib/smooth-scroll.js'
+import { SPRING } from '@/lib/animations'
 
 export default function Header() {
 	const [open, setOpen] = useState(false)
@@ -57,7 +58,7 @@ export default function Header() {
 
 	return (
 		<header
-			className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
+			className={`fixed top-0 inset-x-0 z-50 transition duration-300 ${
 				scrolled
 					? "glass-dock border-b border-line shadow-2xl pt-[max(0.5rem,env(safe-area-inset-top))] pb-2.5 sm:py-3"
 					: "bg-transparent border-b border-transparent pt-[max(0.75rem,env(safe-area-inset-top))] sm:pt-5 pb-2"
@@ -107,7 +108,7 @@ export default function Header() {
 										<motion.span
 											layoutId="activeNavIndicator"
 											className="absolute -bottom-1 left-0 right-0 h-[2px] rounded-full bg-accent"
-											transition={{ type: "spring", stiffness: 400, damping: 32 }}
+											transition={SPRING}
 										/>
 									)}
 								</>
@@ -122,7 +123,7 @@ export default function Header() {
 						to="/contact"
 						{...getRoutePreloadProps('/contact')}
 						className={({ isActive }) =>
-							`group inline-flex items-center gap-2 pl-4 pr-1 py-1 text-[13px] font-sans font-medium tracking-[-0.005em] rounded-full border transition-all duration-300 active:scale-[0.97] ${
+							`group inline-flex items-center gap-2 pl-4 pr-1 py-1 text-[0.8125rem] font-sans font-medium tracking-[-0.005em] rounded-full border transition duration-300 active:scale-[0.97] ${
 								isActive
 									? "text-ink border-accent bg-accent/10 shadow-sm"
 									: "text-muted border-line hover:text-ink hover:border-line-strong hover:bg-surface/80"
@@ -209,10 +210,10 @@ export default function Header() {
 									{/* Nav links section */}
 									<div>
 										<div className="flex items-center justify-between pb-2.5 mb-2 border-b border-line">
-											<span className="font-mono text-[11px] uppercase tracking-wider text-muted font-medium">
+											<span className="font-mono text-[0.75rem] uppercase tracking-wider text-muted font-medium">
 												Navigation
 											</span>
-											<span className="font-mono text-[11px] uppercase tracking-wider text-accent font-semibold">
+											<span className="font-mono text-[0.75rem] uppercase tracking-wider text-accent font-semibold">
 												Directory
 											</span>
 										</div>
@@ -230,7 +231,7 @@ export default function Header() {
 														onClick={() => setOpen(false)}
 														{...getRoutePreloadProps(route.path)}
 														className={({ isActive }) =>
-															`group flex items-center justify-between py-3.5 px-2 rounded-xl transition-all active:scale-[0.98] ${
+															`group flex items-center justify-between py-3.5 px-2 rounded-xl transition active:scale-[0.98] ${
 																isActive ? "text-accent bg-surface/60" : "text-ink hover:text-accent hover:bg-surface/30"
 															}`
 														}
@@ -248,12 +249,12 @@ export default function Header() {
 																</span>
 															</div>
 															{route.desc && (
-																<span className="text-[13px] text-muted pl-4 mt-0.5 line-clamp-1 font-sans leading-relaxed">
+																<span className="text-[0.8125rem] text-muted pl-4 mt-0.5 line-clamp-1 font-sans leading-relaxed">
 																	{route.desc}
 																</span>
 															)}
 														</div>
-														<ArrowUpRight className="h-4 w-4 text-muted group-hover:text-accent group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all opacity-50 group-hover:opacity-100 flex-shrink-0" />
+														<ArrowUpRight className="h-4 w-4 text-muted group-hover:text-accent group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition opacity-50 group-hover:opacity-100 flex-shrink-0" />
 													</NavLink>
 												</motion.li>
 											))}
@@ -263,7 +264,7 @@ export default function Header() {
 									{/* Bottom meta area */}
 									<div className="mt-6 pt-5 border-t border-line flex flex-col gap-3.5">
 										{/* Social Links Row */}
-										<div className="flex items-center justify-between pt-1 font-sans text-[13px] text-muted">
+										<div className="flex items-center justify-between pt-1 font-sans text-[0.8125rem] text-muted">
 											<div className="flex items-center gap-3">
 												{configuredSocials.map((link) => (
 													<a
@@ -278,7 +279,7 @@ export default function Header() {
 													</a>
 												))}
 											</div>
-											<div className="flex items-center gap-2 font-mono text-[11px] text-muted">
+											<div className="flex items-center gap-2 font-mono text-[0.75rem] text-muted">
 												<span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" />
 												<span>India</span>
 											</div>

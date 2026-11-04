@@ -32,7 +32,7 @@ function formatActivityDate(value) {
 
 function StatItem({ icon: Icon, label, value, to }) {
   return (
-    <Link to={to} className="flex items-center justify-between p-3 rounded-xl hover:bg-surface/80 active:scale-[0.97] transition-all duration-250 ease-[var(--ease-out-quart)] group">
+    <Link to={to} className="flex items-center justify-between p-3 rounded-xl hover:bg-surface/80 active:scale-[0.97] transition duration-250 ease-[var(--ease-out-quart)] group">
       <div className="flex items-center gap-3 text-xs font-sans">
         <div className="p-2 rounded-lg bg-surface text-muted group-hover:text-accent transition-colors border border-line">
           <Icon className="h-3.5 w-3.5" />
@@ -48,15 +48,15 @@ function QuickAction({ icon: Icon, label, description, to }) {
   return (
     <Link 
       to={to} 
-      className="relative overflow-hidden flex flex-col p-5 rounded-2xl border border-line bg-surface/40 hover:bg-surface/80 hover:border-accent/40 transition-all duration-250 ease-[var(--ease-out-quart)] group shadow-subtle hover:-translate-y-0.5 active:scale-[0.97]"
+      className="relative overflow-hidden flex flex-col p-5 rounded-2xl border border-line bg-surface/40 hover:bg-surface/80 hover:border-accent/40 transition duration-250 ease-[var(--ease-out-quart)] group shadow-subtle hover:-translate-y-0.5 active:scale-[0.97]"
     >
       <div className="flex items-start justify-between mb-3.5">
         <div className="p-2.5 rounded-xl bg-surface border border-line group-hover:border-accent/50 group-hover:text-accent text-muted transition-colors">
           <Icon className="h-4 w-4" />
         </div>
-        <ArrowRight className="h-4 w-4 text-muted/40 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-accent transition-all duration-200" />
+        <ArrowRight className="h-4 w-4 text-muted/40 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-accent transition duration-200" />
       </div>
-      <h3 className="font-sans text-[15px] font-semibold text-ink group-hover:text-accent transition-colors tracking-tight">{label}</h3>
+      <h3 className="font-sans text-[0.9375rem] font-semibold text-ink group-hover:text-accent transition-colors tracking-tight">{label}</h3>
       <p className="font-sans text-xs text-muted mt-1 leading-relaxed">{description}</p>
     </Link>
   )
@@ -154,7 +154,7 @@ export default function Dashboard() {
           
           {/* Quick Actions */}
           <section>
-            <h2 className="font-mono text-[11px] font-bold tracking-widest text-neutral-500 uppercase mb-3">
+            <h2 className="font-mono text-[0.75rem] font-bold tracking-widest text-neutral-500 uppercase mb-3">
               Quick Actions
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
@@ -182,7 +182,7 @@ export default function Dashboard() {
           {/* Recent Messages */}
           <section>
             <div className="flex items-center justify-between mb-3">
-              <h2 className="font-mono text-[11px] font-semibold tracking-wider text-muted uppercase">
+              <h2 className="font-mono text-[0.75rem] font-semibold tracking-wider text-muted uppercase">
                 Recent Messages
               </h2>
               <Link to="/admin/messages" className="font-sans text-xs text-accent hover:text-accent-strong flex items-center gap-1 font-medium transition-colors duration-150 ease-[var(--ease-out-quart)] hover:-translate-x-0.5">
@@ -196,11 +196,11 @@ export default function Dashboard() {
                     <div key={msg.id} className="p-4 hover:bg-surface/70 transition-colors duration-250 ease-[var(--ease-out-quart)]">
                       <div className="flex items-baseline justify-between mb-1">
                         <span className="font-medium text-xs text-ink font-sans">{msg.name}</span>
-                        <span className="text-[10px] font-mono text-muted">
+                        <span className="text-[0.75rem] font-mono text-muted">
                           {new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' }).format(new Date(msg.created_at))}
                         </span>
                       </div>
-                      <p className="text-[11px] font-mono text-accent mb-1.5">{msg.email} {msg.topic && `• ${msg.topic}`}</p>
+                      <p className="text-[0.75rem] font-mono text-accent mb-1.5">{msg.email} {msg.topic && `• ${msg.topic}`}</p>
                       <p className="text-xs text-muted font-sans line-clamp-2 leading-relaxed">{msg.message}</p>
                     </div>
                   ))}
@@ -217,10 +217,10 @@ export default function Dashboard() {
           {/* Activity Feed */}
           <section>
             <div className="flex items-center justify-between mb-3">
-              <h2 className="font-mono text-[11px] font-semibold tracking-wider text-muted uppercase">
+              <h2 className="font-mono text-[0.75rem] font-semibold tracking-wider text-muted uppercase">
                 Recent Activity
               </h2>
-              <span className="text-[11px] font-mono text-muted bg-surface/60 border border-line px-2.5 py-1 rounded-full flex items-center gap-1.5">
+              <span className="text-[0.75rem] font-mono text-muted bg-surface/60 border border-line px-2.5 py-1 rounded-full flex items-center gap-1.5">
                 <span className={`h-1.5 w-1.5 rounded-full ${isRemote ? 'bg-emerald-400' : 'bg-accent'} animate-pulse`} />
                 {isRemote ? 'Cloud Synced' : 'Local Storage'}
               </span>
@@ -237,7 +237,7 @@ export default function Dashboard() {
                           {entry.type.replace('categories.', '')} “{entry.label}”
                         </span>
                       </div>
-                      <time className="text-[11px] font-mono text-muted" dateTime={entry.at}>
+                      <time className="text-[0.75rem] font-mono text-muted" dateTime={entry.at}>
                         {formatActivityDate(entry.at)}
                       </time>
                     </li>
@@ -270,7 +270,7 @@ export default function Dashboard() {
                 ))}
               </ul>
               {drafts.length > 3 && (
-                <Link to="/admin/blog" className="text-[11px] font-sans font-medium text-accent hover:underline mt-2 inline-block transition-colors duration-150 ease-[var(--ease-out-quart)]">
+                <Link to="/admin/blog" className="text-[0.75rem] font-sans font-medium text-accent hover:underline mt-2 inline-block transition-colors duration-150 ease-[var(--ease-out-quart)]">
                   + {drafts.length - 3} more drafts
                 </Link>
               )}
@@ -280,14 +280,14 @@ export default function Dashboard() {
           {/* Real Dynamic System Diagnostics */}
           <section>
             <div className="flex items-center justify-between mb-3">
-              <h2 className="font-mono text-[11px] font-semibold tracking-wider text-muted uppercase">
+              <h2 className="font-mono text-[0.75rem] font-semibold tracking-wider text-muted uppercase">
                 System Diagnostics
               </h2>
               <button
                 type="button"
                 onClick={runHealthCheck}
                 disabled={isTesting}
-                className="text-[11px] font-sans font-medium text-accent hover:underline flex items-center gap-1 cursor-pointer transition-colors duration-150 ease-[var(--ease-out-quart)] active:opacity-80"
+                className="text-[0.75rem] font-sans font-medium text-accent hover:underline flex items-center gap-1 cursor-pointer transition-colors duration-150 ease-[var(--ease-out-quart)] active:opacity-80"
               >
                 <RefreshCw className={`h-2.5 w-2.5 ${isTesting ? 'animate-spin' : ''}`} />
                 Test
@@ -297,11 +297,11 @@ export default function Dashboard() {
               <div className="flex items-center justify-between border-b border-line pb-2.5">
                 <span className="text-muted">Database (Supabase)</span>
                 {health.connected ? (
-                  <span className="flex items-center gap-1.5 text-emerald-400 text-[11px]">
+                  <span className="flex items-center gap-1.5 text-emerald-400 text-[0.75rem]">
                     <CheckCircle2 className="h-3.5 w-3.5" /> Connected ({health.latencyMs}ms)
                   </span>
                 ) : (
-                  <span className="flex items-center gap-1.5 text-accent text-[11px]">
+                  <span className="flex items-center gap-1.5 text-accent text-[0.75rem]">
                     <AlertCircle className="h-3.5 w-3.5" /> Offline / Local
                   </span>
                 )}
@@ -309,20 +309,20 @@ export default function Dashboard() {
 
               <div className="flex items-center justify-between border-b border-line pb-2.5">
                 <span className="text-muted">Content Table</span>
-                <span className={`text-[11px] ${health.tables.siteContent ? 'text-emerald-400' : 'text-neutral-500'}`}>
+                <span className={`text-[0.75rem] ${health.tables.siteContent ? 'text-emerald-400' : 'text-neutral-500'}`}>
                   {health.tables.siteContent ? 'site_content ready' : 'Not verified'}
                 </span>
               </div>
 
               <div className="flex items-center justify-between border-b border-line pb-2.5">
                 <span className="text-muted">Storage Bucket</span>
-                <span className={`text-[11px] ${health.tables.imagesBucket ? 'text-emerald-400' : 'text-neutral-500'}`}>
+                <span className={`text-[0.75rem] ${health.tables.imagesBucket ? 'text-emerald-400' : 'text-neutral-500'}`}>
                   {health.tables.imagesBucket ? 'images ready' : 'Local URLs active'}
                 </span>
               </div>
 
               <div className="pt-2">
-                <Link to="/admin/data" className="text-[11px] font-sans font-medium text-accent hover:underline flex items-center justify-between transition-colors duration-150 ease-[var(--ease-out-quart)] active:opacity-80">
+                <Link to="/admin/data" className="text-[0.75rem] font-sans font-medium text-accent hover:underline flex items-center justify-between transition-colors duration-150 ease-[var(--ease-out-quart)] active:opacity-80">
                   Manage backups &amp; schema <ArrowRight className="h-3 w-3" />
                 </Link>
               </div>
@@ -331,7 +331,7 @@ export default function Dashboard() {
 
           {/* Content Overview */}
           <section>
-            <h2 className="font-mono text-[11px] font-semibold tracking-wider text-muted uppercase mb-3">
+            <h2 className="font-mono text-[0.75rem] font-semibold tracking-wider text-muted uppercase mb-3">
               Content Overview
             </h2>
             <div className="rounded-2xl border border-line bg-surface/40 shadow-subtle p-2 backdrop-blur-sm">

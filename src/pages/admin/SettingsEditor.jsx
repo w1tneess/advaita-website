@@ -335,7 +335,7 @@ export default function SettingsEditor() {
                 <p className="text-xs font-mono uppercase tracking-wider text-neutral-400">Current Admin Account</p>
                 <p className="mt-0.5 text-sm font-medium text-ink">{session?.user?.email || 'Local Offline Mode'}</p>
               </div>
-              <span className="rounded-md border border-accent/40 bg-accent/10 px-2.5 py-1 font-mono text-[11px] text-accent font-semibold">
+              <span className="rounded-md border border-accent/40 bg-accent/10 px-2.5 py-1 font-mono text-[0.75rem] text-accent font-semibold">
                 {session ? 'Verified Session' : 'Offline'}
               </span>
             </div>
@@ -346,7 +346,7 @@ export default function SettingsEditor() {
               <div>
                 <label
                   htmlFor="new-admin-password"
-                  className="block font-mono text-[11px] uppercase tracking-wider text-neutral-400 mb-1.5"
+                  className="block font-mono text-[0.75rem] uppercase tracking-wider text-neutral-400 mb-1.5"
                 >
                   New Password
                 </label>
@@ -362,7 +362,7 @@ export default function SettingsEditor() {
               <div>
                 <label
                   htmlFor="confirm-admin-password"
-                  className="block font-mono text-[11px] uppercase tracking-wider text-neutral-400 mb-1.5"
+                  className="block font-mono text-[0.75rem] uppercase tracking-wider text-neutral-400 mb-1.5"
                 >
                   Confirm New Password
                 </label>

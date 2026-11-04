@@ -343,7 +343,7 @@ export default function PhotographyEditor() {
                           type="button"
                           onClick={() => moveItem(index, -1)}
                           disabled={index === 0}
-                          className="p-1 text-white bg-black/40 rounded hover:bg-black/80 disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-150 ease-[var(--ease-out-quart)] active:scale-[0.97] disabled:active:scale-100"
+                          className="p-1 text-white bg-black/40 rounded hover:bg-black/80 disabled:opacity-30 disabled:cursor-not-allowed transition duration-150 ease-[var(--ease-out-quart)] active:scale-[0.97] disabled:active:scale-100"
                           aria-label="Move left"
                         >
                           <ChevronLeft className="h-5 w-5" />
@@ -352,7 +352,7 @@ export default function PhotographyEditor() {
                           type="button"
                           onClick={() => moveItem(index, 1)}
                           disabled={index === items.length - 1}
-                          className="p-1 text-white bg-black/40 rounded hover:bg-black/80 disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-150 ease-[var(--ease-out-quart)] active:scale-[0.97] disabled:active:scale-100"
+                          className="p-1 text-white bg-black/40 rounded hover:bg-black/80 disabled:opacity-30 disabled:cursor-not-allowed transition duration-150 ease-[var(--ease-out-quart)] active:scale-[0.97] disabled:active:scale-100"
                           aria-label="Move right"
                         >
                           <ChevronRight className="h-5 w-5" />
@@ -362,7 +362,7 @@ export default function PhotographyEditor() {
                         <button
                           type="button"
                           onClick={() => removeItem(item.id)}
-                          className="p-1.5 text-white bg-red-500/80 rounded hover:bg-red-500 transition-all duration-150 ease-[var(--ease-out-quart)] active:scale-[0.97] shadow-sm"
+                          className="p-1.5 text-white bg-red-500/80 rounded hover:bg-red-500 transition duration-150 ease-[var(--ease-out-quart)] active:scale-[0.97] shadow-sm"
                           aria-label="Remove image"
                         >
                           <XIcon className="h-4 w-4" />
@@ -392,7 +392,7 @@ export default function PhotographyEditor() {
                 }
               }}
               onClick={() => fileInputRef.current?.click()}
-              className={`p-6 sm:p-8 border-2 border-dashed rounded-2xl flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-250 ease-[var(--ease-out-quart)] active:scale-[0.99] ${
+              className={`p-6 sm:p-8 border-2 border-dashed rounded-2xl flex flex-col items-center justify-center text-center cursor-pointer transition duration-250 ease-[var(--ease-out-quart)] active:scale-[0.99] ${
                 isDragging
                   ? 'border-accent bg-accent/10 scale-[1.01]'
                   : 'border-line hover:border-accent/40 bg-surface/40 hover:bg-surface/70'
@@ -430,7 +430,7 @@ export default function PhotographyEditor() {
                     handleAddUrl()
                   }
                 }}
-                className="flex-1 rounded-xl border border-line bg-surface px-3.5 py-2.5 text-sm text-ink placeholder:text-muted/60 focus:border-accent focus:outline-none focus:-translate-y-0.5 focus:shadow-subtle transition-all duration-250 ease-[var(--ease-out-quart)]"
+                className="flex-1 rounded-xl border border-line bg-surface px-3.5 py-2.5 text-sm text-ink placeholder:text-muted/60 focus:border-accent focus:outline-none focus:-translate-y-0.5 focus:shadow-subtle transition duration-250 ease-[var(--ease-out-quart)]"
               />
               <Button type="button" size="sm" variant="secondary" onClick={handleAddUrl}>
                 Add URL

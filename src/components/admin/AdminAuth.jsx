@@ -325,7 +325,7 @@ export default function AdminAuth({ children }) {
                 <div>
                   <label
                     htmlFor="recovery-new-password"
-                    className="block font-mono text-[11px] uppercase tracking-wider text-neutral-400 mb-1.5"
+                    className="block font-mono text-[0.75rem] uppercase tracking-wider text-neutral-400 mb-1.5"
                   >
                     New Password
                   </label>
@@ -342,7 +342,7 @@ export default function AdminAuth({ children }) {
                 <div>
                   <label
                     htmlFor="recovery-confirm-password"
-                    className="block font-mono text-[11px] uppercase tracking-wider text-neutral-400 mb-1.5"
+                    className="block font-mono text-[0.75rem] uppercase tracking-wider text-neutral-400 mb-1.5"
                   >
                     Confirm Password
                   </label>
@@ -360,7 +360,7 @@ export default function AdminAuth({ children }) {
                   <button
                     type="submit"
                     disabled={submitting || !isConfigured}
-                    className="w-full flex items-center justify-center gap-2 rounded-lg border border-[#c2956a] bg-[#c2956a] py-3 text-xs font-mono uppercase tracking-wider text-[#0F0E0D] font-semibold transition-all duration-250 ease-[var(--ease-out-quart)] hover:bg-[#d4a87d] active:scale-[0.97] hover:-translate-y-0.5 hover:shadow-subtle disabled:opacity-40 cursor-pointer"
+                    className="w-full flex items-center justify-center gap-2 rounded-lg border border-[#c2956a] bg-[#c2956a] py-3 text-xs font-mono uppercase tracking-wider text-[#0F0E0D] font-semibold transition duration-250 ease-[var(--ease-out-quart)] hover:bg-[#d4a87d] active:scale-[0.97] hover:-translate-y-0.5 hover:shadow-subtle disabled:opacity-40 cursor-pointer"
                   >
                     {submitting ? (
                       <>
@@ -387,7 +387,7 @@ export default function AdminAuth({ children }) {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label htmlFor="forgot-email" className="block font-mono text-[11px] uppercase tracking-wider text-neutral-400">
+                  <label htmlFor="forgot-email" className="block font-mono text-[0.75rem] uppercase tracking-wider text-neutral-400">
                     Admin Email Address
                   </label>
                   <div className="relative">
@@ -402,7 +402,7 @@ export default function AdminAuth({ children }) {
                       placeholder="admin@domain.org"
                       required
                       disabled={submitting}
-                      className="block w-full rounded-lg border border-[#2c2825] bg-[#1a1918] py-2.5 pl-10 pr-4 text-sm text-[#f2ede6] placeholder:text-neutral-600 focus:border-[#c2956a] focus:outline-none transition-all duration-250 ease-[var(--ease-out-quart)] focus:-translate-y-0.5 focus:shadow-subtle"
+                      className="block w-full rounded-lg border border-[#2c2825] bg-[#1a1918] py-2.5 pl-10 pr-4 text-sm text-[#f2ede6] placeholder:text-neutral-600 focus:border-[#c2956a] focus:outline-none transition duration-250 ease-[var(--ease-out-quart)] focus:-translate-y-0.5 focus:shadow-subtle"
                     />
                   </div>
                 </div>
@@ -418,7 +418,7 @@ export default function AdminAuth({ children }) {
                   <button
                     type="submit"
                     disabled={submitting || !isConfigured || cooldown > 0}
-                    className="w-full flex items-center justify-center gap-2 rounded-lg border border-[#c2956a] bg-[#c2956a] py-3 text-xs font-mono uppercase tracking-wider text-[#0F0E0D] font-semibold transition-all duration-250 ease-[var(--ease-out-quart)] hover:bg-[#d4a87d] active:scale-[0.97] hover:-translate-y-0.5 hover:shadow-subtle disabled:opacity-40 cursor-pointer"
+                    className="w-full flex items-center justify-center gap-2 rounded-lg border border-[#c2956a] bg-[#c2956a] py-3 text-xs font-mono uppercase tracking-wider text-[#0F0E0D] font-semibold transition duration-250 ease-[var(--ease-out-quart)] hover:bg-[#d4a87d] active:scale-[0.97] hover:-translate-y-0.5 hover:shadow-subtle disabled:opacity-40 cursor-pointer"
                   >
                     {submitting ? (
                       <>
@@ -451,7 +451,7 @@ export default function AdminAuth({ children }) {
               /* Regular Sign In Form */
               <form onSubmit={handleAuthSubmit} className="space-y-5">
                 <div className="space-y-1.5">
-                  <label htmlFor="auth-email" className="block font-mono text-[11px] uppercase tracking-wider text-neutral-400">
+                  <label htmlFor="auth-email" className="block font-mono text-[0.75rem] uppercase tracking-wider text-neutral-400">
                     Email Address
                   </label>
                   <div className="relative">
@@ -466,13 +466,13 @@ export default function AdminAuth({ children }) {
                       placeholder="admin@domain.org"
                       required
                       disabled={submitting}
-                      className="block w-full rounded-lg border border-[#2c2825] bg-[#1a1918] py-2.5 pl-10 pr-4 text-sm text-[#f2ede6] placeholder:text-neutral-600 focus:border-[#c2956a] focus:outline-none transition-all duration-250 ease-[var(--ease-out-quart)] focus:-translate-y-0.5 focus:shadow-subtle"
+                      className="block w-full rounded-lg border border-[#2c2825] bg-[#1a1918] py-2.5 pl-10 pr-4 text-sm text-[#f2ede6] placeholder:text-neutral-600 focus:border-[#c2956a] focus:outline-none transition duration-250 ease-[var(--ease-out-quart)] focus:-translate-y-0.5 focus:shadow-subtle"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label htmlFor="auth-password" className="block font-mono text-[11px] uppercase tracking-wider text-neutral-400 mb-1.5">
+                  <label htmlFor="auth-password" className="block font-mono text-[0.75rem] uppercase tracking-wider text-neutral-400 mb-1.5">
                     Password
                   </label>
                   <PasswordInput
@@ -511,7 +511,7 @@ export default function AdminAuth({ children }) {
                   <button
                     type="submit"
                     disabled={submitting || !isConfigured}
-                    className="w-full flex items-center justify-center gap-2 rounded-lg border border-[#c2956a] bg-[#c2956a] py-3 text-xs font-mono uppercase tracking-wider text-[#0F0E0D] font-semibold transition-all duration-250 ease-[var(--ease-out-quart)] hover:bg-[#d4a87d] active:scale-[0.97] hover:-translate-y-0.5 hover:shadow-subtle disabled:opacity-40 cursor-pointer"
+                    className="w-full flex items-center justify-center gap-2 rounded-lg border border-[#c2956a] bg-[#c2956a] py-3 text-xs font-mono uppercase tracking-wider text-[#0F0E0D] font-semibold transition duration-250 ease-[var(--ease-out-quart)] hover:bg-[#d4a87d] active:scale-[0.97] hover:-translate-y-0.5 hover:shadow-subtle disabled:opacity-40 cursor-pointer"
                   >
                     {submitting ? (
                       <>
