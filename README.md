@@ -63,7 +63,7 @@ A cornerstone of this site is intellectual honesty and epistemic transparency:
 ## Key Features
 
 - **Selected Projects & Portfolio (`/projects`)**:
-  - Detailed case studies and concept specs spanning web engineering, time-series data analysis (e.g., terrorism records in India from 1947–2026), and decoupled system designs (e.g., educational worksheet generator).
+  - Detailed case studies and concept specs spanning web engineering, time-series data analysis, and a documentary research archive.
   - Status badges (`In Progress`, `Published`, `Concept`), tool tags, and GitHub repository links.
 - **Philosophy Notes (`/philosophy`)**:
   - Analytical reading notes on J. Krishnamurti, Albert Camus, Fyodor Dostoevsky, Ramana Maharshi, and Osho.

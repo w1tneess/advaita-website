@@ -14,17 +14,6 @@ const DEFAULT_INQUIRIES = [
     linkText: 'Read note',
   },
   {
-    category: 'History & Data Analysis',
-    status: 'Completed study',
-    title: 'Terrorism in India: Data Visualisation, 1947–2026',
-    summary:
-      'A Python data project collecting and visualising records from 1947 to 2026. Highlights where different historical databases conflict and preserves data gaps rather than hiding them.',
-    locus: 'Historical Data',
-    text: 'Python / Matplotlib',
-    link: '/projects',
-    linkText: 'View project',
-  },
-  {
     category: 'Historical Accounts',
     status: 'Documentary inquiry',
     title: 'Osho: Impartial Archival Inquiry',
