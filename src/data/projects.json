@@ -3,11 +3,17 @@
     "id": "prj-terrorism-india-dataviz",
     "slug": "terrorism-in-india-data-visualization",
     "title": "Terrorism in India: Data Visualization, 1947–2026",
-    "categories": ["data", "research"],
+    "categories": [
+      "data",
+      "research"
+    ],
     "summary": "A matplotlib data visualization of terrorism in India from 1947 to 2026. Built to handle gaps and conflicting numbers across different sources.",
     "description": "A data project examining terrorism in India across 1947 to 2026. Most of the work was source reconciliation because available records are uneven across decades and organisations count incidents differently. The project marks data gaps instead of smoothing them out.",
     "role": "Sole researcher. Framed the question, compared sources, prepared data, and built charts.",
-    "tools": ["Python", "matplotlib"],
+    "tools": [
+      "Python",
+      "matplotlib"
+    ],
     "status": "completed",
     "visibility": "Personal project. Not published publicly.",
     "published": true,
@@ -47,11 +53,21 @@
     "id": "prj-osho-research-document",
     "slug": "osho-documentary-research-document",
     "title": "Osho Documentary: Impartial Archival Inquiry",
-    "categories": ["research", "writing", "technology"],
+    "categories": [
+      "research",
+      "writing",
+      "technology"
+    ],
     "summary": "An impartial, evidence-graded investigative inquiry into Bhagwan Shree Rajneesh (1931–1990) deconstructing his life, teachings, Oregon commune, 1984 bioterror attack, and global legacy.",
     "description": "An unflinching, evidence-graded documentary web archive examining Bhagwan Shree Rajneesh (Osho). Built from over 5,000 recorded audio discourses, declassified FBI vault dossiers, and Wasco County court exhibits, placing contradictory biographical and institutional accounts side by side with rigorous epistemic grading.",
     "role": "Creator and researcher. Archival curation, historical synthesis, and web development.",
-    "tools": ["Next.js", "React", "Tailwind CSS", "Primary Sources", "Archival Curation"],
+    "tools": [
+      "Next.js",
+      "React",
+      "Tailwind CSS",
+      "Primary Sources",
+      "Archival Curation"
+    ],
     "status": "completed",
     "visibility": "Public web documentary and archival research project.",
     "published": true,
@@ -85,11 +101,18 @@
     "id": "prj-worksheet-generator",
     "slug": "worksheet-generator",
     "title": "Worksheet Generator",
-    "categories": ["concepts", "education", "technology"],
+    "categories": [
+      "concepts",
+      "education",
+      "technology"
+    ],
     "summary": "A concept design for a school worksheet system split into four layers. No code exists for this project yet.",
     "description": "A design document for generating school worksheets. The core idea is separating content, layout, and styling into independent layers so each can change without breaking the others. This is a design document, not working software.",
     "role": "Product design and system architecture. Concept stage only.",
-    "tools": ["System design", "Written specification"],
+    "tools": [
+      "System design",
+      "Written specification"
+    ],
     "status": "concept",
     "visibility": "Concept stage design. No code or prototype.",
     "published": true,
@@ -129,11 +152,19 @@
     "id": "prj-personal-website",
     "slug": "personal-website",
     "title": "advaitachandra.in",
-    "categories": ["technology"],
+    "categories": [
+      "technology"
+    ],
     "summary": "Portfolio website by Advaita Chandra. Built with React, Vite, Tailwind CSS, and Supabase to learn and experiment with modern web development.",
     "description": "Portfolio website by Advaita Chandra, created as an ongoing project to learn modern web development. It uses React for components, Vite for bundling, Tailwind CSS for styling, Supabase for data, and Vercel for hosting. It serves as the official central home for his research, photography, projects, and writing.",
     "role": "Creator and developer.",
-    "tools": ["React", "Vite", "Tailwind CSS", "Supabase", "Vercel"],
+    "tools": [
+      "React",
+      "Vite",
+      "Tailwind CSS",
+      "Supabase",
+      "Vercel"
+    ],
     "status": "in-progress",
     "visibility": "Public website.",
     "published": true,
@@ -158,5 +189,137 @@
     },
     "featured": false,
     "order": 4
+  },
+  {
+    "id": "prj-declutter",
+    "slug": "declutter",
+    "title": "Declutter",
+    "categories": [
+      "technology"
+    ],
+    "summary": "Windows app that safely declutters a messy folder: sort by type, find duplicates, large/old files and empty folders. Previews first, never permanently deletes.",
+    "description": "Windows app that safely declutters a messy folder: sort by type, find duplicates, large/old files and empty folders. Previews first, never permanently deletes.",
+    "role": "Creator and developer.",
+    "tools": [
+      "Python"
+    ],
+    "status": "in-progress",
+    "visibility": "Public project.",
+    "published": true,
+    "methodology": [],
+    "limitations": [],
+    "links": {
+      "repository": "https://github.com/w1tneess/declutter",
+      "live": "https://declutter.advaitachandra.in/",
+      "writeup": null
+    },
+    "featured": false,
+    "order": 5
+  },
+  {
+    "id": "prj-supportadvaita",
+    "slug": "supportadvaita",
+    "title": "Support Advaita",
+    "categories": [
+      "technology"
+    ],
+    "summary": "Custom zero-fee UPI payment page to support independent software, research, photography, and philosophy projects.",
+    "description": "Custom zero-fee UPI payment page to support independent software, research, photography, and philosophy projects.",
+    "role": "Creator and developer.",
+    "tools": [
+      "JavaScript"
+    ],
+    "status": "in-progress",
+    "visibility": "Public project.",
+    "published": true,
+    "methodology": [],
+    "limitations": [],
+    "links": {
+      "repository": "https://github.com/w1tneess/supportadvaita",
+      "live": "https://support.advaitachandra.in/",
+      "writeup": null
+    },
+    "featured": false,
+    "order": 6
+  },
+  {
+    "id": "prj-aperture",
+    "slug": "aperture",
+    "title": "Aperture",
+    "categories": [
+      "technology"
+    ],
+    "summary": "Paste a link, keep the post: save reels, videos, photos and carousels from Instagram, X, Facebook and Pinterest. No ads, no accounts, no tracking.",
+    "description": "Paste a link, keep the post: save reels, videos, photos and carousels from Instagram, X, Facebook and Pinterest. No ads, no accounts, no tracking.",
+    "role": "Creator and developer.",
+    "tools": [
+      "JavaScript"
+    ],
+    "status": "in-progress",
+    "visibility": "Public project.",
+    "published": true,
+    "methodology": [],
+    "limitations": [],
+    "links": {
+      "repository": "https://github.com/w1tneess/aperture",
+      "live": "https://aperture.advaitachandra.in",
+      "writeup": null
+    },
+    "featured": false,
+    "order": 7
+  },
+  {
+    "id": "prj-w1tos-ui",
+    "slug": "w1tos-ui",
+    "title": "w1tOS",
+    "categories": [
+      "technology"
+    ],
+    "summary": "A minimal, keyboard-first web UI for CasaOS home servers. Three themes, command palette, no telemetry. Fork of CasaOS-UI.",
+    "description": "A minimal, keyboard-first web UI for CasaOS home servers. Three themes, command palette, no telemetry. Fork of CasaOS-UI.",
+    "role": "Creator and developer.",
+    "tools": [
+      "Vue"
+    ],
+    "status": "in-progress",
+    "visibility": "Public project.",
+    "published": true,
+    "methodology": [],
+    "limitations": [],
+    "links": {
+      "repository": "https://github.com/w1tneess/w1tos-ui",
+      "live": null,
+      "writeup": null
+    },
+    "featured": false,
+    "order": 8
+  },
+  {
+    "id": "prj-command-deck",
+    "slug": "command-deck",
+    "title": "Command Deck",
+    "categories": [
+      "technology"
+    ],
+    "summary": "Class 10 exam and syllabus study dashboard built on Cloudflare Workers and D1.",
+    "description": "Class 10 exam and syllabus study dashboard built on Cloudflare Workers and D1.",
+    "role": "Creator and developer.",
+    "tools": [
+      "TypeScript",
+      "Cloudflare Workers",
+      "D1"
+    ],
+    "status": "in-progress",
+    "visibility": "Public project.",
+    "published": true,
+    "methodology": [],
+    "limitations": [],
+    "links": {
+      "repository": "https://github.com/w1tneess/command-deck",
+      "live": null,
+      "writeup": null
+    },
+    "featured": false,
+    "order": 9
   }
 ]
