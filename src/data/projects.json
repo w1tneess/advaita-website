@@ -1,5 +1,54 @@
 [
   {
+    "id": "prj-aperture",
+    "slug": "aperture",
+    "title": "Aperture: Social Media Downloader",
+    "categories": ["technology"],
+    "summary": "A clean, ad-free web app that saves reels, videos, photos and full carousels from Instagram, X, Facebook and Pinterest. Paste a link, pick a quality, keep the post.",
+    "description": "An open-source downloader built as an installable web app for Brave and mobile Chrome. A Node.js server runs yt-dlp and gallery-dl behind a strict host allowlist, merges audio with ffmpeg, streams live progress to a React interface, and deletes every file within minutes. Instagram posts the free extractors cannot read fall back to a hosted scraper, so no personal account is ever used.",
+    "role": "Sole developer. Product design, frontend, backend, security hardening and deployment.",
+    "tools": [
+      "React",
+      "TypeScript",
+      "Node.js",
+      "Express",
+      "yt-dlp",
+      "gallery-dl",
+      "ffmpeg",
+      "Docker",
+      "Render",
+      "Cloudflare"
+    ],
+    "status": "completed",
+    "visibility": "Public web app and open-source repository (MIT).",
+    "published": true,
+    "methodology": [
+      {
+        "title": "Two extractors with fallback",
+        "detail": "yt-dlp handles video and quality selection; gallery-dl handles photos and mixed carousels; an Apify backup covers Instagram posts that block logged-out requests."
+      },
+      {
+        "title": "Security before features",
+        "detail": "Allowlisted hosts, no shell invocation, server-side ids instead of client URLs, CDN-restricted media, strict CSP, and per-visitor rate, size and duration limits."
+      },
+      {
+        "title": "Measured, not assumed",
+        "detail": "Every platform was tested from the live server; ones that block cloud servers (YouTube, TikTok, Reddit) were removed from the public instance instead of being left to fail."
+      }
+    ],
+    "limitations": [
+      "Platforms actively change their sites to stop downloaders, so no downloader works every time; extractors update daily to recover quickly.",
+      "Private posts, stories and deleted content cannot be downloaded, and the public instance runs on free hosting with daily usage caps."
+    ],
+    "links": {
+      "repository": "https://github.com/w1tneess/aperture",
+      "live": "https://aperture.advaitachandra.in/",
+      "writeup": null
+    },
+    "featured": true,
+    "order": 0
+  },
+  {
     "id": "prj-terrorism-india-dataviz",
     "slug": "terrorism-in-india-data-visualization",
     "title": "Terrorism in India: Data Visualization, 1947–2026",
