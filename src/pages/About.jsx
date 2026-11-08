@@ -60,7 +60,7 @@ export default function About() {
                   I'm Advaita Chandra, a student based in West Bengal, India. This site is where I keep the things I'm working on: projects, reading notes, photography, and questions I haven't fully worked out yet.
                 </p>
                 <p>
-                  Most of what I read and think about falls under philosophy, history, and computer systems, with psychology, politics, public policy, and cybersecurity mixed in. Some of it turns into actual projects, like a worksheet generator I built for teachers, or a data visualization on terrorism in India. Most of it just stays as notes.
+                  Most of what I read and think about falls under philosophy, history, and computer systems, with psychology, politics, public policy, and cybersecurity mixed in. Some of it turns into actual projects, like the Osho documentary archive. Most of it just stays as notes.
                 </p>
                 <p>
                   This isn't a professional publication or a portfolio built to impress anyone. It's closer to a public notebook. I'm not an expert in any of this. I'm just someone who reads a lot and likes building things, and this is where that ends up.

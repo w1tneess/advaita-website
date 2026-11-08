@@ -4,7 +4,7 @@
     "group": "Research & analysis",
     "name": "Comparing conflicting sources",
     "level": "working-knowledge",
-    "evidence": "terrorism-in-india-data-visualization",
+    "evidence": null,
     "note": "Keeping disagreements between sources visible instead of resolving them by preference.",
     "order": 1
   },
@@ -13,7 +13,7 @@
     "group": "Research & analysis",
     "name": "Identifying gaps in a dataset",
     "level": "working-knowledge",
-    "evidence": "terrorism-in-india-data-visualization",
+    "evidence": null,
     "note": "Recognising when missing records are being read as zero values.",
     "order": 2
   },
@@ -49,7 +49,7 @@
     "group": "Data",
     "name": "Python",
     "level": "learning",
-    "evidence": "terrorism-in-india-data-visualization",
+    "evidence": null,
     "note": "Used for data preparation and plotting; comfortable with the basics.",
     "order": 6
   },
@@ -58,7 +58,7 @@
     "group": "Data",
     "name": "matplotlib",
     "level": "working-knowledge",
-    "evidence": "terrorism-in-india-data-visualization",
+    "evidence": null,
     "note": "Building readable time-series charts that show their own uncertainty.",
     "order": 7
   },
@@ -85,7 +85,7 @@
     "group": "Web & software",
     "name": "Layered system design",
     "level": "learning",
-    "evidence": "worksheet-generator",
+    "evidence": null,
     "note": "Separating concerns on paper. Untested against a real implementation.",
     "order": 10
   },

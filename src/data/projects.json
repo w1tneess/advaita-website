@@ -56,56 +56,6 @@
     "order": 0
   },
   {
-    "id": "prj-terrorism-india-dataviz",
-    "slug": "terrorism-in-india-data-visualization",
-    "title": "Terrorism in India: Data Visualization, 1947–2026",
-    "categories": [
-      "data",
-      "research"
-    ],
-    "summary": "A matplotlib data visualization of terrorism in India from 1947 to 2026. Built to handle gaps and conflicting numbers across different sources.",
-    "description": "A data project examining terrorism in India across 1947 to 2026. Most of the work was source reconciliation because available records are uneven across decades and organisations count incidents differently. The project marks data gaps instead of smoothing them out.",
-    "role": "Sole researcher. Framed the question, compared sources, prepared data, and built charts.",
-    "tools": [
-      "Python",
-      "matplotlib"
-    ],
-    "status": "completed",
-    "visibility": "Personal project. Not published publicly.",
-    "published": true,
-    "methodology": [
-      {
-        "title": "Framed the question narrowly",
-        "detail": "Decided in advance what the charts would show so that gaps in data remain visible."
-      },
-      {
-        "title": "Compared sources",
-        "detail": "Where numbers conflicted, both were recorded alongside the source difference."
-      },
-      {
-        "title": "Marked coverage gaps",
-        "detail": "Periods with sparse records are marked clearly so absence of records is not read as absence of events."
-      },
-      {
-        "title": "Built charts in Python",
-        "detail": "Used matplotlib so data transformations remain visible."
-      }
-    ],
-    "limitations": [
-      "Records are incomplete, especially for earlier decades.",
-      "Different organisations count incidents differently, so figures from different sources cannot be directly compared.",
-      "The project maps available data. It does not establish causes.",
-      "The visualisations are exploratory, not a published conclusion."
-    ],
-    "links": {
-      "repository": null,
-      "live": null,
-      "writeup": null
-    },
-    "featured": true,
-    "order": 1
-  },
-  {
     "id": "prj-osho-research-document",
     "slug": "osho-documentary-research-document",
     "title": "Osho Documentary: Impartial Archival Inquiry",
@@ -151,58 +101,7 @@
       "writeup": null
     },
     "featured": true,
-    "order": 2
-  },
-  {
-    "id": "prj-worksheet-generator",
-    "slug": "worksheet-generator",
-    "title": "Worksheet Generator",
-    "categories": [
-      "concepts",
-      "education",
-      "technology"
-    ],
-    "summary": "A concept design for a school worksheet system split into four layers. No code exists for this project yet.",
-    "description": "A design document for generating school worksheets. The core idea is separating content, layout, and styling into independent layers so each can change without breaking the others. This is a design document, not working software.",
-    "role": "Product design and system architecture. Concept stage only.",
-    "tools": [
-      "System design",
-      "Written specification"
-    ],
-    "status": "concept",
-    "visibility": "Concept stage design. No code or prototype.",
-    "published": true,
-    "methodology": [
-      {
-        "title": "Content layer",
-        "detail": "Stores questions, prompts, and metadata as structured data without layout assumptions."
-      },
-      {
-        "title": "Layout engine",
-        "detail": "Calculates page arrangements, item flow, and page breaks for printing."
-      },
-      {
-        "title": "Template engine",
-        "detail": "Provides reusable document styles and header patterns."
-      },
-      {
-        "title": "Optional assistance layer",
-        "detail": "An optional layer for drafting content variations. The core three layers work without it."
-      }
-    ],
-    "limitations": [
-      "This is a design document. No prototype or code exists.",
-      "The four layer split is untested against real classroom requirements.",
-      "Page pagination and layout overflow handling are not fully specified.",
-      "It has never been tested in a classroom."
-    ],
-    "links": {
-      "repository": null,
-      "live": null,
-      "writeup": null
-    },
-    "featured": true,
-    "order": 3
+    "order": 1
   },
   {
     "id": "prj-personal-website",
@@ -244,7 +143,7 @@
       "writeup": null
     },
     "featured": false,
-    "order": 4
+    "order": 2
   },
   {
     "id": "prj-declutter",
@@ -270,7 +169,7 @@
       "writeup": null
     },
     "featured": false,
-    "order": 5
+    "order": 3
   },
   {
     "id": "prj-supportadvaita",
@@ -296,7 +195,7 @@
       "writeup": null
     },
     "featured": false,
-    "order": 6
+    "order": 4
   },
   {
     "id": "prj-w1tos-ui",
@@ -322,7 +221,7 @@
       "writeup": null
     },
     "featured": false,
-    "order": 7
+    "order": 5
   },
   {
     "id": "prj-command-deck",
@@ -350,6 +249,6 @@
       "writeup": null
     },
     "featured": false,
-    "order": 8
+    "order": 6
   }
 ]
