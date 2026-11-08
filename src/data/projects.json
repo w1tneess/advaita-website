@@ -3,7 +3,9 @@
     "id": "prj-aperture",
     "slug": "aperture",
     "title": "Aperture: Social Media Downloader",
-    "categories": ["technology"],
+    "categories": [
+      "technology"
+    ],
     "summary": "A clean, ad-free web app that saves reels, videos, photos and full carousels from Instagram, X, Facebook and Pinterest. Paste a link, pick a quality, keep the post: most links are ready in 2–4 seconds.",
     "description": "An open-source downloader built as an installable web app for Brave and mobile Chrome. A Node.js server runs yt-dlp and gallery-dl behind a strict host allowlist, merges audio with ffmpeg, streams live progress to a React interface, and deletes every file within minutes. The extractors stay loaded in a long-running Python worker, so lookups skip interpreter startup, and Instagram photos, carousels and videos are read from the same public data any logged-out visitor sees. A hosted scraper remains only as a backup for the rare post that cannot be read that way, so no personal account is ever used.",
     "role": "Sole developer. Product design, frontend, backend, security hardening and deployment.",
@@ -297,32 +299,6 @@
     "order": 6
   },
   {
-    "id": "prj-aperture",
-    "slug": "aperture",
-    "title": "Aperture",
-    "categories": [
-      "technology"
-    ],
-    "summary": "Paste a link, keep the post: save reels, videos, photos and carousels from Instagram, X, Facebook and Pinterest. No ads, no accounts, no tracking.",
-    "description": "Paste a link, keep the post: save reels, videos, photos and carousels from Instagram, X, Facebook and Pinterest. No ads, no accounts, no tracking.",
-    "role": "Creator and developer.",
-    "tools": [
-      "JavaScript"
-    ],
-    "status": "in-progress",
-    "visibility": "Public project.",
-    "published": true,
-    "methodology": [],
-    "limitations": [],
-    "links": {
-      "repository": "https://github.com/w1tneess/aperture",
-      "live": "https://aperture.advaitachandra.in",
-      "writeup": null
-    },
-    "featured": false,
-    "order": 7
-  },
-  {
     "id": "prj-w1tos-ui",
     "slug": "w1tos-ui",
     "title": "w1tOS",
@@ -346,7 +322,7 @@
       "writeup": null
     },
     "featured": false,
-    "order": 8
+    "order": 7
   },
   {
     "id": "prj-command-deck",
@@ -374,6 +350,6 @@
       "writeup": null
     },
     "featured": false,
-    "order": 9
+    "order": 8
   }
 ]
