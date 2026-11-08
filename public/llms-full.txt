@@ -137,15 +137,16 @@ Advaita operates under an explicit framework designed to prevent bias and mainta
 - **Repository**: https://github.com/w1tneess/aperture
 - **Categories**: Technology, Open Source
 - **Summary**: A clean, ad-free web app that saves reels, videos, photos and full carousels from Instagram, X, Facebook and Pinterest. Paste a link, pick a quality, keep the post. Installable as a PWA in Brave and mobile Chrome.
-- **Stack**: React, TypeScript, Vite, Node.js, Express, yt-dlp, gallery-dl, ffmpeg, Docker, Render, Cloudflare.
+- **Stack**: React, TypeScript, Vite, Node.js, Express, Python, yt-dlp, gallery-dl, ffmpeg, Docker, Render, Cloudflare.
 - **Methodology**:
-  - Two extractors with automatic fallback, plus a hosted backup for Instagram posts that block logged-out requests; no personal account is used.
+  - Free path first, paid backup last: yt-dlp reads videos and public Instagram photos without logging in, gallery-dl adds photos elsewhere, and a hosted backup is used only when Instagram cannot be read or hides a video's sound; no personal account is used.
+  - Speed found by measuring: lookups were slow because each one started fresh Python processes on a fraction of a CPU. Keeping the extractors loaded, skipping tools that cannot succeed and caching repeat links cut typical lookups from 10–70 seconds to 2–4.
   - Security first: allowlisted hosts, no shell invocation, server-side ids instead of client URLs, CDN-restricted media, strict CSP, per-visitor rate, size and duration limits.
   - Every platform was tested from the live server; platforms that block cloud servers (YouTube, TikTok, Reddit) were removed from the public instance rather than left to fail.
 - **Process**: Built through an AI-assisted workflow with Claude; the work focused on product direction, requirements, testing decisions and deployment.
 - **Stated Limitations**:
   - Platforms actively change their sites to stop downloaders, so no downloader works every time; extractors update daily to recover quickly.
-  - Private posts, stories and deleted content cannot be downloaded; the public instance runs on free hosting with daily usage caps.
+  - Private posts, stories and deleted content cannot be downloaded without a logged-in account, which the public instance deliberately never uses; it runs on free hosting with daily usage caps.
 
 ### Project 5: advaitachandra.in (Personal Portfolio & Web Architecture)
 - **Categories**: Web Engineering, Open Source

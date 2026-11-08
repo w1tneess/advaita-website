@@ -4,14 +4,15 @@
     "slug": "aperture",
     "title": "Aperture: Social Media Downloader",
     "categories": ["technology"],
-    "summary": "A clean, ad-free web app that saves reels, videos, photos and full carousels from Instagram, X, Facebook and Pinterest. Paste a link, pick a quality, keep the post.",
-    "description": "An open-source downloader built as an installable web app for Brave and mobile Chrome. A Node.js server runs yt-dlp and gallery-dl behind a strict host allowlist, merges audio with ffmpeg, streams live progress to a React interface, and deletes every file within minutes. Instagram posts the free extractors cannot read fall back to a hosted scraper, so no personal account is ever used.",
+    "summary": "A clean, ad-free web app that saves reels, videos, photos and full carousels from Instagram, X, Facebook and Pinterest. Paste a link, pick a quality, keep the post: most links are ready in 2–4 seconds.",
+    "description": "An open-source downloader built as an installable web app for Brave and mobile Chrome. A Node.js server runs yt-dlp and gallery-dl behind a strict host allowlist, merges audio with ffmpeg, streams live progress to a React interface, and deletes every file within minutes. The extractors stay loaded in a long-running Python worker, so lookups skip interpreter startup, and Instagram photos, carousels and videos are read from the same public data any logged-out visitor sees. A hosted scraper remains only as a backup for the rare post that cannot be read that way, so no personal account is ever used.",
     "role": "Sole developer. Product design, frontend, backend, security hardening and deployment.",
     "tools": [
       "React",
       "TypeScript",
       "Node.js",
       "Express",
+      "Python",
       "yt-dlp",
       "gallery-dl",
       "ffmpeg",
@@ -24,8 +25,12 @@
     "published": true,
     "methodology": [
       {
-        "title": "Two extractors with fallback",
-        "detail": "yt-dlp handles video and quality selection; gallery-dl handles photos and mixed carousels; an Apify backup covers Instagram posts that block logged-out requests."
+        "title": "Free path first, paid backup last",
+        "detail": "yt-dlp handles video, quality selection and Instagram photos without logging in; gallery-dl adds photos on X, Facebook and Pinterest; an Apify backup is used only when Instagram cannot be read or hides a video's sound."
+      },
+      {
+        "title": "Speed found by measuring",
+        "detail": "Profiling the live server showed lookups were slow because each one started fresh Python processes on a fraction of a CPU, not because of the network. Keeping the extractors loaded, skipping tools that cannot succeed and caching repeat links cut typical lookups from 10–70 seconds to 2–4."
       },
       {
         "title": "Security before features",
@@ -38,7 +43,7 @@
     ],
     "limitations": [
       "Platforms actively change their sites to stop downloaders, so no downloader works every time; extractors update daily to recover quickly.",
-      "Private posts, stories and deleted content cannot be downloaded, and the public instance runs on free hosting with daily usage caps."
+      "Private posts, stories and deleted content cannot be downloaded without a logged-in account, which the public instance deliberately never uses; it runs on free hosting with daily usage caps."
     ],
     "links": {
       "repository": "https://github.com/w1tneess/aperture",
