@@ -185,7 +185,7 @@ export default function ContactForm() {
           <button
             type="button"
             onClick={() => setStatus('idle')}
-            className="border border-copper/60 bg-copper/10 px-5 py-2.5 rounded-full font-semibold text-sm text-copper hover:bg-copper hover:text-canvas active:scale-[0.97] transition-all duration-250 ease-[var(--ease-out-quart)] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30"
+            className="border border-copper/60 bg-copper/10 px-5 py-2.5 rounded-full font-semibold text-sm text-copper hover:bg-copper hover:text-canvas active:scale-[0.97] transition duration-250 ease-[var(--ease-out-quart)] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30"
           >
             Send Another Dispatch
           </button>
@@ -215,7 +215,7 @@ export default function ContactForm() {
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
         {/* Name */}
         <div>
-          <label htmlFor="contact-name" className="block font-mono text-[11px] uppercase tracking-wider text-text-3 font-medium mb-1.5">
+          <label htmlFor="contact-name" className="block font-mono text-[0.75rem] uppercase tracking-wider text-text-3 font-medium mb-1.5">
             Your Name <span className="text-copper">*</span>
           </label>
           <input
@@ -226,7 +226,7 @@ export default function ContactForm() {
             onChange={handleChange}
             autoComplete="name"
             spellCheck={false}
-            className={`block w-full rounded-lg border bg-canvas/70 px-3.5 py-2.5 font-sans text-base sm:text-sm text-text transition-all duration-250 ease-[var(--ease-out-quart)] placeholder:text-text-3/40 focus:border-copper focus:bg-canvas focus:-translate-y-0.5 focus:shadow-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30 ${
+            className={`block w-full rounded-lg border bg-canvas/70 px-3.5 py-2.5 font-sans text-base sm:text-sm text-text transition duration-250 ease-[var(--ease-out-quart)] placeholder:text-text-3/40 focus:border-copper focus:bg-canvas focus:-translate-y-0.5 focus:shadow-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30 ${
               errors.name ? 'border-limitation bg-limitation/5' : 'border-line hover:border-copper/40'
             }`}
             placeholder="Advaita Chandra"
@@ -242,7 +242,7 @@ export default function ContactForm() {
 
         {/* Email */}
         <div>
-          <label htmlFor="contact-email" className="block font-mono text-[11px] uppercase tracking-wider text-text-3 font-medium mb-1.5">
+          <label htmlFor="contact-email" className="block font-mono text-[0.75rem] uppercase tracking-wider text-text-3 font-medium mb-1.5">
             Email Address <span className="text-copper">*</span>
           </label>
           <input
@@ -253,7 +253,7 @@ export default function ContactForm() {
             onChange={handleChange}
             autoComplete="email"
             spellCheck={false}
-            className={`block w-full rounded-lg border bg-canvas/70 px-3.5 py-2.5 font-sans text-base sm:text-sm text-text transition-all duration-250 ease-[var(--ease-out-quart)] placeholder:text-text-3/40 focus:border-copper focus:bg-canvas focus:-translate-y-0.5 focus:shadow-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30 ${
+            className={`block w-full rounded-lg border bg-canvas/70 px-3.5 py-2.5 font-sans text-base sm:text-sm text-text transition duration-250 ease-[var(--ease-out-quart)] placeholder:text-text-3/40 focus:border-copper focus:bg-canvas focus:-translate-y-0.5 focus:shadow-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30 ${
               errors.email ? 'border-limitation bg-limitation/5' : 'border-line hover:border-copper/40'
             }`}
             placeholder="name@institution.edu"
@@ -271,11 +271,11 @@ export default function ContactForm() {
       {/* Modern Interactive Topic Selector */}
       <div>
         <div className="flex items-center justify-between mb-2">
-          <label id="contact-topic-label" className="block font-mono text-[11px] uppercase tracking-wider text-text-3 font-medium">
+          <label id="contact-topic-label" className="block font-mono text-[0.75rem] uppercase tracking-wider text-text-3 font-medium">
             Inquiry Topic <span className="text-copper">*</span>
           </label>
           {form.topic && (
-            <span className="font-mono text-[10px] text-copper uppercase tracking-widest">
+            <span className="font-mono text-[0.75rem] text-copper uppercase tracking-widest">
               Selected
             </span>
           )}
@@ -295,7 +295,7 @@ export default function ContactForm() {
                 role="radio"
                 aria-checked={isSelected}
                 onClick={() => handleTopicSelect(t.value)}
-                className={`font-mono text-xs uppercase tracking-wider px-3 py-1.5 border rounded-md transition-all duration-250 ease-[var(--ease-out-quart)] active:scale-[0.97] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30 ${
+                className={`font-mono text-xs uppercase tracking-wider px-3 py-1.5 border rounded-md transition duration-250 ease-[var(--ease-out-quart)] active:scale-[0.97] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30 ${
                   isSelected
                     ? 'border-copper bg-copper/15 text-copper font-medium shadow-subtle'
                     : 'border-line bg-surface/40 text-text-3 hover:border-copper/40 hover:text-text-2 hover:bg-surface/80'
@@ -318,10 +318,10 @@ export default function ContactForm() {
       {/* Message */}
       <div>
         <div className="flex items-center justify-between mb-1.5">
-          <label htmlFor="contact-message" className="block font-mono text-[11px] uppercase tracking-wider text-text-3 font-medium">
+          <label htmlFor="contact-message" className="block font-mono text-[0.75rem] uppercase tracking-wider text-text-3 font-medium">
             Message <span className="text-copper">*</span>
           </label>
-          <span className={`font-mono text-[11px] tabular-nums ${
+          <span className={`font-mono text-[0.75rem] tabular-nums ${
             form.message.length > 1900 ? 'text-limitation' : 'text-text-3'
           }`}>
             {form.message.length} / 2000
@@ -336,7 +336,7 @@ export default function ContactForm() {
           rows={5}
           autoComplete="off"
           spellCheck={true}
-          className={`block w-full resize-y rounded-lg border bg-canvas/70 px-3.5 py-3 font-sans text-base sm:text-sm leading-relaxed text-text transition-all duration-250 ease-[var(--ease-out-quart)] placeholder:text-text-3/40 focus:border-copper focus:bg-canvas focus:-translate-y-0.5 focus:shadow-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30 ${
+          className={`block w-full resize-y rounded-lg border bg-canvas/70 px-3.5 py-3 font-sans text-base sm:text-sm leading-relaxed text-text transition duration-250 ease-[var(--ease-out-quart)] placeholder:text-text-3/40 focus:border-copper focus:bg-canvas focus:-translate-y-0.5 focus:shadow-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30 ${
             errors.message ? 'border-limitation bg-limitation/5' : 'border-line hover:border-copper/40'
           }`}
           placeholder="Share your perspectives, research inquiries, recommended readings, or constructive critique…"
@@ -366,7 +366,7 @@ export default function ContactForm() {
         <button
           type="submit"
           disabled={status === 'submitting' || timeRemaining > 0}
-          className="group inline-flex items-center justify-center gap-3 rounded-full border border-copper bg-copper pl-6 pr-2 py-2 text-sm font-semibold text-canvas transition-all duration-500 ease-[var(--ease-out-expo)] hover:bg-copper-strong hover:border-copper-strong active:scale-[0.97] shadow-subtle disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
+          className="group inline-flex items-center justify-center gap-3 rounded-full border border-copper bg-copper pl-6 pr-2 py-2 text-sm font-semibold text-canvas transition duration-500 ease-[var(--ease-out-expo)] hover:bg-copper-strong hover:border-copper-strong active:scale-[0.97] shadow-subtle disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
         >
           {status === 'submitting' ? (
             <>
@@ -392,7 +392,7 @@ export default function ContactForm() {
           )}
         </button>
 
-        <p className="font-mono text-[11px] text-text-3 flex items-center gap-1.5">
+        <p className="font-mono text-[0.75rem] text-text-3 flex items-center gap-1.5">
           <span className="text-copper">🔒</span>
           <span>Archived in private correspondence ledger</span>
         </p>

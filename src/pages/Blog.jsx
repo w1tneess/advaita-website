@@ -86,7 +86,7 @@ export default function Blog() {
                       key={cat}
                       type="button"
                       onClick={() => setActiveCategory(cat)}
-                      className={`px-3.5 py-1.5 min-h-[32px] text-xs transition-all duration-150 cursor-pointer rounded-full active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink ${
+                      className={`px-3.5 py-1.5 min-h-[32px] text-xs transition duration-150 cursor-pointer rounded-full active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink ${
                         activeCategory === cat
                           ? 'bg-ink text-canvas font-medium shadow-subtle'
                           : 'bg-surface border border-line/60 text-muted hover:text-ink hover:border-line-strong hover:bg-surface/80'
@@ -134,7 +134,7 @@ export default function Blog() {
               return (
                 <li
                   key={post.id}
-                  className="group grid gap-4 sm:gap-6 py-8 sm:py-10 sm:grid-cols-[10rem_minmax(0,1fr)] items-start -mx-4 px-4 sm:-mx-6 sm:px-6 rounded-xl hover:bg-surface/40 hover:shadow-subtle hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-250 ease-[var(--ease-out-quart)] first:pt-4"
+                  className="group grid gap-4 sm:gap-6 py-8 sm:py-10 sm:grid-cols-[10rem_minmax(0,1fr)] items-start -mx-4 px-4 sm:-mx-6 sm:px-6 rounded-xl hover:bg-surface/40 hover:shadow-subtle hover:-translate-y-0.5 active:scale-[0.98] transition duration-250 ease-[var(--ease-out-quart)] first:pt-4"
                 >
                   {/* Left Metadata Column */}
                   <div className="font-mono text-xs text-muted space-y-2">
@@ -142,11 +142,11 @@ export default function Blog() {
                       {formatDate(post.published_at)}
                     </time>
                     {post.category && (
-                      <span className="inline-block bg-surface border border-line/60 px-2 py-0.5 text-ink text-[11px] rounded-sm shadow-subtle group-hover:border-line-strong transition-colors duration-150">
+                      <span className="inline-block bg-surface border border-line/60 px-2 py-0.5 text-ink text-[0.75rem] rounded-sm shadow-subtle group-hover:border-line-strong transition-colors duration-150">
                         {post.category}
                       </span>
                     )}
-                    <span className="block text-[11px] text-muted">{estMinutes} min read</span>
+                    <span className="block text-[0.75rem] text-muted">{estMinutes} min read</span>
                   </div>
 
                   {/* Right Content Column */}
@@ -170,7 +170,7 @@ export default function Blog() {
                     <div className="mt-5">
                       <span className="inline-flex items-center gap-2 font-mono text-xs text-ink group-hover:text-muted transition-colors duration-150 ease-[var(--ease-out-quart)]">
                         <span>Read note</span>
-                        <ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-all duration-250 ease-[var(--ease-out-quart)] -translate-x-2 group-hover:translate-x-0" />
+                        <ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition duration-250 ease-[var(--ease-out-quart)] -translate-x-2 group-hover:translate-x-0" />
                       </span>
                     </div>
                   </div>

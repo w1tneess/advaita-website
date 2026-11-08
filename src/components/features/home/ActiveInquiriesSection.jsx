@@ -101,7 +101,7 @@ export default function ActiveInquiriesSection({ philosophy = {} }) {
               <h3 className="font-sans text-sm tracking-wide text-ink">Readings &amp; Thinkers</h3>
               <Link
                 to="/philosophy"
-                className="font-sans text-sm tracking-wide text-ink border-b border-line hover:text-muted hover:border-muted active:opacity-80 transition-all duration-150 ease-[var(--ease-out-quart)] pb-1"
+                className="font-sans text-sm tracking-wide text-ink border-b border-line hover:text-muted hover:border-muted active:opacity-80 transition duration-150 ease-[var(--ease-out-quart)] pb-1"
               >
                 Reading log &rarr;
               </Link>
@@ -136,7 +136,7 @@ export default function ActiveInquiriesSection({ philosophy = {} }) {
           {DEFAULT_INQUIRIES.map((item, idx) => (
             <article
               key={idx}
-              className="group py-8 sm:py-10 grid gap-4 sm:grid-cols-[1fr_2fr] items-baseline transition-all duration-250 ease-[var(--ease-out-quart)] hover:bg-surface/60 -mx-4 px-4 sm:-mx-6 sm:px-6 rounded-xl hover:-translate-y-0.5 hover:shadow-subtle active:scale-[0.98] first:pt-4"
+              className="group py-8 sm:py-10 grid gap-4 sm:grid-cols-[1fr_2fr] items-baseline transition duration-250 ease-[var(--ease-out-quart)] hover:bg-surface/60 -mx-4 px-4 sm:-mx-6 sm:px-6 rounded-xl hover:-translate-y-0.5 hover:shadow-subtle active:scale-[0.98] first:pt-4"
             >
               <div className="font-mono text-xs tracking-widest uppercase text-muted font-medium">
                 {item.category}
@@ -152,12 +152,12 @@ export default function ActiveInquiriesSection({ philosophy = {} }) {
                       className="inline-flex items-baseline gap-3 outline-none"
                     >
                       <span>{item.title}</span>
-                      <ArrowUpRight className="h-4 w-4 opacity-50 group-hover:opacity-100 transition-all duration-250 ease-[var(--ease-out-quart)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 text-muted" />
+                      <ArrowUpRight className="h-4 w-4 opacity-50 group-hover:opacity-100 transition duration-250 ease-[var(--ease-out-quart)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 text-muted" />
                     </a>
                   ) : (
                     <Link to={item.link} className="inline-flex items-baseline gap-3 outline-none">
                       <span>{item.title}</span>
-                      <ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-all duration-250 ease-[var(--ease-out-quart)] -translate-x-3 group-hover:translate-x-0 text-muted" />
+                      <ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition duration-250 ease-[var(--ease-out-quart)] -translate-x-3 group-hover:translate-x-0 text-muted" />
                     </Link>
                   )}
                 </h3>

@@ -19,7 +19,7 @@ export default function HeroSection({ profile = {} }) {
 
       <div className="relative z-10 w-full">
         {/* Top Status Eyebrow */}
-        <div className="inline-flex items-center gap-2.5 px-3.5 py-1 rounded-full border border-line bg-surface/60 text-muted font-mono text-[11px] mb-6 sm:mb-8 backdrop-blur-sm">
+        <div className="inline-flex items-center gap-2.5 px-3.5 py-1 rounded-full border border-line bg-surface/60 text-muted font-mono text-[0.75rem] mb-6 sm:mb-8 backdrop-blur-sm">
           <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" />
           <span className="text-ink font-medium">{profile?.name || 'Advaita Chandra'}</span>
           <span className="text-line">•</span>
@@ -27,7 +27,7 @@ export default function HeroSection({ profile = {} }) {
         </div>
 
         <div className="max-w-5xl">
-          <h1 className="text-[length:var(--text-hero)] font-normal tracking-tight text-ink mb-[var(--spacing-fluid-sm)] leading-[1.12] text-balance">
+          <h1 className="text-[length:var(--text-hero)] font-normal tracking-[-0.02em] text-ink mb-[var(--spacing-fluid-sm)] leading-[1.12] text-balance">
             I am someone who notices, thinks, builds, photographs, reads, and writes.
           </h1>
 
@@ -39,7 +39,7 @@ export default function HeroSection({ profile = {} }) {
           <div className="flex flex-wrap items-center gap-4 sm:gap-6 mb-[var(--spacing-fluid-lg)]">
             <Link
               to="/projects"
-              className="group inline-flex items-center gap-3 pl-6 pr-2 py-2 rounded-full bg-accent text-canvas text-sm font-semibold hover:bg-accent-strong active:scale-[0.97] transition-all duration-500 ease-[var(--ease-out-expo)] shadow-subtle"
+              className="group inline-flex items-center gap-3 pl-6 pr-2 py-2 rounded-full bg-accent text-canvas text-sm font-semibold hover:bg-accent-strong active:scale-[0.97] transition duration-500 ease-[var(--ease-out-expo)] shadow-subtle"
             >
               <span>Explore Projects</span>
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-canvas/15 transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:scale-105 group-hover:translate-x-0.5">
@@ -48,7 +48,7 @@ export default function HeroSection({ profile = {} }) {
             </Link>
             <a
               href="#inquiries"
-              className="group inline-flex items-center gap-3 pl-6 pr-2 py-2 rounded-full border border-line bg-surface/50 text-muted hover:text-ink hover:border-line-strong hover:bg-surface active:scale-[0.97] transition-all duration-500 ease-[var(--ease-out-expo)] text-sm font-semibold"
+              className="group inline-flex items-center gap-3 pl-6 pr-2 py-2 rounded-full border border-line bg-surface/50 text-muted hover:text-ink hover:border-line-strong hover:bg-surface active:scale-[0.97] transition duration-500 ease-[var(--ease-out-expo)] text-sm font-semibold"
             >
               <span>Reading Archive</span>
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-ink/5 transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:scale-105 group-hover:translate-y-0.5">
@@ -64,7 +64,7 @@ export default function HeroSection({ profile = {} }) {
             <Link
               key={b.path}
               to={b.path}
-              className="group p-4 sm:p-6 rounded-xl border border-line/60 bg-surface/30 hover:bg-surface/70 hover:border-line-strong hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-250 ease-[var(--ease-out-quart)] flex flex-col justify-between"
+              className="group p-4 sm:p-6 rounded-xl border border-line/60 bg-surface/30 hover:bg-surface/70 hover:border-line-strong hover:-translate-y-0.5 active:scale-[0.98] transition duration-250 ease-[var(--ease-out-quart)] flex flex-col justify-between"
             >
               <div className="flex items-center justify-between mb-2">
                 <span className="font-mono text-xs text-ink group-hover:text-muted transition-colors duration-150 ease-[var(--ease-out-quart)] font-medium">

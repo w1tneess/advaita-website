@@ -19,7 +19,7 @@ export default function DataTable({ caption, columns, rows, rowKey = (row) => ro
               <th
                 key={column.key}
                 scope="col"
-                className={`px-4 py-3.5 text-left text-[11px] font-mono font-semibold tracking-wider text-muted uppercase ${
+                className={`px-4 py-3.5 text-left text-[0.75rem] font-mono font-semibold tracking-wider text-muted uppercase ${
                   column.className ?? ''
                 }`}
               >
@@ -44,7 +44,7 @@ export default function DataTable({ caption, columns, rows, rowKey = (row) => ro
                 >
                   {/* Column label, shown only in the stacked mobile layout. */}
                   <span
-                    className="mb-1 block text-[11px] font-mono font-semibold tracking-wider text-muted uppercase sm:hidden"
+                    className="mb-1 block text-[0.75rem] font-mono font-semibold tracking-wider text-muted uppercase sm:hidden"
                     aria-hidden="true"
                   >
                     {column.header}

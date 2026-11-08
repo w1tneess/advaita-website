@@ -180,7 +180,7 @@ export default function DataManager() {
             <button
               onClick={handleManualSync}
               disabled={syncing}
-              className="inline-flex items-center gap-2 rounded-lg border border-[#c2956a] bg-[#c2956a]/10 px-4 py-2 text-xs font-mono tracking-wider uppercase text-[#c2956a] hover:bg-[#c2956a]/20 transition-all duration-250 ease-[var(--ease-out-quart)] active:scale-[0.97] cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100"
+              className="inline-flex items-center gap-2 rounded-lg border border-[#c2956a] bg-[#c2956a]/10 px-4 py-2 text-xs font-mono tracking-wider uppercase text-[#c2956a] hover:bg-[#c2956a]/20 transition duration-250 ease-[var(--ease-out-quart)] active:scale-[0.97] cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100"
             >
               <RefreshCw className={`h-3.5 w-3.5 ${syncing ? 'animate-spin' : ''}`} />
               <span>{syncing ? 'Syncing...' : 'Sync to Cloud'}</span>
@@ -192,14 +192,14 @@ export default function DataManager() {
       {/* Supabase Diagnostics & Schema Setup */}
       <section className="mt-10">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="font-mono text-[11px] font-bold tracking-widest text-neutral-500 uppercase">
+          <h2 className="font-mono text-[0.75rem] font-bold tracking-widest text-neutral-500 uppercase">
             Supabase Health &amp; Diagnostics
           </h2>
           <button
             type="button"
             onClick={testConnection}
             disabled={testingHealth}
-            className="text-xs font-mono text-[#c2956a] hover:underline flex items-center gap-1.5 cursor-pointer transition-all duration-150 ease-[var(--ease-out-quart)] active:opacity-80"
+            className="text-xs font-mono text-[#c2956a] hover:underline flex items-center gap-1.5 cursor-pointer transition duration-150 ease-[var(--ease-out-quart)] active:opacity-80"
           >
             <RefreshCw className={`h-3 w-3 ${testingHealth ? 'animate-spin' : ''}`} />
             Run Diagnostics
@@ -208,7 +208,7 @@ export default function DataManager() {
 
         <div className="grid gap-4 rounded-xl border border-[#242220] bg-[#141312] p-5 sm:grid-cols-3 font-mono text-xs">
           <div>
-            <p className="text-[10px] tracking-wider text-neutral-500 uppercase">Cloud Connection</p>
+            <p className="text-[0.75rem] tracking-wider text-neutral-500 uppercase">Cloud Connection</p>
             <div className="mt-1.5 flex items-center gap-2">
               {health.connected ? (
                 <>
@@ -222,25 +222,25 @@ export default function DataManager() {
                 </>
               )}
             </div>
-            <p className="mt-1 text-[11px] text-neutral-400 truncate">{health.message}</p>
+            <p className="mt-1 text-[0.75rem] text-neutral-400 truncate">{health.message}</p>
           </div>
 
           <div>
-            <p className="text-[10px] tracking-wider text-neutral-500 uppercase">Database Tables</p>
+            <p className="text-[0.75rem] tracking-wider text-neutral-500 uppercase">Database Tables</p>
             <p className="mt-1.5 font-medium text-[#f2ede6]">
               site_content: <span className={health.tables.siteContent ? 'text-emerald-400' : 'text-neutral-500'}>{health.tables.siteContent ? 'Ready' : 'Not verified'}</span>
             </p>
-            <p className="mt-0.5 text-[11px] text-neutral-400">
+            <p className="mt-0.5 text-[0.75rem] text-neutral-400">
               contact_submissions: <span className={health.tables.contactSubmissions ? 'text-emerald-400' : 'text-neutral-500'}>{health.tables.contactSubmissions ? 'Ready' : 'Not verified'}</span>
             </p>
           </div>
 
           <div>
-            <p className="text-[10px] tracking-wider text-neutral-500 uppercase">Document Size</p>
+            <p className="text-[0.75rem] tracking-wider text-neutral-500 uppercase">Document Size</p>
             <p className="mt-1.5 font-medium text-[#f2ede6]">
               {documentBytes > 0 ? `${Math.round(documentBytes / 1024)} KB` : '—'}
             </p>
-            <p className="mt-0.5 text-[11px] text-neutral-400">Schema Version v{content?.schemaVersion ?? '—'}</p>
+            <p className="mt-0.5 text-[0.75rem] text-neutral-400">Schema Version v{content?.schemaVersion ?? '—'}</p>
           </div>
         </div>
 
@@ -250,7 +250,7 @@ export default function DataManager() {
           <button
             type="button"
             onClick={handleCopySchemaSql}
-            className="inline-flex items-center gap-1.5 text-xs text-[#c2956a] hover:underline cursor-pointer ml-3 shrink-0 transition-all duration-150 ease-[var(--ease-out-quart)] active:opacity-80"
+            className="inline-flex items-center gap-1.5 text-xs text-[#c2956a] hover:underline cursor-pointer ml-3 shrink-0 transition duration-150 ease-[var(--ease-out-quart)] active:opacity-80"
           >
             {copiedSql ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
             <span>{copiedSql ? 'Copied!' : 'Copy SQL Script'}</span>
@@ -260,7 +260,7 @@ export default function DataManager() {
 
       {/* Export */}
       <section className="mt-12">
-        <h2 className="font-mono text-[11px] font-bold tracking-widest text-neutral-500 uppercase mb-2">
+        <h2 className="font-mono text-[0.75rem] font-bold tracking-widest text-neutral-500 uppercase mb-2">
           Export Backup
         </h2>
         <p className="text-xs text-neutral-400">
@@ -276,7 +276,7 @@ export default function DataManager() {
 
       {/* Import */}
       <section className="mt-12">
-        <h2 className="font-mono text-[11px] font-bold tracking-widest text-neutral-500 uppercase mb-2">
+        <h2 className="font-mono text-[0.75rem] font-bold tracking-widest text-neutral-500 uppercase mb-2">
           Import Backup
         </h2>
         <p className="text-xs text-neutral-400">
@@ -285,7 +285,7 @@ export default function DataManager() {
         <div className="mt-4 flex flex-wrap items-center gap-4">
           <label
             htmlFor="content-import"
-            className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-[#242220] bg-[#161514] px-4 py-2.5 text-xs font-mono text-neutral-300 hover:border-[#c2956a] hover:bg-surface hover:text-[#f2ede6] transition-all duration-250 ease-[var(--ease-out-quart)] active:scale-[0.97]"
+            className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-[#242220] bg-[#161514] px-4 py-2.5 text-xs font-mono text-neutral-300 hover:border-[#c2956a] hover:bg-surface hover:text-[#f2ede6] transition duration-250 ease-[var(--ease-out-quart)] active:scale-[0.97]"
           >
             <Upload className="h-4 w-4 text-[#c2956a]" aria-hidden="true" />
             Select JSON File
@@ -305,7 +305,7 @@ export default function DataManager() {
 
       {/* Reset */}
       <section className="mt-12">
-        <h2 className="font-mono text-[11px] font-bold tracking-widest text-neutral-500 uppercase mb-2">
+        <h2 className="font-mono text-[0.75rem] font-bold tracking-widest text-neutral-500 uppercase mb-2">
           Clear / Revert Storage
         </h2>
         <p className="text-xs text-neutral-400">
