@@ -57,11 +57,13 @@ function makeMark(w, h, ink) {
   let y
   let room
   if (kind === 'bracket') {
-    x = rand(w * 0.008, w * 0.016); y = rand(h * 0.14, h * 0.42); room = w
-  } else if (Math.random() < 0.4) {
-    x = rand(w * 0.02, w * 0.12); y = rand(h * 0.14, h * 0.46); room = w * 0.2 - (x - w * 0.02)
+    x = rand(w * 0.975, w * 0.985); y = rand(h * 0.14, h * 0.4); room = w
+  } else if (Math.random() < 0.5) {
+    // beside the Sanskrit note, right of "Chandra"
+    x = rand(w * 0.52, w * 0.74); y = rand(h * 0.44, h * 0.54); room = w * 0.78 - x
   } else {
-    x = rand(w * 0.78, w * 0.88); y = rand(h * 0.52, h * 0.9); room = w * 0.97 - x
+    // the band below the signature
+    x = rand(w * 0.55, w * 0.85); y = rand(h * 0.9, h * 0.96); room = w * 0.95 - x
   }
   const size = Math.max(40, Math.min(Math.min(w, h) * 0.12, room / 3))
   const highlighter = kind === 'swipe'
