@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router'
 
 import { useContent } from '@/lib/content.jsx'
 import { CONTACT_EMAIL } from '@/config/site.js'
 import { getRoutePreloadProps } from '@/lib/preload'
+import InkSketch from '@/components/features/ink/InkSketch.jsx'
 
 // His clock, so a reader can tell whether a reply is likely soon. Updated once a minute.
 function useIndiaTime() {
@@ -33,7 +34,7 @@ function PenClock({ h, m }) {
   const hourDeg = ((h % 12) + m / 60) * 30
   const minDeg = m * 6
   return (
-    <svg viewBox="0 0 64 64" className="h-16 w-16 shrink-0" aria-hidden="true">
+    <svg viewBox="0 0 64 64" className="h-14 w-14 shrink-0" aria-hidden="true">
       <path d="M32 3 C 50 2, 62 15, 61 33 C 60 50, 47 62, 31 61 C 14 60, 3 48, 3 31 C 4 15, 16 4, 34 4" fill="none" stroke="currentColor" strokeOpacity="0.45" strokeWidth="1.4" strokeLinecap="round" />
       {[0, 90, 180, 270].map((d) => (
         <line key={d} x1="32" y1="8" x2="32" y2="11" stroke="currentColor" strokeOpacity="0.45" strokeWidth="1.4" strokeLinecap="round" transform={`rotate(${d} 32 32)`} />
@@ -45,55 +46,132 @@ function PenClock({ h, m }) {
   )
 }
 
-// One inline link in the colophon: pen underline at rest, ink on hover.
-function L({ to, href, children }) {
-  const cls = 'text-ink underline decoration-line-strong decoration-1 underline-offset-[0.2em] transition-colors duration-200 hover:text-accent hover:decoration-accent'
-  if (to) return <Link to={to} {...getRoutePreloadProps(to)} className={cls}>{children}</Link>
-  return <a href={href} className={cls} {...(href?.startsWith('http') ? { target: '_blank', rel: 'me noopener noreferrer' } : {})}>{children}</a>
-}
+const INDEX = [
+  ['/philosophy', 'Philosophy', 'what I am reading'],
+  ['/photography', 'Photography', 'what caught my eye'],
+  ['/blog', 'Writing', 'longer pieces'],
+  ['/projects', 'Projects', 'things I built'],
+  ['/about', 'About', 'who I am'],
+  ['/contact', 'Contact', 'write to me'],
+]
+
+const PENS = [
+  ['fact', 'Blue pencil'],
+  ['analysis', 'Highlighter'],
+  ['opinion', 'Red pen'],
+  ['limitation', 'Graphite'],
+]
+
+const NOTE = 'mark-label !text-[clamp(1rem,0.9rem+0.5vw,1.375rem)] absolute left-[0.04em] top-full mt-3 whitespace-nowrap tracking-normal opacity-0 transition-opacity duration-500 group-hover/foot:opacity-100'
+const PART = 'relative inline-block transition-transform duration-700 ease-[var(--ease-soft)]'
 
 /**
- * The colophon: the last page of the notebook, written as one short paragraph in his voice,
- * with every way onward set inside the sentence. Then a single line of small print.
+ * The last page of the notebook, left open: visitors can write on it with any of the four
+ * inks (the ink dries and fades), every page of the site is indexed in large type with its
+ * margin note, and the name it is kept under parts into "not two" when pointed at.
  */
 export default function Footer() {
   const { profile, publicSocialLinks } = useContent()
-  const byPlatform = (p) => publicSocialLinks.find((l) => l.url && l.platform === p)
-  const github = byPlatform('GitHub')
-  const x = byPlatform('X')
-  const instagram = byPlatform('Instagram')
+  const social = publicSocialLinks.filter((l) => l.url && l.kind !== 'email')
   const year = new Date().getFullYear()
   const name = profile?.name || 'Advaita Chandra'
+  const [first, ...rest] = name.split(' ')
   const time = useIndiaTime()
+  const pageRef = useRef(null)
+  const [pen, setPen] = useState('opinion')
+  const [clears, setClears] = useState(0)
 
   return (
-    <footer className="mt-auto border-t border-line pt-16 pb-8 lg:pt-20">
-      <div className="shell folio gap-y-8" data-reveal>
-        <div className="folio-margin flex items-start gap-4 lg:flex-col lg:gap-5">
-          {time && <PenClock h={time.h} m={time.m} />}
-          <p className="mark-label" data-ink="opinion">end of the page</p>
-        </div>
+    <footer ref={pageRef} className="relative isolate mt-auto overflow-hidden border-t border-line pt-16 pb-8 lg:pt-20">
+      <InkSketch targetRef={pageRef} ink={pen} clearSignal={clears} className="-z-10" />
 
-        <p className="folio-body max-w-[46rem] text-[clamp(1.25rem,1.05rem+0.9vw,1.75rem)] leading-[1.45] tracking-[-0.02em] text-muted">
-          This notebook is kept by <span className="text-ink">{name}</span> in {profile?.location || 'West Bengal, India'}
-          {time ? <>, where it’s <time className="text-ink tabular-nums">{time.label}</time> right now</> : null}. It holds{' '}
-          <L to="/philosophy">reading notes</L>, <L to="/photography">photographs</L>, <L to="/blog">longer writing</L> and{' '}
-          <L to="/projects">things I built</L>, with a little <L to="/about">about me</L>. If something here is wrong,{' '}
-          <L to="/contact">tell me</L> or write to <L href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</L>.
-          {(github || x || instagram) && (
-            <>
-              {' '}Elsewhere I’m{' '}
-              {github && <L href={github.url}>@{github.handle}</L>}
-              {github && x && ' on GitHub, '}
-              {x && <L href={x.url}>@{x.handle}</L>}
-              {x && ' on X'}
-              {instagram && <>{' '}and <L href={instagram.url}>@{instagram.handle}</L> on Instagram</>}.
-            </>
+      <div className="shell grid gap-x-10 gap-y-14 lg:grid-cols-12">
+        {/* Index: every page in large type, with its margin note on hover. */}
+        <nav aria-label="Footer" className="lg:col-span-7">
+          <p className="mark-label" data-ink="opinion">end of the page</p>
+          <ul className="mt-6">
+            {INDEX.map(([to, label, note]) => (
+              <li key={to} className="border-b border-line first:border-t">
+                <Link to={to} {...getRoutePreloadProps(to)} className="group flex items-baseline justify-between gap-6 py-3">
+                  <span className="nav-swipe text-[clamp(1.75rem,1.2rem+2vw,3rem)] leading-none tracking-[-0.04em] text-muted transition-colors group-hover:text-ink group-hover:[background-size:100%_0.45em] group-focus-visible:text-ink group-focus-visible:[background-size:100%_0.45em]">
+                    {label}
+                  </span>
+                  <span className="mark-label !text-[1.25rem] text-text-3 opacity-0 -translate-x-2 transition-[opacity,transform] duration-300 group-hover:translate-x-0 group-hover:opacity-100 group-focus-visible:translate-x-0 group-focus-visible:opacity-100">
+                    {note}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        {/* The open page: pick a pen and write on it. Then the clock and the ways to reach him. */}
+        <div className="flex flex-col gap-10 lg:col-span-4 lg:col-start-9">
+          <div className="hidden pointer-fine:block">
+            <p className="text-[length:var(--text-2xl)] leading-tight tracking-[-0.03em]">This page is blank. Write on it.</p>
+            <p className="mt-2 text-[15px] text-muted">Move to draw, hold to highlight. The ink dries in a few seconds.</p>
+            <div role="radiogroup" aria-label="Pen" className="mt-5 flex flex-wrap items-center gap-2">
+              {PENS.map(([key, label]) => (
+                <button
+                  key={key}
+                  type="button"
+                  role="radio"
+                  aria-checked={pen === key}
+                  onClick={() => setPen(key)}
+                  className={`flex h-9 items-center gap-2 rounded-[6px] border px-3 text-[13px] transition-colors ${pen === key ? 'border-ink text-ink' : 'border-line text-muted hover:border-line-strong hover:text-ink'}`}
+                >
+                  <span aria-hidden="true" className="h-2.5 w-2.5 rounded-full" style={{ background: `var(--color-${key})` }} />
+                  {label}
+                </button>
+              ))}
+              <button type="button" onClick={() => setClears((c) => c + 1)} className="pen-link ml-1 py-1 text-[13px] text-text-3 hover:text-ink">
+                Clear
+              </button>
+            </div>
+          </div>
+
+          {time && (
+            <div className="flex items-center gap-4">
+              <PenClock h={time.h} m={time.m} />
+              <p className="text-[15px] leading-snug">
+                <time className="tabular-nums text-ink">{time.label}</time>
+                <span className="block text-muted">in {profile?.location || 'West Bengal, India'}</span>
+              </p>
+            </div>
           )}
+
+          <ul className="space-y-1 text-[15px]">
+            <li>
+              <a href={`mailto:${CONTACT_EMAIL}`} className="pen-link inline-block py-1 text-ink">{CONTACT_EMAIL}</a>
+            </li>
+            {social.map((l) => (
+              <li key={l.id || l.label}>
+                <a href={l.url} target="_blank" rel="me noopener noreferrer" className="group inline-flex items-baseline gap-2 py-1 text-muted hover:text-ink">
+                  <span className="pen-link">{l.label}</span>
+                  {l.handle && <span className="text-text-3 group-hover:text-muted">@{l.handle}</span>}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      {/* The name it is kept under: point at it and it parts into a- and dvaita, "not two". */}
+      <div className="shell mt-20 [container-type:inline-size]" aria-hidden="true">
+        <p className="group/foot w-fit whitespace-nowrap text-[clamp(2.5rem,13.4cqi,15rem)] font-medium leading-[0.8] tracking-[-0.065em] select-none">
+          <span className={`${PART} group-hover/foot:-translate-x-[0.1em]`}>
+            {first.slice(0, 1)}
+            <span className={NOTE} data-ink="fact">a-: not</span>
+          </span>
+          <span className={`${PART} group-hover/foot:translate-x-[0.1em]`}>
+            {first.slice(1)}
+            <span className={NOTE} data-ink="fact">dvaita: two</span>
+          </span>{' '}
+          <span className={`${PART} text-muted group-hover/foot:translate-x-[0.1em]`}>{rest.join(' ')}</span>
         </p>
       </div>
 
-      <div className="shell mt-14 flex flex-col gap-3 border-t border-line pt-5 text-[13px] text-text-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="shell mt-16 flex flex-col gap-3 border-t border-line pt-5 pr-16 text-[13px] text-text-3 sm:flex-row sm:items-center sm:justify-between lg:pr-24">
         <p className="flex flex-wrap items-baseline gap-x-3 tabular-nums">
           <span>&copy; {year} {name}</span>
           <span className="mark-label !text-[1.05rem] text-muted">ex duris gloria</span>
