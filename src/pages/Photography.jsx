@@ -133,6 +133,7 @@ export default function Photography() {
               return (
                 <figure
                   key={photo.id}
+                  data-reveal
                   className="relative break-inside-avoid group cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
                   onClick={() => openLightbox(photo)}
                   role="button"

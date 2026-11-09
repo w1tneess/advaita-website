@@ -30,6 +30,22 @@ export default function PublicLayout() {
   const location = useLocation()
   useEffect(() => { hasPainted = true }, [])
 
+  // Arm scroll reveals for this page: [data-reveal] elements settle in as they enter view.
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    document.documentElement.classList.add('reveal-ready')
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target) } }),
+      { rootMargin: '0px 0px -8% 0px', threshold: 0.12 },
+    )
+    const scan = () => document.querySelectorAll('[data-reveal]:not(.is-in)').forEach((el) => io.observe(el))
+    // Lazy routes and late content mount after this effect, so keep watching for new elements.
+    const mo = new MutationObserver(scan)
+    mo.observe(document.body, { childList: true, subtree: true })
+    const id = requestAnimationFrame(scan)
+    return () => { cancelAnimationFrame(id); mo.disconnect(); io.disconnect() }
+  }, [location.pathname])
+
   // Track privacy-first pageviews
   useEffect(() => {
     trackPageView(location.pathname)

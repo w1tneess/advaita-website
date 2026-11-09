@@ -54,6 +54,7 @@ export default function Footer() {
 
         <p
           aria-hidden="true"
+          data-reveal
           className="mt-20 text-[clamp(2rem,12.6vw,15rem)] font-medium leading-[0.86] tracking-[-0.06em] text-ink -ml-[0.05em] select-none whitespace-nowrap"
         >
           {name}

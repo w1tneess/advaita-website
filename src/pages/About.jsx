@@ -6,6 +6,7 @@ import Seo from '@/components/meta/Seo.jsx'
 import { useContent } from '@/lib/content.jsx'
 import { PUBLIC_ROUTES } from '@/config/nav.js'
 import { INKS } from '@/components/features/ink/InkLens.jsx'
+import PenStroke from '@/components/features/ink/PenStroke.jsx'
 
 const ROUTE = PUBLIC_ROUTES.find((route) => route.key === 'about')
 
@@ -19,11 +20,12 @@ const INK_MEANING = {
 function Section({ title, note, children, id }) {
   return (
     <section id={id} className="folio gap-y-8 border-t border-line py-20 lg:py-28" aria-labelledby={`${id}-h`}>
-      <div className="folio-margin">
+      <div className="folio-margin" data-reveal>
         <h2 id={`${id}-h`} className="text-[length:var(--text-2xl)] tracking-[-0.03em]">{title}</h2>
+        <PenStroke seed={title.length} className="mt-1" />
         {note && <p className="mt-3 max-w-[16rem] text-[15px] leading-snug text-muted">{note}</p>}
       </div>
-      <div className="folio-body">{children}</div>
+      <div className="folio-body" data-reveal style={{ '--i': 1 }}>{children}</div>
     </section>
   )
 }

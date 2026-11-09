@@ -12,12 +12,12 @@ import NotesSection from '@/components/features/home/NotesSection.jsx'
 const ROUTE = PUBLIC_ROUTES.find((route) => route.key === 'home')
 
 export default function Home() {
-  const { featuredProjects, philosophy, publicNotes, profile } = useContent()
+  const { featuredProjects, philosophy, publicNotes, publicProjects, profile } = useContent()
 
   return (
     <>
       <Seo title={ROUTE.title} description={ROUTE.description} path="/" />
-      <HeroSection profile={profile} />
+      <HeroSection profile={profile} notes={publicNotes} projects={publicProjects} />
       <NotesSection notes={publicNotes} thinkers={philosophy?.thinkers} />
       <SelectedProjectsSection featuredProjects={featuredProjects} />
       <ActiveInquiriesSection philosophy={philosophy} />

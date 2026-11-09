@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 
 // The phrases of the owner's rule, in the order they appear, with the ink each one names.
 const PHRASES = [
@@ -11,30 +11,9 @@ const PHRASES = [
 /**
  * Renders the epistemic rule with each of its four phrases inked. If the text was edited
  * and no longer contains the phrases, it renders as plain text instead of guessing.
- * `idle` lets a pen re-mark one phrase at a time while the text is on screen.
  */
-export default function InkedText({ text, idle = false }) {
+export default function InkedText({ text }) {
   const ref = useRef(null)
-
-  useEffect(() => {
-    const root = ref.current
-    if (!idle || !root || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    const marks = [...root.querySelectorAll('.ink')]
-    if (!marks.length) return
-    let visible = true
-    let i = 0
-    const io = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting })
-    io.observe(root)
-    // shortcut: a plain interval rather than a shared animation clock; there is only one idle loop on the site.
-    const timer = setInterval(() => {
-      if (!visible || document.documentElement.dataset.lens || document.hidden) return
-      const mark = marks[i % marks.length]
-      i += 1
-      mark.classList.add('is-lifted')
-      setTimeout(() => mark.classList.remove('is-lifted'), 700)
-    }, 2400)
-    return () => { clearInterval(timer); io.disconnect() }
-  }, [idle, text])
 
   if (!text) return null
   const lower = text.toLowerCase()

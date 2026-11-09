@@ -1,6 +1,7 @@
 import { Link } from 'react-router'
 import { ArrowUpRight } from 'lucide-react'
 import { isSafeUrl } from '@/lib/url.ts'
+import PenStroke from '@/components/features/ink/PenStroke.jsx'
 
 /**
  * Featured projects as asymmetric pairs: what the project is on the left, and on the right
@@ -11,9 +12,10 @@ export default function SelectedProjectsSection({ featuredProjects = [] }) {
 
   return (
     <section className="shell py-24 lg:py-32 border-t border-line" id="projects" aria-labelledby="work-heading">
-      <div className="folio mb-14 lg:mb-20">
+      <div className="folio mb-14 lg:mb-20" data-reveal>
         <div className="folio-margin">
           <h2 id="work-heading" className="text-[length:var(--text-2xl)] tracking-[-0.03em]">Projects</h2>
+          <PenStroke seed={1} className="mt-1" />
         </div>
         <div className="folio-body flex flex-wrap items-baseline justify-between gap-4">
           <p className="max-w-xl text-[length:var(--text-lg)] leading-snug text-muted">
@@ -30,7 +32,7 @@ export default function SelectedProjectsSection({ featuredProjects = [] }) {
           const limits = (project.limitations || []).slice(0, 2)
 
           return (
-            <article key={project.id} className="folio gap-y-8">
+            <article key={project.id} className="folio gap-y-8" data-reveal>
               <div className="folio-margin text-[14px] text-muted">
                 <p>{project.categories?.[0] ? project.categories[0][0].toUpperCase() + project.categories[0].slice(1) : 'Project'}</p>
                 {project.tools?.length > 0 && <p className="mt-1">{project.tools.slice(0, 3).join(', ')}</p>}

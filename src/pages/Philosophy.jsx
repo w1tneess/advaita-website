@@ -6,6 +6,7 @@ import { useContent } from '@/lib/content.jsx'
 import Seo from '@/components/meta/Seo.jsx'
 import { PUBLIC_ROUTES } from '@/config/nav.js'
 import { formatDate, isoDateAttr } from '@/lib/format'
+import PenStroke from '@/components/features/ink/PenStroke.jsx'
 
 const ROUTE = PUBLIC_ROUTES.find((route) => route.key === 'philosophy')
 
@@ -26,7 +27,7 @@ export default function Philosophy() {
 					{thinkers.map((thinker) => {
 						const own = notesFor(thinker.id)
 						return (
-							<li key={thinker.id || thinker.name} className="folio gap-y-4 border-b border-line py-10 lg:py-14">
+							<li key={thinker.id || thinker.name} className="folio gap-y-4 border-b border-line py-10 lg:py-14" data-reveal>
 								<h3 className="folio-margin text-[length:var(--text-2xl)] leading-tight tracking-[-0.03em]">{thinker.name}</h3>
 								<div className="folio-body grid gap-8 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
 									<p className="text-[length:var(--text-lg)] leading-relaxed text-muted max-w-xl">{thinker.description}</p>
@@ -54,8 +55,9 @@ export default function Philosophy() {
 			</section>
 
 			<section className="shell folio pb-28 lg:pb-40" aria-labelledby="log-heading">
-				<div className="folio-margin mb-8 lg:mb-0">
+				<div className="folio-margin mb-8 lg:mb-0" data-reveal>
 					<h2 id="log-heading" className="text-[length:var(--text-2xl)] tracking-[-0.03em]">All notes</h2>
+					<PenStroke seed={1} className="mt-1" />
 					<p className="mt-3 max-w-[16rem] text-[15px] leading-snug text-muted">Newest first</p>
 				</div>
 				<div className="folio-body">
@@ -63,8 +65,8 @@ export default function Philosophy() {
 						<EmptyState icon={BookOpen} title="No notes yet" message="Notes appear here as they are published." />
 					) : (
 						<ol className="border-t border-line">
-							{notes.map((note) => (
-								<li key={note.id} className="border-b border-line">
+							{notes.map((note, i) => (
+								<li key={note.id} className="border-b border-line" data-reveal style={{ '--i': i }}>
 									<Link to={`/philosophy/${note.slug}`} className="group grid gap-3 py-8 sm:grid-cols-[minmax(0,1fr)_8rem] sm:gap-8">
 										<span>
 											<span className="block text-[length:var(--text-xl)] leading-tight tracking-[-0.025em] transition-transform duration-300 ease-[var(--ease-soft)] group-hover:translate-x-2">

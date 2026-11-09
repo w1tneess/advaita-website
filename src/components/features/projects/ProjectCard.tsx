@@ -26,7 +26,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
   ].filter((a) => isSafeUrl(a.href))
 
   return (
-    <article className="folio gap-y-6 border-b border-line py-12 lg:py-16">
+    <article className="folio gap-y-6 border-b border-line py-12 lg:py-16" data-reveal>
       <div className="folio-margin text-[14px] text-muted space-y-1">
         <p className="text-ink">{cap(categories?.[0]) || 'Project'}</p>
         {status && <p>{STATUS[status] || cap(status)}</p>}

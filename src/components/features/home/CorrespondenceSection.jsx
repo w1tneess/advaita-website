@@ -6,6 +6,7 @@ import { CONTACT_EMAIL } from '@/config/site.js'
 export default function CorrespondenceSection() {
   return (
     <section className="shell py-28 lg:py-44 border-t border-line" aria-labelledby="write-heading">
+      <div data-reveal>
       <p className="mark-label" data-ink="opinion">a correction is welcome</p>
       <h2
         id="write-heading"
@@ -13,7 +14,8 @@ export default function CorrespondenceSection() {
       >
         Tell me where I’m <span className="ink" data-ink="opinion">wrong</span>.
       </h2>
-      <div className="mt-12 flex flex-wrap items-center gap-x-8 gap-y-4">
+      </div>
+      <div className="mt-12 flex flex-wrap items-center gap-x-8 gap-y-4" data-reveal style={{ '--i': 2 }}>
         <Link to="/contact" className="btn-ink">
           <span>Write a note</span>
           <ArrowRight className="h-4 w-4" aria-hidden="true" />
