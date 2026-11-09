@@ -13,7 +13,7 @@ import { useLens } from './InkLens.jsx'
  */
 const INKS = ['fact', 'analysis', 'opinion', 'limitation']
 const HEX = { fact: '#7DB4FF', analysis: '#F2D45C', opinion: '#FF7A5C', limitation: '#B9BCC2' }
-const MAX_MARKS = 14
+const MAX_MARKS = 10
 
 const rand = (a, b) => a + Math.random() * (b - a)
 
@@ -41,7 +41,7 @@ function path(kind, x, y, size) {
     const s2 = rand(14, 22)
     pts.push([x, y], [x + s2 * 0.35, y + s2 * 0.45], [x + s2, y - s2 * 0.55])
   } else {
-    const rx = size * rand(0.5, 0.9)
+    const rx = size * rand(0.35, 0.6)
     const ry = rx * rand(0.28, 0.42)
     const a0 = rand(0, Math.PI * 2)
     for (let i = 0; i <= 40; i++) { const a = a0 + (i / 40) * Math.PI * 2.15; pts.push([x + Math.cos(a) * rx + jitter(), y + Math.sin(a) * ry + jitter()]) }
@@ -56,14 +56,14 @@ function makeMark(w, h, ink) {
   let x
   let y
   if (kind === 'bracket') {
-    x = Math.random() < 0.5 ? rand(w * 0.015, w * 0.06) : rand(w * 0.93, w * 0.975)
+    x = rand(w * 0.93, w * 0.975)
     y = rand(h * 0.15, h * 0.7)
   } else if (zone < 0.45) {
-    x = rand(w * 0.66, w * 0.92); y = rand(h * 0.14, h * 0.62)
+    x = rand(w * 0.7, w * 0.95); y = rand(h * 0.62, h * 0.86)
   } else if (zone < 0.8) {
     x = rand(w * 0.56, w * 0.9); y = rand(h * 0.7, h * 0.88)
   } else {
-    x = rand(w * 0.02, w * 0.16); y = rand(h * 0.5, h * 0.82)
+    x = rand(w * 0.78, w * 0.9); y = rand(h * 0.2, h * 0.5)
   }
   const size = Math.max(60, Math.min(w, h) * 0.12)
   const highlighter = kind === 'swipe'
@@ -233,7 +233,7 @@ export default function InkField({ remarkSelector, className = '' }) {
         type="button"
         onClick={() => setPaused((p) => !p)}
         aria-pressed={paused}
-        className="absolute bottom-6 right-[var(--margin-safe)] z-20 hidden text-[13px] text-text-3 hover:text-ink transition-colors motion-safe:md:inline-flex items-center gap-2 py-1"
+        className="absolute top-20 right-[var(--margin-safe)] z-20 hidden text-[13px] text-text-3 hover:text-ink transition-colors motion-safe:md:inline-flex items-center gap-2 py-1"
       >
         <span aria-hidden="true" className={`h-1.5 w-1.5 rounded-full ${paused ? 'bg-text-3' : 'bg-ink'}`} />
         {paused ? 'Resume the pens' : 'Pause the pens'}

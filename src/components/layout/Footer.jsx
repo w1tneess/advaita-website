@@ -52,13 +52,18 @@ export default function Footer() {
           </div>
         </div>
 
+        <div className="relative" aria-hidden="true" data-reveal>
         <p
-          aria-hidden="true"
-          data-reveal
           className="mt-20 text-[clamp(2rem,12.6vw,15rem)] font-medium leading-[0.86] tracking-[-0.06em] text-ink -ml-[0.05em] select-none whitespace-nowrap"
         >
           {name}
         </p>
+        <p className="mt-4 flex gap-8 text-text-3">
+          <span className="mark-label" data-ink="fact">a-: not</span>
+          <span className="mark-label" data-ink="fact">dvaita: two</span>
+          <span className="mark-label text-muted">ex duris gloria</span>
+        </p>
+        </div>
 
         <div className="mt-8 flex flex-col gap-3 border-t border-line pt-6 text-[13px] text-text-3 sm:flex-row sm:items-center sm:justify-between">
           <p className="tabular-nums">&copy; {year} {name}</p>

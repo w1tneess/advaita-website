@@ -55,6 +55,7 @@ export function InkKeys({ variant = 'compact', className = '' }) {
       aria-label="Ink lens: highlight one kind of claim"
       className={className}
     >
+      {!hero && <span className="sr-only">Lens</span>}
       <ul className={hero ? 'grid grid-cols-2 gap-x-6 gap-y-3 sm:flex sm:flex-wrap sm:gap-x-8' : 'flex items-center gap-1'}>
         {INKS.map((ink) => {
           const active = lens === ink.key

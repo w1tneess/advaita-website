@@ -148,8 +148,8 @@ test('theme configuration adheres to verified accent tokens', async () => {
   const { join } = await import('node:path')
 
   const css = await readFile(join(process.cwd(), 'src/index.css'), 'utf8')
-  assert.match(css, /--color-accent:\s*#c2956a;/, 'index.css must define confirmed --color-accent')
-  assert.match(css, /--color-accent-strong:\s*#d4a87d;/, 'index.css must define confirmed --color-accent-strong')
+  assert.match(css, /--color-accent:\s*#FF7A5C;/, 'index.css must define confirmed --color-accent')
+  assert.match(css, /--color-accent-strong:\s*#FF967D;/, 'index.css must define confirmed --color-accent-strong')
 })
 
 test('route preloader correctly registers handlers and resolves paths for first-click reliability', async () => {

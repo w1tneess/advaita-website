@@ -8,6 +8,7 @@ import {
   CorrespondenceSection,
 } from '@/components/features/home'
 import NotesSection from '@/components/features/home/NotesSection.jsx'
+import RuleSection from '@/components/features/home/RuleSection.jsx'
 
 const ROUTE = PUBLIC_ROUTES.find((route) => route.key === 'home')
 
@@ -18,6 +19,7 @@ export default function Home() {
     <>
       <Seo title={ROUTE.title} description={ROUTE.description} path="/" />
       <HeroSection profile={profile} notes={publicNotes} projects={publicProjects} />
+      <RuleSection profile={profile} />
       <NotesSection notes={publicNotes} thinkers={philosophy?.thinkers} />
       <SelectedProjectsSection featuredProjects={featuredProjects} />
       <ActiveInquiriesSection philosophy={philosophy} />

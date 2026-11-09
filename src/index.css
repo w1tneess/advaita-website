@@ -513,3 +513,31 @@ html.reveal-ready [data-reveal]:not(.is-in) { opacity: 0; transform: translateY(
   #hero-heading:has(.ink:hover) .ink:not(:hover) { opacity: 0.3; }
   #hero-heading .ink:hover { background-size: 100% 0.5em; }
 }
+
+/* "Not two": the name arrives as a- and dvaita, apart, and closes into one word.
+   Pointing at the name opens the gap a little again; the pencilled etymology sits under each part. */
+.name-part { transition: transform 700ms var(--ease-soft); }
+.name-a { animation: name-close-a 1100ms var(--ease-soft) 250ms backwards; }
+.name-rest { animation: name-close-b 1100ms var(--ease-soft) 250ms backwards; }
+@keyframes name-close-a { from { transform: translateX(-0.22em); opacity: 0; } 40% { opacity: 1; } to { transform: none; } }
+@keyframes name-close-b { from { transform: translateX(0.22em); opacity: 0; } 40% { opacity: 1; } to { transform: none; } }
+@media (hover: hover) {
+  .group\/name:hover .name-a { transform: translateX(-0.08em); }
+  .group\/name:hover .name-rest { transform: translateX(0.08em); }
+}
+.name-note {
+  position: absolute;
+  top: 100%;
+  margin-top: 0.12em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  font-size: 1rem;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+.name-note .mark-label { font-size: clamp(1.25rem, 1rem + 0.8vw, 1.75rem); animation: settle 600ms var(--ease-soft) 1500ms backwards; }
+.pen-stroke.pen-late path { animation-delay: 1250ms !important; }
+@media (prefers-reduced-motion: reduce) {
+  .name-a, .name-rest, .name-note .mark-label { animation: none; }
+}
