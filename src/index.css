@@ -541,3 +541,13 @@ html.reveal-ready [data-reveal]:not(.is-in) { opacity: 0; transform: translateY(
 @media (prefers-reduced-motion: reduce) {
   .name-a, .name-rest, .name-note .mark-label { animation: none; }
 }
+
+/* Header nav: a highlighter swipe behind the word on hover, the way a reader marks a line. */
+.nav-swipe {
+  background-image: linear-gradient(color-mix(in srgb, var(--color-analysis) 38%, transparent), color-mix(in srgb, var(--color-analysis) 38%, transparent));
+  background-repeat: no-repeat;
+  background-position: 0 78%;
+  background-size: 0% 0.45em;
+  transition: background-size 380ms var(--ease-soft), color 160ms var(--ease-soft);
+}
+.nav-swipe:hover, .nav-swipe:focus-visible { background-size: 100% 0.45em; }

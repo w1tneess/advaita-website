@@ -27,6 +27,7 @@ export default function Header() {
 	const [scrolled, setScrolled] = useState(false)
 	const [lensOpen, setLensOpen] = useState(false)
 	const progressRef = useRef(null)
+	const pageRef = useRef(null)
 	const lensRef = useRef(null)
 	const location = useLocation()
 	const { profile } = useContent()
@@ -45,6 +46,12 @@ export default function Header() {
 			const max = document.documentElement.scrollHeight - window.innerHeight
 			setScrolled(y > 24)
 			if (progressRef.current) progressRef.current.style.transform = `scaleX(${max > 0 ? Math.min(1, y / max) : 0})`
+			// Page count, like a notebook: one page per screen of reading.
+			if (pageRef.current) {
+				const total = Math.max(1, Math.round(document.documentElement.scrollHeight / window.innerHeight))
+				const now = Math.min(total, Math.floor((y + window.innerHeight * 0.5) / window.innerHeight) + 1)
+				pageRef.current.textContent = `p. ${now} / ${total}`
+			}
 			ticking = false
 		}
 		const onScroll = () => {
@@ -92,27 +99,24 @@ export default function Header() {
 			className={`fixed inset-x-0 top-0 z-50 border-b bg-canvas transition-[border-color] duration-300 ${scrolled ? 'border-line' : 'border-transparent'}`}
 		>
 			<div className="shell grid h-[72px] grid-cols-[1fr_auto] items-center gap-6 pt-[env(safe-area-inset-top)] md:grid-cols-[1fr_auto_1fr]">
-				{/* Wordmark: the name stacked, with the a- of Advaita underlined in pen. */}
-				<Link to="/" {...getRoutePreloadProps('/')} className="group flex w-fit flex-col leading-none" aria-label={`${name}, home`}>
-					<span className="relative text-[19px] font-medium tracking-[-0.035em] text-ink">
-						<span className="relative">
-							{first.slice(0, 1)}
-							<span aria-hidden="true" className="absolute -bottom-[1px] left-0 h-[1.5px] w-full origin-left rounded-full bg-fact transition-transform duration-500 ease-[var(--ease-soft)] group-hover:scale-x-150" />
-						</span>
-						{first.slice(1)}
-					</span>{' '}
-					<span className="mt-[7px] text-[12px] tracking-[0.01em] text-muted transition-colors duration-200 group-hover:text-ink">{rest.join(' ')}</span>
+				{/* Signed, like the inside cover of a notebook: the name in type, the surname in his hand. */}
+				<Link to="/" {...getRoutePreloadProps('/')} className="group relative flex w-fit items-baseline gap-2" aria-label={`${name}, home`}>
+					<span className="text-[20px] font-medium tracking-[-0.04em] text-ink">{first}</span>{' '}
+					<span className="mark-label !text-[1.5rem] text-fact transition-transform duration-500 ease-[var(--ease-soft)] group-hover:-rotate-3">{rest.join(' ')}</span>
+					<span aria-hidden="true" className="pointer-events-none absolute left-0 top-full mt-1 whitespace-nowrap text-[12px] text-text-3 opacity-0 transition-[opacity,transform] duration-300 group-hover:translate-y-0.5 group-hover:opacity-100 group-focus-visible:opacity-100">
+						Sanskrit for “not two”
+					</span>
 				</Link>
 
 				<nav className="hidden md:block" aria-label="Primary">
-					<ul className="flex items-center gap-8">
+					<ul className="flex items-center gap-6">
 						{links.map((route) => (
 							<li key={route.path}>
 								<NavLink
 									to={route.path}
 									{...getRoutePreloadProps(route.path)}
 									className={({ isActive }) =>
-										`nav-link relative inline-block py-1 text-[14px] transition-colors ${isActive ? 'text-ink' : 'pen-link text-muted hover:text-ink'}`
+										`nav-link relative inline-block px-1 py-1 text-[14px] transition-colors ${isActive ? 'text-ink' : 'nav-swipe text-muted hover:text-ink'}`
 									}
 								>
 									{({ isActive }) => (
@@ -127,13 +131,15 @@ export default function Header() {
 					</ul>
 				</nav>
 
-				<div className="hidden items-center justify-end gap-3 md:flex">
+				<div className="hidden items-center justify-end gap-4 md:flex">
+					<span ref={pageRef} aria-hidden="true" className="mark-label hidden !text-[1.25rem] tabular-nums text-text-3 xl:inline">p. 1 / 1</span>
 					<div ref={lensRef} className="relative hidden lg:block">
 						<button
 							type="button"
 							onClick={() => setLensOpen((v) => !v)}
 							aria-expanded={lensOpen}
 							aria-controls="lens-panel"
+							title="Lens: read by one kind of claim"
 							className={`flex h-10 items-center gap-2.5 rounded-[6px] border px-3 text-[14px] transition-colors duration-200 ${lensOpen ? 'border-ink text-ink' : 'border-line text-muted hover:border-line-strong hover:text-ink'}`}
 						>
 							<span className="flex gap-1" aria-hidden="true">
@@ -141,7 +147,7 @@ export default function Header() {
 									<span key={k} className="h-2 w-2 rounded-full" style={{ background: `var(--color-${k})` }} />
 								))}
 							</span>
-							Lens
+							<span className="sr-only">Lens: read by one kind of claim</span>
 						</button>
 						<AnimatePresence>
 							{lensOpen && (
@@ -194,7 +200,7 @@ export default function Header() {
 								<div className="shell flex h-16 shrink-0 items-center justify-between">
 									<Link to="/" className="flex items-baseline gap-1.5 text-[15px]">
 										<span className="font-medium text-ink">{first}</span>{' '}
-										<span className="text-muted">{rest.join(' ')}</span>
+										<span className="mark-label !text-[1.4rem] text-fact">{rest.join(' ')}</span>
 									</Link>
 									<button type="button" onClick={() => setOpen(false)} className="-mr-2 flex h-11 items-center px-2 text-[15px] text-ink">
 										Close

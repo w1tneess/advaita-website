@@ -1,12 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router'
-import { ArrowRight } from 'lucide-react'
 
 import { useContent } from '@/lib/content.jsx'
-import { NAV_ITEMS } from '@/config/nav.js'
 import { CONTACT_EMAIL } from '@/config/site.js'
 import { getRoutePreloadProps } from '@/lib/preload'
-import PenStroke from '@/components/features/ink/PenStroke.jsx'
 
 // His clock, so a reader can tell whether a reply is likely soon. Updated once a minute.
 function useIndiaTime() {
@@ -48,129 +45,64 @@ function PenClock({ h, m }) {
   )
 }
 
-/** The notebook's last page: a sign-off, where everything is, and the name it is kept under. */
+// One inline link in the colophon: pen underline at rest, ink on hover.
+function L({ to, href, children }) {
+  const cls = 'text-ink underline decoration-line-strong decoration-1 underline-offset-[0.2em] transition-colors duration-200 hover:text-accent hover:decoration-accent'
+  if (to) return <Link to={to} {...getRoutePreloadProps(to)} className={cls}>{children}</Link>
+  return <a href={href} className={cls} {...(href?.startsWith('http') ? { target: '_blank', rel: 'me noopener noreferrer' } : {})}>{children}</a>
+}
+
+/**
+ * The colophon: the last page of the notebook, written as one short paragraph in his voice,
+ * with every way onward set inside the sentence. Then a single line of small print.
+ */
 export default function Footer() {
   const { profile, publicSocialLinks } = useContent()
-  const elsewhere = publicSocialLinks.filter((link) => link.url && link.kind !== 'email')
+  const byPlatform = (p) => publicSocialLinks.find((l) => l.url && l.platform === p)
+  const github = byPlatform('GitHub')
+  const x = byPlatform('X')
+  const instagram = byPlatform('Instagram')
   const year = new Date().getFullYear()
   const name = profile?.name || 'Advaita Chandra'
-  const [first, ...rest] = name.split(' ')
   const time = useIndiaTime()
 
   return (
-    <footer className="mt-auto border-t border-line pt-24 pb-10 lg:pt-32">
-      <div className="shell">
-        {/* Sign-off: the whole sentence is the way to write to him. */}
-        <div className="folio gap-y-10" data-reveal>
-          <div className="folio-margin">
-            <p className="mark-label" data-ink="opinion">end of the page</p>
-            <PenStroke seed={2} className="mt-2" />
-            <p className="mt-4 max-w-[15rem] text-[15px] leading-snug text-muted">Thanks for reading this far.</p>
-          </div>
+    <footer className="mt-auto border-t border-line pt-16 pb-8 lg:pt-20">
+      <div className="shell folio gap-y-8" data-reveal>
+        <div className="folio-margin flex items-start gap-4 lg:flex-col lg:gap-5">
+          {time && <PenClock h={time.h} m={time.m} />}
+          <p className="mark-label" data-ink="opinion">end of the page</p>
+        </div>
 
-          <div className="lg:col-span-6 lg:col-start-4">
-            <Link to="/contact" {...getRoutePreloadProps('/contact')} className="group block">
-              <span className="block text-[clamp(2.75rem,1.2rem+5.6vw,6.5rem)] font-medium leading-[0.98] tracking-[-0.05em]">
-                Tell me where I’m{' '}
-                <span className="ink is-lifted transition-[background-size] duration-500 group-hover:[background-size:100%_0.26em] group-focus-visible:[background-size:100%_0.26em]" data-ink="opinion">
-                  wrong
-                </span>
-                .
-              </span>
-              <span className="mt-8 inline-flex items-center gap-2 text-[16px] text-muted transition-colors group-hover:text-ink">
-                Write a note
-                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
-              </span>
-            </Link>
-            <a href={`mailto:${CONTACT_EMAIL}`} className="pen-link mt-3 inline-block py-1 text-[16px] text-muted hover:text-ink">
-              or email {CONTACT_EMAIL}
-            </a>
-          </div>
-
-          {time && (
-            <div className="flex items-center gap-5 self-end text-ink lg:col-span-3 lg:col-start-10 lg:justify-end">
-              <PenClock h={time.h} m={time.m} />
-              <div className="text-[15px] leading-snug">
-                <p className="tabular-nums">
-                  It’s <time>{time.label}</time> for me
-                </p>
-                <p className="text-muted">in {profile?.location || 'West Bengal, India'}</p>
-              </div>
-            </div>
+        <p className="folio-body max-w-[46rem] text-[clamp(1.25rem,1.05rem+0.9vw,1.75rem)] leading-[1.45] tracking-[-0.02em] text-muted">
+          This notebook is kept by <span className="text-ink">{name}</span> in {profile?.location || 'West Bengal, India'}
+          {time ? <>, where it’s <time className="text-ink tabular-nums">{time.label}</time> right now</> : null}. It holds{' '}
+          <L to="/philosophy">reading notes</L>, <L to="/photography">photographs</L>, <L to="/blog">longer writing</L> and{' '}
+          <L to="/projects">things I built</L>, with a little <L to="/about">about me</L>. If something here is wrong,{' '}
+          <L to="/contact">tell me</L> or write to <L href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</L>.
+          {(github || x || instagram) && (
+            <>
+              {' '}Elsewhere I’m{' '}
+              {github && <L href={github.url}>@{github.handle}</L>}
+              {github && x && ' on GitHub, '}
+              {x && <L href={x.url}>@{x.handle}</L>}
+              {x && ' on X'}
+              {instagram && <>{' '}and <L href={instagram.url}>@{instagram.handle}</L> on Instagram</>}.
+            </>
           )}
-        </div>
+        </p>
+      </div>
 
-        {/* Where everything is */}
-        <div className="folio mt-24 gap-y-10 border-t border-line pt-10" data-reveal style={{ '--i': 1 }}>
-          <div className="folio-margin text-[15px] text-muted">
-            <p className="text-ink">{profile?.location || 'West Bengal, India'}</p>
-            <p className="mt-1">India Standard Time</p>
-          </div>
-
-          <nav aria-label="Footer" className="lg:col-span-3 lg:col-start-4">
-            <p className="mark-label !text-[1.125rem] text-text-3">pages</p>
-            <ul className="mt-3 space-y-1">
-              {NAV_ITEMS.map((item) => (
-                <li key={item.path}>
-                  <Link to={item.path} {...getRoutePreloadProps(item.path)} className="pen-link inline-block py-1 text-[15px] text-muted hover:text-ink">
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          <div className="lg:col-span-3 lg:col-start-7">
-            <p className="mark-label !text-[1.125rem] text-text-3">elsewhere</p>
-            <ul className="mt-3 space-y-1">
-              {elsewhere.map((link) => (
-                <li key={link.id || link.label}>
-                  <a href={link.url} target="_blank" rel="me noopener noreferrer" className="pen-link inline-block py-1 text-[15px] text-muted hover:text-ink">
-                    {link.label}
-                    {link.handle && <span className="text-text-3"> @{link.handle}</span>}
-                  </a>
-                </li>
-              ))}
-              <li>
-                <a href="https://support.advaitachandra.in" target="_blank" rel="noopener noreferrer" className="pen-link inline-block py-1 text-[15px] text-muted hover:text-ink">
-                  Support my work
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <div className="lg:col-span-3 lg:col-start-10 text-[15px] leading-relaxed text-muted">
-            <p className="mark-label !text-[1.125rem] text-text-3">kept by</p>
-            <p className="mt-3">A student and developer building small things and keeping the questions open.</p>
-          </div>
-        </div>
-
-        {/* The name it is kept under, with its meaning pencilled beneath. */}
-        <div className="mt-24 group/name [container-type:inline-size]" aria-hidden="true" data-reveal style={{ '--i': 2 }}>
-          <p className="whitespace-nowrap text-[clamp(2.5rem,13.4cqi,15rem)] font-medium leading-[0.8] tracking-[-0.065em] -ml-[0.05em] select-none">
-            <span className="name-part relative inline-block">
-              {first.slice(0, 1)}
-              <span className="absolute left-[0.04em] top-full mt-3 hidden whitespace-nowrap sm:block tracking-normal mark-label !text-[clamp(1rem,0.9rem+0.5vw,1.375rem)]" data-ink="fact">a-: not</span>
-            </span>
-            <span className="name-part relative inline-block">
-              {first.slice(1)}
-              <span className="absolute left-[0.04em] top-full mt-3 hidden whitespace-nowrap sm:block tracking-normal mark-label !text-[clamp(1rem,0.9rem+0.5vw,1.375rem)]" data-ink="fact">dvaita: two</span>
-            </span>
-            <span className="text-muted"> {rest.join(' ')}</span>
-          </p>
-          <p className="mt-1 flex gap-5 sm:hidden">
-            <span className="mark-label !text-[1.125rem]" data-ink="fact">a-: not</span>
-            <span className="mark-label !text-[1.125rem]" data-ink="fact">dvaita: two</span>
-          </p>
-        </div>
-
-        <div className="mt-20 flex flex-col gap-3 border-t border-line pt-6 text-[13px] text-text-3 sm:flex-row sm:items-center sm:justify-between">
-          <p className="tabular-nums">&copy; {year} {name}. <span className="mark-label !text-[1rem] text-muted">ex duris gloria</span></p>
-          <ul className="flex flex-wrap gap-x-6 gap-y-2">
-            <li><Link to="/privacy" className="inline-block py-1 hover:text-ink transition-colors">Privacy</Link></li>
-            <li><Link to="/terms" className="inline-block py-1 hover:text-ink transition-colors">Terms</Link></li>
-          </ul>
-        </div>
+      <div className="shell mt-14 flex flex-col gap-3 border-t border-line pt-5 text-[13px] text-text-3 sm:flex-row sm:items-center sm:justify-between">
+        <p className="flex flex-wrap items-baseline gap-x-3 tabular-nums">
+          <span>&copy; {year} {name}</span>
+          <span className="mark-label !text-[1.05rem] text-muted">ex duris gloria</span>
+        </p>
+        <ul className="flex flex-wrap gap-x-6 gap-y-1">
+          <li><Link to="/privacy" className="inline-block py-1 transition-colors hover:text-ink">Privacy</Link></li>
+          <li><Link to="/terms" className="inline-block py-1 transition-colors hover:text-ink">Terms</Link></li>
+          <li><a href="https://support.advaitachandra.in" target="_blank" rel="noopener noreferrer" className="inline-block py-1 transition-colors hover:text-ink">Support my work</a></li>
+        </ul>
       </div>
     </footer>
   )
