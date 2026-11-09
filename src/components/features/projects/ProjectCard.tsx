@@ -19,7 +19,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
   const link = rawLink
 
   return (
-    <article className="group flex h-full flex-col justify-between p-6 sm:p-8 rounded-[1.5rem] border border-line/60 bg-surface/40 shadow-[inset_0_1px_0_rgba(248,246,240,0.05)] hover:bg-surface/70 hover:-translate-y-1 hover:border-line-strong hover:shadow-card-hover active:scale-[0.99] motion-reduce:hover:translate-y-0 transition-[background-color,border-color,box-shadow,transform] duration-500 ease-[var(--ease-out-expo)]">
+    <article className="group flex h-full flex-col justify-between p-6 sm:p-8 rounded-[1.5rem] border border-line/60 bg-surface/40 shadow-[inset_0_1px_0_rgba(248,246,240,0.05)] hover:bg-surface/70 hover:border-line-strong active:scale-[0.99] motion-reduce:hover:translate-y-0 transition-[background-color,border-color,box-shadow,transform] duration-500 ease-[var(--ease-out-expo)]">
       <div>
         {/* Top Card Catalog Bar */}
         <div className="flex items-center justify-between border-b border-line pb-4 mb-5 font-mono text-[11px] tracking-widest uppercase text-muted">
@@ -35,7 +35,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         </div>
 
         {/* Title */}
-        <h3 className="text-xl sm:text-2xl font-normal text-ink group-hover:text-accent-strong transition-colors duration-500 ease-[var(--ease-out-expo)] leading-snug text-balance">
+        <h3 className="text-xl sm:text-2xl font-normal text-ink group-hover:text-accent-strong transition-colors duration-200 ease-[var(--ease-out-expo)] leading-snug text-balance">
           {link ? (
             <a
               href={link}
@@ -44,7 +44,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
               className="inline-flex items-baseline gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas rounded-sm hover:underline underline-offset-4 decoration-line-strong"
             >
               <span>{title}</span>
-              <ArrowUpRight className="inline-block h-4 w-4 opacity-50 transition-all duration-150 ease-[var(--ease-out-quart)] group-hover:opacity-100 text-muted group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              <ArrowUpRight className="inline-block h-4 w-4 opacity-50 transition duration-150 ease-[var(--ease-out-quart)] group-hover:opacity-100 text-muted group-hover:translate-x-0.5 group-" />
             </a>
           ) : (
             title
@@ -105,7 +105,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
                 href={repoLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-surface border border-line/60 text-muted hover:border-line-strong hover:text-ink transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas uppercase text-[10px] tracking-wider"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-surface border border-line/60 text-muted hover:border-line-strong hover:text-ink transition duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas uppercase text-[10px] tracking-wider"
               >
                 <Github className="h-3.5 w-3.5" />
                 <span>Source</span>
@@ -116,7 +116,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
                 href={liveLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-raised border border-line hover:border-accent text-ink hover:text-accent font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas uppercase text-[10px] tracking-wider shadow-2xs"
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-raised border border-line hover:border-accent text-ink hover:text-accent font-medium transition duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas uppercase text-[10px] tracking-wider shadow-2xs"
               >
                 <Globe className="h-3.5 w-3.5" />
                 <span>Live Project &rarr;</span>
@@ -127,7 +127,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
                 href={writeupLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-surface border border-line/60 text-muted hover:border-line-strong hover:text-ink transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas uppercase text-[10px] tracking-wider"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-surface border border-line/60 text-muted hover:border-line-strong hover:text-ink transition duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas uppercase text-[10px] tracking-wider"
               >
                 <ArrowUpRight className="h-3.5 w-3.5" />
                 <span>Writeup</span>

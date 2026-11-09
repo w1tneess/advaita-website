@@ -23,7 +23,7 @@ export default function ProjectFilter({
           onChange={(e) => onSearchChange(e.target.value)}
           placeholder="Filter by title, tools, or description…"
           aria-label="Filter projects"
-          className="w-full rounded-full border border-line bg-surface/70 py-2.5 pr-10 pl-10 text-xs sm:text-sm text-ink placeholder:text-muted/60 focus:border-ink focus:outline-none focus:ring-1 focus:ring-ink transition-colors"
+          className="w-full rounded-lg border border-line bg-surface py-2.5 pr-10 pl-10 text-xs sm:text-sm text-ink placeholder:text-muted/60 focus:border-ink focus:outline-none focus:ring-1 focus:ring-ink transition-colors"
         />
         {searchQuery && (
           <button
@@ -46,10 +46,10 @@ export default function ProjectFilter({
               key={cat}
               type="button"
               onClick={() => onCategoryChange(cat)}
-              className={`px-3.5 py-1.5 min-h-[32px] text-xs transition-all duration-150 cursor-pointer rounded-full active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink ${
+              className={`px-3.5 py-1.5 min-h-[32px] text-xs transition duration-150 cursor-pointer rounded-full active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink ${
                 activeCategory === cat
                   ? 'bg-ink text-canvas font-medium shadow-subtle'
-                  : 'bg-surface border border-line/60 text-muted hover:text-ink hover:border-line-strong hover:bg-surface/80'
+                  : 'bg-surface border border-line/60 text-muted hover:text-ink hover:border-line-strong hover:bg-surface'
               }`}
             >
               {cat}

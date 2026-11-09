@@ -200,7 +200,7 @@ export default function HomeEditor() {
           />
         </Card>
 
-        <div className="sticky bottom-0 mt-6 flex flex-wrap items-center gap-3 border-t border-line bg-canvas/90 py-4 backdrop-blur-sm">
+        <div className="sticky bottom-0 mt-6 flex flex-wrap items-center gap-3 border-t border-line bg-canvas/90 py-4">
           <Button type="submit" disabled={!dirty || isSubmitting}>
             {isSubmitting ? 'Saving...' : 'Save home page'}
           </Button>

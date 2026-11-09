@@ -75,7 +75,7 @@ export default function ConfirmDialog({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Clicking the backdrop cancels — the same as Escape, never the same as confirming. */}
       <div
-        className="absolute inset-0 bg-ink/45 backdrop-blur-sm"
+        className="absolute inset-0 bg-ink/45"
         onClick={onCancel}
         aria-hidden="true"
       />

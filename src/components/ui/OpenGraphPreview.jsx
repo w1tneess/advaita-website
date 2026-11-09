@@ -22,9 +22,9 @@ export default function OpenGraphPreview({
   })()
 
   return (
-    <div className="rounded-2xl border border-line bg-surface/80 p-5 shadow-sm space-y-4 max-w-lg print:hidden">
+    <div className="rounded-2xl border border-line bg-surface p-5 shadow-sm space-y-4 max-w-lg print:hidden">
       <div className="flex items-center justify-between border-b border-line/40 pb-3">
-        <div className="flex items-center gap-2 text-xs font-semibold text-muted uppercase tracking-wider">
+        <div className="flex items-center gap-2 text-xs font-medium text-muted uppercase tracking-wider">
           <Share2 className="h-4 w-4 text-accent" aria-hidden="true" />
           <span>Open Graph Share Preview</span>
         </div>
@@ -53,7 +53,7 @@ export default function OpenGraphPreview({
       </div>
 
       {/* Card Preview Box */}
-      <div className="overflow-hidden rounded-xl border border-line/70 bg-canvas shadow-md transition-all hover:border-line">
+      <div className="overflow-hidden rounded-xl border border-line/70 bg-canvas shadow-md transition hover:border-line">
         {/* Card Image */}
         <div className="relative aspect-[1200/630] w-full overflow-hidden bg-raised">
           {image ? (
@@ -78,7 +78,7 @@ export default function OpenGraphPreview({
             <Globe className="h-3 w-3" />
             {hostName}
           </p>
-          <p className="font-display text-base font-semibold leading-[1.1] tracking-tight text-ink line-clamp-1 text-balance">
+          <p className="font-display text-base font-medium leading-[1.1] tracking-tight text-ink line-clamp-1 text-balance">
             {title}
           </p>
           <p className="text-xs text-muted line-clamp-2 leading-normal">

@@ -213,7 +213,7 @@ export default function NoteEditor() {
           </div>
         </FormSection>
 
-        <div className="sticky bottom-0 mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-line bg-canvas/90 py-4 backdrop-blur-sm">
+        <div className="sticky bottom-0 mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-line bg-canvas/90 py-4">
           <div className="flex items-center gap-3">
             <Button type="submit" disabled={isSaving}>
               {isNew ? 'Create note' : 'Save note'}

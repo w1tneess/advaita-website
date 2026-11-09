@@ -62,7 +62,7 @@ export default function Blog() {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search notes and observations…"
                 aria-label="Filter blog notes"
-                className="w-full rounded-full border border-line bg-surface/70 py-2.5 pr-10 pl-10 text-xs sm:text-sm text-ink placeholder:text-muted/60 focus:border-ink focus:outline-none focus:ring-1 focus:ring-ink transition-colors"
+                className="w-full rounded-lg border border-line bg-surface py-2.5 pr-10 pl-10 text-xs sm:text-sm text-ink placeholder:text-muted/60 focus:border-ink focus:outline-none focus:ring-1 focus:ring-ink transition-colors"
               />
               {searchQuery && (
                 <button
@@ -86,10 +86,10 @@ export default function Blog() {
                       key={cat}
                       type="button"
                       onClick={() => setActiveCategory(cat)}
-                      className={`px-3.5 py-1.5 min-h-[32px] text-xs transition-all duration-150 cursor-pointer rounded-full active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink ${
+                      className={`px-3.5 py-1.5 min-h-[32px] text-xs transition duration-150 cursor-pointer rounded-full active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink ${
                         activeCategory === cat
                           ? 'bg-ink text-canvas font-medium shadow-subtle'
-                          : 'bg-surface border border-line/60 text-muted hover:text-ink hover:border-line-strong hover:bg-surface/80'
+                          : 'bg-surface border border-line/60 text-muted hover:text-ink hover:border-line-strong hover:bg-surface'
                       }`}
                     >
                       {cat}
@@ -134,7 +134,7 @@ export default function Blog() {
               return (
                 <li
                   key={post.id}
-                  className="group grid gap-4 sm:gap-6 py-8 sm:py-10 sm:grid-cols-[10rem_minmax(0,1fr)] items-start -mx-4 px-4 sm:-mx-6 sm:px-6 rounded-xl hover:bg-surface/40 hover:shadow-subtle hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-250 ease-[var(--ease-out-quart)] first:pt-4"
+                  className="group grid gap-4 sm:gap-6 py-8 sm:py-10 sm:grid-cols-[10rem_minmax(0,1fr)] items-start -mx-4 px-4 sm:-mx-6 sm:px-6 rounded-xl hover:bg-surface/40 active:scale-[0.98] transition duration-250 ease-[var(--ease-out-quart)] first:pt-4"
                 >
                   {/* Left Metadata Column */}
                   <div className="font-mono text-xs text-muted space-y-2">
@@ -170,7 +170,7 @@ export default function Blog() {
                     <div className="mt-5">
                       <span className="inline-flex items-center gap-2 font-mono text-xs text-ink group-hover:text-muted transition-colors duration-150 ease-[var(--ease-out-quart)]">
                         <span>Read note</span>
-                        <ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-all duration-250 ease-[var(--ease-out-quart)] -translate-x-2 group-hover:translate-x-0" />
+                        <ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition duration-250 ease-[var(--ease-out-quart)] -translate-x-2 group-hover:translate-x-0" />
                       </span>
                     </div>
                   </div>

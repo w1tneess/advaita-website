@@ -19,7 +19,7 @@ export default function RelatedNotes({ currentSlug, posts = [] }) {
           <Link
             key={post.slug}
             to={`/blog/${post.slug}`}
-            className="group block p-4 border border-line bg-surface hover:border-line-strong hover:bg-surface/80 rounded-xl transition-all duration-150"
+            className="group block p-4 border border-line bg-surface hover:border-line-strong hover:bg-surface rounded-xl transition duration-150"
           >
             <div className="flex items-center gap-2 font-mono text-[10px] text-muted mb-2 uppercase tracking-wider">
               <span>{post.category || 'Monograph'}</span>

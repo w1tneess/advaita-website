@@ -169,7 +169,7 @@ export default function ContactForm() {
   if (status === 'success') {
     return (
       <motion.div
-        className="border border-copper/40 bg-surface/90 p-8 sm:p-10 text-center relative overflow-hidden backdrop-blur-sm rounded-2xl shadow-subtle"
+        className="border border-copper/40 bg-surface/90 p-8 sm:p-10 text-center relative overflow-hidden rounded-2xl"
         initial={{ opacity: 0, scale: 0.98 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.3 }}
@@ -185,7 +185,7 @@ export default function ContactForm() {
           <button
             type="button"
             onClick={() => setStatus('idle')}
-            className="border border-copper/60 bg-copper/10 px-5 py-2.5 rounded-full font-semibold text-sm text-copper hover:bg-copper hover:text-canvas active:scale-[0.97] transition-all duration-250 ease-[var(--ease-out-quart)] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30"
+            className="border border-copper/60 bg-copper/10 px-5 py-2.5 rounded-lg font-medium text-sm text-copper hover:bg-copper hover:text-canvas active:scale-[0.98] transition-colors duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30"
           >
             Send Another Dispatch
           </button>
@@ -226,7 +226,7 @@ export default function ContactForm() {
             onChange={handleChange}
             autoComplete="name"
             spellCheck={false}
-            className={`block w-full rounded-lg border bg-canvas/70 px-3.5 py-2.5 font-sans text-base sm:text-sm text-text transition-all duration-250 ease-[var(--ease-out-quart)] placeholder:text-text-3/40 focus:border-copper focus:bg-canvas focus:-translate-y-0.5 focus:shadow-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30 ${
+            className={`block w-full rounded-lg border bg-canvas/70 px-3.5 py-2.5 font-sans text-base sm:text-sm text-text transition duration-250 ease-[var(--ease-out-quart)] placeholder:text-text-3/40 focus:border-copper focus:bg-canvas focus:-translate-y-0.5 focus:shadow-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30 ${
               errors.name ? 'border-limitation bg-limitation/5' : 'border-line hover:border-copper/40'
             }`}
             placeholder="Advaita Chandra"
@@ -253,7 +253,7 @@ export default function ContactForm() {
             onChange={handleChange}
             autoComplete="email"
             spellCheck={false}
-            className={`block w-full rounded-lg border bg-canvas/70 px-3.5 py-2.5 font-sans text-base sm:text-sm text-text transition-all duration-250 ease-[var(--ease-out-quart)] placeholder:text-text-3/40 focus:border-copper focus:bg-canvas focus:-translate-y-0.5 focus:shadow-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30 ${
+            className={`block w-full rounded-lg border bg-canvas/70 px-3.5 py-2.5 font-sans text-base sm:text-sm text-text transition duration-250 ease-[var(--ease-out-quart)] placeholder:text-text-3/40 focus:border-copper focus:bg-canvas focus:-translate-y-0.5 focus:shadow-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30 ${
               errors.email ? 'border-limitation bg-limitation/5' : 'border-line hover:border-copper/40'
             }`}
             placeholder="name@institution.edu"
@@ -295,10 +295,10 @@ export default function ContactForm() {
                 role="radio"
                 aria-checked={isSelected}
                 onClick={() => handleTopicSelect(t.value)}
-                className={`font-mono text-xs uppercase tracking-wider px-3 py-1.5 border rounded-md transition-all duration-250 ease-[var(--ease-out-quart)] active:scale-[0.97] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30 ${
+                className={`font-mono text-xs uppercase tracking-wider px-3 py-1.5 border rounded-md transition duration-250 ease-[var(--ease-out-quart)] active:scale-[0.97] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30 ${
                   isSelected
                     ? 'border-copper bg-copper/15 text-copper font-medium shadow-subtle'
-                    : 'border-line bg-surface/40 text-text-3 hover:border-copper/40 hover:text-text-2 hover:bg-surface/80'
+                    : 'border-line bg-surface/40 text-text-3 hover:border-copper/40 hover:text-text-2 hover:bg-surface'
                 }`}
               >
                 {isSelected && <span className="inline-block mr-1.5 h-1.5 w-1.5 rounded-full bg-copper" aria-hidden="true" />}
@@ -336,7 +336,7 @@ export default function ContactForm() {
           rows={5}
           autoComplete="off"
           spellCheck={true}
-          className={`block w-full resize-y rounded-lg border bg-canvas/70 px-3.5 py-3 font-sans text-base sm:text-sm leading-relaxed text-text transition-all duration-250 ease-[var(--ease-out-quart)] placeholder:text-text-3/40 focus:border-copper focus:bg-canvas focus:-translate-y-0.5 focus:shadow-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30 ${
+          className={`block w-full resize-y rounded-lg border bg-canvas/70 px-3.5 py-3 font-sans text-base sm:text-sm leading-relaxed text-text transition duration-250 ease-[var(--ease-out-quart)] placeholder:text-text-3/40 focus:border-copper focus:bg-canvas focus:-translate-y-0.5 focus:shadow-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30 ${
             errors.message ? 'border-limitation bg-limitation/5' : 'border-line hover:border-copper/40'
           }`}
           placeholder="Share your perspectives, research inquiries, recommended readings, or constructive critique…"
@@ -366,28 +366,22 @@ export default function ContactForm() {
         <button
           type="submit"
           disabled={status === 'submitting' || timeRemaining > 0}
-          className="group inline-flex items-center justify-center gap-3 rounded-full border border-copper bg-copper pl-6 pr-2 py-2 text-sm font-semibold text-canvas transition-all duration-500 ease-[var(--ease-out-expo)] hover:bg-copper-strong hover:border-copper-strong active:scale-[0.97] shadow-subtle disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
+          className="group inline-flex items-center justify-center gap-2 rounded-lg border border-copper bg-copper px-5 py-3 text-sm font-medium text-canvas transition-[background-color,border-color,transform] duration-150 ease-[var(--ease-soft)] hover:bg-copper-strong hover:border-copper-strong active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
         >
           {status === 'submitting' ? (
             <>
               <span>Transmitting…</span>
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-canvas/15">
-                <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
-              </div>
+              <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
             </>
           ) : timeRemaining > 0 ? (
             <>
               <span>Cooldown ({timeRemaining}s)</span>
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-canvas/15">
-                <Loader2 className="h-4 w-4" aria-hidden="true" />
-              </div>
+              <Loader2 className="h-4 w-4" aria-hidden="true" />
             </>
           ) : (
             <>
               <span>Send Message</span>
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-canvas/15 transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:scale-105 group-hover:translate-x-0.5">
-                <Send className="h-4 w-4" aria-hidden="true" />
-              </div>
+              <Send className="h-4 w-4" aria-hidden="true" />
             </>
           )}
         </button>

@@ -18,7 +18,7 @@ export default function Header() {
 		setOpen(false)
 	}, [location.pathname])
 
-	// Smooth scroll listener for frosted glass header
+	// Solid header once the page scrolls
 	useEffect(() => {
 		const handleScroll = () => {
 			setScrolled(window.scrollY > 20)
@@ -57,9 +57,9 @@ export default function Header() {
 
 	return (
 		<header
-			className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
+			className={`fixed top-0 inset-x-0 z-50 transition-[background-color,border-color,padding] duration-200 ${
 				scrolled
-					? "glass-dock border-b border-line shadow-2xl pt-[max(0.5rem,env(safe-area-inset-top))] pb-2.5 sm:py-3"
+					? "bg-canvas border-b border-line pt-[max(0.5rem,env(safe-area-inset-top))] pb-2.5 sm:py-3"
 					: "bg-transparent border-b border-transparent pt-[max(0.75rem,env(safe-area-inset-top))] sm:pt-5 pb-2"
 			}`}
 		>
@@ -71,17 +71,10 @@ export default function Header() {
 					className="group flex items-center gap-2.5 sm:gap-3 text-ink select-none"
 					aria-label={`${profile?.name || 'Advaita Chandra'}, home`}
 				>
-					<span className="font-display text-[1.15rem] sm:text-[1.3rem] font-normal tracking-[-0.015em] text-ink transition-colors duration-300 group-hover:text-accent">
+					<span className="font-display text-[1.15rem] sm:text-[1.3rem] font-normal tracking-[-0.015em] text-ink transition-colors duration-200 group-hover:text-accent">
 						{profile?.name || 'Advaita Chandra'}
 					</span>
-					<span
-						aria-hidden="true"
-						className="h-1.5 w-1.5 rounded-full bg-accent shadow-[0_0_8px_rgba(194,149,106,0.55)] transition-transform duration-300 group-hover:scale-110"
-					/>
-					<span
-						aria-hidden="true"
-						className="hidden sm:block h-px w-3 bg-accent/40 transition-all duration-300 group-hover:w-5"
-					/>
+					<span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-accent" />
 				</Link>
 
 				{/* Desktop Navigation */}
@@ -107,7 +100,7 @@ export default function Header() {
 										<motion.span
 											layoutId="activeNavIndicator"
 											className="absolute -bottom-1 left-0 right-0 h-[2px] rounded-full bg-accent"
-											transition={{ type: "spring", stiffness: 400, damping: 32 }}
+											transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
 										/>
 									)}
 								</>
@@ -122,17 +115,15 @@ export default function Header() {
 						to="/contact"
 						{...getRoutePreloadProps('/contact')}
 						className={({ isActive }) =>
-							`group inline-flex items-center gap-2 pl-4 pr-1 py-1 text-[13px] font-sans font-medium tracking-[-0.005em] rounded-full border transition-all duration-300 active:scale-[0.97] ${
+							`group inline-flex items-center gap-1.5 px-3 py-1.5 text-[13px] font-sans font-medium rounded-lg border transition-colors duration-150 active:scale-[0.98] ${
 								isActive
-									? "text-ink border-accent bg-accent/10 shadow-sm"
-									: "text-muted border-line hover:text-ink hover:border-line-strong hover:bg-surface/80"
+									? "text-ink border-accent/60 bg-accent/10"
+									: "text-muted border-line hover:text-ink hover:border-line-strong hover:bg-surface"
 							}`
 						}
 					>
 						<span>Contact</span>
-						<div className="flex h-6 w-6 items-center justify-center rounded-full bg-ink/5 transition-transform duration-300 group-hover:scale-105 group-hover:translate-x-[1px]">
-							<ArrowUpRight className="h-3 w-3 text-accent" />
-						</div>
+						<ArrowUpRight className="h-3.5 w-3.5 text-accent" aria-hidden="true" />
 					</NavLink>
 				</div>
 
@@ -147,12 +138,12 @@ export default function Header() {
 				>
 					<span className="relative block h-3.5 w-5 pointer-events-none">
 						<span
-							className={`absolute left-0 block h-[1.5px] w-5 bg-current transition-all duration-300 ${
+							className={`absolute left-0 block h-[1.5px] w-5 bg-current transition duration-200 ${
 								open ? "top-1.5 rotate-45 text-accent" : "top-0.5"
 							}`}
 						/>
 						<span
-							className={`absolute left-0 block h-[1.5px] w-5 bg-current transition-all duration-300 ${
+							className={`absolute left-0 block h-[1.5px] w-5 bg-current transition duration-200 ${
 								open ? "top-1.5 -rotate-45 text-accent" : "top-2.5"
 							}`}
 						/>
@@ -160,7 +151,7 @@ export default function Header() {
 				</button>
 			</div>
 
-			{/* Full-Screen Mobile Navigation Overlay (Portaled to document.body so header backdrop-blur never traps fixed positioning) */}
+			{/* Full-Screen Mobile Navigation Overlay (Portaled to document.body so header never traps fixed positioning) */}
 			{typeof document !== 'undefined' &&
 				createPortal(
 					<AnimatePresence>
@@ -171,7 +162,7 @@ export default function Header() {
 								animate={{ opacity: 1, y: 0 }}
 								exit={{ opacity: 0, y: -8 }}
 								transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-								className="fixed inset-0 z-[100] flex flex-col justify-between bg-canvas/98 backdrop-blur-2xl md:hidden overflow-y-auto overscroll-contain pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]"
+								className="fixed inset-0 z-[100] flex flex-col justify-between bg-canvas md:hidden overflow-y-auto overscroll-contain pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]"
 							>
 								{/* Mobile Top Bar */}
 								<div className="border-b border-line bg-surface/40">
@@ -187,7 +178,7 @@ export default function Header() {
 											</span>
 											<span
 												aria-hidden="true"
-												className="h-1.5 w-1.5 rounded-full bg-accent shadow-[0_0_8px_rgba(194,149,106,0.6)]"
+												className="h-1.5 w-1.5 rounded-full bg-accent"
 											/>
 										</Link>
 
@@ -212,7 +203,7 @@ export default function Header() {
 											<span className="font-mono text-[11px] uppercase tracking-wider text-muted font-medium">
 												Navigation
 											</span>
-											<span className="font-mono text-[11px] uppercase tracking-wider text-accent font-semibold">
+											<span className="font-mono text-[11px] uppercase tracking-wider text-accent font-medium">
 												Directory
 											</span>
 										</div>
@@ -230,7 +221,7 @@ export default function Header() {
 														onClick={() => setOpen(false)}
 														{...getRoutePreloadProps(route.path)}
 														className={({ isActive }) =>
-															`group flex items-center justify-between py-3.5 px-2 rounded-xl transition-all active:scale-[0.98] ${
+															`group flex items-center justify-between py-3.5 px-2 rounded-lg transition-colors active:scale-[0.98] ${
 																isActive ? "text-accent bg-surface/60" : "text-ink hover:text-accent hover:bg-surface/30"
 															}`
 														}
@@ -253,7 +244,7 @@ export default function Header() {
 																</span>
 															)}
 														</div>
-														<ArrowUpRight className="h-4 w-4 text-muted group-hover:text-accent group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all opacity-50 group-hover:opacity-100 flex-shrink-0" />
+														<ArrowUpRight className="h-4 w-4 text-muted group-hover:text-accent group-hover:translate-x-0.5 group- transition opacity-50 group-hover:opacity-100 flex-shrink-0" />
 													</NavLink>
 												</motion.li>
 											))}
@@ -279,7 +270,6 @@ export default function Header() {
 												))}
 											</div>
 											<div className="flex items-center gap-2 font-mono text-[11px] text-muted">
-												<span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" />
 												<span>India</span>
 											</div>
 										</div>

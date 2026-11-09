@@ -224,7 +224,7 @@ export default function PhotographyList() {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Search photos by title, caption, tags..."
-                className="w-full rounded-xl border border-line bg-surface/60 py-2 pl-10 pr-4 text-xs font-sans text-ink placeholder:text-neutral-500 focus:border-accent focus:outline-none transition-all duration-200"
+                className="w-full rounded-xl border border-line bg-surface/60 py-2 pl-10 pr-4 text-xs font-sans text-ink placeholder:text-neutral-500 focus:border-accent focus:outline-none transition duration-200"
               />
             </div>
 
@@ -234,7 +234,7 @@ export default function PhotographyList() {
                 <select
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="rounded-xl border border-line bg-surface/80 px-3 py-1.5 font-mono text-xs text-ink focus:border-accent focus:outline-none cursor-pointer"
+                  className="rounded-xl border border-line bg-surface px-3 py-1.5 font-mono text-xs text-ink focus:border-accent focus:outline-none cursor-pointer"
                 >
                   <option value="all">All Categories ({photos.length})</option>
                   {categories.map((c) => (

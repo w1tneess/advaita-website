@@ -90,23 +90,18 @@ export default function ActiveInquiriesSection({ philosophy = {} }) {
               <h3 className="font-sans text-sm tracking-wide text-ink">Readings &amp; Thinkers</h3>
               <Link
                 to="/philosophy"
-                className="font-sans text-sm tracking-wide text-ink border-b border-line hover:text-muted hover:border-muted active:opacity-80 transition-all duration-150 ease-[var(--ease-out-quart)] pb-1"
+                className="font-sans text-sm tracking-wide text-ink border-b border-line hover:text-muted hover:border-muted active:opacity-80 transition duration-150 ease-[var(--ease-out-quart)] pb-1"
               >
                 Reading log &rarr;
               </Link>
             </div>
-            <ul className="space-y-5 text-base">
+            <ul className="space-y-4 text-base">
               {thinkers.map((thinker) => (
-                <li
-                  key={thinker.name}
-                  className="flex justify-between items-start gap-6 text-muted"
-                >
-                  <span className="font-normal whitespace-nowrap text-ink">{thinker.name}</span>
-                  <span className="text-right italic">
-                    {thinker.description
-                      ? thinker.description.split('.')[0].slice(0, 24)
-                      : thinker.role || 'Inquiry'}
-                  </span>
+                <li key={thinker.name} className="space-y-1">
+                  <p className="text-ink">{thinker.name}</p>
+                  <p className="text-sm text-muted leading-relaxed">
+                    {thinker.description ? thinker.description.split('.')[0] : thinker.role || 'Inquiry'}
+                  </p>
                 </li>
               ))}
             </ul>
@@ -125,7 +120,7 @@ export default function ActiveInquiriesSection({ philosophy = {} }) {
           {DEFAULT_INQUIRIES.map((item, idx) => (
             <article
               key={idx}
-              className="group py-8 sm:py-10 grid gap-4 sm:grid-cols-[1fr_2fr] items-baseline transition-all duration-250 ease-[var(--ease-out-quart)] hover:bg-surface/60 -mx-4 px-4 sm:-mx-6 sm:px-6 rounded-xl hover:-translate-y-0.5 hover:shadow-subtle active:scale-[0.98] first:pt-4"
+              className="group py-8 sm:py-10 grid gap-4 sm:grid-cols-[1fr_2fr] items-baseline transition duration-250 ease-[var(--ease-out-quart)] hover:bg-surface/60 -mx-4 px-4 sm:-mx-6 sm:px-6 rounded-xl active:scale-[0.98] first:pt-4"
             >
               <div className="font-mono text-xs tracking-widest uppercase text-muted font-medium">
                 {item.category}
@@ -141,12 +136,12 @@ export default function ActiveInquiriesSection({ philosophy = {} }) {
                       className="inline-flex items-baseline gap-3 outline-none"
                     >
                       <span>{item.title}</span>
-                      <ArrowUpRight className="h-4 w-4 opacity-50 group-hover:opacity-100 transition-all duration-250 ease-[var(--ease-out-quart)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 text-muted" />
+                      <ArrowUpRight className="h-4 w-4 opacity-50 group-hover:opacity-100 transition duration-250 ease-[var(--ease-out-quart)] group-hover:translate-x-0.5 group- text-muted" />
                     </a>
                   ) : (
                     <Link to={item.link} className="inline-flex items-baseline gap-3 outline-none">
                       <span>{item.title}</span>
-                      <ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-all duration-250 ease-[var(--ease-out-quart)] -translate-x-3 group-hover:translate-x-0 text-muted" />
+                      <ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition duration-250 ease-[var(--ease-out-quart)] -translate-x-3 group-hover:translate-x-0 text-muted" />
                     </Link>
                   )}
                 </h3>

@@ -9,7 +9,7 @@ export default function DataTable({ caption, columns, rows, rowKey = (row) => ro
   if (rows.length === 0) return empty ?? null
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-line bg-surface/40 shadow-subtle backdrop-blur-sm">
+    <div className="overflow-hidden rounded-2xl border border-line bg-surface/40 shadow-subtle">
       <table className="w-full border-collapse text-sm">
         {caption && <caption className="sr-only">{caption}</caption>}
 

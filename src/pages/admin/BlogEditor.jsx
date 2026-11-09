@@ -221,7 +221,7 @@ export default function BlogEditor() {
           </div>
         </FormSection>
 
-        <div className="sticky bottom-0 mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-line bg-canvas/90 py-4 backdrop-blur-sm z-10">
+        <div className="sticky bottom-0 mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-line bg-canvas/90 py-4 z-10">
           <div className="flex items-center gap-3">
             <Button type="submit" disabled={isSaving}>
               {isNew ? 'Create post' : 'Save post'}
