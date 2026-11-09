@@ -1,7 +1,7 @@
+import { useState } from 'react'
 import { Link } from 'react-router'
 import InkField from '@/components/features/ink/InkField.jsx'
 import PenStroke from '@/components/features/ink/PenStroke.jsx'
-import { formatDate, isoDateAttr } from '@/lib/format'
 
 // His own line, with each verb leading to the part of the notebook where it happens.
 const VERBS = [
@@ -16,26 +16,35 @@ const VERBS = [
 /**
  * First screen: Advaita, by name. "Advaita" is Sanskrit for "not two"; the word arrives
  * as two parts (a- and dvaita) that close into one, with the etymology pencilled underneath.
- * Around it: his handle, his motto, his own words. Every value in the strip comes from content.
+ * Around it: his handle, his motto, his own words.
  */
-export default function HeroSection({ profile = {}, notes = [], projects = [] }) {
-  const latest = notes[0]
+export default function HeroSection({ profile = {} }) {
+  const [paused, setPaused] = useState(false)
   const [first = 'Advaita', ...rest] = (profile?.name || 'Advaita Chandra').split(' ')
   const last = rest.join(' ') || 'Chandra'
   const splitAt = first.toLowerCase().startsWith('a') ? 1 : 0
 
   return (
     <section className="relative isolate overflow-hidden" aria-labelledby="hero-heading">
-      <InkField className="-z-10" />
+      <InkField paused={paused} className="-z-10" />
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_58%_46%_at_50%_42%,var(--color-canvas)_32%,transparent_80%)]" />
 
-      <div className="shell folio min-h-[100svh] grid-rows-[1fr_auto] gap-y-10 pt-24 lg:pt-28">
+      <div className="shell folio min-h-[100svh] gap-y-10 pt-24 pb-16 lg:pt-28">
         {/* Margin: who he is online, and the line he signs with. */}
         <aside className="folio-margin order-2 self-end text-[15px] leading-snug text-muted lg:order-none lg:pb-4 settle" style={{ '--settle-delay': '700ms' }}>
           <p className="mark-label" data-ink="fact">online I’m w1tneess</p>
           <p className="mt-2 max-w-[15rem]">Read it as “witness”. Same person on GitHub and X.</p>
           <p className="mark-label mt-8 text-ink">ex duris gloria</p>
           <p className="mt-2 max-w-[15rem]">Latin: from hardship, glory.</p>
+          <button
+            type="button"
+            onClick={() => setPaused((p) => !p)}
+            aria-pressed={paused}
+            className="pen-link mt-8 hidden items-center gap-2 py-1 text-[13px] text-text-3 hover:text-ink motion-safe:lg:inline-flex"
+          >
+            <span aria-hidden="true" className={`h-1.5 w-1.5 rounded-full ${paused ? 'bg-text-3' : 'bg-accent'}`} />
+            {paused ? 'Let the pens draw' : 'Pause the pens'}
+          </button>
         </aside>
 
         <div className="folio-body self-center [container-type:inline-size]">
@@ -88,29 +97,6 @@ export default function HeroSection({ profile = {}, notes = [], projects = [] })
           </div>
         </div>
 
-        {/* What is in the notebook right now. */}
-        <dl className="col-span-full order-3 grid grid-cols-2 gap-x-6 gap-y-4 border-t border-line py-6 text-[14px] sm:grid-cols-4 lg:grid-cols-12">
-          <div className="lg:col-span-3">
-            <dt className="text-text-3">Notes</dt>
-            <dd className="mt-1 text-ink tabular-nums">{notes.length}</dd>
-          </div>
-          <div className="lg:col-span-2">
-            <dt className="text-text-3">Projects</dt>
-            <dd className="mt-1 text-ink tabular-nums">{projects.length}</dd>
-          </div>
-          <div className="col-span-2 min-w-0 sm:col-span-1 lg:col-span-4">
-            <dt className="text-text-3">Latest note</dt>
-            <dd className="mt-1 truncate">
-              {latest ? <Link to={`/philosophy/${latest.slug}`} className="pen-link inline-block py-1 text-ink">{latest.title}</Link> : <span className="text-muted">None yet</span>}
-            </dd>
-          </div>
-          <div className="hidden sm:block lg:col-span-3 lg:text-right">
-            <dt className="text-text-3">Written</dt>
-            <dd className="mt-1 text-ink tabular-nums">
-              {latest?.published_at ? <time dateTime={isoDateAttr(latest.published_at)}>{formatDate(latest.published_at)}</time> : 'Not yet'}
-            </dd>
-          </div>
-        </dl>
       </div>
     </section>
   )

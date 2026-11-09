@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { useLens } from './InkLens.jsx'
 
 /**
@@ -61,7 +61,7 @@ function makeMark(w, h, ink) {
   } else if (Math.random() < 0.4) {
     x = rand(w * 0.02, w * 0.12); y = rand(h * 0.14, h * 0.46); room = w * 0.2 - (x - w * 0.02)
   } else {
-    x = rand(w * 0.6, w * 0.84); y = rand(h * 0.76, h * 0.88); room = w * 0.95 - x
+    x = rand(w * 0.78, w * 0.88); y = rand(h * 0.52, h * 0.9); room = w * 0.97 - x
   }
   const size = Math.max(40, Math.min(Math.min(w, h) * 0.12, room / 3))
   const highlighter = kind === 'swipe'
@@ -94,11 +94,10 @@ function drawMark(ctx, m, lens) {
   ctx.stroke()
 }
 
-export default function InkField({ remarkSelector, className = '' }) {
+export default function InkField({ remarkSelector, paused = false, className = '' }) {
   const canvasRef = useRef(null)
   const lens = useLens()
   const lensRef = useRef(lens)
-  const [paused, setPaused] = useState(false)
   const pausedRef = useRef(false)
 
   useEffect(() => { lensRef.current = lens }, [lens])
@@ -227,18 +226,5 @@ export default function InkField({ remarkSelector, className = '' }) {
     }
   }, [remarkSelector])
 
-  return (
-    <>
-      <canvas ref={canvasRef} aria-hidden="true" className={`pointer-events-none absolute inset-0 h-full w-full ${className}`} />
-      <button
-        type="button"
-        onClick={() => setPaused((p) => !p)}
-        aria-pressed={paused}
-        className="absolute top-20 right-[var(--margin-safe)] z-20 hidden text-[13px] text-text-3 hover:text-ink transition-colors motion-safe:md:inline-flex items-center gap-2 py-1 pen-link"
-      >
-        <span aria-hidden="true" className={`h-1.5 w-1.5 rounded-full ${paused ? 'bg-text-3' : 'bg-ink'}`} />
-        {paused ? 'Resume the pens' : 'Pause the pens'}
-      </button>
-    </>
-  )
+  return <canvas ref={canvasRef} aria-hidden="true" className={`pointer-events-none absolute inset-0 h-full w-full ${className}`} />
 }
