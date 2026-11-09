@@ -1,284 +1,159 @@
-import { useEffect, useState } from "react"
-import { createPortal } from "react-dom"
-import { Link, NavLink, useLocation } from "react-router"
-import { ArrowUpRight } from "lucide-react"
-import { motion, AnimatePresence } from "framer-motion"
+import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
+import { Link, NavLink, useLocation } from 'react-router'
+import { motion, AnimatePresence } from 'framer-motion'
 import { NAV_ITEMS } from '@/config/nav.js'
 import { useContent } from '@/lib/content.jsx'
 import { getRoutePreloadProps } from '@/lib/preload'
 import { stopScroll, startScroll } from '@/lib/smooth-scroll.js'
+import { InkKeys, useLensReset } from '@/components/features/ink/InkLens.jsx'
+
+const EASE = [0.22, 1, 0.36, 1]
 
 export default function Header() {
 	const [open, setOpen] = useState(false)
 	const [scrolled, setScrolled] = useState(false)
 	const location = useLocation()
-	const { profile, publicSocialLinks } = useContent()
+	const { profile } = useContent()
+	const menuRef = useRef(null)
+	useLensReset()
+	const name = profile?.name || 'Advaita Chandra'
 
-	useEffect(() => {
-		setOpen(false)
-	}, [location.pathname])
+	useEffect(() => setOpen(false), [location.pathname])
 
-	// Solid header once the page scrolls
+	// Hairline under the bar once the page leaves the top.
 	useEffect(() => {
-		const handleScroll = () => {
-			setScrolled(window.scrollY > 20)
-		}
-		window.addEventListener('scroll', handleScroll, { passive: true })
-		handleScroll()
-		return () => window.removeEventListener('scroll', handleScroll)
+		const sentinel = document.createElement('div')
+		sentinel.style.cssText = 'position:absolute;top:0;height:24px;width:1px;pointer-events:none'
+		document.body.prepend(sentinel)
+		const io = new IntersectionObserver(([e]) => setScrolled(!e.isIntersecting))
+		io.observe(sentinel)
+		return () => { io.disconnect(); sentinel.remove() }
 	}, [])
 
 	useEffect(() => {
 		if (open) {
 			document.body.style.overflow = 'hidden'
 			stopScroll()
+			menuRef.current?.querySelector('a')?.focus()
 		} else {
 			document.body.style.overflow = ''
 			startScroll()
 		}
+		const onKey = (event) => { if (event.key === 'Escape') setOpen(false) }
+		window.addEventListener('keydown', onKey)
 		return () => {
+			window.removeEventListener('keydown', onKey)
 			document.body.style.overflow = ''
 			startScroll()
 		}
 	}, [open])
 
-	useEffect(() => {
-		const onKey = (event) => {
-			if (event.key === "Escape") setOpen(false)
-		}
-		window.addEventListener("keydown", onKey)
-		return () => window.removeEventListener("keydown", onKey)
-	}, [])
-
-	// Filter out Home from horizontal desktop nav for clean elegance (handled by brand logo)
-	// and keep Contact separated as a sharp CTA button on desktop
-	const desktopLinks = NAV_ITEMS.filter((route) => route.path !== "/" && route.path !== "/contact")
-	const configuredSocials = (publicSocialLinks || []).filter((link) => link.url)
+	const links = NAV_ITEMS.filter((route) => route.path !== '/')
 
 	return (
 		<header
-			className={`fixed top-0 inset-x-0 z-50 transition-[background-color,border-color,padding] duration-200 ${
-				scrolled
-					? "bg-canvas border-b border-line pt-[max(0.5rem,env(safe-area-inset-top))] pb-2.5 sm:py-3"
-					: "bg-transparent border-b border-transparent pt-[max(0.75rem,env(safe-area-inset-top))] sm:pt-5 pb-2"
-			}`}
+			className={`fixed inset-x-0 top-0 z-50 bg-canvas transition-[border-color] duration-200 border-b ${scrolled ? 'border-line' : 'border-transparent'}`}
 		>
-			<div className="shell flex h-12 sm:h-14 items-center justify-between gap-[var(--spacing-fluid-md)]">
-				{/* Brand Wordmark */}
+			<div className="shell flex h-16 items-center justify-between gap-6 pt-[env(safe-area-inset-top)]">
 				<Link
 					to="/"
 					{...getRoutePreloadProps('/')}
-					className="group flex items-center gap-2.5 sm:gap-3 text-ink select-none"
-					aria-label={`${profile?.name || 'Advaita Chandra'}, home`}
+					className="pen-link text-[15px] font-medium tracking-[-0.01em] text-ink"
+					aria-label={`${name}, home`}
 				>
-					<span className="font-display text-[1.15rem] sm:text-[1.3rem] font-normal tracking-[-0.015em] text-ink transition-colors duration-200 group-hover:text-accent">
-						{profile?.name || 'Advaita Chandra'}
-					</span>
-					<span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-accent" />
+					{name}
 				</Link>
 
-				{/* Desktop Navigation */}
-				<nav className="hidden items-center gap-6 lg:gap-7 md:flex" aria-label="Primary">
-					{desktopLinks.map((route) => (
-						<NavLink
-							key={route.path}
-							to={route.path}
-							{...getRoutePreloadProps(route.path)}
-							className={({ isActive }) =>
-								`relative text-[13.5px] font-sans tracking-[-0.01em] transition-colors duration-200 py-1 ${
-									isActive
-										? "text-ink font-medium"
-										: "text-muted hover:text-ink font-normal"
-								}`
-							}
-							aria-current={({ isActive }) => (isActive ? "page" : undefined)}
-						>
-							{({ isActive }) => (
-								<>
-									<span>{route.label}</span>
-									{isActive && (
-										<motion.span
-											layoutId="activeNavIndicator"
-											className="absolute -bottom-1 left-0 right-0 h-[2px] rounded-full bg-accent"
-											transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-										/>
-									)}
-								</>
-							)}
-						</NavLink>
-					))}
+				<InkKeys className="hidden lg:block" />
+
+				<nav className="hidden md:block" aria-label="Primary">
+					<ul className="flex items-center gap-7">
+						{links.map((route) => (
+							<li key={route.path}>
+								<NavLink
+									to={route.path}
+									{...getRoutePreloadProps(route.path)}
+									className={({ isActive }) =>
+										`pen-link py-1 text-[14px] transition-colors ${isActive ? 'text-ink' : 'text-muted hover:text-ink'}`
+									}
+								>
+									{route.label}
+								</NavLink>
+							</li>
+						))}
+					</ul>
 				</nav>
 
-				{/* Desktop Right Actions: Contact */}
-				<div className="hidden sm:flex items-center gap-3">
-					<NavLink
-						to="/contact"
-						{...getRoutePreloadProps('/contact')}
-						className={({ isActive }) =>
-							`group inline-flex items-center gap-1.5 px-3 py-1.5 text-[13px] font-sans font-medium rounded-lg border transition-colors duration-150 active:scale-[0.98] ${
-								isActive
-									? "text-ink border-accent/60 bg-accent/10"
-									: "text-muted border-line hover:text-ink hover:border-line-strong hover:bg-surface"
-							}`
-						}
-					>
-						<span>Contact</span>
-						<ArrowUpRight className="h-3.5 w-3.5 text-accent" aria-hidden="true" />
-					</NavLink>
-				</div>
-
-				{/* Mobile Menu Toggle Button (Touch target min 44x44px) */}
 				<button
 					type="button"
-					onClick={() => setOpen((value) => !value)}
-					className="-mr-2 relative z-50 flex h-11 w-11 items-center justify-center text-muted hover:text-ink transition-colors md:hidden cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 rounded-sm"
+					onClick={() => setOpen((v) => !v)}
+					className="-mr-2 flex h-11 items-center px-2 text-[15px] text-ink md:hidden"
 					aria-expanded={open}
 					aria-controls="mobile-nav"
-					aria-label={open ? "Close navigation menu" : "Open navigation menu"}
 				>
-					<span className="relative block h-3.5 w-5 pointer-events-none">
-						<span
-							className={`absolute left-0 block h-[1.5px] w-5 bg-current transition duration-200 ${
-								open ? "top-1.5 rotate-45 text-accent" : "top-0.5"
-							}`}
-						/>
-						<span
-							className={`absolute left-0 block h-[1.5px] w-5 bg-current transition duration-200 ${
-								open ? "top-1.5 -rotate-45 text-accent" : "top-2.5"
-							}`}
-						/>
-					</span>
+					{open ? 'Close' : 'Menu'}
 				</button>
 			</div>
 
-			{/* Full-Screen Mobile Navigation Overlay (Portaled to document.body so header never traps fixed positioning) */}
 			{typeof document !== 'undefined' &&
 				createPortal(
 					<AnimatePresence>
 						{open && (
 							<motion.div
 								id="mobile-nav"
-								initial={{ opacity: 0, y: -8 }}
-								animate={{ opacity: 1, y: 0 }}
-								exit={{ opacity: 0, y: -8 }}
-								transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-								className="fixed inset-0 z-[100] flex flex-col justify-between bg-canvas md:hidden overflow-y-auto overscroll-contain pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]"
+								ref={menuRef}
+								role="dialog"
+								aria-modal="true"
+								aria-label="Site menu"
+								initial={{ opacity: 0 }}
+								animate={{ opacity: 1 }}
+								exit={{ opacity: 0 }}
+								transition={{ duration: 0.2, ease: EASE }}
+								className="fixed inset-0 z-[100] flex flex-col bg-canvas md:hidden pt-[env(safe-area-inset-top)] pb-[max(1.5rem,env(safe-area-inset-bottom))]"
 							>
-								{/* Mobile Top Bar */}
-								<div className="border-b border-line bg-surface/40">
-									<div className="shell flex h-14 sm:h-16 items-center justify-between gap-6">
-										<Link
-											to="/"
-											onClick={() => setOpen(false)}
-											className="group flex items-center gap-2.5 text-ink"
-											aria-label={`${profile?.name || 'Advaita Chandra'}, home`}
-										>
-											<span className="font-display text-xl font-normal tracking-tight text-ink">
-												{profile?.name || 'Advaita Chandra'}
-											</span>
-											<span
-												aria-hidden="true"
-												className="h-1.5 w-1.5 rounded-full bg-accent"
-											/>
-										</Link>
-
-										<button
-											type="button"
-											onClick={() => setOpen(false)}
-											className="-mr-2 flex h-11 w-11 items-center justify-center text-muted hover:text-accent transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm active:scale-95"
-											aria-label="Close navigation menu"
-										>
-											<span className="relative block h-4 w-4 pointer-events-none">
-												<span className="absolute left-0 top-2 block h-[1.5px] w-4 bg-current rotate-45" />
-												<span className="absolute left-0 top-2 block h-[1.5px] w-4 bg-current -rotate-45" />
-											</span>
-										</button>
-									</div>
+								<div className="shell flex h-16 items-center justify-between">
+									<Link to="/" className="text-[15px] font-medium text-ink">{name}</Link>
+									<button
+										type="button"
+										onClick={() => setOpen(false)}
+										className="-mr-2 flex h-11 items-center px-2 text-[15px] text-ink"
+									>
+										Close
+									</button>
 								</div>
-
-								<div className="shell flex flex-col justify-between flex-1 py-5">
-									{/* Nav links section */}
-									<div>
-										<div className="flex items-center justify-between pb-2.5 mb-2 border-b border-line">
-											<span className="font-mono text-[11px] uppercase tracking-wider text-muted font-medium">
-												Navigation
-											</span>
-											<span className="font-mono text-[11px] uppercase tracking-wider text-accent font-medium">
-												Directory
-											</span>
-										</div>
-
-										<ul className="flex flex-col divide-y divide-line">
-											{NAV_ITEMS.map((route, idx) => (
-												<motion.li
-													key={route.path}
-													initial={{ opacity: 0, x: -6 }}
-													animate={{ opacity: 1, x: 0 }}
-													transition={{ delay: idx * 0.025, duration: 0.2 }}
+								<nav className="shell mt-8 flex-1" aria-label="Mobile">
+									<ul>
+										{NAV_ITEMS.map((route, i) => (
+											<motion.li
+												key={route.path}
+												initial={{ opacity: 0, y: 12 }}
+												animate={{ opacity: 1, y: 0 }}
+												transition={{ delay: 0.04 + i * 0.04, duration: 0.42, ease: EASE }}
+												className="border-b border-line"
+											>
+												<NavLink
+													to={route.path}
+													end={route.path === '/'}
+													className={({ isActive }) =>
+														`flex items-baseline justify-between py-4 text-[2rem] tracking-[-0.03em] ${isActive ? 'text-ink' : 'text-muted'}`
+													}
 												>
-													<NavLink
-														to={route.path}
-														onClick={() => setOpen(false)}
-														{...getRoutePreloadProps(route.path)}
-														className={({ isActive }) =>
-															`group flex items-center justify-between py-3.5 px-2 rounded-lg transition-colors active:scale-[0.98] ${
-																isActive ? "text-accent bg-surface/60" : "text-ink hover:text-accent hover:bg-surface/30"
-															}`
-														}
-													>
-														<div className="flex flex-col pr-4">
-															<div className="flex items-center gap-2.5">
-																<span
-																	className="h-1.5 w-1.5 rounded-full bg-accent transition-opacity"
-																	style={{
-																		opacity: location.pathname === route.path ? 1 : 0,
-																	}}
-																/>
-																<span className="font-sans text-[17px] font-medium tracking-[-0.01em]">
-																	{route.label}
-																</span>
-															</div>
-															{route.desc && (
-																<span className="text-[13px] text-muted pl-4 mt-0.5 line-clamp-1 font-sans leading-relaxed">
-																	{route.desc}
-																</span>
-															)}
-														</div>
-														<ArrowUpRight className="h-4 w-4 text-muted group-hover:text-accent group-hover:translate-x-0.5 group- transition opacity-50 group-hover:opacity-100 flex-shrink-0" />
-													</NavLink>
-												</motion.li>
-											))}
-										</ul>
-									</div>
-
-									{/* Bottom meta area */}
-									<div className="mt-6 pt-5 border-t border-line flex flex-col gap-3.5">
-										{/* Social Links Row */}
-										<div className="flex items-center justify-between pt-1 font-sans text-[13px] text-muted">
-											<div className="flex items-center gap-3">
-												{configuredSocials.map((link) => (
-													<a
-														key={link.id || link.label}
-														href={link.kind === 'email' ? `mailto:${link.url}` : link.url}
-														target={link.kind === 'email' ? undefined : '_blank'}
-														rel={link.kind === 'email' ? undefined : 'noopener noreferrer'}
-														className="hover:text-accent transition-colors py-1 px-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 rounded-sm font-medium"
-														aria-label={link.label}
-													>
-														{link.label}
-													</a>
-												))}
-											</div>
-											<div className="flex items-center gap-2 font-mono text-[11px] text-muted">
-												<span>India</span>
-											</div>
-										</div>
-									</div>
-								</div>
+													{({ isActive }) => (
+														<>
+															<span>{route.label}</span>
+															{isActive && <span className="mark-label text-accent">here</span>}
+														</>
+													)}
+												</NavLink>
+											</motion.li>
+										))}
+									</ul>
+								</nav>
 							</motion.div>
 						)}
 					</AnimatePresence>,
-					document.body
+					document.body,
 				)}
 		</header>
 	)

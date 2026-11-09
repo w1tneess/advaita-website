@@ -22,9 +22,13 @@ import { trackPageView } from '../lib/analytics.js'
  * `#main-content` is the target of both the skip link and the route-change focus move in
  * ScrollToTop, so the id and tabIndex here are load-bearing — do not rename them.
  */
+// The first page paints as-is (it is pre-rendered); later pages settle in like a turned page.
+let hasPainted = false
+
 export default function PublicLayout() {
   const { previewDrafts, setPreviewDrafts } = useContent()
   const location = useLocation()
+  useEffect(() => { hasPainted = true }, [])
 
   // Track privacy-first pageviews
   useEffect(() => {
@@ -97,9 +101,9 @@ export default function PublicLayout() {
         id="main-content"
         tabIndex={-1}
         className="flex-1 min-h-dvh focus:outline-none"
-        initial={false}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
+        initial={hasPainted ? { opacity: 0, y: 12 } : false}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
       >
         {/* One broken page keeps the header and footer; keyed so navigating away recovers. */}
         <ErrorBoundary key={location.pathname}>

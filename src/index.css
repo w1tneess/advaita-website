@@ -1,40 +1,45 @@
 @import 'tailwindcss';
 
+@font-face { font-family: 'Switzer'; src: url('/fonts/switzer-400-normal.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Switzer'; src: url('/fonts/switzer-500-normal.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Switzer'; src: url('/fonts/switzer-600-normal.woff2') format('woff2'); font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Caveat'; src: url('/fonts/caveat-500-normal.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: swap; unicode-range: U+0000-00FF, U+2000-206F; }
+
 /* ---------------------------------------------------------------------------
-   DESIGN SYSTEM: Student Archive & Editorial Broadsheet
-   ---------------------------------------------------------------------------
-   Warm "ink at night" palette, dark only (light tokens kept for later).
-   System serif for display, system sans for body, system mono for meta.
-   One copper accent, used rarely. Depth from surface steps and hairlines.
+   DESIGN SYSTEM: Four inks (see DESIGN.md)
+   Cool graphite chrome. The only colour is the four marks a careful notebook uses:
+   fact (blue pencil), inference (highlighter), opinion (red pen), unknown (graphite).
+   Switzer for everything, Caveat only for margin marks that name an ink.
 --------------------------------------------------------------------------- */
 
 @theme {
   /* Warm Dark Editorial Theme (Forced default) */
-  --color-canvas: #0F0E0D;
-  --color-surface: #161514;
-  --color-raised: #1C1B1A;
-  --color-ink: #F8F6F0;
-  --color-muted: #A8A29E; /* Warm grey – 5.2:1 on canvas */
-  --color-line: rgba(248, 246, 240, 0.08); /* Extremely subtle border */
-  --color-line-strong: rgba(248, 246, 240, 0.15);
+  --color-canvas: #0E0F11;
+  --color-surface: #16181B;
+  --color-raised: #1E2024;
+  --color-ink: #ECEDE8;
+  --color-muted: #9A9EA6; /* 7.3:1 on canvas */
+  --color-line: rgba(236, 237, 232, 0.12);
+  --color-line-strong: rgba(236, 237, 232, 0.22);
 
   /* Muted terracotta/copper accent */
-  --color-accent: #c2956a;
-  --color-accent-strong: #d4a87d;
-  --color-on-accent: #F8F6F0;
+  --color-accent: #FF7A5C; /* = opinion ink, the one action colour */
+  --color-accent-strong: #FF967D;
+  --color-on-accent: #0E0F11;
 
   /* Epistemic label hues (subdued for dark mode) */
-  --color-fact: #8fb0c4;
-  --color-analysis: #a9a3c2;
-  --color-opinion: #d4a373;
-  --color-limitation: #d08c86;
+  --color-fact: #7DB4FF;
+  --color-analysis: #F2D45C;
+  --color-opinion: #FF7A5C;
+  --color-limitation: #B9BCC2;
 
   /* Typography */
-  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  --font-sans: 'Switzer', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
   
-  --font-display: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
-  --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-display: 'Switzer', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Switzer', ui-sans-serif, system-ui, sans-serif;
+  --font-hand: 'Caveat', 'Segoe Print', 'Bradley Hand', cursive;
 
   /* Fluid Typography Scale */
   --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
@@ -45,7 +50,7 @@
   --text-4xl: clamp(2.25rem, 1.95rem + 1.5vw, 2.75rem);
   --text-5xl: clamp(2.75rem, 2.5rem + 2vw, 3.5rem);
   --text-6xl: clamp(3.5rem, 3rem + 3.75vw, 4.5rem);
-  --text-hero: clamp(2.25rem, 1.4rem + 3.8vw, 5.25rem);
+  --text-hero: clamp(2.5rem, 1.1rem + 5.6vw, 7rem);
 
   /* Fluid Spacing Scale */
   --spacing-fluid-xs: clamp(0.5rem, 1vw, 1rem);
@@ -61,10 +66,10 @@
   --color-surface-3: var(--color-raised);
   --color-text: var(--color-ink);
   --color-text-2: var(--color-muted);
-  --color-text-3: #8A847D; /* ≥4.6:1 on canvas, surface and raised (WCAG AA) */
+  --color-text-3: #868B93; /* >=4.6:1 on canvas, surface and raised */
   --color-copper: var(--color-accent);
   --color-copper-strong: var(--color-accent-strong);
-  --color-copper-deep: #5E3C2C;
+  --color-copper-deep: #3A2A26;
 
   --text-label: 0.75rem; 
   --text-meta: 0.8125rem; 
@@ -81,12 +86,12 @@
 
   /* Asymmetric layout */
   --gutter-asymmetric: 12vw;
-  --margin-safe: clamp(1rem, 4vw, 4rem);
+  --margin-safe: clamp(1rem, 2.2vw, 2rem);
   --section-gap: clamp(3.5rem, 8vw, 8rem);
   --content-gap: 1.5rem;
 
   /* Apple HIG inspired cards */
-  --radius-card: 12px;
+  --radius-card: 6px;
   --shadow-subtle: 0 4px 16px -4px rgba(0, 0, 0, 0.15);
   --shadow-raised: 0 12px 32px -8px rgba(0, 0, 0, 0.20);
   --shadow-card-hover: 0 16px 40px -12px rgba(0, 0, 0, 0.25);
@@ -101,17 +106,17 @@
 }
 
 :root {
-  --color-canvas: #0F0E0D;
-  --color-surface: #161514;
-  --color-raised: #1C1B1A;
-  --color-ink: #F8F6F0;
-  --color-muted: #A8A29E;
-  --color-line: rgba(248, 246, 240, 0.08);
-  --color-accent: #c2956a;
-  --color-accent-strong: #d4a87d;
-  --color-on-accent: #F8F6F0;
-  --color-text-3: #8A847D;
-  --color-line-strong: rgba(248, 246, 240, 0.15);
+  --color-canvas: #0E0F11;
+  --color-surface: #16181B;
+  --color-raised: #1E2024;
+  --color-ink: #ECEDE8;
+  --color-muted: #9A9EA6;
+  --color-line: rgba(236, 237, 232, 0.12);
+  --color-accent: #FF7A5C;
+  --color-accent-strong: #FF967D;
+  --color-on-accent: #0E0F11;
+  --color-text-3: #868B93;
+  --color-line-strong: rgba(236, 237, 232, 0.22);
 }
 
 /* Light mode foundation — future-proofing per HIG dark-mode.md */
@@ -169,10 +174,10 @@
   h1, h2, h3, h4, h5, h6 {
     color: var(--color-ink);
     font-family: var(--font-display);
-    line-height: 1.1;
-    letter-spacing: -0.02em;
+    line-height: 1.04;
+    letter-spacing: -0.035em;
     text-wrap: balance;
-    font-weight: 400; /* Use normal weight for elegant serifs */
+    font-weight: 500;
   }
 
   p {
@@ -223,7 +228,7 @@
 
 @layer components {
   .shell {
-    width: min(100%, 1240px);
+    width: min(100%, 1440px);
     margin-inline: auto;
     padding-inline: var(--margin-safe);
   }
@@ -266,13 +271,13 @@
 
   .prose-body blockquote {
     font-family: var(--font-display);
-    border-left: 2px solid var(--color-line-strong);
+    border-left: 2px solid var(--color-fact);
     padding-left: 1.5rem;
     margin: 2.5rem 0;
-    color: var(--color-muted);
+    color: var(--color-ink);
     font-size: var(--text-xl);
-    font-style: italic;
-    line-height: 1.4;
+    letter-spacing: -0.02em;
+    line-height: 1.35;
   }
 
 }
@@ -292,10 +297,106 @@
   
   .font-utility {
     font-family: var(--font-sans);
-    font-size: var(--text-label);
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
+    font-size: 0.8125rem;
   }
+
+  /* Margin mark: names which ink a passage is written in. */
+  .mark-label {
+    font-family: var(--font-hand);
+    font-size: 1.375rem;
+    line-height: 1;
+    font-weight: 500;
+  }
+  .mark-label[data-ink='fact'] { color: var(--color-fact); }
+  .mark-label[data-ink='analysis'] { color: var(--color-analysis); }
+  .mark-label[data-ink='opinion'] { color: var(--color-opinion); }
+  .mark-label[data-ink='limitation'] { color: var(--color-limitation); }
+
+  /* The pen stroke under an inked phrase: draws left to right. */
+  .ink {
+    position: relative;
+    z-index: 0;
+  }
+  .ink::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    left: -0.04em;
+    right: -0.04em;
+    bottom: 0.08em;
+    height: 0.26em;
+    background: var(--ink-color, var(--color-analysis));
+    opacity: 0.42;
+    transform: scaleX(var(--ink-draw, 1));
+    transform-origin: left center;
+    transition: transform 520ms var(--ease-soft), opacity 320ms var(--ease-soft);
+  }
+  .ink[data-ink='fact'] { --ink-color: var(--color-fact); }
+  .ink[data-ink='analysis'] { --ink-color: var(--color-analysis); }
+  .ink[data-ink='opinion'] { --ink-color: var(--color-opinion); }
+  .ink[data-ink='limitation'] { --ink-color: var(--color-limitation); }
+  .ink[data-ink='limitation']::after {
+    background: repeating-linear-gradient(90deg, var(--color-limitation) 0 0.3em, transparent 0.3em 0.5em);
+  }
+  .ink.is-lifted::after { --ink-draw: 0; }
+
+  /* Lens: when an ink is chosen, passages of other inks recede. */
+  [data-ink] { transition: opacity 320ms var(--ease-soft); }
+  html[data-lens='fact'] main [data-ink]:not([data-ink='fact']),
+  html[data-lens='analysis'] main [data-ink]:not([data-ink='analysis']),
+  html[data-lens='opinion'] main [data-ink]:not([data-ink='opinion']),
+  html[data-lens='limitation'] main [data-ink]:not([data-ink='limitation']) { opacity: 0.25; }
+  html[data-lens] main .ink::after { opacity: 0.7; }
+
+  /* Pen link: underline draws in on hover, like a pen stroke. */
+  .pen-link {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 0% 1px;
+    transition: background-size 320ms var(--ease-soft), color 160ms var(--ease-soft);
+  }
+  .pen-link:hover,
+  .pen-link:focus-visible,
+  .pen-link[aria-current='page'] { background-size: 100% 1px; }
+
+  /* Primary button: the fill sweeps in from the left. */
+  .btn-ink {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.25rem;
+    border-radius: 6px;
+    border: 1px solid var(--color-ink);
+    color: var(--color-canvas);
+    background: var(--color-ink);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    transition: color 320ms var(--ease-soft), border-color 320ms var(--ease-soft), transform 160ms var(--ease-soft);
+  }
+  .btn-ink::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--color-accent);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 420ms var(--ease-soft);
+  }
+  .btn-ink:hover::before,
+  .btn-ink:focus-visible::before { transform: scaleX(1); }
+  .btn-ink:hover,
+  .btn-ink:focus-visible { border-color: var(--color-accent); }
+  .btn-ink:active { transform: scale(0.98); }
+  .btn-ink.is-ghost { background: transparent; color: var(--color-ink); border-color: var(--color-line-strong); }
+  .btn-ink.is-ghost::before { background: var(--color-raised); }
+  .btn-ink.is-ghost:hover,
+  .btn-ink.is-ghost:focus-visible { border-color: var(--color-ink); }
+
 
 
   .code-badge {
@@ -369,5 +470,26 @@
   blockquote {
     orphans: 3;
     widows: 3;
+  }
+}
+
+/* Hero entrance: the four strokes draw in once, left to right, after the text settles. */
+@keyframes ink-draw { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes settle { from { opacity: 0; transform: translateY(0.35em); } to { opacity: 1; transform: none; } }
+.ink-enter::after { animation: ink-draw 620ms var(--ease-soft) both; animation-delay: var(--enter-delay, 500ms); }
+.settle { animation: settle 700ms var(--ease-soft) both; animation-delay: var(--settle-delay, 0ms); }
+@media (prefers-reduced-motion: reduce) {
+  .ink-enter::after, .settle { animation: none; }
+}
+
+/* Notebook grid: a three-column margin for marks and labels, then the text. */
+@layer components {
+  .folio { display: grid; grid-template-columns: minmax(0, 1fr); column-gap: clamp(16px, 2.2vw, 32px); }
+  .folio-margin { grid-column: 1 / -1; }
+  .folio-body { grid-column: 1 / -1; min-width: 0; }
+  @media (min-width: 1024px) {
+    .folio { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+    .folio-margin { grid-column: 1 / span 3; }
+    .folio-body { grid-column: 4 / -1; }
   }
 }

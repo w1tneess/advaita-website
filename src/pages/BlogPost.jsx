@@ -1,24 +1,20 @@
 import { useParams, Link } from 'react-router'
-import { ArrowLeft, Clock } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import NotFound from '@/pages/NotFound.jsx'
 import CopyButton from '@/components/ui/CopyButton.jsx'
-import OpenGraphPreview from '@/components/ui/OpenGraphPreview.jsx'
 import { RelatedNotes, ReadingProgressBar } from '@/components/features/notes'
 import Seo from '@/components/meta/Seo.jsx'
 import { useContent } from '@/lib/content.jsx'
-import { formatDate, readingMinutes } from '@/lib/format'
+import { formatDate, isoDateAttr, readingMinutes } from '@/lib/format'
 
 export default function BlogPost() {
   const { slug } = useParams()
   const { findBlogPostBySlug, blog = [] } = useContent()
-
   const post = findBlogPostBySlug(slug)
+  if (!post) return <NotFound />
 
-  if (!post) {
-    return <NotFound />
-  }
-
-  const estMinutes = readingMinutes(post.content || post.excerpt || '')
+  const minutes = readingMinutes(post.content || post.excerpt || '')
+  const url = `https://advaitachandra.in/blog/${post.slug}`
 
   return (
     <>
@@ -32,82 +28,34 @@ export default function BlogPost() {
         updatedAt={post.updated_at}
       />
 
-      <article className="shell max-w-[52rem] mx-auto pt-10 pb-20 md:pt-16 md:pb-28">
-        {/* Back Link */}
-        <div className="mb-8 print:hidden">
-          <Link
-            to="/blog"
-            className="inline-flex items-center gap-2 font-utility text-muted hover:text-ink transition-colors"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            <span>Return to Notes &amp; Logs</span>
+      <article className="shell folio pt-32 pb-24 lg:pt-40 lg:pb-36">
+        <aside className="folio-margin mb-10 text-[15px] text-muted lg:mb-0">
+          <Link to="/blog" className="group inline-flex items-center gap-2 text-ink print:hidden">
+            <ArrowLeft className="h-4 w-4 transition-transform duration-300 group-hover:-translate-x-1" aria-hidden="true" />
+            <span className="pen-link">All writing</span>
           </Link>
-        </div>
+          <dl className="mt-10 space-y-4 lg:sticky lg:top-28">
+            {post.published_at && (
+              <div><dt className="text-text-3">Written</dt><dd className="tabular-nums"><time dateTime={isoDateAttr(post.published_at)}>{formatDate(post.published_at)}</time></dd></div>
+            )}
+            {post.category && <div><dt className="text-text-3">Subject</dt><dd>{post.category}</dd></div>}
+            <div><dt className="text-text-3">Length</dt><dd className="tabular-nums">{minutes} min</dd></div>
+          </dl>
+        </aside>
 
-        <header className="border-b border-line pb-10 mb-10">
-          <div className="flex flex-wrap items-center gap-3 font-utility text-muted mb-4">
-            <time dateTime={post.published_at} className="text-ink">
-              {formatDate(post.published_at)}
-            </time>
-            <span>|</span>
-            <span className="border border-line bg-surface px-2.5 py-0.5 text-ink">
-              {post.category || 'Note'}
-            </span>
-            <span>|</span>
-            <span className="inline-flex items-center gap-1.5 text-xs text-muted">
-              <Clock className="h-3.5 w-3.5" />
-              <span>{estMinutes} min read</span>
-            </span>
+        <div className="folio-body lg:col-end-11">
+          <h1 className="text-[length:var(--text-5xl)] leading-[1.02] tracking-[-0.04em] -ml-[0.03em]">{post.title}</h1>
+          {post.excerpt && <p className="mt-8 text-[length:var(--text-xl)] leading-snug tracking-[-0.015em] text-muted">{post.excerpt}</p>}
+
+          <div className="prose-body mt-14 max-w-[38rem] whitespace-pre-wrap text-[18px] text-ink">{post.content}</div>
+
+          <div className="mt-16 flex flex-wrap items-center justify-between gap-4 border-t border-line pt-6 text-[15px] text-muted print:hidden">
+            <p>Disagree, or know a better source? <Link to="/contact" className="pen-link text-ink">Write to me</Link></p>
+            <CopyButton getText={() => (typeof window !== 'undefined' ? window.location.href : url)} label="Copy link" copiedLabel="Copied" showText />
           </div>
 
-          <h1 className="font-display text-4xl sm:text-5xl text-ink font-normal leading-[1.1]">
-            {post.title}
-          </h1>
-
-          {post.excerpt && (
-            <div className="mt-6 border-l border-ink pl-6 py-1">
-              <p className="font-sans text-xl sm:text-2xl text-muted italic leading-relaxed">
-                {post.excerpt}
-              </p>
-            </div>
-          )}
-        </header>
-
-        {/* Content Body */}
-        <div className="prose-body whitespace-pre-wrap text-base sm:text-lg font-sans leading-relaxed text-ink space-y-6">
-          {post.content}
+          <RelatedNotes currentSlug={post.slug} posts={blog} />
         </div>
-
-        {/* Colophon & Share Registry */}
-        <div className="mt-16 border-t border-line pt-8 space-y-6 font-utility">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <span className="text-muted">CITATION &amp; PROVENANCE</span>
-            <CopyButton
-              getText={() =>
-                typeof window !== 'undefined'
-                  ? window.location.href
-                  : `https://advaitachandra.in/blog/${post.slug}`
-              }
-              label="Copy URL"
-              copiedLabel="URL Copied!"
-              showText={true}
-              className="py-1 px-3 border border-line bg-surface text-muted hover:text-ink rounded-lg"
-            />
-          </div>
-
-          <OpenGraphPreview
-            title={post.title}
-            description={post.excerpt}
-            url={
-              typeof window !== 'undefined'
-                ? window.location.href
-                : `https://advaitachandra.in/blog/${post.slug}`
-            }
-          />
-        </div>
-
-        {/* Related Notes for Internal Linking */}
-        <RelatedNotes currentSlug={post.slug} posts={blog} />
       </article>
     </>
   )

@@ -11,7 +11,7 @@ export default function RelatedNotes({ currentSlug, posts = [] }) {
 
   return (
     <div className="mt-16 border-t border-line pt-8 print:hidden">
-      <h2 className="font-mono text-xs text-muted uppercase tracking-wider mb-6">
+      <h2 className="text-[15px] text-muted mb-6">
         Related Notes &amp; Projects
       </h2>
       <div className="grid sm:grid-cols-2 gap-4">
@@ -19,12 +19,12 @@ export default function RelatedNotes({ currentSlug, posts = [] }) {
           <Link
             key={post.slug}
             to={`/blog/${post.slug}`}
-            className="group block p-4 border border-line bg-surface hover:border-line-strong hover:bg-surface rounded-xl transition duration-150"
+            className="group block border-t border-line pt-4"
           >
-            <div className="flex items-center gap-2 font-mono text-[10px] text-muted mb-2 uppercase tracking-wider">
+            <div className="flex items-center gap-2 text-[13px] text-text-3 mb-2 tabular-nums">
               <span>{post.category || 'Monograph'}</span>
             </div>
-            <h3 className="font-display text-lg text-ink group-hover:text-muted transition-colors leading-tight mb-2">
+            <h3 className="text-[length:var(--text-lg)] tracking-[-0.02em] text-ink leading-tight mb-2">
               {post.title}
             </h3>
             <div className="flex items-center gap-1.5 text-xs text-muted group-hover:text-ink transition-colors">

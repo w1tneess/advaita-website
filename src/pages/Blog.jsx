@@ -44,8 +44,8 @@ export default function Blog() {
 
       <PageHeader
         eyebrow="Writing"
-        title="Notes &amp; Logs"
-        lead="Notes and observations on philosophy, history, politics, and technology."
+        title="Longer pieces"
+        lead="Essays on philosophy, history, politics and technology, written when a note outgrows a page."
       >
         {/* Nothing to search until something is published. */}
         {publicBlogPosts.length > 0 && (
@@ -53,16 +53,16 @@ export default function Blog() {
             {/* Search Input Bar */}
             <div className="relative max-w-md">
               <Search
-                className="pointer-events-none absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-muted"
+                className="pointer-events-none absolute top-1/2 left-0 h-4 w-4 -translate-y-1/2 text-muted"
                 aria-hidden="true"
               />
               <input
                 type="search"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search notes and observations…"
+                placeholder="Search writing"
                 aria-label="Filter blog notes"
-                className="w-full rounded-lg border border-line bg-surface py-2.5 pr-10 pl-10 text-xs sm:text-sm text-ink placeholder:text-muted/60 focus:border-ink focus:outline-none focus:ring-1 focus:ring-ink transition-colors"
+                className="w-full border-0 border-b border-line bg-transparent py-2 pr-8 pl-6 text-[15px] text-ink placeholder:text-text-3 focus:border-ink focus:outline-none transition-colors"
               />
               {searchQuery && (
                 <button
@@ -78,26 +78,22 @@ export default function Blog() {
 
             {/* Category Filter Pills */}
             {categories.length > 2 && (
-              <div className="flex flex-wrap items-center justify-between gap-3 font-utility">
-                <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
-                  <span className="text-muted mr-1 text-xs">Categories:</span>
-                  {categories.map((cat) => (
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+                                    {categories.map((cat) => (
                     <button
                       key={cat}
                       type="button"
                       onClick={() => setActiveCategory(cat)}
-                      className={`px-3.5 py-1.5 min-h-[32px] text-xs transition duration-150 cursor-pointer rounded-full active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink ${
-                        activeCategory === cat
-                          ? 'bg-ink text-canvas font-medium shadow-subtle'
-                          : 'bg-surface border border-line/60 text-muted hover:text-ink hover:border-line-strong hover:bg-surface'
-                      }`}
+                      aria-pressed={activeCategory === cat}
+                      className={`pen-link py-1 text-[15px] ${activeCategory === cat ? 'text-ink [background-size:100%_1px]' : 'text-muted hover:text-ink'}`}
                     >
                       {cat}
                     </button>
                   ))}
                 </div>
 
-                <div className="font-mono text-xs text-muted">
+                <div className="text-[15px] text-text-3 tabular-nums">
                   Showing {filteredPosts.length} of {publicBlogPosts.length}
                 </div>
               </div>
@@ -123,35 +119,34 @@ export default function Blog() {
             }
           />
         ) : filteredPosts.length === 0 ? (
-          <div className="bg-surface p-[clamp(1.5rem,3vw,2.5rem)] text-center text-sm font-utility text-muted border border-line rounded-xl">
+          <div className="border-t border-line py-16 text-center text-[15px] text-muted">
             No articles match the filter "{searchQuery}".
           </div>
         ) : (
-          <ul className="divide-y divide-line border-t border-b border-line lg:border-t-0 lg:border-b-0">
+          <ul className="divide-y divide-line border-y border-line">
             {filteredPosts.map((post) => {
               const estMinutes = readingMinutes(post.content || post.excerpt || '')
 
               return (
                 <li
                   key={post.id}
-                  className="group grid gap-4 sm:gap-6 py-8 sm:py-10 sm:grid-cols-[10rem_minmax(0,1fr)] items-start -mx-4 px-4 sm:-mx-6 sm:px-6 rounded-xl hover:bg-surface/40 active:scale-[0.98] transition duration-250 ease-[var(--ease-out-quart)] first:pt-4"
+                  className="group folio gap-y-4 py-10"
                 >
                   {/* Left Metadata Column */}
-                  <div className="font-mono text-xs text-muted space-y-2">
-                    <time dateTime={post.published_at} className="block text-ink font-medium">
+                  <div className="folio-margin text-[14px] text-muted space-y-1 tabular-nums">
+                    <time dateTime={post.published_at} className="block text-ink">
                       {formatDate(post.published_at)}
                     </time>
                     {post.category && (
-                      <span className="inline-block bg-surface border border-line/60 px-2 py-0.5 text-ink text-[11px] rounded-sm shadow-subtle group-hover:border-line-strong transition-colors duration-150">
+                      <span className="block">
                         {post.category}
                       </span>
                     )}
-                    <span className="block text-[11px] text-muted">{estMinutes} min read</span>
+                    <span className="block">{estMinutes} min</span>
                   </div>
 
-                  {/* Right Content Column */}
-                  <div>
-                    <h2 className="text-xl sm:text-2xl font-normal text-ink leading-snug group-hover:text-muted transition-colors duration-150 ease-[var(--ease-out-quart)] text-balance">
+                  <div className="folio-body">
+                    <h2 className="text-[length:var(--text-3xl)] leading-[1.05] tracking-[-0.035em] transition-transform duration-300 ease-[var(--ease-soft)] group-hover:translate-x-2">
                       <Link
                         to={`/blog/${post.slug}`}
                         onPointerEnter={() => preloadRoute(`/blog/${post.slug}`)}
@@ -163,16 +158,10 @@ export default function Blog() {
                       </Link>
                     </h2>
                     {post.excerpt && (
-                      <p className="mt-3 text-base sm:text-lg text-muted font-sans leading-relaxed">
+                      <p className="mt-4 max-w-2xl text-[17px] text-muted leading-relaxed">
                         {post.excerpt}
                       </p>
                     )}
-                    <div className="mt-5">
-                      <span className="inline-flex items-center gap-2 font-mono text-xs text-ink group-hover:text-muted transition-colors duration-150 ease-[var(--ease-out-quart)]">
-                        <span>Read note</span>
-                        <ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition duration-250 ease-[var(--ease-out-quart)] -translate-x-2 group-hover:translate-x-0" />
-                      </span>
-                    </div>
                   </div>
                 </li>
               )

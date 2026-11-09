@@ -87,47 +87,40 @@ export default function Photography() {
 
       <PageHeader
         eyebrow="Photography"
-        title="Photography"
+        title="What caught my eye"
         lead={photography.intro || "Photographs, street scenes, and everyday geometry. Documenting light, architectural texture, and moments around me."}
       >
-        {/* Category Filters Bar */}
         {dynamicCategories.length > 0 && (
-          <div className="flex flex-wrap items-center gap-2 sm:gap-3 mt-6 font-utility">
-            <span className="text-muted mr-1 sm:mr-2 text-xs">
-              Category:
-            </span>
+          <div role="group" aria-label="Filter by category" className="flex flex-wrap gap-x-5 gap-y-2">
             <button
               type="button"
+              aria-pressed={activeCategories.length === 0}
               onClick={() => setValue('category', [])}
-              className={`px-4 py-2 min-h-[36px] text-xs transition duration-150 ease-[var(--ease-out-quart)] cursor-pointer rounded-full active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas ${
-                activeCategories.length === 0
-                  ? "bg-ink text-canvas font-medium shadow-subtle"
-                  : "bg-surface border border-line/60 text-muted hover:text-ink hover:border-line-strong hover:bg-surface"
-              }`}
+              className={`pen-link py-1 text-[15px] ${activeCategories.length === 0 ? 'text-ink [background-size:100%_1px]' : 'text-muted hover:text-ink'}`}
             >
-              All Photos ({photos.length})
+              All <span className="tabular-nums text-text-3">{photos.length}</span>
             </button>
-            {dynamicCategories.map((cat) => (
-              <button
-                key={cat.id}
-                type="button"
-                onClick={() => toggleValue('category', cat.slug)}
-                className={`px-4 py-2 min-h-[36px] text-xs transition duration-150 ease-[var(--ease-out-quart)] cursor-pointer rounded-full active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas ${
-                  activeCategories.includes(cat.slug)
-                    ? "bg-ink text-canvas font-medium shadow-subtle"
-                    : "bg-surface border border-line/60 text-muted hover:text-ink hover:border-line-strong hover:bg-surface"
-                }`}
-              >
-                {cat.name}
-              </button>
-            ))}
+            {dynamicCategories.map((cat) => {
+              const on = activeCategories.includes(cat.slug)
+              return (
+                <button
+                  key={cat.id}
+                  type="button"
+                  aria-pressed={on}
+                  onClick={() => toggleValue('category', cat.slug)}
+                  className={`pen-link py-1 text-[15px] ${on ? 'text-ink [background-size:100%_1px]' : 'text-muted hover:text-ink'}`}
+                >
+                  {cat.name}
+                </button>
+              )
+            })}
           </div>
         )}
       </PageHeader>
 
-      <section className="shell pb-24 pt-8">
+      <section className="shell pb-28 pt-4">
         {filtered.length > 0 ? (
-          <div className="columns-1 gap-4 sm:columns-2 lg:columns-3 space-y-4">
+          <div className="columns-1 gap-[clamp(16px,2.2vw,32px)] sm:columns-2 lg:columns-3 [&>*]:mb-[clamp(24px,3vw,48px)]">
             {filtered.map((photo) => {
               const images = photo.gallery?.length > 0 
                 ? photo.gallery 
@@ -140,7 +133,7 @@ export default function Photography() {
               return (
                 <figure
                   key={photo.id}
-                  className="relative break-inside-avoid border border-line/60 bg-surface/30 p-2 sm:p-3 rounded-xl transition duration-250 ease-[var(--ease-out-quart)] hover:bg-surface/60 hover:border-line-strong active:scale-[0.98] group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas"
+                  className="relative break-inside-avoid group cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
                   onClick={() => openLightbox(photo)}
                   role="button"
                   tabIndex={0}
@@ -152,20 +145,20 @@ export default function Photography() {
                   }}
                   aria-label={`View ${photo.alt_text || photo.title || 'photo'} in full size`}
                 >
-                  <div className="relative overflow-hidden bg-surface rounded-lg">
+                  <div className="relative overflow-hidden bg-surface">
                     <img
                       {...getOptimizedImageProps(cover.image_url, cover.variants)}
                       alt={photo.alt_text || photo.title || 'Photograph by Advaita Chandra'}
                       loading="lazy"
                       decoding="async"
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      className="w-full object-cover transition-transform duration-500"
+                      className="w-full object-cover transition-[opacity,filter] duration-500 ease-[var(--ease-soft)] group-hover:opacity-90"
                       style={photo.aspectRatio ? { aspectRatio: photo.aspectRatio } : undefined}
                     />
 
                     {/* Floating Slide Counter */}
                     {images.length > 1 && (
-                      <div className="absolute top-3 right-3 flex items-center gap-1.5 bg-surface border border-line/50 rounded-full px-2.5 py-1 font-mono text-xs text-ink z-20 shadow-subtle">
+                      <div className="absolute top-3 right-3 flex items-center gap-1.5 rounded-[6px] bg-canvas/85 px-2 py-1 text-[13px] text-ink z-20 tabular-nums">
                         <Images className="h-3.5 w-3.5 text-muted" />
                         <span>{images.length}</span>
                       </div>
@@ -173,8 +166,8 @@ export default function Photography() {
                   </div>
 
                   {photo.caption && (
-                    <figcaption className="pt-2 mt-1 text-xs sm:text-sm font-display text-muted italic leading-relaxed">
-                      "{photo.caption}"
+                    <figcaption className="mt-3 text-[14px] leading-relaxed text-muted">
+                      <span className="pen-link">{photo.caption}</span>
                     </figcaption>
                   )}
                 </figure>
