@@ -21,7 +21,7 @@ export default function Card({
         'rounded-[1.25rem] border border-line/70 bg-surface/60 p-1 shadow-subtle',
         'transition-[border-color,box-shadow,transform] duration-500 ease-[var(--ease-out-expo)]',
         interactive
-          ? 'cursor-pointer hover:-translate-y-1 hover:border-line-strong hover:shadow-card-hover active:scale-[0.99] motion-reduce:hover:translate-y-0'
+          ? 'cursor-pointer hover:border-line-strong active:scale-[0.99] motion-reduce:hover:translate-y-0'
           : '',
         ...outer,
       ]

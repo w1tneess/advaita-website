@@ -1,242 +1,136 @@
-import { ArrowRight, ArrowUpRight } from 'lucide-react'
-import { CONTACT_EMAIL } from '@/config/site.js'
 import { Link } from 'react-router'
+import { ArrowUpRight } from 'lucide-react'
+import { CONTACT_EMAIL } from '@/config/site.js'
 import PageHeader from '@/components/ui/PageHeader.jsx'
 import Seo from '@/components/meta/Seo.jsx'
-import Icon from '@/components/meta/Icon.jsx'
 import { useContent } from '@/lib/content.jsx'
 import { PUBLIC_ROUTES } from '@/config/nav.js'
+import { INKS } from '@/components/features/ink/InkLens.jsx'
+import PenStroke from '@/components/features/ink/PenStroke.jsx'
 
 const ROUTE = PUBLIC_ROUTES.find((route) => route.key === 'about')
 
-export default function About() {
-  const { profile, settings, interests, skillGroups, timeline, publicProjects } = useContent()
+const INK_MEANING = {
+  fact: 'Something a source says, with the source next to it.',
+  analysis: 'What I conclude from the sources. It can be wrong even when they are right.',
+  opinion: 'What I think or prefer. Read it as one person’s view.',
+  limitation: 'A gap: missing data, conflicting accounts, or a question I have not answered.',
+}
 
-  const evidenceFor = (slug) =>
-    slug ? (publicProjects?.find((project) => project.slug === slug) ?? null) : null
+function Section({ title, note, children, id }) {
+  return (
+    <section id={id} className="folio gap-y-8 border-t border-line py-20 lg:py-28" aria-labelledby={`${id}-h`}>
+      <div className="folio-margin" data-reveal>
+        <h2 id={`${id}-h`} className="text-[length:var(--text-2xl)] tracking-[-0.03em]">{title}</h2>
+        <PenStroke seed={title.length} className="mt-1" />
+        {note && <p className="mt-3 max-w-[16rem] text-[15px] leading-snug text-muted">{note}</p>}
+      </div>
+      <div className="folio-body" data-reveal style={{ '--i': 1 }}>{children}</div>
+    </section>
+  )
+}
+
+export default function About() {
+  const { profile, settings, interests, skillGroups, timeline, publicProjects, publicSocialLinks } = useContent()
+  const evidenceFor = (slug) => publicProjects?.find((p) => p.slug === slug || p.id === slug)
+  const links = (publicSocialLinks || []).filter((l) => l.url && l.kind !== 'email')
 
   return (
     <>
       <Seo title={ROUTE.title} description={ROUTE.description} path="/about" />
 
-      <PageHeader
-        eyebrow="Official Profile"
-        title="About Advaita Chandra"
-        lead={
-          profile.bio ||
-          "Advaita Chandra is a student from West Bengal, India. This is his personal website for projects, reading notes, and learning logs."
-        }
-      >
-        <div className="flex flex-wrap items-center gap-3 font-utility text-muted">
-          <span className="text-ink">Role:</span>
-          {profile.roles?.map((role) => (
-            <span
-              key={role}
-              className="px-2 py-0.5 bg-surface text-ink"
-            >
-              {role}
-            </span>
-          )) || (
-            <span className="px-2 py-0.5 bg-surface text-ink">
-              Student
-            </span>
-          )}
-          <span className="text-line">|</span>
-          <span className="text-ink">
-            Location: {profile.location ? profile.location : 'West Bengal, India'}
-          </span>
-        </div>
-      </PageHeader>
+      <PageHeader eyebrow="About" registry="Official website of Advaita Chandra" title="A student who reads a lot and builds things" />
 
-      <div className="shell pb-24 pt-8 space-y-24">
-        <section className="border-t border-line pt-12">
-          <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-12 items-start">
-            <div className="space-y-4">
-              <h2 className="text-2xl sm:text-3xl font-normal text-ink leading-snug text-balance">
-                This is the official website of Advaita Chandra.
-              </h2>
-              <div className="space-y-4 text-base sm:text-lg text-muted leading-relaxed max-w-prose font-sans">
-                <p>
-                  I'm Advaita Chandra, a student based in West Bengal, India. This site is where I keep the things I'm working on: projects, reading notes, photography, and questions I haven't fully worked out yet.
-                </p>
-                <p>
-                  Most of what I read and think about falls under philosophy, history, and computer systems, with psychology, politics, public policy, and cybersecurity mixed in. Some of it turns into actual projects, like the Osho documentary archive. Most of it just stays as notes.
-                </p>
-                <p>
-                  This isn't a professional publication or a portfolio built to impress anyone. It's closer to a public notebook. I'm not an expert in any of this. I'm just someone who reads a lot and likes building things, and this is where that ends up.
-                </p>
-              </div>
-            </div>
-
-            <div className="pt-8 border-t border-line lg:border-t-0 lg:pt-0 lg:pl-10 lg:border-l space-y-5">
-              <h3 className="font-mono text-xs uppercase tracking-wider text-ink border-b border-line pb-3">
-                Profiles
-              </h3>
-              <ul className="space-y-3 font-mono text-xs tracking-wide">
-                <li className="flex items-center justify-between gap-4 border-b border-line pb-3">
-                  <span className="text-muted">Website:</span>
-                  <a
-                    href="https://advaitachandra.in/"
-                    className="text-ink hover:text-muted active:opacity-80 transition-colors duration-150 ease-[var(--ease-out-quart)] inline-flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas rounded-sm"
-                  >
-                    <span>advaitachandra.in</span>
-                    <ArrowUpRight className="h-3 w-3" />
-                  </a>
+      <div className="shell pb-24">
+        <section className="folio gap-y-10 pb-20 lg:pb-28" aria-label="Introduction">
+          <aside className="folio-margin text-[15px] text-muted">
+            <p className="text-ink">{profile?.location || 'West Bengal, India'}</p>
+            <ul className="mt-6 space-y-1">
+              {links.map((l) => (
+                <li key={l.id || l.label}>
+                  <a href={l.url} target="_blank" rel="me noopener noreferrer" className="pen-link inline-block py-1 hover:text-ink">{l.label}</a>
                 </li>
-                <li className="flex items-center justify-between gap-4 border-b border-line pb-3">
-                  <span className="text-muted">GitHub:</span>
-                  <a
-                    href="https://github.com/w1tneess"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-ink hover:text-muted active:opacity-80 transition-colors duration-150 ease-[var(--ease-out-quart)] inline-flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas rounded-sm"
-                  >
-                    <span>github.com/w1tneess</span>
-                    <ArrowUpRight className="h-3 w-3" />
-                  </a>
-                </li>
-                <li className="flex items-center justify-between gap-4 border-b border-line pb-3">
-                  <span className="text-muted">X (Twitter):</span>
-                  <a
-                    href="https://x.com/w1tneess_"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-ink hover:text-muted active:opacity-80 transition-colors duration-150 ease-[var(--ease-out-quart)] inline-flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas rounded-sm"
-                  >
-                    <span>x.com/w1tneess_</span>
-                    <ArrowUpRight className="h-3 w-3" />
-                  </a>
-                </li>
-                <li className="flex items-center justify-between gap-4 border-b border-line pb-3">
-                  <span className="text-muted">Instagram:</span>
-                  <a
-                    href="https://www.instagram.com/adva1ta_/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-ink hover:text-muted active:opacity-80 transition-colors duration-150 ease-[var(--ease-out-quart)] inline-flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas rounded-sm"
-                  >
-                    <span>instagram.com/adva1ta_</span>
-                    <ArrowUpRight className="h-3 w-3" />
-                  </a>
-                </li>
-                <li className="flex items-center justify-between gap-4 pt-1">
-                  <span className="text-muted">Email:</span>
-                  <a
-                    href={`mailto:${CONTACT_EMAIL}`}
-                    className="text-ink hover:text-muted active:opacity-80 transition-colors duration-150 ease-[var(--ease-out-quart)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas rounded-sm"
-                  >
-                    {CONTACT_EMAIL}
-                  </a>
-                </li>
-              </ul>
-            </div>
+              ))}
+              {CONTACT_EMAIL && (
+                <li><a href={`mailto:${CONTACT_EMAIL}`} className="pen-link inline-block py-1 hover:text-ink">{CONTACT_EMAIL}</a></li>
+              )}
+            </ul>
+          </aside>
+          <div className="folio-body max-w-[46rem] space-y-6 text-[length:var(--text-xl)] leading-[1.4] tracking-[-0.015em]">
+            <p>I’m Advaita Chandra, a student based in West Bengal, India. This site is where I keep the things I’m working on: projects, reading notes, photography, and questions I haven’t fully worked out yet.</p>
+            <p className="text-muted">Most of what I read falls under philosophy, history and computer systems, with psychology, politics, public policy and cybersecurity mixed in. Some of it turns into projects, like the Osho documentary archive. Most of it stays as notes.</p>
+            <p className="text-muted">This isn’t a professional publication. It’s closer to a public notebook. I’m not an expert in any of this; I read a lot and like building things, and this is where that ends up.</p>
           </div>
         </section>
 
-        {profile.epistemicNote && (
-          <section className="border-l-2 border-muted/30 pl-6 py-2">
-            <div className="font-mono text-xs text-muted mb-3 tracking-wider uppercase">
-              Guiding Principle
-            </div>
-            <p className="text-lg sm:text-xl text-muted italic leading-relaxed max-w-3xl font-display text-balance">
-              &ldquo;{profile.epistemicNote}&rdquo;
-            </p>
-          </section>
+        <Section id="inks" title="How to read this site" note="Four kinds of claim, each marked in its own ink">
+          <ul className="grid gap-x-10 gap-y-10 sm:grid-cols-2">
+            {INKS.map((ink) => (
+              <li key={ink.key} data-ink={ink.key}>
+                <p className="mark-label" data-ink={ink.key}>{ink.mark}</p>
+                <p className="mt-3 text-[length:var(--text-lg)]"><span className="ink" data-ink={ink.key}>{ink.label}</span></p>
+                <p className="mt-2 text-[16px] leading-relaxed text-muted">{INK_MEANING[ink.key]}</p>
+              </li>
+            ))}
+          </ul>
+          <ul className="mt-14 space-y-4 border-t border-line pt-8 text-[16px] leading-relaxed text-muted max-w-2xl">
+            <li><span className="text-ink">Student work.</span> These notes are learning in progress, not academic publications.</li>
+            <li><span className="text-ink">Disagreements stay visible.</span> When primary sources conflict, the accounts sit side by side instead of being forced into one claim.</li>
+            <li><span className="text-ink">Open to correction.</span> Code, data and essays are public so mistakes can be found. <Link to="/contact" className="pen-link text-ink [background-size:100%_1px]">Send one</Link>.</li>
+          </ul>
+        </Section>
+
+        {profile?.approach?.length > 0 && (
+          <Section id="method" title="How I work">
+            <ol className="grid gap-x-10 gap-y-10 sm:grid-cols-2 xl:grid-cols-4">
+              {profile.approach.map((step, i) => (
+                <li key={step.title} className="border-t border-line pt-5">
+                  <p className="text-[14px] text-text-3 tabular-nums">Step {i + 1}</p>
+                  <h3 className="mt-2 text-[length:var(--text-lg)] tracking-[-0.02em]">{step.title}</h3>
+                  <p className="mt-3 text-[15px] leading-relaxed text-muted">{step.detail}</p>
+                </li>
+              ))}
+            </ol>
+          </Section>
         )}
 
-        {publicProjects?.length > 0 && (
-          <section>
-            <div className="flex items-center justify-between border-b border-line pb-4 mb-6">
-              <div>
-                <span className="font-mono text-xs text-muted block mb-1 tracking-wider uppercase">
-                  Projects & Systems
-                </span>
-                <h2 className="text-2xl sm:text-3xl text-ink font-normal">
-                  Current Projects
-                </h2>
-              </div>
-              <Link
-                to="/projects"
-                className="font-mono text-xs text-ink hover:text-muted active:opacity-80 transition-colors duration-150 ease-[var(--ease-out-quart)] flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas rounded-sm"
-              >
-                <span>All Projects ({publicProjects.length})</span>
-                <ArrowRight className="h-3.5 w-3.5" />
-              </Link>
-            </div>
-
-            <div className="divide-y divide-line border-t border-b border-line lg:border-t-0 lg:border-b-0">
-              {publicProjects.map((project) => (
-                <div
-                  key={project.id}
-                  className="py-6 sm:py-8 grid gap-4 sm:gap-6 sm:grid-cols-[1fr_2.5fr] items-baseline group -mx-4 px-4 sm:-mx-6 sm:px-6 rounded-xl hover:bg-surface/40 hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-250 ease-[var(--ease-out-quart)] first:pt-4"
-                >
-                  <div className="font-mono text-xs tracking-wider uppercase text-muted font-medium">
-                    {project.categories?.join(' / ') || 'Project'}
-                  </div>
-                  <div>
-                    <h3 className="text-lg sm:text-xl font-normal text-ink mb-2 group-hover:text-muted transition-colors duration-150 ease-[var(--ease-out-quart)] text-balance">
-                      <Link to="/projects" className="inline-flex items-baseline gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas rounded-sm">
-                        <span>{project.title}</span>
-                        <ArrowUpRight className="h-4 w-4 opacity-50 group-hover:opacity-100 transition-all duration-150 ease-[var(--ease-out-quart)] text-muted" />
-                      </Link>
-                    </h3>
-                    <p className="text-sm sm:text-base text-muted leading-relaxed mb-4 max-w-2xl">
-                      {project.description}
-                    </p>
-                    <div className="flex items-center justify-between font-mono text-xs tracking-wide">
-                      <span className="text-muted/80">
-                        {project.tools?.join(', ')}
-                      </span>
-                    </div>
-                  </div>
-                </div>
+        {interests?.length > 0 && (
+          <Section id="topics" title="What I study">
+            <ul className="grid gap-x-10 gap-y-6 sm:grid-cols-2 xl:grid-cols-3">
+              {interests.map((interest) => (
+                <li key={interest.id || interest.name}>
+                  <h3 className="text-[17px] text-ink">{interest.name || interest.title}</h3>
+                  {(interest.note || interest.description) && (
+                    <p className="mt-1 text-[15px] leading-relaxed text-muted">{interest.note || interest.description}</p>
+                  )}
+                </li>
               ))}
-            </div>
-          </section>
+            </ul>
+          </Section>
         )}
 
         {settings?.showSkills && skillGroups?.length > 0 && (
-          <section className="pt-6 border-t border-line">
-            <div className="flex items-center justify-between border-b border-line pb-3 mb-4">
-              <h2 className="text-xl sm:text-2xl font-normal text-ink">
-                Technologies & Toolkit
-              </h2>
-            </div>
-
-            <div className="grid gap-6 lg:grid-cols-2">
+          <Section id="skills" title="What I can do" note="With a project as evidence where there is one">
+            <div className="grid gap-12 lg:grid-cols-2">
               {skillGroups.map((group) => (
-                <div key={group.name} className="space-y-4">
-                  <h3 className="font-mono text-xs uppercase tracking-wider text-ink border-b border-line pb-2">
-                    {group.name}
-                  </h3>
-                  <ul className="space-y-4">
+                <div key={group.name}>
+                  <h3 className="text-[15px] text-muted">{group.name}</h3>
+                  <ul className="mt-4 border-t border-line">
                     {group.items?.map((skill) => {
                       const project = evidenceFor(skill.evidence)
                       return (
-                        <li
-                          key={skill.id}
-                          className="flex items-start justify-between gap-4"
-                        >
-                          <div className="min-w-0 flex-1">
-                            <div className="flex flex-wrap items-center gap-2.5 font-sans">
-                              <span className="text-ink text-sm sm:text-base">{skill.name}</span>
-                              <span className="text-[10px] font-mono text-muted uppercase tracking-wider px-2 py-0.5 border border-line rounded bg-surface">
-                                {skill.level?.replace('-', ' ')}
-                              </span>
-                            </div>
-                            {skill.note && (
-                              <p className="mt-1 text-xs sm:text-sm leading-relaxed text-muted">{skill.note}</p>
-                            )}
-                            {project && (
-                              <Link
-                                to={`/projects`}
-                                className="mt-2 inline-flex items-center gap-1.5 font-mono text-xs text-ink hover:text-muted transition-colors duration-150 ease-[var(--ease-out-quart)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas rounded-sm"
-                              >
-                                <span>See in: {project.title}</span>
-                                <ArrowUpRight className="h-3 w-3" />
-                              </Link>
-                            )}
-                          </div>
+                        <li key={skill.id} className="border-b border-line py-4">
+                          <p className="flex flex-wrap items-baseline justify-between gap-x-4">
+                            <span className="text-[17px] text-ink">{skill.name}</span>
+                            {skill.level && <span className="text-[14px] text-text-3">{skill.level.replace('-', ' ')}</span>}
+                          </p>
+                          {skill.note && <p className="mt-1 text-[15px] leading-relaxed text-muted">{skill.note}</p>}
+                          {project && (
+                            <Link to="/projects" className="group mt-2 inline-flex items-center gap-1 text-[14px] text-ink">
+                              <span className="pen-link">See {project.title}</span>
+                              <ArrowUpRight className="h-3.5 w-3.5 text-muted" aria-hidden="true" />
+                            </Link>
+                          )}
                         </li>
                       )
                     })}
@@ -244,151 +138,24 @@ export default function About() {
                 </div>
               ))}
             </div>
-          </section>
+          </Section>
         )}
-
-        <section className="pt-6 border-t border-line">
-          <div className="flex flex-wrap items-end justify-between gap-4 border-b border-line pb-4 mb-8">
-            <div>
-              <span className="font-mono text-xs text-muted uppercase tracking-widest block mb-2">
-                Curiosity Index
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-normal text-ink">
-                Areas of Study
-              </h2>
-            </div>
-            <span className="font-mono text-xs tracking-wide text-muted bg-surface/50 px-3 py-1.5 rounded-md border border-line/50">
-              {interests?.length || 11} Topics Cataloged
-            </span>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            {interests?.map((interest, idx) => {
-              const name = interest.name || interest.title || "Study Topic"
-              const note = interest.note || interest.description || ""
-              const iconName = interest.icon || "BookOpen"
-
-              return (
-                <div
-                  key={interest.id || idx}
-                  className="p-6 sm:p-8 rounded-2xl border border-line/60 bg-surface/30 hover:bg-surface/60 hover:-translate-y-1 hover:border-line-strong hover:shadow-subtle active:scale-[0.98] transition-all duration-250 ease-[var(--ease-out-quart)] flex flex-col justify-between group"
-                >
-                  <div>
-                    <div className="flex items-center justify-between gap-3 mb-4">
-                      <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-line/60 bg-surface text-muted group-hover:border-line-strong group-hover:bg-surface transition-colors duration-150 ease-[var(--ease-out-quart)] shadow-subtle">
-                        <Icon name={iconName} className="h-5 w-5" />
-                      </span>
-                      <span className="font-mono text-[10px] text-muted/80 bg-raised px-2 py-0.5 rounded border border-line/50">
-                        {String(interest.order || idx + 1).padStart(2, '0')}
-                      </span>
-                    </div>
-
-                    <h3 className="text-lg font-medium text-ink group-hover:text-muted transition-colors duration-150 ease-[var(--ease-out-quart)] mb-2">
-                      {name}
-                    </h3>
-                    <p className="text-sm sm:text-base text-muted leading-relaxed font-sans">
-                      {note}
-                    </p>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        </section>
 
         {settings?.showTimeline && timeline?.length > 0 && (
-          <section>
-            <div className="flex items-center justify-between border-b border-line pb-3 mb-4">
-              <div>
-                <span className="font-mono text-xs text-muted block mb-1 tracking-wider uppercase">
-                  Timeline
-                </span>
-                <h2 className="text-xl sm:text-2xl font-normal text-ink">
-                  Learning Milestones
-                </h2>
-              </div>
-            </div>
-
-            <div className="border-l border-line pl-6 sm:pl-8 space-y-8 ml-3">
+          <Section id="timeline" title="Along the way">
+            <ol className="border-t border-line">
               {timeline.map((item) => (
-                <div key={item.id} className="relative">
-                  <span
-                    className="absolute -left-[calc(1.5rem+4px)] sm:-left-[calc(2rem+4px)] top-1.5 h-2 w-2 rounded-full bg-muted"
-                    aria-hidden="true"
-                  />
-                  <span className="font-mono text-xs text-muted block mb-1">
-                    {item.period}
-                  </span>
-                  <h3 className="text-base sm:text-lg font-normal text-ink mb-1.5">
-                    {item.title}
-                  </h3>
-                  {item.detail && (
-                    <p className="text-xs sm:text-sm text-muted leading-relaxed max-w-2xl">
-                      {item.detail}
-                    </p>
-                  )}
-                </div>
+                <li key={item.id} className="grid gap-2 border-b border-line py-6 sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-8">
+                  <p className="text-[15px] text-muted tabular-nums">{item.period}</p>
+                  <div>
+                    <h3 className="text-[length:var(--text-lg)] tracking-[-0.02em]">{item.title}</h3>
+                    {item.detail && <p className="mt-2 text-[15px] leading-relaxed text-muted max-w-2xl">{item.detail}</p>}
+                  </div>
+                </li>
               ))}
-            </div>
-          </section>
+            </ol>
+          </Section>
         )}
-
-        <section>
-          <div className="grid gap-6 md:grid-cols-2 lg:gap-8">
-            <div className="pt-4 border-t border-line">
-              <div className="font-mono text-xs text-muted mb-2 tracking-wider uppercase">
-                How to Read This Site
-              </div>
-              <h3 className="text-lg sm:text-xl font-normal text-ink mb-3">
-                Honesty & Limitations
-              </h3>
-              <ul className="space-y-3.5 text-xs sm:text-sm text-muted leading-relaxed">
-                <li className="flex items-start gap-3">
-                  <span className="font-mono text-accent">1.</span>
-                  <span>Independent student work: These notes reflect my ongoing learning and are not formal academic publications.</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="font-mono text-accent">2.</span>
-                  <span>Preserving disagreements: When primary sources conflict, differing accounts are recorded side by side rather than forced into a single claim.</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="font-mono text-accent">3.</span>
-                  <span>Open to feedback: Code, datasets, and essays are shared openly so others can spot mistakes and suggest improvements.</span>
-                </li>
-              </ul>
-            </div>
-
-            <div className="pt-4 border-t border-line lg:border-t-0 lg:border-l lg:pl-8 flex flex-col justify-between">
-              <div>
-                <div className="font-mono text-xs text-muted mb-2 tracking-wider uppercase">
-                  Feedback & Dialogue
-                </div>
-                <h3 className="text-lg sm:text-xl font-normal text-ink mb-3">
-                  Get in Touch
-                </h3>
-                <p className="text-xs sm:text-sm text-muted leading-relaxed">
-                  If you notice a factual error, a missing citation, or an incomplete dataset, please send a note. Constructive corrections and thoughtful conversations are always welcome.
-                </p>
-              </div>
-
-              <div className="mt-8 pt-6 border-t border-line flex flex-wrap items-center gap-4">
-                <Link
-                  to="/contact"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-md bg-ink text-canvas font-mono text-xs uppercase tracking-wider font-semibold hover:bg-white/20 hover:text-ink active:scale-[0.97] active:opacity-80 transition-all duration-250 ease-[var(--ease-out-quart)] shadow-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas"
-                >
-                  <span>Send Message</span>
-                  <ArrowRight className="h-3.5 w-3.5" />
-                </Link>
-                <Link
-                  to="/projects"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-md border border-line bg-surface/50 text-muted hover:text-ink hover:border-line-strong hover:bg-surface active:scale-[0.97] active:opacity-80 transition-all duration-250 ease-[var(--ease-out-quart)] font-mono text-xs uppercase tracking-wider focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas"
-                >
-                  <span>View Projects</span>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
       </div>
     </>
   )

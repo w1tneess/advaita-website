@@ -389,7 +389,7 @@ export default function SettingsEditor() {
           )}
         </section>
 
-        <div className="sticky bottom-0 mt-8 flex flex-wrap items-center gap-3 border-t border-line bg-base/90 py-4 backdrop-blur-sm">
+        <div className="sticky bottom-0 mt-8 flex flex-wrap items-center gap-3 border-t border-line bg-base/90 py-4">
           <Button type="submit" disabled={!dirty || isSubmitting}>
             {isSubmitting ? 'Saving...' : 'Save settings'}
           </Button>

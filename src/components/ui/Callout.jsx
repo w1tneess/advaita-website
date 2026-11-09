@@ -58,12 +58,12 @@ export default function Callout({ variant = 'note', title, children, className =
       aria-label={`${meta.label}${title ? `: ${title}` : ''}`}
     >
       <p
-        className={`mb-2 flex items-center gap-2 text-xs font-semibold tracking-wide uppercase ${meta.accent}`}
+        className={`mb-2 flex items-center gap-2 text-xs font-medium tracking-wide uppercase ${meta.accent}`}
       >
         <Icon className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
         {meta.label}
       </p>
-      {title && <p className="mb-1 font-semibold">{title}</p>}
+      {title && <p className="mb-1 font-medium">{title}</p>}
       <div className="text-sm leading-relaxed text-ink/90">{children}</div>
     </aside>
   )

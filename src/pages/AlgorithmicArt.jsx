@@ -272,9 +272,6 @@ export default function AlgorithmicArt() {
         path="/art"
       />
 
-      {/* Cinematic noise overlay */}
-      <div className="premium-noise" />
-
       <PageHeader
         eyebrow={<span className="text-[10px] uppercase tracking-[0.2em] font-medium px-3 py-1 rounded-full bg-white/5 border border-white/10 text-muted">Creative Computing</span>}
         title={<span className="text-[clamp(2.5rem,5vw,5rem)] leading-none block py-2">Algorithmic Art</span>}
@@ -346,25 +343,25 @@ export default function AlgorithmicArt() {
             <canvas ref={canvasRef} className="block w-full h-full cursor-crosshair touch-none" />
 
             {/* Interactive Hint Banner (Fades on hover) */}
-            <div className="absolute top-5 left-5 pointer-events-none flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-black/40 backdrop-blur-md font-mono text-[11px] text-muted opacity-80 group-hover:opacity-100 transition-opacity duration-500">
+            <div className="absolute top-5 left-5 pointer-events-none flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-black/70 font-mono text-[11px] text-muted opacity-80 group-hover:opacity-100 transition-opacity duration-500">
               <Sparkles className="h-3.5 w-3.5 text-accent" />
               <span>Move cursor or touch to bend field lines • Tap or click to deflect</span>
             </div>
 
 
             {/* Seed indicator pill */}
-            <div className="absolute top-5 right-5 pointer-events-none flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-black/40 backdrop-blur-md font-mono text-[11px] text-muted opacity-80 group-hover:opacity-100 transition-opacity duration-500">
+            <div className="absolute top-5 right-5 pointer-events-none flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-black/70 font-mono text-[11px] text-muted opacity-80 group-hover:opacity-100 transition-opacity duration-500">
               <span>SEED:</span>
-              <span className="text-accent font-semibold">#{seed}</span>
+              <span className="text-accent font-medium">#{seed}</span>
             </div>
 
             {/* Floating Apple Dock Controls (Magnetic + Glassmorphism) */}
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 flex flex-wrap items-center gap-2 p-1.5 rounded-full border border-white/10 bg-black/60 backdrop-blur-2xl shadow-[0_20px_40px_rgba(0,0,0,0.4)]">
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 flex flex-wrap items-center gap-2 p-1.5 rounded-full border border-white/10 bg-black/80 shadow-[0_20px_40px_rgba(0,0,0,0.4)]">
               <button
                 type="button"
                 onClick={() => setIsRunning((r) => !r)}
                 aria-label={isRunning ? 'Pause simulation' : 'Play simulation'}
-                className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-ink hover:bg-white/20 active:scale-[0.96] transition-all duration-300 ease-[var(--ease-spring)] cursor-pointer"
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-ink hover:bg-white/20 active:scale-[0.96] transition duration-200 ease-[var(--ease-spring)] cursor-pointer"
                 title={isRunning ? 'Pause simulation' : 'Resume simulation'}
               >
                 {isRunning ? <Pause className="h-4 w-4 fill-current" /> : <Play className="h-4 w-4 fill-current" />}
@@ -373,7 +370,7 @@ export default function AlgorithmicArt() {
               <button
                 type="button"
                 onClick={initSimulation}
-                className="flex h-11 w-11 items-center justify-center rounded-full bg-transparent border border-white/10 hover:bg-white/5 text-muted hover:text-ink active:scale-[0.96] transition-all duration-300 ease-[var(--ease-spring)] cursor-pointer"
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-transparent border border-white/10 hover:bg-white/5 text-muted hover:text-ink active:scale-[0.96] transition duration-200 ease-[var(--ease-spring)] cursor-pointer"
                 title="Reset Canvas"
               >
                 <RotateCcw className="h-4 w-4" />
@@ -385,7 +382,7 @@ export default function AlgorithmicArt() {
                   const nextSeed = Math.floor(Math.random() * 900000) + 100000
                   setSeed(nextSeed)
                 }}
-                className="flex items-center gap-2 px-4 h-11 rounded-full bg-transparent border border-white/10 hover:bg-white/5 text-muted hover:text-ink font-mono text-xs active:scale-[0.96] transition-all duration-300 ease-[var(--ease-spring)] cursor-pointer"
+                className="flex items-center gap-2 px-4 h-11 rounded-full bg-transparent border border-white/10 hover:bg-white/5 text-muted hover:text-ink font-mono text-xs active:scale-[0.96] transition duration-200 ease-[var(--ease-spring)] cursor-pointer"
                 title="Generate new pseudo-random mathematical seed"
               >
                 <Sparkles className="h-3.5 w-3.5 text-accent" />
@@ -398,13 +395,11 @@ export default function AlgorithmicArt() {
               <button
                 type="button"
                 onClick={exportImage}
-                className="group flex items-center gap-3 pl-5 pr-1.5 h-11 rounded-full bg-ink text-canvas font-mono text-xs font-semibold hover:bg-ink/90 active:scale-[0.96] transition-all duration-300 ease-[var(--ease-spring)] cursor-pointer shadow-subtle"
+                className="flex items-center gap-2 px-4 h-11 rounded-full bg-ink text-canvas font-mono text-xs font-medium hover:bg-ink/90 active:scale-[0.98] transition-[background-color,transform] duration-150 cursor-pointer"
                 title="Export high-resolution PNG snapshot"
               >
                 <span>Save PNG</span>
-                <div className="w-8 h-8 rounded-full bg-canvas/10 flex items-center justify-center group-hover:bg-canvas/20 group-hover:scale-105 group-hover:translate-x-[2px] transition-all duration-300">
-                  <Download className="h-3.5 w-3.5" />
-                </div>
+                <Download className="h-3.5 w-3.5" aria-hidden="true" />
               </button>
             </div>
           </div>
@@ -433,19 +428,19 @@ export default function AlgorithmicArt() {
                 key={preset.id}
                 type="button"
                 onClick={() => applyPreset(preset)}
-                className={`group p-1.5 rounded-[2rem] border text-left cursor-pointer flex flex-col justify-between transition-all duration-500 ease-[var(--ease-out-quart)] active:scale-[0.98] ${
+                className={`group p-1.5 rounded-[2rem] border text-left cursor-pointer flex flex-col justify-between transition duration-200 ease-[var(--ease-out-quart)] active:scale-[0.98] ${
                   isSelected
                     ? 'border-accent/40 bg-accent/5 shadow-subtle'
                     : 'border-line bg-surface/30 hover:bg-surface/60'
                 }`}
               >
-                <div className={`p-5 h-full rounded-[calc(2rem-0.375rem)] border transition-colors duration-500 flex flex-col justify-between ${
+                <div className={`p-5 h-full rounded-[calc(2rem-0.375rem)] border transition-colors duration-200 flex flex-col justify-between ${
                   isSelected ? 'border-accent/20 bg-accent/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]' : 'border-white/5 bg-surface/20 group-hover:bg-surface/40'
                 }`}>
                   <div>
                     <div className="flex items-center justify-between mb-4">
                       <span
-                        className={`p-2.5 rounded-full border transition-colors duration-500 ${
+                        className={`p-2.5 rounded-full border transition-colors duration-200 ${
                           isSelected
                             ? 'border-accent/30 bg-accent/20 text-accent'
                             : 'border-line bg-canvas text-muted group-hover:text-ink group-hover:border-white/20'

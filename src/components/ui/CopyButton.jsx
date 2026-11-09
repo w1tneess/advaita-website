@@ -68,7 +68,7 @@ export default function CopyButton({
       onClick={handleCopy}
       aria-label={copied ? copiedLabel : label}
       title={copied ? copiedLabel : label}
-      className={`inline-flex items-center justify-center gap-1.5 rounded-lg border border-line/70 bg-surface/70 px-2.5 py-1.5 text-xs font-medium text-ink shadow-xs backdrop-blur-md transition-all hover:border-accent hover:bg-surface active:scale-95 ${className}`}
+      className={`inline-flex items-center justify-center gap-1.5 rounded-[6px] border border-line px-3 py-2 text-[14px] text-ink transition-colors duration-150 hover:border-ink active:scale-[0.98] ${className}`}
     >
       {copied ? (
         <Check className="h-3.5 w-3.5 text-accent animate-rise" aria-hidden="true" />

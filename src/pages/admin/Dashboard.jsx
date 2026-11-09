@@ -32,7 +32,7 @@ function formatActivityDate(value) {
 
 function StatItem({ icon: Icon, label, value, to }) {
   return (
-    <Link to={to} className="flex items-center justify-between p-3 rounded-xl hover:bg-surface/80 active:scale-[0.97] transition-all duration-250 ease-[var(--ease-out-quart)] group">
+    <Link to={to} className="flex items-center justify-between p-3 rounded-xl hover:bg-surface active:scale-[0.97] transition duration-250 ease-[var(--ease-out-quart)] group">
       <div className="flex items-center gap-3 text-xs font-sans">
         <div className="p-2 rounded-lg bg-surface text-muted group-hover:text-accent transition-colors border border-line">
           <Icon className="h-3.5 w-3.5" />
@@ -48,13 +48,13 @@ function QuickAction({ icon: Icon, label, description, to }) {
   return (
     <Link 
       to={to} 
-      className="relative overflow-hidden flex flex-col p-5 rounded-2xl border border-line bg-surface/40 hover:bg-surface/80 hover:border-accent/40 transition-all duration-250 ease-[var(--ease-out-quart)] group shadow-subtle hover:-translate-y-0.5 active:scale-[0.97]"
+      className="relative overflow-hidden flex flex-col p-5 rounded-2xl border border-line bg-surface/40 hover:bg-surface hover:border-accent/40 transition duration-250 ease-[var(--ease-out-quart)] group shadow-subtle active:scale-[0.97]"
     >
       <div className="flex items-start justify-between mb-3.5">
         <div className="p-2.5 rounded-xl bg-surface border border-line group-hover:border-accent/50 group-hover:text-accent text-muted transition-colors">
           <Icon className="h-4 w-4" />
         </div>
-        <ArrowRight className="h-4 w-4 text-muted/40 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-accent transition-all duration-200" />
+        <ArrowRight className="h-4 w-4 text-muted/40 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-accent transition duration-200" />
       </div>
       <h3 className="font-sans text-[15px] font-semibold text-ink group-hover:text-accent transition-colors tracking-tight">{label}</h3>
       <p className="font-sans text-xs text-muted mt-1 leading-relaxed">{description}</p>
@@ -189,7 +189,7 @@ export default function Dashboard() {
                 View all <ArrowRight className="h-3 w-3" />
               </Link>
             </div>
-            <div className="rounded-2xl border border-line bg-surface/40 shadow-subtle overflow-hidden backdrop-blur-sm">
+            <div className="rounded-2xl border border-line bg-surface/40 shadow-subtle overflow-hidden">
               {messages.length > 0 ? (
                 <div className="divide-y divide-line">
                   {messages.map((msg) => (
@@ -225,7 +225,7 @@ export default function Dashboard() {
                 {isRemote ? 'Cloud Synced' : 'Local Storage'}
               </span>
             </div>
-            <div className="rounded-2xl border border-line bg-surface/40 shadow-subtle overflow-hidden backdrop-blur-sm">
+            <div className="rounded-2xl border border-line bg-surface/40 shadow-subtle overflow-hidden">
               {activity.length > 0 ? (
                 <ul className="divide-y divide-line">
                   {activity.slice(0, 5).map((entry) => (
@@ -255,7 +255,7 @@ export default function Dashboard() {
         <div className="lg:col-span-4 space-y-8">
           
           {drafts.length > 0 && (
-            <div className="rounded-2xl border border-accent/30 bg-accent/5 p-4 shadow-subtle backdrop-blur-sm">
+            <div className="rounded-2xl border border-accent/30 bg-accent/5 p-4 shadow-subtle">
               <h3 className="font-sans text-xs font-semibold text-accent flex items-center gap-2 mb-2 tracking-tight">
                 <FileText className="h-3.5 w-3.5" />
                 Drafts in Progress
@@ -293,7 +293,7 @@ export default function Dashboard() {
                 Test
               </button>
             </div>
-            <div className="rounded-2xl border border-line bg-surface/40 shadow-subtle p-4 space-y-3 font-mono text-xs backdrop-blur-sm">
+            <div className="rounded-2xl border border-line bg-surface/40 shadow-subtle p-4 space-y-3 font-mono text-xs">
               <div className="flex items-center justify-between border-b border-line pb-2.5">
                 <span className="text-muted">Database (Supabase)</span>
                 {health.connected ? (
@@ -334,7 +334,7 @@ export default function Dashboard() {
             <h2 className="font-mono text-[11px] font-semibold tracking-wider text-muted uppercase mb-3">
               Content Overview
             </h2>
-            <div className="rounded-2xl border border-line bg-surface/40 shadow-subtle p-2 backdrop-blur-sm">
+            <div className="rounded-2xl border border-line bg-surface/40 shadow-subtle p-2">
               <div className="flex flex-col space-y-0.5">
                 {stats.map((stat) => (
                   <StatItem key={stat.label} {...stat} />

@@ -360,7 +360,7 @@ export default function AdminAuth({ children }) {
                   <button
                     type="submit"
                     disabled={submitting || !isConfigured}
-                    className="w-full flex items-center justify-center gap-2 rounded-lg border border-[#c2956a] bg-[#c2956a] py-3 text-xs font-mono uppercase tracking-wider text-[#0F0E0D] font-semibold transition-all duration-250 ease-[var(--ease-out-quart)] hover:bg-[#d4a87d] active:scale-[0.97] hover:-translate-y-0.5 hover:shadow-subtle disabled:opacity-40 cursor-pointer"
+                    className="w-full flex items-center justify-center gap-2 rounded-lg border border-[#c2956a] bg-[#c2956a] py-3 text-xs font-mono uppercase tracking-wider text-[#0F0E0D] font-semibold transition duration-250 ease-[var(--ease-out-quart)] hover:bg-[#d4a87d] active:scale-[0.97] disabled:opacity-40 cursor-pointer"
                   >
                     {submitting ? (
                       <>
@@ -402,7 +402,7 @@ export default function AdminAuth({ children }) {
                       placeholder="admin@domain.org"
                       required
                       disabled={submitting}
-                      className="block w-full rounded-lg border border-[#2c2825] bg-[#1a1918] py-2.5 pl-10 pr-4 text-sm text-[#f2ede6] placeholder:text-neutral-600 focus:border-[#c2956a] focus:outline-none transition-all duration-250 ease-[var(--ease-out-quart)] focus:-translate-y-0.5 focus:shadow-subtle"
+                      className="block w-full rounded-lg border border-[#2c2825] bg-[#1a1918] py-2.5 pl-10 pr-4 text-sm text-[#f2ede6] placeholder:text-neutral-600 focus:border-[#c2956a] focus:outline-none transition duration-250 ease-[var(--ease-out-quart)] focus:-translate-y-0.5 focus:shadow-subtle"
                     />
                   </div>
                 </div>
@@ -418,7 +418,7 @@ export default function AdminAuth({ children }) {
                   <button
                     type="submit"
                     disabled={submitting || !isConfigured || cooldown > 0}
-                    className="w-full flex items-center justify-center gap-2 rounded-lg border border-[#c2956a] bg-[#c2956a] py-3 text-xs font-mono uppercase tracking-wider text-[#0F0E0D] font-semibold transition-all duration-250 ease-[var(--ease-out-quart)] hover:bg-[#d4a87d] active:scale-[0.97] hover:-translate-y-0.5 hover:shadow-subtle disabled:opacity-40 cursor-pointer"
+                    className="w-full flex items-center justify-center gap-2 rounded-lg border border-[#c2956a] bg-[#c2956a] py-3 text-xs font-mono uppercase tracking-wider text-[#0F0E0D] font-semibold transition duration-250 ease-[var(--ease-out-quart)] hover:bg-[#d4a87d] active:scale-[0.97] disabled:opacity-40 cursor-pointer"
                   >
                     {submitting ? (
                       <>
@@ -466,7 +466,7 @@ export default function AdminAuth({ children }) {
                       placeholder="admin@domain.org"
                       required
                       disabled={submitting}
-                      className="block w-full rounded-lg border border-[#2c2825] bg-[#1a1918] py-2.5 pl-10 pr-4 text-sm text-[#f2ede6] placeholder:text-neutral-600 focus:border-[#c2956a] focus:outline-none transition-all duration-250 ease-[var(--ease-out-quart)] focus:-translate-y-0.5 focus:shadow-subtle"
+                      className="block w-full rounded-lg border border-[#2c2825] bg-[#1a1918] py-2.5 pl-10 pr-4 text-sm text-[#f2ede6] placeholder:text-neutral-600 focus:border-[#c2956a] focus:outline-none transition duration-250 ease-[var(--ease-out-quart)] focus:-translate-y-0.5 focus:shadow-subtle"
                     />
                   </div>
                 </div>
@@ -511,7 +511,7 @@ export default function AdminAuth({ children }) {
                   <button
                     type="submit"
                     disabled={submitting || !isConfigured}
-                    className="w-full flex items-center justify-center gap-2 rounded-lg border border-[#c2956a] bg-[#c2956a] py-3 text-xs font-mono uppercase tracking-wider text-[#0F0E0D] font-semibold transition-all duration-250 ease-[var(--ease-out-quart)] hover:bg-[#d4a87d] active:scale-[0.97] hover:-translate-y-0.5 hover:shadow-subtle disabled:opacity-40 cursor-pointer"
+                    className="w-full flex items-center justify-center gap-2 rounded-lg border border-[#c2956a] bg-[#c2956a] py-3 text-xs font-mono uppercase tracking-wider text-[#0F0E0D] font-semibold transition duration-250 ease-[var(--ease-out-quart)] hover:bg-[#d4a87d] active:scale-[0.97] disabled:opacity-40 cursor-pointer"
                   >
                     {submitting ? (
                       <>

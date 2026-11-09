@@ -22,9 +22,29 @@ import { trackPageView } from '../lib/analytics.js'
  * `#main-content` is the target of both the skip link and the route-change focus move in
  * ScrollToTop, so the id and tabIndex here are load-bearing — do not rename them.
  */
+// The first page paints as-is (it is pre-rendered); later pages settle in like a turned page.
+let hasPainted = false
+
 export default function PublicLayout() {
   const { previewDrafts, setPreviewDrafts } = useContent()
   const location = useLocation()
+  useEffect(() => { hasPainted = true }, [])
+
+  // Arm scroll reveals for this page: [data-reveal] elements settle in as they enter view.
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    document.documentElement.classList.add('reveal-ready')
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target) } }),
+      { rootMargin: '0px 0px -8% 0px', threshold: 0.12 },
+    )
+    const scan = () => document.querySelectorAll('[data-reveal]:not(.is-in)').forEach((el) => io.observe(el))
+    // Lazy routes and late content mount after this effect, so keep watching for new elements.
+    const mo = new MutationObserver(scan)
+    mo.observe(document.body, { childList: true, subtree: true })
+    const id = requestAnimationFrame(scan)
+    return () => { cancelAnimationFrame(id); mo.disconnect(); io.disconnect() }
+  }, [location.pathname])
 
   // Track privacy-first pageviews
   useEffect(() => {
@@ -66,7 +86,7 @@ export default function PublicLayout() {
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1 py-2 text-sm">
               <Eye className="h-4 w-4 text-opinion" aria-hidden="true" />
               <span>
-                <strong className="font-semibold">Preview mode.</strong> Drafts and hidden items are
+                <strong className="font-medium">Preview mode.</strong> Drafts and hidden items are
                 visible. This affects your browser only.
               </span>
               <button
@@ -97,9 +117,9 @@ export default function PublicLayout() {
         id="main-content"
         tabIndex={-1}
         className="flex-1 min-h-dvh focus:outline-none"
-        initial={false}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
+        initial={hasPainted ? { opacity: 0, y: 12 } : false}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
       >
         {/* One broken page keeps the header and footer; keyed so navigating away recovers. */}
         <ErrorBoundary key={location.pathname}>

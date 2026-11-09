@@ -118,7 +118,7 @@ export default function MarkdownSplitEditor({
     <div className={`space-y-3 ${className}`}>
       {/* Restorable Draft Banner */}
       {hasRestorableDraft && (
-        <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-xl border border-accent/40 bg-accent/10 backdrop-blur-md text-xs font-mono text-ink">
+        <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-xl border border-accent/40 bg-accent/10 text-xs font-mono text-ink">
           <div className="flex items-center gap-2">
             <Sparkles className="h-4 w-4 text-accent" />
             <span>
@@ -131,14 +131,14 @@ export default function MarkdownSplitEditor({
             <button
               type="button"
               onClick={restoreDraft}
-              className="px-3 py-1 rounded-md bg-accent text-canvas font-semibold hover:bg-accent-strong transition-all duration-150 ease-[var(--ease-out-quart)] active:scale-[0.97] cursor-pointer"
+              className="px-3 py-1 rounded-md bg-accent text-canvas font-semibold hover:bg-accent-strong transition duration-150 ease-[var(--ease-out-quart)] active:scale-[0.97] cursor-pointer"
             >
               Restore Draft
             </button>
             <button
               type="button"
               onClick={discardDraft}
-              className="px-3 py-1 rounded-md border border-line bg-surface hover:bg-raised text-muted hover:text-ink transition-all duration-150 ease-[var(--ease-out-quart)] active:scale-[0.97] cursor-pointer"
+              className="px-3 py-1 rounded-md border border-line bg-surface hover:bg-raised text-muted hover:text-ink transition duration-150 ease-[var(--ease-out-quart)] active:scale-[0.97] cursor-pointer"
             >
               Discard
             </button>
@@ -159,11 +159,11 @@ export default function MarkdownSplitEditor({
         </label>
 
         {/* View Mode Switcher */}
-        <div className="flex items-center gap-1 p-1 rounded-xl border border-line bg-surface/80 backdrop-blur-md">
+        <div className="flex items-center gap-1 p-1 rounded-xl border border-line bg-surface">
           <button
             type="button"
             onClick={() => setMode('write')}
-            className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-mono transition-all cursor-pointer ${
+            className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-mono transition cursor-pointer ${
               mode === 'write'
                 ? 'bg-ink text-canvas font-semibold shadow-subtle'
                 : 'text-muted hover:text-ink'
@@ -176,7 +176,7 @@ export default function MarkdownSplitEditor({
           <button
             type="button"
             onClick={() => setMode('split')}
-            className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-mono transition-all cursor-pointer ${
+            className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-mono transition cursor-pointer ${
               mode === 'split'
                 ? 'bg-ink text-canvas font-semibold shadow-subtle'
                 : 'text-muted hover:text-ink'
@@ -189,7 +189,7 @@ export default function MarkdownSplitEditor({
           <button
             type="button"
             onClick={() => setMode('preview')}
-            className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-mono transition-all cursor-pointer ${
+            className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-mono transition cursor-pointer ${
               mode === 'preview'
                 ? 'bg-ink text-canvas font-semibold shadow-subtle'
                 : 'text-muted hover:text-ink'
@@ -204,11 +204,11 @@ export default function MarkdownSplitEditor({
 
       {/* Markdown Helper Formatting Ribbon (Active when writing or split) */}
       {mode !== 'preview' && (
-        <div className="flex flex-wrap items-center gap-1 p-1.5 rounded-xl border border-line bg-surface/50 backdrop-blur-sm text-muted">
+        <div className="flex flex-wrap items-center gap-1 p-1.5 rounded-xl border border-line bg-surface/50 text-muted">
           <button
             type="button"
             onClick={() => insertSyntax('**', '**')}
-            className="p-1.5 rounded hover:bg-raised hover:text-ink transition-all duration-150 ease-[var(--ease-out-quart)] active:scale-[0.97] cursor-pointer"
+            className="p-1.5 rounded hover:bg-raised hover:text-ink transition duration-150 ease-[var(--ease-out-quart)] active:scale-[0.97] cursor-pointer"
             title="Bold"
           >
             <Bold className="h-4 w-4" />
@@ -216,7 +216,7 @@ export default function MarkdownSplitEditor({
           <button
             type="button"
             onClick={() => insertSyntax('*', '*')}
-            className="p-1.5 rounded hover:bg-raised hover:text-ink transition-all duration-150 ease-[var(--ease-out-quart)] active:scale-[0.97] cursor-pointer"
+            className="p-1.5 rounded hover:bg-raised hover:text-ink transition duration-150 ease-[var(--ease-out-quart)] active:scale-[0.97] cursor-pointer"
             title="Italic"
           >
             <Italic className="h-4 w-4" />
@@ -225,7 +225,7 @@ export default function MarkdownSplitEditor({
           <button
             type="button"
             onClick={() => insertSyntax('## ')}
-            className="p-1.5 rounded hover:bg-raised hover:text-ink transition-all duration-150 ease-[var(--ease-out-quart)] active:scale-[0.97] cursor-pointer"
+            className="p-1.5 rounded hover:bg-raised hover:text-ink transition duration-150 ease-[var(--ease-out-quart)] active:scale-[0.97] cursor-pointer"
             title="Heading 2"
           >
             <Heading2 className="h-4 w-4" />
@@ -233,7 +233,7 @@ export default function MarkdownSplitEditor({
           <button
             type="button"
             onClick={() => insertSyntax('### ')}
-            className="p-1.5 rounded hover:bg-raised hover:text-ink transition-all duration-150 ease-[var(--ease-out-quart)] active:scale-[0.97] cursor-pointer"
+            className="p-1.5 rounded hover:bg-raised hover:text-ink transition duration-150 ease-[var(--ease-out-quart)] active:scale-[0.97] cursor-pointer"
             title="Heading 3"
           >
             <Heading3 className="h-4 w-4" />
@@ -242,7 +242,7 @@ export default function MarkdownSplitEditor({
           <button
             type="button"
             onClick={() => insertSyntax('> ')}
-            className="p-1.5 rounded hover:bg-raised hover:text-ink transition-all duration-150 ease-[var(--ease-out-quart)] active:scale-[0.97] cursor-pointer"
+            className="p-1.5 rounded hover:bg-raised hover:text-ink transition duration-150 ease-[var(--ease-out-quart)] active:scale-[0.97] cursor-pointer"
             title="Blockquote"
           >
             <Quote className="h-4 w-4" />
@@ -250,7 +250,7 @@ export default function MarkdownSplitEditor({
           <button
             type="button"
             onClick={() => insertSyntax('```\n', '\n```')}
-            className="p-1.5 rounded hover:bg-raised hover:text-ink transition-all duration-150 ease-[var(--ease-out-quart)] active:scale-[0.97] cursor-pointer"
+            className="p-1.5 rounded hover:bg-raised hover:text-ink transition duration-150 ease-[var(--ease-out-quart)] active:scale-[0.97] cursor-pointer"
             title="Code Block"
           >
             <Code className="h-4 w-4" />
@@ -258,7 +258,7 @@ export default function MarkdownSplitEditor({
           <button
             type="button"
             onClick={() => insertSyntax('- ')}
-            className="p-1.5 rounded hover:bg-raised hover:text-ink transition-all duration-150 ease-[var(--ease-out-quart)] active:scale-[0.97] cursor-pointer"
+            className="p-1.5 rounded hover:bg-raised hover:text-ink transition duration-150 ease-[var(--ease-out-quart)] active:scale-[0.97] cursor-pointer"
             title="Bullet List"
           >
             <List className="h-4 w-4" />
@@ -266,7 +266,7 @@ export default function MarkdownSplitEditor({
           <button
             type="button"
             onClick={() => insertSyntax('[', '](https://...)')}
-            className="p-1.5 rounded hover:bg-raised hover:text-ink transition-all duration-150 ease-[var(--ease-out-quart)] active:scale-[0.97] cursor-pointer"
+            className="p-1.5 rounded hover:bg-raised hover:text-ink transition duration-150 ease-[var(--ease-out-quart)] active:scale-[0.97] cursor-pointer"
             title="Link"
           >
             <LinkIcon className="h-4 w-4" />

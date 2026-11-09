@@ -1,119 +1,86 @@
-import { Link } from "react-router"
-import PageHeader from "@/components/ui/PageHeader.jsx"
-import EmptyState from "@/components/ui/EmptyState.jsx"
-import { useContent } from "@/lib/content.jsx"
-import Seo from "@/components/meta/Seo.jsx"
-import { PUBLIC_ROUTES } from "@/config/nav.js"
-import { BookOpen } from "lucide-react"
+import { Link } from 'react-router'
+import { BookOpen } from 'lucide-react'
+import PageHeader from '@/components/ui/PageHeader.jsx'
+import EmptyState from '@/components/ui/EmptyState.jsx'
+import { useContent } from '@/lib/content.jsx'
+import Seo from '@/components/meta/Seo.jsx'
+import { PUBLIC_ROUTES } from '@/config/nav.js'
+import { formatDate, isoDateAttr } from '@/lib/format'
+import PenStroke from '@/components/features/ink/PenStroke.jsx'
 
 const ROUTE = PUBLIC_ROUTES.find((route) => route.key === 'philosophy')
 
-import { formatDate } from "@/lib/format"
-
 export default function Philosophy() {
 	const { philosophy, publicNotes } = useContent()
-	const thinkers = philosophy?.thinkers || []
+	const thinkers = [...(philosophy?.thinkers || [])].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
 	const notes = publicNotes || []
-
-	const notesByThinker = new Map()
-	for (const note of notes) {
-		if (note.thinker) {
-			const list = notesByThinker.get(note.thinker) ?? []
-			list.push(note)
-			notesByThinker.set(note.thinker, list)
-		}
-	}
+	const notesFor = (id) => notes.filter((note) => note.thinker === id)
 
 	return (
 		<>
 			<Seo title={ROUTE.title} description={ROUTE.description} path="/philosophy" />
-			<PageHeader
-				eyebrow="Philosophy"
-				title="Reading"
-				lead={philosophy?.intro || "Books I'm reading."}
-			/>
+			<PageHeader eyebrow="Philosophy" title="Reading, slowly" lead={philosophy?.intro || 'Books I am reading.'} />
 
-			<section className="shell border-t border-line">
-				<div className="flex items-center justify-between border-b border-line pb-4 mb-8 pt-[var(--spacing-fluid-section)]">
-					<h2 className="text-2xl sm:text-3xl font-normal text-ink text-balance">Reading Focus</h2>
-				</div>
-				<div className="divide-y divide-line border-t border-b border-line lg:border-t-0 lg:border-b-0">
+			<section className="shell pb-24 lg:pb-32" aria-labelledby="thinkers-heading">
+				<h2 id="thinkers-heading" className="sr-only">Who I am reading</h2>
+				<ul className="border-t border-line">
 					{thinkers.map((thinker) => {
-						const thinkerNotes = notesByThinker.get(thinker.id) ?? []
+						const own = notesFor(thinker.id)
 						return (
-							<article key={thinker.id || thinker.name} className="py-8 sm:py-10 grid gap-4 sm:grid-cols-[1fr_2.2fr] items-baseline -mx-4 px-4 sm:-mx-6 sm:px-6 rounded-xl hover:bg-surface/60 transition-all duration-250 ease-[var(--ease-out-quart)] first:pt-4">
-								<div className="font-mono text-xs tracking-widest uppercase text-muted font-medium">
-									{thinker.name}
-								</div>
-								<div>
-									<h3 className="text-lg sm:text-xl font-normal text-ink mb-3 text-balance leading-snug">{thinker.description}</h3>
-									
-									<div className="mt-4 sm:mt-5">
-										{thinkerNotes.length === 0 ? (
-											<div className="text-sm text-muted font-sans tracking-wide">No notes published yet</div>
+							<li key={thinker.id || thinker.name} className="folio gap-y-4 border-b border-line py-10 lg:py-14" data-reveal>
+								<h3 className="folio-margin text-[length:var(--text-2xl)] leading-tight tracking-[-0.03em]">{thinker.name}</h3>
+								<div className="folio-body grid gap-8 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
+									<p className="text-[length:var(--text-lg)] leading-relaxed text-muted max-w-xl">{thinker.description}</p>
+									<div>
+										{own.length === 0 ? (
+											<p className="text-[15px] text-text-3">No note yet</p>
 										) : (
 											<ul className="space-y-4">
-												{thinkerNotes.map((note) => (
-													<li key={note.id} className="group">
-														{note.slug ? (
-															<Link to={`/philosophy/${note.slug}`} className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-4 focus-visible:ring-offset-canvas rounded-md hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-250 ease-[var(--ease-out-quart)]">
-																<p className="text-base sm:text-lg text-ink leading-snug group-hover:text-muted transition-colors duration-150 ease-[var(--ease-out-quart)] text-balance underline decoration-line hover:decoration-line-strong underline-offset-4">{note.title}</p>
-															</Link>
-														) : (
-															<p className="text-base sm:text-lg text-ink leading-snug text-balance">{note.title}</p>
-														)}
-														<p className="mt-1 font-mono text-xs text-muted">
-															{formatDate(note.published_at || note.noted_on)}
-														</p>
+												{own.map((note) => (
+													<li key={note.id}>
+														<Link to={`/philosophy/${note.slug}`} className="group block">
+															<span className="pen-link text-[17px] leading-snug text-ink">{note.title}</span>
+															<span className="mt-1 block text-[14px] text-muted tabular-nums">{formatDate(note.published_at)}</span>
+														</Link>
 													</li>
 												))}
 											</ul>
 										)}
 									</div>
 								</div>
-							</article>
+							</li>
 						)
 					})}
-				</div>
+				</ul>
 			</section>
 
-			<section className="shell pt-[var(--spacing-fluid-section)] pb-24">
-				<div className="flex items-center justify-between border-b border-line pb-4 mb-8">
-					<h2 className="text-2xl sm:text-3xl font-normal text-ink text-balance">Dated Log</h2>
+			<section className="shell folio pb-28 lg:pb-40" aria-labelledby="log-heading">
+				<div className="folio-margin mb-8 lg:mb-0" data-reveal>
+					<h2 id="log-heading" className="text-[length:var(--text-2xl)] tracking-[-0.03em]">All notes</h2>
+					<PenStroke seed={1} className="mt-1" />
+					<p className="mt-3 max-w-[16rem] text-[15px] leading-snug text-muted">Newest first</p>
 				</div>
-				<div className="mt-6 sm:mt-8">
+				<div className="folio-body">
 					{notes.length === 0 ? (
-					<EmptyState
-						icon={BookOpen}
-						title="The log is empty"
-						message="Notes and reading observations will appear here as they are published."
-					/>
+						<EmptyState icon={BookOpen} title="No notes yet" message="Notes appear here as they are published." />
 					) : (
-						<ul className="divide-y divide-line border-t border-b border-line lg:border-t-0 lg:border-b-0">
-							{notes.map((note) => (
-								<li key={note.id} className="grid gap-4 sm:gap-6 py-8 sm:py-10 sm:grid-cols-[1fr_2.2fr] items-baseline -mx-4 px-4 sm:-mx-6 sm:px-6 rounded-xl hover:bg-surface/40 transition-colors duration-250 ease-[var(--ease-out-quart)] first:pt-4">
-									<p className="font-mono text-xs tracking-wider uppercase text-muted font-medium">
-										{formatDate(note.published_at || note.noted_on)}
-									</p>
-									<div>
-										<h3 className="text-lg sm:text-xl font-normal text-ink mb-3 text-balance">
-											{note.slug ? (
-												<Link to={`/philosophy/${note.slug}`} className="hover:text-muted transition-colors underline decoration-line/60 hover:decoration-line-strong underline-offset-4">
-													{note.title}
-												</Link>
-											) : (
-												note.title
-											)}
-										</h3>
-										{note.content ? (
-											<div className="prose prose-invert prose-p:text-muted prose-p:leading-relaxed prose-p:text-base sm:prose-p:text-lg max-w-none font-sans whitespace-pre-line">
-												{note.content}
-											</div>
-										) : null}
-									</div>
+						<ol className="border-t border-line">
+							{notes.map((note, i) => (
+								<li key={note.id} className="border-b border-line" data-reveal style={{ '--i': i }}>
+									<Link to={`/philosophy/${note.slug}`} className="group grid gap-3 py-8 sm:grid-cols-[minmax(0,1fr)_8rem] sm:gap-8">
+										<span>
+											<span className="block text-[length:var(--text-xl)] leading-tight tracking-[-0.025em] transition-transform duration-300 ease-[var(--ease-soft)] group-hover:translate-x-2">
+												{note.title}
+											</span>
+											{note.excerpt && <span className="mt-3 block max-w-2xl text-[16px] leading-relaxed text-muted">{note.excerpt}</span>}
+										</span>
+										<time dateTime={isoDateAttr(note.published_at)} className="text-[14px] text-muted tabular-nums sm:text-right">
+											{formatDate(note.published_at)}
+										</time>
+									</Link>
 								</li>
 							))}
-						</ul>
+						</ol>
 					)}
 				</div>
 			</section>

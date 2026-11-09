@@ -1,14 +1,14 @@
 import { useState, useCallback, useEffect } from 'react'
 import { CONTACT_EMAIL } from '@/config/site.js'
 import { motion } from 'framer-motion'
-import { Send, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
+import { Send, AlertCircle, Loader2 } from 'lucide-react'
 import { submitContactForm } from '@/lib/supabase/api.js'
 
 const TOPICS = [
   { value: 'general', label: 'General' },
-  { value: 'collaboration', label: 'Research & Collaboration' },
-  { value: 'project-feedback', label: 'Project Feedback' },
-  { value: 'correction', label: 'Correction / Source' },
+  { value: 'collaboration', label: 'Research or collaboration' },
+  { value: 'project-feedback', label: 'Project feedback' },
+  { value: 'correction', label: 'Correction or source' },
   { value: 'other', label: 'Other' },
 ]
 
@@ -169,25 +169,23 @@ export default function ContactForm() {
   if (status === 'success') {
     return (
       <motion.div
-        className="border border-copper/40 bg-surface/90 p-8 sm:p-10 text-center relative overflow-hidden backdrop-blur-sm rounded-2xl shadow-subtle"
+        className="border-t border-line pt-10"
         initial={{ opacity: 0, scale: 0.98 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.3 }}
       >
-        <div className="mx-auto flex h-12 w-12 items-center justify-center border border-copper/40 bg-copper/10 text-copper rounded-xl">
-          <CheckCircle className="h-6 w-6" aria-hidden="true" />
-        </div>
-        <h3 className="mt-4 font-display text-2xl font-normal text-text">Transmission Logged</h3>
-        <p className="mt-2 text-sm leading-relaxed text-text-2 max-w-md mx-auto">
-          Thank you for writing. Your dispatch has been entered into the correspondence archive. I reply to every thoughtful inquiry as time permits.
+        <p className="mark-label" data-ink="fact">received</p>
+        <h3 className="mt-4 text-[length:var(--text-3xl)] tracking-[-0.035em]">Message sent</h3>
+        <p className="mt-3 max-w-md text-[17px] leading-relaxed text-muted">
+          Thank you for writing. I read every message and reply when I can.
         </p>
-        <div className="mt-6 pt-6 border-t border-line flex justify-center">
+        <div className="mt-8">
           <button
             type="button"
             onClick={() => setStatus('idle')}
-            className="border border-copper/60 bg-copper/10 px-5 py-2.5 rounded-full font-semibold text-sm text-copper hover:bg-copper hover:text-canvas active:scale-[0.97] transition-all duration-250 ease-[var(--ease-out-quart)] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30"
+            className="btn-ink is-ghost"
           >
-            Send Another Dispatch
+            Write another
           </button>
         </div>
       </motion.div>
@@ -215,8 +213,8 @@ export default function ContactForm() {
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
         {/* Name */}
         <div>
-          <label htmlFor="contact-name" className="block font-mono text-[11px] uppercase tracking-wider text-text-3 font-medium mb-1.5">
-            Your Name <span className="text-copper">*</span>
+          <label htmlFor="contact-name" className="block text-[14px] text-muted mb-1.5">
+            Name <span className="text-accent" aria-hidden="true">*</span>
           </label>
           <input
             id="contact-name"
@@ -226,15 +224,15 @@ export default function ContactForm() {
             onChange={handleChange}
             autoComplete="name"
             spellCheck={false}
-            className={`block w-full rounded-lg border bg-canvas/70 px-3.5 py-2.5 font-sans text-base sm:text-sm text-text transition-all duration-250 ease-[var(--ease-out-quart)] placeholder:text-text-3/40 focus:border-copper focus:bg-canvas focus:-translate-y-0.5 focus:shadow-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30 ${
-              errors.name ? 'border-limitation bg-limitation/5' : 'border-line hover:border-copper/40'
+            className={`block w-full rounded-[6px] border bg-surface px-3.5 py-3 text-base text-text transition duration-250 ease-[var(--ease-out-quart)] placeholder:text-text-3/40 focus:border-ink focus:bg-canvas focus:-translate-y-0.5 focus:shadow-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30 ${
+              errors.name ? 'border-accent' : 'border-line hover:border-line-strong'
             }`}
             placeholder="Advaita Chandra"
             aria-describedby={errors.name ? 'contact-name-error' : undefined}
             aria-invalid={errors.name ? 'true' : undefined}
           />
           {errors.name && (
-            <p id="contact-name-error" className="mt-1 font-mono text-xs text-limitation flex items-center gap-1" role="alert">
+            <p id="contact-name-error" className="mt-1 text-[14px] text-accent flex items-center gap-1" role="alert">
               <span aria-hidden="true">›</span> {errors.name}
             </p>
           )}
@@ -242,8 +240,8 @@ export default function ContactForm() {
 
         {/* Email */}
         <div>
-          <label htmlFor="contact-email" className="block font-mono text-[11px] uppercase tracking-wider text-text-3 font-medium mb-1.5">
-            Email Address <span className="text-copper">*</span>
+          <label htmlFor="contact-email" className="block text-[14px] text-muted mb-1.5">
+            Email <span className="text-accent" aria-hidden="true">*</span>
           </label>
           <input
             id="contact-email"
@@ -253,15 +251,15 @@ export default function ContactForm() {
             onChange={handleChange}
             autoComplete="email"
             spellCheck={false}
-            className={`block w-full rounded-lg border bg-canvas/70 px-3.5 py-2.5 font-sans text-base sm:text-sm text-text transition-all duration-250 ease-[var(--ease-out-quart)] placeholder:text-text-3/40 focus:border-copper focus:bg-canvas focus:-translate-y-0.5 focus:shadow-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30 ${
-              errors.email ? 'border-limitation bg-limitation/5' : 'border-line hover:border-copper/40'
+            className={`block w-full rounded-[6px] border bg-surface px-3.5 py-3 text-base text-text transition duration-250 ease-[var(--ease-out-quart)] placeholder:text-text-3/40 focus:border-ink focus:bg-canvas focus:-translate-y-0.5 focus:shadow-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30 ${
+              errors.email ? 'border-accent' : 'border-line hover:border-line-strong'
             }`}
             placeholder="name@institution.edu"
             aria-describedby={errors.email ? 'contact-email-error' : undefined}
             aria-invalid={errors.email ? 'true' : undefined}
           />
           {errors.email && (
-            <p id="contact-email-error" className="mt-1 font-mono text-xs text-limitation flex items-center gap-1" role="alert">
+            <p id="contact-email-error" className="mt-1 text-[14px] text-accent flex items-center gap-1" role="alert">
               <span aria-hidden="true">›</span> {errors.email}
             </p>
           )}
@@ -271,14 +269,9 @@ export default function ContactForm() {
       {/* Modern Interactive Topic Selector */}
       <div>
         <div className="flex items-center justify-between mb-2">
-          <label id="contact-topic-label" className="block font-mono text-[11px] uppercase tracking-wider text-text-3 font-medium">
-            Inquiry Topic <span className="text-copper">*</span>
+          <label id="contact-topic-label" className="block text-[14px] text-muted">
+            Topic <span className="text-accent" aria-hidden="true">*</span>
           </label>
-          {form.topic && (
-            <span className="font-mono text-[10px] text-copper uppercase tracking-widest">
-              Selected
-            </span>
-          )}
         </div>
 
         <div
@@ -295,13 +288,12 @@ export default function ContactForm() {
                 role="radio"
                 aria-checked={isSelected}
                 onClick={() => handleTopicSelect(t.value)}
-                className={`font-mono text-xs uppercase tracking-wider px-3 py-1.5 border rounded-md transition-all duration-250 ease-[var(--ease-out-quart)] active:scale-[0.97] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30 ${
+                className={`px-3 py-2 border rounded-[6px] text-[14px] transition-colors duration-150 active:scale-[0.98] cursor-pointer ${
                   isSelected
-                    ? 'border-copper bg-copper/15 text-copper font-medium shadow-subtle'
-                    : 'border-line bg-surface/40 text-text-3 hover:border-copper/40 hover:text-text-2 hover:bg-surface/80'
+                    ? 'border-ink bg-ink text-canvas'
+                    : 'border-line text-muted hover:border-line-strong hover:text-ink'
                 }`}
               >
-                {isSelected && <span className="inline-block mr-1.5 h-1.5 w-1.5 rounded-full bg-copper" aria-hidden="true" />}
                 <span>{t.label}</span>
               </button>
             )
@@ -309,7 +301,7 @@ export default function ContactForm() {
         </div>
 
         {errors.topic && (
-          <p id="contact-topic-error" className="mt-1.5 font-mono text-xs text-limitation flex items-center gap-1" role="alert">
+          <p id="contact-topic-error" className="mt-1.5 text-[14px] text-accent flex items-center gap-1" role="alert">
             <span aria-hidden="true">›</span> {errors.topic}
           </p>
         )}
@@ -318,10 +310,10 @@ export default function ContactForm() {
       {/* Message */}
       <div>
         <div className="flex items-center justify-between mb-1.5">
-          <label htmlFor="contact-message" className="block font-mono text-[11px] uppercase tracking-wider text-text-3 font-medium">
-            Message <span className="text-copper">*</span>
+          <label htmlFor="contact-message" className="block text-[14px] text-muted">
+            Message <span className="text-accent" aria-hidden="true">*</span>
           </label>
-          <span className={`font-mono text-[11px] tabular-nums ${
+          <span className={`text-[13px] tabular-nums ${
             form.message.length > 1900 ? 'text-limitation' : 'text-text-3'
           }`}>
             {form.message.length} / 2000
@@ -336,15 +328,15 @@ export default function ContactForm() {
           rows={5}
           autoComplete="off"
           spellCheck={true}
-          className={`block w-full resize-y rounded-lg border bg-canvas/70 px-3.5 py-3 font-sans text-base sm:text-sm leading-relaxed text-text transition-all duration-250 ease-[var(--ease-out-quart)] placeholder:text-text-3/40 focus:border-copper focus:bg-canvas focus:-translate-y-0.5 focus:shadow-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30 ${
-            errors.message ? 'border-limitation bg-limitation/5' : 'border-line hover:border-copper/40'
+          className={`block w-full resize-y rounded-[6px] border bg-surface px-3.5 py-3 text-base leading-relaxed text-text transition duration-250 ease-[var(--ease-out-quart)] placeholder:text-text-3/40 focus:border-ink focus:bg-canvas focus:-translate-y-0.5 focus:shadow-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30 ${
+            errors.message ? 'border-accent' : 'border-line hover:border-line-strong'
           }`}
           placeholder="Share your perspectives, research inquiries, recommended readings, or constructive critique…"
           aria-describedby={errors.message ? 'contact-message-error' : undefined}
           aria-invalid={errors.message ? 'true' : undefined}
         />
         {errors.message && (
-          <p id="contact-message-error" className="mt-1 font-mono text-xs text-limitation flex items-center gap-1" role="alert">
+          <p id="contact-message-error" className="mt-1 text-[14px] text-accent flex items-center gap-1" role="alert">
             <span aria-hidden="true">›</span> {errors.message}
           </p>
         )}
@@ -353,11 +345,11 @@ export default function ContactForm() {
       {/* Error banner */}
       {status === 'error' && errorMessage && (
         <div
-          className="flex items-start gap-3 border border-limitation/40 bg-limitation/10 p-3.5"
+          className="flex items-start gap-3 border-l-2 border-accent pl-4 py-1"
           role="alert"
         >
-          <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-limitation" aria-hidden="true" />
-          <p className="text-xs sm:text-sm text-limitation leading-relaxed">{errorMessage}</p>
+          <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
+          <p className="text-[15px] text-ink leading-relaxed">{errorMessage}</p>
         </div>
       )}
 
@@ -366,36 +358,27 @@ export default function ContactForm() {
         <button
           type="submit"
           disabled={status === 'submitting' || timeRemaining > 0}
-          className="group inline-flex items-center justify-center gap-3 rounded-full border border-copper bg-copper pl-6 pr-2 py-2 text-sm font-semibold text-canvas transition-all duration-500 ease-[var(--ease-out-expo)] hover:bg-copper-strong hover:border-copper-strong active:scale-[0.97] shadow-subtle disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/30 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
+          className="btn-ink mt-6 justify-center disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {status === 'submitting' ? (
             <>
-              <span>Transmitting…</span>
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-canvas/15">
-                <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
-              </div>
+              <span>Sending…</span>
+              <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
             </>
           ) : timeRemaining > 0 ? (
             <>
               <span>Cooldown ({timeRemaining}s)</span>
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-canvas/15">
-                <Loader2 className="h-4 w-4" aria-hidden="true" />
-              </div>
+              <Loader2 className="h-4 w-4" aria-hidden="true" />
             </>
           ) : (
             <>
-              <span>Send Message</span>
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-canvas/15 transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:scale-105 group-hover:translate-x-0.5">
-                <Send className="h-4 w-4" aria-hidden="true" />
-              </div>
+              <span>Send</span>
+              <Send className="h-4 w-4" aria-hidden="true" />
             </>
           )}
         </button>
 
-        <p className="font-mono text-[11px] text-text-3 flex items-center gap-1.5">
-          <span className="text-copper">🔒</span>
-          <span>Archived in private correspondence ledger</span>
-        </p>
+        <p className="text-[14px] text-text-3">Only I read these.</p>
       </div>
     </form>
   )

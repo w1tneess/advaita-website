@@ -18,20 +18,20 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const VARIANTS: Record<ButtonVariant, string> = {
   primary:
-    'bg-accent text-on-accent border border-accent hover:bg-accent-strong hover:border-accent-strong shadow-subtle hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.97]',
+    'bg-accent text-on-accent border border-accent hover:bg-accent-strong hover:border-accent-strong active:scale-[0.98]',
   secondary:
-    'bg-surface text-ink border border-line hover:border-ink/25 hover:bg-raised shadow-subtle hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.97]',
+    'bg-surface text-ink border border-line hover:border-ink/25 hover:bg-raised active:scale-[0.98]',
   ghost:
-    'bg-transparent text-muted border border-transparent hover:bg-surface hover:text-ink active:scale-[0.97]',
+    'bg-transparent text-muted border border-transparent hover:bg-surface hover:text-ink active:scale-[0.98]',
   danger:
-    'bg-transparent text-limitation border border-limitation/30 hover:bg-limitation/10 hover:border-limitation active:scale-[0.97]',
+    'bg-transparent text-limitation border border-limitation/30 hover:bg-limitation/10 hover:border-limitation active:scale-[0.98]',
   link: 'bg-transparent text-accent border-0 p-0 underline underline-offset-4 hover:text-accent-strong',
 }
 
 const SIZES: Record<ButtonSize, string> = {
-  sm: 'px-4 py-1.5 text-sm gap-1.5 rounded-full',
-  md: 'px-5 py-2.5 text-sm gap-2 rounded-full',
-  lg: 'px-7 py-3.5 text-base gap-2.5 rounded-full',
+  sm: 'px-3 py-1.5 text-sm gap-1.5 rounded-lg',
+  md: 'px-5 py-2.5 text-sm gap-2 rounded-lg',
+  lg: 'px-6 py-3 text-base gap-2 rounded-[10px]',
 }
 
 export default function Button({
@@ -54,10 +54,10 @@ export default function Button({
   const variantClasses = VARIANTS[variant] || VARIANTS.primary
 
   const classes = [
-    'inline-flex max-w-full items-center justify-center font-semibold break-words text-center transition-[background-color,border-color,color,box-shadow,transform] duration-500 ease-[var(--ease-out-expo)]',
+    'inline-flex max-w-full items-center justify-center font-medium break-words text-center transition-[background-color,border-color,color,transform] duration-150 ease-[var(--ease-soft)]',
     'disabled:cursor-not-allowed disabled:opacity-50 disabled:transform-none',
     'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
-    variant === 'link' ? 'motion-reduce:hover:text-accent' : 'motion-reduce:hover:-translate-y-0',
+    variant === 'link' ? 'motion-reduce:hover:text-accent' : '',
     sizeClasses,
     variantClasses,
     className,

@@ -1,81 +1,109 @@
+import { useState } from 'react'
 import { Link } from 'react-router'
-import { ArrowUpRight } from 'lucide-react'
+import InkField from '@/components/features/ink/InkField.jsx'
+import PenStroke from '@/components/features/ink/PenStroke.jsx'
 
-const BRANCHES = [
-  { label: 'Philosophy', desc: 'Krishnamurti, Camus, inquiry notes', path: '/philosophy' },
-  { label: 'Projects & Tools', desc: 'Data analysis, code experiments', path: '/projects' },
-  { label: 'Photography', desc: 'Visual documentation & geometry', path: '/photography' },
-  { label: 'Notes & Logs', desc: 'Working essays & observations', path: '/blog' },
+// His own line, with each verb leading to the part of the notebook where it happens.
+const VERBS = [
+  ['notice', '/about'],
+  ['think', '/philosophy'],
+  ['build', '/projects'],
+  ['photograph', '/photography'],
+  ['read', '/philosophy'],
+  ['write', '/blog'],
 ]
 
+/**
+ * First screen: Advaita, by name. "Advaita" is Sanskrit for "not two"; the word arrives
+ * as two parts (a- and dvaita) that close into one, with the etymology pencilled underneath.
+ * Around it: his handle, his motto, his own words.
+ */
 export default function HeroSection({ profile = {} }) {
+  const [paused, setPaused] = useState(false)
+  const [first = 'Advaita', ...rest] = (profile?.name || 'Advaita Chandra').split(' ')
+  const last = rest.join(' ') || 'Chandra'
+  const splitAt = first.toLowerCase().startsWith('a') ? 1 : 0
+
   return (
-    <section className="shell relative pt-[clamp(7.5rem,13vw,11.5rem)] pb-[clamp(2.5rem,5vw,4.5rem)] overflow-hidden">
-      {/* Atmospheric Ambient Glow */}
-      <div
-        className="ambient-glow top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(48rem,95vw)] h-[min(48rem,95vw)] opacity-20"
-        aria-hidden="true"
-      />
+    <section className="relative isolate overflow-hidden" aria-labelledby="hero-heading">
+      <InkField paused={paused} className="-z-10" />
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_58%_46%_at_50%_42%,var(--color-canvas)_32%,transparent_80%)]" />
 
-      <div className="relative z-10 w-full">
-        {/* Top Status Eyebrow */}
-        <div className="inline-flex items-center gap-2.5 px-3.5 py-1 rounded-full border border-line bg-surface/60 text-muted font-mono text-[11px] mb-6 sm:mb-8 backdrop-blur-sm">
-          <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" />
-          <span className="text-ink font-medium">{profile?.name || 'Advaita Chandra'}</span>
-          <span className="text-line">•</span>
-          <span>Archive &amp; Notebook</span>
-        </div>
-
-        <div className="max-w-5xl">
-          <h1 className="text-[length:var(--text-hero)] font-normal tracking-tight text-ink mb-[var(--spacing-fluid-sm)] leading-[1.12] text-balance">
-            I am someone who notices, thinks, builds, photographs, reads, and writes.
+      <div className="shell folio min-h-[100svh] gap-y-10 pt-24 pb-20 lg:pt-24">
+        <div className="col-span-full self-center [container-type:inline-size]">
+          <h1 id="hero-heading" className="group/name">
+            <span className="sr-only">{first} {last}</span>
+            <span aria-hidden="true" className="name-word block whitespace-nowrap text-[clamp(4.5rem,31cqi,24rem)] lg:text-[clamp(4.5rem,24.5cqi,24rem)] font-medium leading-[0.8] tracking-[-0.065em] -ml-[0.035em]">
+              {splitAt > 0 && (
+                <span className="name-part name-a relative inline-block">
+                  {first.slice(0, splitAt)}
+                  <span className="name-note left-[0.04em]">
+                    <PenStroke seed={2} auto width="0.66em" className="pen-late !h-[0.06em] max-w-none" />
+                    <span className="mark-label" data-ink="fact">a-: not</span>
+                  </span>
+                </span>
+              )}
+              <span className="name-part name-rest relative inline-block">
+                {first.slice(splitAt)}
+                {splitAt > 0 && (
+                  <span className="name-note left-[0.04em]">
+                    <PenStroke seed={0} auto width="2.4em" className="pen-late !h-[0.06em] max-w-none" />
+                    <span className="mark-label" data-ink="fact">dvaita: two</span>
+                  </span>
+                )}
+              </span>
+            </span>
+            <span aria-hidden="true" className="settle mt-[clamp(3rem,5.5cqi,5rem)] flex items-baseline justify-between gap-6" style={{ '--settle-delay': '450ms' }}>
+              <span className="text-[clamp(2.25rem,6.6cqi,7rem)] font-medium leading-none tracking-[-0.05em] text-muted">{last}</span>
+              <span className="hidden text-right text-[14px] leading-snug text-text-3 sm:block">
+                Sanskrit <span className="text-muted">अद्वैत</span>
+                <br />
+                “not two”
+              </span>
+            </span>
           </h1>
 
-          <p className="text-[length:var(--text-lg)] text-muted leading-relaxed mb-[var(--spacing-fluid-md)] max-w-3xl">
-            Working drafts, code experiments, and study notes tracking my interests in creative
-            computing, philosophy, history, and internet infrastructure.
-          </p>
+          {/* Under the name: his words on the left, his signature on the right. */}
+          <div className="mt-10 grid gap-x-10 gap-y-10 lg:grid-cols-12">
+          <div className="settle lg:col-span-7" style={{ '--settle-delay': '600ms' }}>
+            <p className="text-[length:var(--text-xl)] leading-[1.35] tracking-[-0.015em]">
+              Student and developer from India, somewhere between software, philosophy and history.
+              Building small things, keeping the questions open.
+            </p>
+            <p className="mt-4 text-[length:var(--text-lg)] leading-relaxed text-muted">
+              I{' '}
+              {VERBS.map(([verb, to], i) => (
+                <span key={verb}>
+                  <Link to={to} className="pen-link inline-block py-1 text-ink [background-size:100%_1px] hover:text-accent">{verb}</Link>
+                  {i < VERBS.length - 2 ? ', ' : i === VERBS.length - 2 ? ' and ' : '.'}
+                </span>
+              ))}
+            </p>
+          </div>
 
-          <div className="flex flex-wrap items-center gap-4 sm:gap-6 mb-[var(--spacing-fluid-lg)]">
-            <Link
-              to="/projects"
-              className="group inline-flex items-center gap-3 pl-6 pr-2 py-2 rounded-full bg-accent text-canvas text-sm font-semibold hover:bg-accent-strong active:scale-[0.97] transition-all duration-500 ease-[var(--ease-out-expo)] shadow-subtle"
+          {/* Signature: who he is online, the line he signs with, and the pens' switch. */}
+          <div className="settle grid content-start gap-x-10 gap-y-6 border-t border-line pt-6 text-[15px] leading-snug text-muted sm:grid-cols-2 lg:col-span-4 lg:col-start-9 lg:grid-cols-1 lg:border-t-0 lg:border-l lg:pl-8 lg:pt-1" style={{ '--settle-delay': '750ms' }}>
+            <div>
+              <p className="mark-label" data-ink="fact">online I’m w1tneess</p>
+              <p className="mt-2 max-w-[17rem]">Read it as “witness”. Same person on GitHub and X.</p>
+            </div>
+            <div>
+              <p className="mark-label text-ink">ex duris gloria</p>
+              <p className="mt-2">Latin: from hardship, glory.</p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setPaused((p) => !p)}
+              aria-pressed={paused}
+              className="pen-link hidden w-fit items-center gap-2 py-1 text-[13px] text-text-3 hover:text-ink motion-safe:lg:inline-flex"
             >
-              <span>Explore Projects</span>
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-canvas/15 transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:scale-105 group-hover:translate-x-0.5">
-                <ArrowUpRight className="h-4 w-4" />
-              </div>
-            </Link>
-            <a
-              href="#inquiries"
-              className="group inline-flex items-center gap-3 pl-6 pr-2 py-2 rounded-full border border-line bg-surface/50 text-muted hover:text-ink hover:border-line-strong hover:bg-surface active:scale-[0.97] transition-all duration-500 ease-[var(--ease-out-expo)] text-sm font-semibold"
-            >
-              <span>Reading Archive</span>
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-ink/5 transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:scale-105 group-hover:translate-y-0.5">
-                <span aria-hidden="true">&darr;</span>
-              </div>
-            </a>
+              <span aria-hidden="true" className={`h-1.5 w-1.5 rounded-full ${paused ? 'bg-text-3' : 'bg-accent'}`} />
+              {paused ? 'Let the pens draw' : 'Pause the pens'}
+            </button>
+          </div>
           </div>
         </div>
 
-        {/* Archive Directory Explorer Strip */}
-        <div className="pt-8 border-t border-line grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 w-full">
-          {BRANCHES.map((b) => (
-            <Link
-              key={b.path}
-              to={b.path}
-              className="group p-4 sm:p-6 rounded-xl border border-line/60 bg-surface/30 hover:bg-surface/70 hover:border-line-strong hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-250 ease-[var(--ease-out-quart)] flex flex-col justify-between"
-            >
-              <div className="flex items-center justify-between mb-2">
-                <span className="font-mono text-xs text-ink group-hover:text-muted transition-colors duration-150 ease-[var(--ease-out-quart)] font-medium">
-                  {b.label}
-                </span>
-                <ArrowUpRight className="h-4 w-4 text-muted group-hover:text-ink transition-colors duration-150 ease-[var(--ease-out-quart)] opacity-60 group-hover:opacity-100" />
-              </div>
-              <p className="text-xs text-muted leading-relaxed line-clamp-2">{b.desc}</p>
-            </Link>
-          ))}
-        </div>
       </div>
     </section>
   )

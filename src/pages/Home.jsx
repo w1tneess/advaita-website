@@ -5,21 +5,23 @@ import {
   HeroSection,
   SelectedProjectsSection,
   ActiveInquiriesSection,
-  CorrespondenceSection,
 } from '@/components/features/home'
+import NotesSection from '@/components/features/home/NotesSection.jsx'
+import RuleSection from '@/components/features/home/RuleSection.jsx'
 
 const ROUTE = PUBLIC_ROUTES.find((route) => route.key === 'home')
 
 export default function Home() {
-  const { featuredProjects, philosophy, publicSocialLinks, profile } = useContent()
+  const { featuredProjects, philosophy, publicNotes, profile } = useContent()
 
   return (
     <>
       <Seo title={ROUTE.title} description={ROUTE.description} path="/" />
       <HeroSection profile={profile} />
+      <RuleSection profile={profile} />
+      <NotesSection notes={publicNotes} thinkers={philosophy?.thinkers} />
       <SelectedProjectsSection featuredProjects={featuredProjects} />
       <ActiveInquiriesSection philosophy={philosophy} />
-      <CorrespondenceSection publicSocialLinks={publicSocialLinks} />
     </>
   )
 }

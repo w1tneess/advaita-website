@@ -1,37 +1,33 @@
-/** 
- * Standardized high-editorial page header for inner routes.
- * Follows the broadsheet design system with delicate rules,
- * Playfair Display serif title, and generous editorial lead text.
+import PenStroke from '@/components/features/ink/PenStroke.jsx'
+
+/**
+ * Header for inner pages, on the notebook grid: the margin names the section,
+ * the body carries a large title and the lead.
  */
 export default function PageHeader({ eyebrow, title, lead, registry, children }) {
 	return (
-		<header className="shell pt-[clamp(6.5rem,10vw,8.5rem)] pb-[clamp(1.5rem,3vw,2.5rem)] mb-[clamp(1.5rem,3.5vw,2.75rem)] border-b border-line">
-			<div className="flex flex-wrap items-center justify-between gap-2 pb-2 sm:pb-3">
-				<p className="font-utility text-[length:var(--text-label)] text-muted">
-					{eyebrow}
-				</p>
-				{registry && (
-					<span className="font-utility text-[length:var(--text-label)] text-muted">
-						{registry}
-					</span>
-				)}
-			</div>
-
-			<h1 className="mt-1 text-[clamp(1.75rem,1.25rem+2vw,2.85rem)] text-ink font-normal tracking-tight leading-[1.15]">
-				{title}
-			</h1>
-
-			{lead && (
-				<p className="mt-2.5 sm:mt-3 max-w-2xl text-base sm:text-lg leading-relaxed text-muted">
-					{lead}
-				</p>
-			)}
-
-			{children && (
-				<div className="mt-4 sm:mt-6 pt-3 sm:pt-4 border-t border-line">
-					{children}
+		<header className="shell pt-32 pb-12 lg:pt-40 lg:pb-16">
+			<div className="folio gap-y-6">
+				<div className="folio-margin text-[15px] text-muted lg:pt-3">
+					{eyebrow && <p>{eyebrow}</p>}
+					{eyebrow && <PenStroke seed={1} auto className="mt-1" />}
+					{registry && <p className="mt-1 tabular-nums text-text-3">{registry}</p>}
 				</div>
-			)}
+
+				<div className="folio-body">
+					<h1 className="settle text-[length:var(--text-6xl)] leading-[1] tracking-[-0.045em] -ml-[0.04em] max-w-[18ch]">
+						{title}
+					</h1>
+
+					{lead && (
+						<p className="settle mt-6 max-w-2xl text-[length:var(--text-lg)] leading-relaxed text-muted" style={{ '--settle-delay': '120ms' }}>
+							{lead}
+						</p>
+					)}
+
+					{children && <div className="mt-10">{children}</div>}
+				</div>
+			</div>
 		</header>
 	)
 }
