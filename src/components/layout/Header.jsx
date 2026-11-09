@@ -26,7 +26,6 @@ export default function Header() {
 	const [open, setOpen] = useState(false)
 	const [scrolled, setScrolled] = useState(false)
 	const [lensOpen, setLensOpen] = useState(false)
-	const progressRef = useRef(null)
 	const pageRef = useRef(null)
 	const lensRef = useRef(null)
 	const location = useLocation()
@@ -38,14 +37,12 @@ export default function Header() {
 
 	useEffect(() => setOpen(false), [location.pathname])
 
-	// Hairline once the page leaves the top, and a pen line along the bar that fills as you read.
+	// Hairline once the page leaves the top, and the page count as you read.
 	useEffect(() => {
 		let ticking = false
 		const update = () => {
 			const y = window.scrollY
-			const max = document.documentElement.scrollHeight - window.innerHeight
 			setScrolled(y > 24)
-			if (progressRef.current) progressRef.current.style.transform = `scaleX(${max > 0 ? Math.min(1, y / max) : 0})`
 			// Page count, like a notebook: one page per screen of reading.
 			if (pageRef.current) {
 				const total = Math.max(1, Math.round(document.documentElement.scrollHeight / window.innerHeight))
@@ -241,7 +238,6 @@ export default function Header() {
 					</AnimatePresence>,
 					document.body,
 				)}
-		<span ref={progressRef} aria-hidden="true" className="absolute bottom-[-1px] left-0 h-px w-full origin-left bg-accent" style={{ transform: 'scaleX(0)' }} />
 		</header>
 	)
 }
