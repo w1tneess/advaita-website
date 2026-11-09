@@ -3,9 +3,9 @@
 /* ---------------------------------------------------------------------------
    DESIGN SYSTEM: Student Archive & Editorial Broadsheet
    ---------------------------------------------------------------------------
-   Utilitarian "Ink on Paper" palette.
-   Defaults to light mode (parchment), falls back to dark mode (obsidian).
-   Uses Playfair Display for display, Plus Jakarta Sans for body, and Space Mono for utility.
+   Warm "ink at night" palette, dark only (light tokens kept for later).
+   System serif for display, system sans for body, system mono for meta.
+   One copper accent, used rarely. Depth from surface steps and hairlines.
 --------------------------------------------------------------------------- */
 
 @theme {
@@ -24,10 +24,10 @@
   --color-on-accent: #F8F6F0;
 
   /* Epistemic label hues (subdued for dark mode) */
-  --color-fact: #38bdf8;
-  --color-analysis: #a78bfa;
-  --color-opinion: #fb923c;
-  --color-limitation: #fb7185;
+  --color-fact: #8fb0c4;
+  --color-analysis: #a9a3c2;
+  --color-opinion: #d4a373;
+  --color-limitation: #d08c86;
 
   /* Typography */
   --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
@@ -92,9 +92,9 @@
   --shadow-card-hover: 0 16px 40px -12px rgba(0, 0, 0, 0.25);
 
   /* Animation timing */
-  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
-  --ease-spring: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-out-expo: var(--ease-soft); /* one curve site-wide */
+  --ease-out-quart: var(--ease-soft);
+  --ease-spring: var(--ease-soft);
   --duration-fast: 150ms;
   --duration-normal: 250ms;
   --duration-slow: 400ms;
@@ -154,11 +154,9 @@
     font-family: var(--font-sans);
     font-size: var(--text-base);
     line-height: 1.6;
-    letter-spacing: -0.01em;
     min-width: 320px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    transition: background-color 0.3s var(--ease-out-expo), color 0.3s var(--ease-out-expo);
   }
 
   img,
@@ -230,14 +228,6 @@
     padding-inline: var(--margin-safe);
   }
 
-  .ambient-glow {
-    position: absolute;
-    border-radius: 9999px;
-    filter: blur(120px);
-    pointer-events: none;
-    opacity: 0.22;
-    background: radial-gradient(circle, var(--color-accent) 0%, rgba(194, 149, 106, 0.08) 50%, transparent 75%);
-  }
 
   .grid-asymmetric {
     display: grid;
@@ -255,7 +245,6 @@
     font-family: var(--font-sans);
     font-size: var(--text-base);
     line-height: 1.7;
-    letter-spacing: -0.01em;
   }
 
   .prose-body p {
@@ -308,13 +297,6 @@
     text-transform: uppercase;
   }
 
-  .glass-dock {
-    background: rgba(15, 14, 13, 0.75);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid rgba(248, 246, 240, 0.12);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
-  }
 
   .code-badge {
     font-family: var(--font-mono);
@@ -325,7 +307,7 @@
     border: 1px solid var(--color-line);
     background: rgba(248, 246, 240, 0.03);
     color: var(--color-muted);
-    transition: all 0.2s ease;
+    transition: color var(--duration-fast) var(--ease-soft), border-color var(--duration-fast) var(--ease-soft);
   }
 
   .code-badge:hover {
@@ -333,15 +315,6 @@
     color: var(--color-ink);
   }
 
-  .premium-noise {
-    position: fixed;
-    inset: 0;
-    z-index: 50;
-    pointer-events: none;
-    mix-blend-mode: overlay;
-    opacity: 0.03;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
