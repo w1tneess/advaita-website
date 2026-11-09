@@ -496,15 +496,16 @@
 html.reveal-ready [data-reveal]:not(.is-in) { opacity: 0; transform: translateY(18px); }
 
 /* Pen underline draws left to right when its section is revealed. */
-.pen-stroke path { stroke-dasharray: 1; stroke-dashoffset: 1; }
+/* Revealed left to right with a clip, which stays exact at any size (dash tricks break when stretched). */
+.pen-stroke path { clip-path: inset(0 100% 0 0); }
 .is-in .pen-stroke path,
 .pen-stroke.is-in path,
 .pen-stroke.is-auto path { animation: pen-draw 900ms var(--ease-soft) 180ms forwards; }
-@keyframes pen-draw { to { stroke-dashoffset: 0; } }
+@keyframes pen-draw { to { clip-path: inset(0 0 0 0); } }
 
 @media (prefers-reduced-motion: reduce) {
   html.reveal-ready [data-reveal]:not(.is-in) { opacity: 1; transform: none; }
-  .pen-stroke path { stroke-dashoffset: 0; animation: none !important; }
+  .pen-stroke path { clip-path: none; animation: none !important; }
 }
 
 /* Pointing at one phrase of the rule previews its ink: the other three recede. */
@@ -517,8 +518,8 @@ html.reveal-ready [data-reveal]:not(.is-in) { opacity: 0; transform: translateY(
 /* "Not two": the name arrives as a- and dvaita, apart, and closes into one word.
    Pointing at the name opens the gap a little again; the pencilled etymology sits under each part. */
 .name-part { transition: transform 700ms var(--ease-soft); }
-.name-a { animation: name-close-a 1100ms var(--ease-soft) 250ms backwards; }
-.name-rest { animation: name-close-b 1100ms var(--ease-soft) 250ms backwards; }
+.name-a { animation: name-close-a 900ms var(--ease-soft) 120ms backwards; }
+.name-rest { animation: name-close-b 900ms var(--ease-soft) 120ms backwards; }
 @keyframes name-close-a { from { transform: translateX(-0.22em); opacity: 0; } 40% { opacity: 1; } to { transform: none; } }
 @keyframes name-close-b { from { transform: translateX(0.22em); opacity: 0; } 40% { opacity: 1; } to { transform: none; } }
 @media (hover: hover) {
@@ -528,16 +529,15 @@ html.reveal-ready [data-reveal]:not(.is-in) { opacity: 0; transform: translateY(
 .name-note {
   position: absolute;
   top: 100%;
-  margin-top: 0.12em;
+  margin-top: 0.03em;
   display: flex;
   flex-direction: column;
-  gap: 0.15rem;
-  font-size: 1rem;
+  gap: 0.25rem;
   letter-spacing: 0;
   white-space: nowrap;
 }
-.name-note .mark-label { font-size: clamp(1.25rem, 1rem + 0.8vw, 1.75rem); animation: settle 600ms var(--ease-soft) 1500ms backwards; }
-.pen-stroke.pen-late path { animation-delay: 1250ms !important; }
+.name-note .mark-label { font-size: clamp(1.25rem, 1rem + 0.8vw, 1.75rem); animation: settle 500ms var(--ease-soft) 950ms backwards; }
+.pen-stroke.pen-late path { animation-delay: 800ms !important; }
 @media (prefers-reduced-motion: reduce) {
   .name-a, .name-rest, .name-note .mark-label { animation: none; }
 }

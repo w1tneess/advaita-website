@@ -34,7 +34,7 @@ export default function Footer() {
                 <li key={link.id || link.label}>
                   <a
                     href={hrefFor(link)}
-                    className="pen-link inline-block py-1 text-[15px] text-muted hover:text-ink"
+                    className="pen-link inline-block min-w-6 py-1 text-[15px] text-muted hover:text-ink"
                     {...(link.kind === 'email' ? {} : { target: '_blank', rel: 'me noopener noreferrer' })}
                   >
                     {link.kind === 'email' ? link.url : link.label}

@@ -45,22 +45,19 @@ export default function CookieBanner() {
         <motion.aside
           role="region"
           aria-label="Privacy notice"
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 16 }}
+          exit={{ opacity: 0, y: 12 }}
           transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
-          className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-4 right-4 z-50 mx-auto max-w-md rounded-[8px] border border-line bg-raised p-4 sm:left-auto sm:right-6 sm:w-[24rem]"
+          className="fixed inset-x-0 bottom-0 z-50 border-t border-line bg-canvas pb-[env(safe-area-inset-bottom)]"
         >
-          <p className="text-[13px] sm:text-[14px] leading-relaxed text-ink">
-            No cookies and no tracking. Your browser keeps two small settings: the contact form timer
-            and your theme.{' '}
-            <Link to="/privacy" className="text-muted underline underline-offset-4 hover:text-ink">
-              Privacy
-            </Link>
-          </p>
-          <div className="mt-3 flex justify-end">
-            <button type="button" onClick={() => handleChoice('acknowledged')} className="btn-ink !px-4 !py-2 text-[14px]">
-              OK
+          <div className="shell flex items-center justify-between gap-4 py-2.5 text-[13px] text-muted">
+            <p>
+              No cookies, no tracking.{' '}
+              <Link to="/privacy" className="inline-block py-1 underline underline-offset-4 hover:text-ink">Privacy</Link>
+            </p>
+            <button type="button" onClick={() => handleChoice('acknowledged')} className="pen-link py-1 text-ink">
+              Got it
             </button>
           </div>
         </motion.aside>

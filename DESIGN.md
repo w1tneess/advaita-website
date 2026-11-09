@@ -91,3 +91,11 @@ Inner pages: margin + text column header, then the page's own list or grid.
 - A generic model lands on "dark portfolio, serif hero, copper accent" (the old site) or "cream editorial". Changed to cool graphite with four functional inks.
 - A generic hero says "I build things". Changed to his own rule, set as the headline.
 - Generic labels are uppercase mono eyebrows. Changed to Caveat margin marks that say which kind of claim the text is.
+
+## Hero, second direction (owner asked for the first screen to be about him)
+
+- **Idea:** "Not two." The name is the hero. *Advaita* is Sanskrit for "not two": the word arrives as `A` and `dvaita`, apart, and closes into one; the etymology is pencilled under each part in the fact ink. Hovering the name opens the gap slightly again.
+- **Around it, all from his public profiles:** handle w1tneess ("witness"), his GitHub motto *ex duris gloria* with its translation, his README line ("Student and developer from India, somewhere between software, philosophy and history. Building small things, keeping the questions open."), and his old headline turned into links (notice, think, build, photograph, read, write).
+- **Living page:** a canvas where four pens keep marking the empty parts of the page (margin brackets, ticks, loops, underlines, highlighter swipes). Desktop only, pausable, static under reduced motion.
+- **The rule** (four kinds of claim) moved to its own section right under the hero, with the lens.
+- **Blending:** pen underlines that draw on reveal under every section and page title, Caveat margin notes, the same name and etymology echoed in the footer.

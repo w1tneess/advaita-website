@@ -51,21 +51,19 @@ function path(kind, x, y, size) {
 
 function makeMark(w, h, ink) {
   const kind = KINDS[Math.floor(Math.random() * KINDS.length)]
-  // Marks live where a reader writes: the margins and the lower band, not over the headline.
-  const zone = Math.random()
+  // Marks live where a reader writes and nothing is printed: the top of the left margin and
+  // the space below the text on the right. Each zone caps how long a stroke may run.
   let x
   let y
+  let room
   if (kind === 'bracket') {
-    x = rand(w * 0.93, w * 0.975)
-    y = rand(h * 0.15, h * 0.7)
-  } else if (zone < 0.45) {
-    x = rand(w * 0.7, w * 0.95); y = rand(h * 0.62, h * 0.86)
-  } else if (zone < 0.8) {
-    x = rand(w * 0.56, w * 0.9); y = rand(h * 0.7, h * 0.88)
+    x = rand(w * 0.008, w * 0.016); y = rand(h * 0.14, h * 0.42); room = w
+  } else if (Math.random() < 0.4) {
+    x = rand(w * 0.02, w * 0.12); y = rand(h * 0.14, h * 0.46); room = w * 0.2 - (x - w * 0.02)
   } else {
-    x = rand(w * 0.78, w * 0.9); y = rand(h * 0.2, h * 0.5)
+    x = rand(w * 0.6, w * 0.84); y = rand(h * 0.76, h * 0.88); room = w * 0.95 - x
   }
-  const size = Math.max(60, Math.min(w, h) * 0.12)
+  const size = Math.max(40, Math.min(Math.min(w, h) * 0.12, room / 3))
   const highlighter = kind === 'swipe'
   return {
     ink,
@@ -169,7 +167,8 @@ export default function InkField({ remarkSelector, className = '' }) {
       if (!visible || document.hidden || pausedRef.current) return
 
       spawnIn -= dt
-      if (spawnIn <= 0 && marks.length < MAX_MARKS) {
+      // Narrow screens stack the margin above the text, so there is no empty paper to mark.
+      if (spawnIn <= 0 && w >= 1024 && marks.length < MAX_MARKS) {
         const ink = lensRef.current && Math.random() < 0.6 ? lensRef.current : INKS[Math.floor(Math.random() * 4)]
         marks.push(makeMark(w, h, ink))
         spawnIn = rand(0.45, 1.1)
@@ -204,13 +203,15 @@ export default function InkField({ remarkSelector, className = '' }) {
 
     if (reduce) {
       // A still page with a few finished marks, so the hero still reads as marked up.
-      for (let i = 0; i < 6; i++) { const m = makeMark(w, h, INKS[i % 4]); m.draw = 1; marks.push(m) }
+      if (w >= 1024) for (let i = 0; i < 6; i++) { const m = makeMark(w, h, INKS[i % 4]); m.draw = 1; marks.push(m) }
       paint()
-      return () => ro.disconnect()
+      const still = new ResizeObserver(() => { resize(); paint() })
+      still.observe(canvas)
+      return () => { ro.disconnect(); still.disconnect() }
     }
 
     // Start with a few marks already on the page so the first frame is composed, not empty.
-    for (let i = 0; i < 7; i++) { const m = makeMark(w, h, INKS[i % 4]); m.draw = 1; m.hold = rand(0.5, 4); marks.push(m) }
+    if (w >= 1024) for (let i = 0; i < 7; i++) { const m = makeMark(w, h, INKS[i % 4]); m.draw = 1; m.hold = rand(0.5, 4); marks.push(m) }
     paint()
 
     const io = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting })
@@ -233,7 +234,7 @@ export default function InkField({ remarkSelector, className = '' }) {
         type="button"
         onClick={() => setPaused((p) => !p)}
         aria-pressed={paused}
-        className="absolute top-20 right-[var(--margin-safe)] z-20 hidden text-[13px] text-text-3 hover:text-ink transition-colors motion-safe:md:inline-flex items-center gap-2 py-1"
+        className="absolute top-20 right-[var(--margin-safe)] z-20 hidden text-[13px] text-text-3 hover:text-ink transition-colors motion-safe:md:inline-flex items-center gap-2 py-1 pen-link"
       >
         <span aria-hidden="true" className={`h-1.5 w-1.5 rounded-full ${paused ? 'bg-text-3' : 'bg-ink'}`} />
         {paused ? 'Resume the pens' : 'Pause the pens'}
