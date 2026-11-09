@@ -25,7 +25,9 @@ const NOTES = {
 export default function Header() {
 	const [open, setOpen] = useState(false)
 	const [scrolled, setScrolled] = useState(false)
-	const [tucked, setTucked] = useState(false)
+	const [lensOpen, setLensOpen] = useState(false)
+	const progressRef = useRef(null)
+	const lensRef = useRef(null)
 	const location = useLocation()
 	const { profile } = useContent()
 	const menuRef = useRef(null)
@@ -35,15 +37,14 @@ export default function Header() {
 
 	useEffect(() => setOpen(false), [location.pathname])
 
-	// The bar steps aside while reading down the page and returns as soon as you scroll up.
+	// Hairline once the page leaves the top, and a pen line along the bar that fills as you read.
 	useEffect(() => {
-		let last = window.scrollY
 		let ticking = false
 		const update = () => {
 			const y = window.scrollY
+			const max = document.documentElement.scrollHeight - window.innerHeight
 			setScrolled(y > 24)
-			if (Math.abs(y - last) > 6) setTucked(y > last && y > 160)
-			last = y
+			if (progressRef.current) progressRef.current.style.transform = `scaleX(${max > 0 ? Math.min(1, y / max) : 0})`
 			ticking = false
 		}
 		const onScroll = () => {
@@ -51,8 +52,20 @@ export default function Header() {
 		}
 		update()
 		window.addEventListener('scroll', onScroll, { passive: true })
-		return () => window.removeEventListener('scroll', onScroll)
-	}, [])
+		window.addEventListener('resize', onScroll)
+		return () => { window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onScroll) }
+	}, [location.pathname])
+
+	// The lens panel closes on a click outside it, on Escape, and on navigation.
+	useEffect(() => setLensOpen(false), [location.pathname])
+	useEffect(() => {
+		if (!lensOpen) return
+		const onDown = (e) => { if (!lensRef.current?.contains(e.target)) setLensOpen(false) }
+		const onKey = (e) => { if (e.key === 'Escape') setLensOpen(false) }
+		document.addEventListener('pointerdown', onDown)
+		window.addEventListener('keydown', onKey)
+		return () => { document.removeEventListener('pointerdown', onDown); window.removeEventListener('keydown', onKey) }
+	}, [lensOpen])
 
 	useEffect(() => {
 		if (open) {
@@ -72,28 +85,27 @@ export default function Header() {
 		}
 	}, [open])
 
-	const links = NAV_ITEMS.filter((route) => route.path !== '/')
+	const links = NAV_ITEMS.filter((route) => route.path !== '/' && route.path !== '/contact')
 
 	return (
 		<header
-			onFocusCapture={() => setTucked(false)}
-			className={`fixed inset-x-0 top-0 z-50 border-b bg-canvas transition-[transform,border-color] duration-500 ease-[var(--ease-soft)] ${
-				scrolled ? 'border-line' : 'border-transparent'
-			} ${tucked && !open ? '-translate-y-full' : ''}`}
+			className={`fixed inset-x-0 top-0 z-50 border-b bg-canvas transition-[border-color] duration-300 ${scrolled ? 'border-line' : 'border-transparent'}`}
 		>
-			<div className="shell flex h-16 items-center justify-between gap-6 pt-[env(safe-area-inset-top)]">
-				<Link to="/" {...getRoutePreloadProps('/')} className="group flex items-baseline gap-1 text-[15px] tracking-[-0.01em]" aria-label={`${name}, home`}>
-					<span className="font-medium text-ink">{first}</span>{' '}
-					<span className="text-muted transition-colors duration-200 group-hover:text-ink">{rest.join(' ')}</span>
+			<div className="shell grid h-[72px] grid-cols-[1fr_auto] items-center gap-6 pt-[env(safe-area-inset-top)] md:grid-cols-[1fr_auto_1fr]">
+				{/* Wordmark: the name stacked, with the a- of Advaita underlined in pen. */}
+				<Link to="/" {...getRoutePreloadProps('/')} className="group flex w-fit flex-col leading-none" aria-label={`${name}, home`}>
+					<span className="relative text-[19px] font-medium tracking-[-0.035em] text-ink">
+						<span className="relative">
+							{first.slice(0, 1)}
+							<span aria-hidden="true" className="absolute -bottom-[1px] left-0 h-[1.5px] w-full origin-left rounded-full bg-fact transition-transform duration-500 ease-[var(--ease-soft)] group-hover:scale-x-150" />
+						</span>
+						{first.slice(1)}
+					</span>{' '}
+					<span className="mt-[7px] text-[12px] tracking-[0.01em] text-muted transition-colors duration-200 group-hover:text-ink">{rest.join(' ')}</span>
 				</Link>
 
-				<div className="hidden items-center gap-2 lg:flex">
-					<span className="mark-label !text-[1.125rem] text-text-3" aria-hidden="true">read by</span>
-					<InkKeys />
-				</div>
-
 				<nav className="hidden md:block" aria-label="Primary">
-					<ul className="flex items-center gap-7">
+					<ul className="flex items-center gap-8">
 						{links.map((route) => (
 							<li key={route.path}>
 								<NavLink
@@ -114,6 +126,43 @@ export default function Header() {
 						))}
 					</ul>
 				</nav>
+
+				<div className="hidden items-center justify-end gap-3 md:flex">
+					<div ref={lensRef} className="relative hidden lg:block">
+						<button
+							type="button"
+							onClick={() => setLensOpen((v) => !v)}
+							aria-expanded={lensOpen}
+							aria-controls="lens-panel"
+							className={`flex h-10 items-center gap-2.5 rounded-[6px] border px-3 text-[14px] transition-colors duration-200 ${lensOpen ? 'border-ink text-ink' : 'border-line text-muted hover:border-line-strong hover:text-ink'}`}
+						>
+							<span className="flex gap-1" aria-hidden="true">
+								{['fact', 'analysis', 'opinion', 'limitation'].map((k) => (
+									<span key={k} className="h-2 w-2 rounded-full" style={{ background: `var(--color-${k})` }} />
+								))}
+							</span>
+							Lens
+						</button>
+						<AnimatePresence>
+							{lensOpen && (
+								<motion.div
+									id="lens-panel"
+									initial={{ opacity: 0, y: -6 }}
+									animate={{ opacity: 1, y: 0 }}
+									exit={{ opacity: 0, y: -6 }}
+									transition={{ duration: 0.22, ease: EASE }}
+									className="absolute right-0 top-full mt-3 w-[22rem] rounded-[8px] border border-line bg-raised p-5 shadow-raised"
+								>
+									<p className="mark-label !text-[1.25rem] text-text-3">read by one kind of claim</p>
+									<InkKeys variant="hero" className="mt-4 [&_ul]:!grid [&_ul]:grid-cols-2 [&_ul]:gap-x-4" />
+								</motion.div>
+							)}
+						</AnimatePresence>
+					</div>
+					<NavLink to="/contact" {...getRoutePreloadProps('/contact')} className="btn-ink !px-4 !py-2.5 text-[14px]">
+						Write to me
+					</NavLink>
+				</div>
 
 				<button
 					type="button"
@@ -186,6 +235,7 @@ export default function Header() {
 					</AnimatePresence>,
 					document.body,
 				)}
+		<span ref={progressRef} aria-hidden="true" className="absolute bottom-[-1px] left-0 h-px w-full origin-left bg-accent" style={{ transform: 'scaleX(0)' }} />
 		</header>
 	)
 }

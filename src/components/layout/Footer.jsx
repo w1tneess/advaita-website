@@ -8,19 +8,44 @@ import { CONTACT_EMAIL } from '@/config/site.js'
 import { getRoutePreloadProps } from '@/lib/preload'
 import PenStroke from '@/components/features/ink/PenStroke.jsx'
 
-// His clock, so a reader knows whether a reply is likely soon. Updated once a minute.
+// His clock, so a reader can tell whether a reply is likely soon. Updated once a minute.
 function useIndiaTime() {
-  const fmt = () =>
-    new Intl.DateTimeFormat('en-IN', { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'Asia/Kolkata' })
-      .format(new Date())
-      .replace(/\s?([ap])\.?m\.?/i, (_, p) => ` ${p.toLowerCase()}m`)
+  const read = () => {
+    const now = new Date()
+    const parts = Object.fromEntries(
+      new Intl.DateTimeFormat('en-GB', { hour: 'numeric', minute: 'numeric', hour12: false, timeZone: 'Asia/Kolkata' })
+        .formatToParts(now)
+        .map((p) => [p.type, p.value]),
+    )
+    const h = Number(parts.hour) % 24
+    const m = Number(parts.minute)
+    const label = `${((h + 11) % 12) + 1}:${String(m).padStart(2, '0')} ${h < 12 ? 'am' : 'pm'}`
+    return { h, m, label }
+  }
   const [time, setTime] = useState(null)
   useEffect(() => {
-    setTime(fmt())
-    const id = setInterval(() => setTime(fmt()), 60_000)
+    setTime(read())
+    const id = setInterval(() => setTime(read()), 60_000)
     return () => clearInterval(id)
   }, [])
   return time
+}
+
+/** A small hand-drawn clock face showing his local time. */
+function PenClock({ h, m }) {
+  const hourDeg = ((h % 12) + m / 60) * 30
+  const minDeg = m * 6
+  return (
+    <svg viewBox="0 0 64 64" className="h-16 w-16 shrink-0" aria-hidden="true">
+      <path d="M32 3 C 50 2, 62 15, 61 33 C 60 50, 47 62, 31 61 C 14 60, 3 48, 3 31 C 4 15, 16 4, 34 4" fill="none" stroke="currentColor" strokeOpacity="0.45" strokeWidth="1.4" strokeLinecap="round" />
+      {[0, 90, 180, 270].map((d) => (
+        <line key={d} x1="32" y1="8" x2="32" y2="11" stroke="currentColor" strokeOpacity="0.45" strokeWidth="1.4" strokeLinecap="round" transform={`rotate(${d} 32 32)`} />
+      ))}
+      <line x1="32" y1="32" x2="32" y2="18" stroke="var(--color-ink)" strokeWidth="2.2" strokeLinecap="round" transform={`rotate(${hourDeg} 32 32)`} />
+      <line x1="32" y1="32" x2="32" y2="11" stroke="var(--color-opinion)" strokeWidth="1.6" strokeLinecap="round" transform={`rotate(${minDeg} 32 32)`} />
+      <circle cx="32" cy="32" r="2" fill="var(--color-ink)" />
+    </svg>
+  )
 }
 
 /** The notebook's last page: a sign-off, where everything is, and the name it is kept under. */
@@ -35,37 +60,51 @@ export default function Footer() {
   return (
     <footer className="mt-auto border-t border-line pt-24 pb-10 lg:pt-32">
       <div className="shell">
-        {/* Sign-off */}
-        <div className="folio gap-y-8" data-reveal>
+        {/* Sign-off: the whole sentence is the way to write to him. */}
+        <div className="folio gap-y-10" data-reveal>
           <div className="folio-margin">
             <p className="mark-label" data-ink="opinion">end of the page</p>
             <PenStroke seed={2} className="mt-2" />
+            <p className="mt-4 max-w-[15rem] text-[15px] leading-snug text-muted">Thanks for reading this far.</p>
           </div>
-          <div className="folio-body">
-            <p className="text-[length:var(--text-5xl)] leading-[1.02] tracking-[-0.045em] max-w-[16ch]">
-              Thanks for reading. If something here is wrong, tell me.
-            </p>
-            <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
-              <Link to="/contact" {...getRoutePreloadProps('/contact')} className="btn-ink">
-                <span>Write a note</span>
-                <ArrowRight className="h-4 w-4" aria-hidden="true" />
-              </Link>
-              <a href={`mailto:${CONTACT_EMAIL}`} className="pen-link py-1 text-[15px] text-muted hover:text-ink">
-                {CONTACT_EMAIL}
-              </a>
+
+          <div className="lg:col-span-6 lg:col-start-4">
+            <Link to="/contact" {...getRoutePreloadProps('/contact')} className="group block">
+              <span className="block text-[clamp(2.75rem,1.2rem+5.6vw,6.5rem)] font-medium leading-[0.98] tracking-[-0.05em]">
+                Tell me where I’m{' '}
+                <span className="ink is-lifted transition-[background-size] duration-500 group-hover:[background-size:100%_0.26em] group-focus-visible:[background-size:100%_0.26em]" data-ink="opinion">
+                  wrong
+                </span>
+                .
+              </span>
+              <span className="mt-8 inline-flex items-center gap-2 text-[16px] text-muted transition-colors group-hover:text-ink">
+                Write a note
+                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
+              </span>
+            </Link>
+            <a href={`mailto:${CONTACT_EMAIL}`} className="pen-link mt-3 inline-block py-1 text-[16px] text-muted hover:text-ink">
+              or email {CONTACT_EMAIL}
+            </a>
+          </div>
+
+          {time && (
+            <div className="flex items-center gap-5 self-end text-ink lg:col-span-3 lg:col-start-10 lg:justify-end">
+              <PenClock h={time.h} m={time.m} />
+              <div className="text-[15px] leading-snug">
+                <p className="tabular-nums">
+                  It’s <time>{time.label}</time> for me
+                </p>
+                <p className="text-muted">in {profile?.location || 'West Bengal, India'}</p>
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
         {/* Where everything is */}
         <div className="folio mt-24 gap-y-10 border-t border-line pt-10" data-reveal style={{ '--i': 1 }}>
           <div className="folio-margin text-[15px] text-muted">
             <p className="text-ink">{profile?.location || 'West Bengal, India'}</p>
-            {time && (
-              <p className="mt-1 tabular-nums">
-                It’s <time>{time}</time> here
-              </p>
-            )}
+            <p className="mt-1">India Standard Time</p>
           </div>
 
           <nav aria-label="Footer" className="lg:col-span-3 lg:col-start-4">
@@ -119,7 +158,7 @@ export default function Footer() {
             </span>
             <span className="text-muted"> {rest.join(' ')}</span>
           </p>
-          <p className="mt-3 flex gap-5 sm:hidden">
+          <p className="mt-1 flex gap-5 sm:hidden">
             <span className="mark-label !text-[1.125rem]" data-ink="fact">a-: not</span>
             <span className="mark-label !text-[1.125rem]" data-ink="fact">dvaita: two</span>
           </p>
