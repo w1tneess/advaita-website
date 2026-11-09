@@ -85,3 +85,7 @@ Thumbs.db
 !.vscode/extensions.json
 
 .vercel
+
+# Local design QA screenshots
+.shots/
+.shots-log.txt
