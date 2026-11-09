@@ -17,10 +17,10 @@ export default function Footer() {
       <div className="shell">
         <div className="folio gap-y-12">
           <nav className="folio-margin" aria-label="Footer">
-            <ul className="space-y-2">
+            <ul className="space-y-1">
               {NAV_ITEMS.map((item) => (
                 <li key={item.path}>
-                  <Link to={item.path} {...getRoutePreloadProps(item.path)} className="pen-link text-[15px] text-muted hover:text-ink">
+                  <Link to={item.path} {...getRoutePreloadProps(item.path)} className="pen-link inline-block py-1 text-[15px] text-muted hover:text-ink">
                     {item.label}
                   </Link>
                 </li>
@@ -34,7 +34,7 @@ export default function Footer() {
                 <li key={link.id || link.label}>
                   <a
                     href={hrefFor(link)}
-                    className="pen-link text-[15px] text-muted hover:text-ink"
+                    className="pen-link inline-block py-1 text-[15px] text-muted hover:text-ink"
                     {...(link.kind === 'email' ? {} : { target: '_blank', rel: 'me noopener noreferrer' })}
                   >
                     {link.kind === 'email' ? link.url : link.label}
@@ -54,7 +54,7 @@ export default function Footer() {
 
         <p
           aria-hidden="true"
-          className="mt-20 text-[clamp(3rem,1rem+10.5vw,11rem)] font-medium leading-[0.86] tracking-[-0.06em] text-ink -ml-[0.05em] select-none whitespace-nowrap"
+          className="mt-20 text-[clamp(2rem,12.6vw,15rem)] font-medium leading-[0.86] tracking-[-0.06em] text-ink -ml-[0.05em] select-none whitespace-nowrap"
         >
           {name}
         </p>
@@ -62,9 +62,9 @@ export default function Footer() {
         <div className="mt-8 flex flex-col gap-3 border-t border-line pt-6 text-[13px] text-text-3 sm:flex-row sm:items-center sm:justify-between">
           <p className="tabular-nums">&copy; {year} {name}</p>
           <ul className="flex flex-wrap gap-x-6 gap-y-2">
-            <li><Link to="/privacy" className="hover:text-ink transition-colors">Privacy</Link></li>
-            <li><Link to="/terms" className="hover:text-ink transition-colors">Terms</Link></li>
-            <li><a href="https://support.advaitachandra.in" target="_blank" rel="noopener noreferrer" className="hover:text-ink transition-colors">Support</a></li>
+            <li><Link to="/privacy" className="inline-block py-1 hover:text-ink transition-colors">Privacy</Link></li>
+            <li><Link to="/terms" className="inline-block py-1 hover:text-ink transition-colors">Terms</Link></li>
+            <li><a href="https://support.advaitachandra.in" target="_blank" rel="noopener noreferrer" className="inline-block py-1 hover:text-ink transition-colors">Support</a></li>
           </ul>
         </div>
       </div>

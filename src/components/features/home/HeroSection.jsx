@@ -17,7 +17,7 @@ export default function HeroSection({ profile = {} }) {
       </div>
 
       <div className="folio-body">
-        <h1 className="settle text-[length:var(--text-hero)] leading-[1.02] tracking-[-0.045em] -ml-[0.04em] max-w-[16ch] sm:max-w-[18ch]">
+        <h1 className="text-[length:var(--text-hero)] leading-[1.02] tracking-[-0.045em] -ml-[0.04em] max-w-[16ch] sm:max-w-[18ch]">
           <InkedText text={rule} idle />
         </h1>
 

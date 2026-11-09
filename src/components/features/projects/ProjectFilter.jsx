@@ -22,7 +22,7 @@ export default function ProjectFilter({
               type="button"
               aria-pressed={active}
               onClick={() => onCategoryChange(cat)}
-              className={`pen-link py-1 text-[15px] ${active ? 'text-ink [background-size:100%_1px]' : 'text-muted hover:text-ink'}`}
+              className={`pen-link min-w-6 py-1 text-[15px] ${active ? 'text-ink [background-size:100%_1px]' : 'text-muted hover:text-ink'}`}
             >
               {label(cat)}
             </button>

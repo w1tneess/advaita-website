@@ -43,14 +43,14 @@ export default function About() {
         <section className="folio gap-y-10 pb-20 lg:pb-28" aria-label="Introduction">
           <aside className="folio-margin text-[15px] text-muted">
             <p className="text-ink">{profile?.location || 'West Bengal, India'}</p>
-            <ul className="mt-6 space-y-2">
+            <ul className="mt-6 space-y-1">
               {links.map((l) => (
                 <li key={l.id || l.label}>
-                  <a href={l.url} target="_blank" rel="me noopener noreferrer" className="pen-link hover:text-ink">{l.label}</a>
+                  <a href={l.url} target="_blank" rel="me noopener noreferrer" className="pen-link inline-block py-1 hover:text-ink">{l.label}</a>
                 </li>
               ))}
               {CONTACT_EMAIL && (
-                <li><a href={`mailto:${CONTACT_EMAIL}`} className="pen-link hover:text-ink">{CONTACT_EMAIL}</a></li>
+                <li><a href={`mailto:${CONTACT_EMAIL}`} className="pen-link inline-block py-1 hover:text-ink">{CONTACT_EMAIL}</a></li>
               )}
             </ul>
           </aside>

@@ -65,7 +65,7 @@ export function InkKeys({ variant = 'compact', className = '' }) {
                 aria-pressed={active}
                 onClick={() => setLens(ink.key)}
                 title={hero ? undefined : ink.label}
-                aria-label={hero ? undefined : ink.label}
+                aria-label={hero ? undefined : `${ink.short}: ${ink.label}`}
                 className={
                   hero
                     ? `group flex items-baseline gap-3 py-1.5 text-left transition-opacity duration-300 ${lens && !active ? 'opacity-45' : ''}`
@@ -74,7 +74,7 @@ export function InkKeys({ variant = 'compact', className = '' }) {
               >
                 <span
                   aria-hidden="true"
-                  className={`inline-block shrink-0 rounded-full transition-transform duration-300 ${hero ? 'h-2.5 w-2.5 group-hover:scale-125' : 'h-2 w-2'} ${active ? 'scale-125' : ''}`}
+                  className={`inline-block shrink-0 rounded-full transition-transform duration-300 ${hero ? 'h-2.5 w-2.5' : 'h-2 w-2'} group-hover:scale-150 ${active ? 'scale-125' : ''}`}
                   style={{ background: `var(--color-${ink.key})` }}
                 />
                 {hero ? (

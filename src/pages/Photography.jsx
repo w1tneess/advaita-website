@@ -96,7 +96,7 @@ export default function Photography() {
               type="button"
               aria-pressed={activeCategories.length === 0}
               onClick={() => setValue('category', [])}
-              className={`pen-link py-1 text-[15px] ${activeCategories.length === 0 ? 'text-ink [background-size:100%_1px]' : 'text-muted hover:text-ink'}`}
+              className={`pen-link min-w-6 py-1 text-[15px] ${activeCategories.length === 0 ? 'text-ink [background-size:100%_1px]' : 'text-muted hover:text-ink'}`}
             >
               All <span className="tabular-nums text-text-3">{photos.length}</span>
             </button>
@@ -108,7 +108,7 @@ export default function Photography() {
                   type="button"
                   aria-pressed={on}
                   onClick={() => toggleValue('category', cat.slug)}
-                  className={`pen-link py-1 text-[15px] ${on ? 'text-ink [background-size:100%_1px]' : 'text-muted hover:text-ink'}`}
+                  className={`pen-link min-w-6 py-1 text-[15px] ${on ? 'text-ink [background-size:100%_1px]' : 'text-muted hover:text-ink'}`}
                 >
                   {cat.name}
                 </button>
@@ -175,11 +175,13 @@ export default function Photography() {
             })}
           </div>
         ) : (
-          <EmptyState
+          <div className="folio"><div className="folio-body">
+            <EmptyState
             icon={Camera}
             title="No photographs yet"
             message="Photographs and visual notes will appear here once added."
           />
+          </div></div>
         )}
       </section>
 

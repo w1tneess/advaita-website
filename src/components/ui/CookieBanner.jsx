@@ -51,7 +51,7 @@ export default function CookieBanner() {
           transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
           className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-4 right-4 z-50 mx-auto max-w-md rounded-[8px] border border-line bg-raised p-4 sm:left-auto sm:right-6 sm:w-[24rem]"
         >
-          <p className="text-[14px] leading-relaxed text-ink">
+          <p className="text-[13px] sm:text-[14px] leading-relaxed text-ink">
             No cookies and no tracking. Your browser keeps two small settings: the contact form timer
             and your theme.{' '}
             <Link to="/privacy" className="text-muted underline underline-offset-4 hover:text-ink">

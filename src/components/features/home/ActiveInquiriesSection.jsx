@@ -15,7 +15,7 @@ export default function ActiveInquiriesSection({ philosophy = {} }) {
       </div>
 
       <div className="folio-body">
-        <p className="text-[length:var(--text-5xl)] leading-[1.05] tracking-[-0.04em] text-ink max-w-[20ch]">
+        <p className="text-[length:var(--text-3xl)] sm:text-[length:var(--text-5xl)] leading-[1.05] tracking-[-0.04em] text-ink max-w-[20ch]">
           {sentence}
         </p>
 

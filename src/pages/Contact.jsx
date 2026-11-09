@@ -37,7 +37,7 @@ export default function Contact() {
               <ul className="mt-3 space-y-2">
                 {socialLinks.map((link) => (
                   <li key={link.id}>
-                    <a href={link.url} target="_blank" rel="me noopener noreferrer" className="pen-link hover:text-ink">
+                    <a href={link.url} target="_blank" rel="me noopener noreferrer" className="pen-link inline-block py-1 hover:text-ink">
                       {link.label}
                       <span className="sr-only"> (opens in a new tab)</span>
                     </a>

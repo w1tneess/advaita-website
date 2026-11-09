@@ -312,33 +312,26 @@
   .mark-label[data-ink='opinion'] { color: var(--color-opinion); }
   .mark-label[data-ink='limitation'] { color: var(--color-limitation); }
 
-  /* The pen stroke under an inked phrase: draws left to right. */
+  /* The pen stroke under an inked phrase: draws left to right and follows line wraps. */
   .ink {
-    position: relative;
-    z-index: 0;
-  }
-  .ink::after {
-    content: '';
-    position: absolute;
-    z-index: -1;
-    left: -0.04em;
-    right: -0.04em;
-    bottom: 0.08em;
-    height: 0.26em;
-    background: var(--ink-color, var(--color-analysis));
-    opacity: 0.42;
-    transform: scaleX(var(--ink-draw, 1));
-    transform-origin: left center;
-    transition: transform 520ms var(--ease-soft), opacity 320ms var(--ease-soft);
+    --ink-color: var(--color-analysis);
+    --ink-fill: linear-gradient(color-mix(in srgb, var(--ink-color) 45%, transparent), color-mix(in srgb, var(--ink-color) 45%, transparent));
+    background-image: var(--ink-fill);
+    background-repeat: no-repeat;
+    background-position: 0 86%;
+    background-size: 100% 0.26em;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+    transition: background-size 520ms var(--ease-soft), opacity 320ms var(--ease-soft);
   }
   .ink[data-ink='fact'] { --ink-color: var(--color-fact); }
   .ink[data-ink='analysis'] { --ink-color: var(--color-analysis); }
   .ink[data-ink='opinion'] { --ink-color: var(--color-opinion); }
-  .ink[data-ink='limitation'] { --ink-color: var(--color-limitation); }
-  .ink[data-ink='limitation']::after {
-    background: repeating-linear-gradient(90deg, var(--color-limitation) 0 0.3em, transparent 0.3em 0.5em);
+  .ink[data-ink='limitation'] {
+    --ink-color: var(--color-limitation);
+    --ink-fill: repeating-linear-gradient(90deg, color-mix(in srgb, var(--color-limitation) 55%, transparent) 0 0.3em, transparent 0.3em 0.5em);
   }
-  .ink.is-lifted::after { --ink-draw: 0; }
+  .ink.is-lifted { background-size: 0% 0.26em; }
 
   /* Lens: when an ink is chosen, passages of other inks recede. */
   [data-ink] { transition: opacity 320ms var(--ease-soft); }
@@ -346,7 +339,6 @@
   html[data-lens='analysis'] main [data-ink]:not([data-ink='analysis']),
   html[data-lens='opinion'] main [data-ink]:not([data-ink='opinion']),
   html[data-lens='limitation'] main [data-ink]:not([data-ink='limitation']) { opacity: 0.25; }
-  html[data-lens] main .ink::after { opacity: 0.7; }
 
   /* Pen link: underline draws in on hover, like a pen stroke. */
   .pen-link {
@@ -474,12 +466,12 @@
 }
 
 /* Hero entrance: the four strokes draw in once, left to right, after the text settles. */
-@keyframes ink-draw { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes ink-draw { from { background-size: 0% 0.26em; } to { background-size: 100% 0.26em; } }
 @keyframes settle { from { opacity: 0; transform: translateY(0.35em); } to { opacity: 1; transform: none; } }
-.ink-enter::after { animation: ink-draw 620ms var(--ease-soft) both; animation-delay: var(--enter-delay, 500ms); }
+.ink-enter { animation: ink-draw 620ms var(--ease-soft) backwards; animation-delay: var(--enter-delay, 500ms); }
 .settle { animation: settle 700ms var(--ease-soft) both; animation-delay: var(--settle-delay, 0ms); }
 @media (prefers-reduced-motion: reduce) {
-  .ink-enter::after, .settle { animation: none; }
+  .ink-enter, .settle { animation: none; }
 }
 
 /* Notebook grid: a three-column margin for marks and labels, then the text. */

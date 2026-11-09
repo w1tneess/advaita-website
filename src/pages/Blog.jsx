@@ -86,7 +86,7 @@ export default function Blog() {
                       type="button"
                       onClick={() => setActiveCategory(cat)}
                       aria-pressed={activeCategory === cat}
-                      className={`pen-link py-1 text-[15px] ${activeCategory === cat ? 'text-ink [background-size:100%_1px]' : 'text-muted hover:text-ink'}`}
+                      className={`pen-link min-w-6 py-1 text-[15px] ${activeCategory === cat ? 'text-ink [background-size:100%_1px]' : 'text-muted hover:text-ink'}`}
                     >
                       {cat}
                     </button>
@@ -104,20 +104,22 @@ export default function Blog() {
 
       <section className="shell pb-24 pt-8">
         {publicBlogPosts.length === 0 ? (
-          <EmptyState
+          <div className="folio"><div className="folio-body">
+            <EmptyState
             icon={FileText}
             title="No articles yet"
             message={settings?.blogEmptyState || 'Articles and notes will be published here.'}
             action={
               <Link
                 to="/philosophy"
-                className="inline-flex items-center gap-2 text-sm text-accent hover:text-accent-strong underline-offset-4 hover:underline"
+                className="btn-ink is-ghost"
               >
                 Read the philosophy notes
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
             }
           />
+          </div></div>
         ) : filteredPosts.length === 0 ? (
           <div className="border-t border-line py-16 text-center text-[15px] text-muted">
             No articles match the filter "{searchQuery}".

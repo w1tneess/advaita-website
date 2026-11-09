@@ -32,7 +32,7 @@ export default function InkedText({ text, idle = false }) {
       i += 1
       mark.classList.add('is-lifted')
       setTimeout(() => mark.classList.remove('is-lifted'), 700)
-    }, 3200)
+    }, 2400)
     return () => { clearInterval(timer); io.disconnect() }
   }, [idle, text])
 
