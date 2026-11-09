@@ -100,9 +100,6 @@ export default function Header() {
 				<Link to="/" {...getRoutePreloadProps('/')} className="group relative flex w-fit items-baseline gap-2" aria-label={`${name}, home`}>
 					<span className="text-[20px] font-medium tracking-[-0.04em] text-ink">{first}</span>{' '}
 					<span className="mark-label !text-[1.5rem] text-fact transition-transform duration-500 ease-[var(--ease-soft)] group-hover:-rotate-3">{rest.join(' ')}</span>
-					<span aria-hidden="true" className="pointer-events-none absolute left-0 top-full mt-1 whitespace-nowrap text-[12px] text-text-3 opacity-0 transition-[opacity,transform] duration-300 group-hover:translate-y-0.5 group-hover:opacity-100 group-focus-visible:opacity-100">
-						Sanskrit for “not two”
-					</span>
 				</Link>
 
 				<nav className="hidden md:block" aria-label="Primary">
