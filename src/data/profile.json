@@ -3,10 +3,10 @@
   "shortName": "Advaita",
   "tagline": "Official website of Advaita Chandra — Student",
   "roles": ["Student"],
-  "location": "West Bengal, India",
+  "location": "India",
   "photo": null,
   "photoAlt": "Portrait of Advaita Chandra",
-  "bio": "I'm Advaita Chandra, a student based in West Bengal, India. This site is where I keep the things I'm working on: projects, reading notes, photography, and questions I haven't fully worked out yet. This isn't a professional publication or a portfolio built to impress anyone. It's closer to a public notebook.",
+  "bio": "I'm Advaita Chandra, a student in India. This site is where I keep the things I'm working on: projects, reading notes, photography, and questions I haven't fully worked out yet. This isn't a professional publication or a portfolio built to impress anyone. It's closer to a public notebook.",
   "learningDirection": "Currently focused on building web applications, experimenting with code, and exploring digital technology, while researching conflicting sources in data and history.",
   "approach": [
     {

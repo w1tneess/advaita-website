@@ -78,7 +78,7 @@ function renderSemanticBody(route, siteData) {
   let mainContent = ''
 
   const canonicalBio =
-    'Advaita Chandra is a student and developer from West Bengal, India. He builds websites, experiments with code, and maintains a public notebook for his interests in photography, philosophy, history, and creative computing. His official website is https://advaitachandra.in/.'
+    'Advaita Chandra is a student in India who builds websites, works on research and data projects, and writes about philosophy, psychology, technology, history and public policy. His official website is https://advaitachandra.in/.'
   const displayBio = profile.bio || canonicalBio
 
   if (route.path === '/') {
@@ -193,8 +193,8 @@ function renderSemanticBody(route, siteData) {
         <h2>Identity &amp; Roles</h2>
         <ul>
           <li><strong>Full Name:</strong> Advaita Chandra</li>
-          <li><strong>Roles:</strong> Student and Developer</li>
-          <li><strong>Location:</strong> West Bengal, India</li>
+          <li><strong>Roles:</strong> Student, web developer, writer</li>
+          <li><strong>Location:</strong> India</li>
           <li><strong>Official Website:</strong> <a href="https://advaitachandra.in/">https://advaitachandra.in/</a></li>
         </ul>
 
@@ -202,7 +202,7 @@ function renderSemanticBody(route, siteData) {
         <ul>
           <li>GitHub: <a href="https://github.com/w1tneess">https://github.com/w1tneess</a></li>
           <li>X (Twitter): <a href="https://x.com/w1tneess_">https://x.com/w1tneess_</a></li>
-          <li>Instagram: <a href="https://www.instagram.com/adva1ta_/">https://www.instagram.com/adva1ta_/</a></li>
+          <li>Instagram: <a href="https://www.instagram.com/w1tneess_/">https://www.instagram.com/w1tneess_/</a></li>
           <li>Email: <a href="mailto:${CONTACT_EMAIL}">${CONTACT_EMAIL}</a></li>
         </ul>
 
@@ -356,7 +356,7 @@ function renderSemanticBody(route, siteData) {
           <li>Email: <a href="mailto:${CONTACT_EMAIL}">${CONTACT_EMAIL}</a></li>
           <li>GitHub: <a href="https://github.com/w1tneess">https://github.com/w1tneess</a></li>
           <li>X (Twitter): <a href="https://x.com/w1tneess_">https://x.com/w1tneess_</a></li>
-          <li>Instagram: <a href="https://www.instagram.com/adva1ta_/">https://www.instagram.com/adva1ta_/</a></li>
+          <li>Instagram: <a href="https://www.instagram.com/w1tneess_/">https://www.instagram.com/w1tneess_/</a></li>
         </ul>
       </article>`
   } else if (route.path === '/privacy') {

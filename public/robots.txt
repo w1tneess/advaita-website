@@ -77,6 +77,41 @@ Allow: /
 Disallow: /admin
 Disallow: /admin/
 
+# AI search and answer-engine crawlers (index for search results, not model training)
+User-agent: Claude-SearchBot
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+User-agent: MistralAI-Index
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+User-agent: Amzn-SearchBot
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+User-agent: meta-webindexer
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+User-agent: DuckAssistBot
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+User-agent: YouBot
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+# AI training crawlers not explicitly allowed above are blocked
+User-agent: MistralAI-Training
+Disallow: /
+
 # Sitemaps & AI Context Endpoints
 Sitemap: https://advaitachandra.in/sitemap.xml
 
