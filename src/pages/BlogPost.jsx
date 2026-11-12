@@ -4,6 +4,7 @@ import NotFound from '@/pages/NotFound.jsx'
 import CopyButton from '@/components/ui/CopyButton.jsx'
 import { RelatedNotes, ReadingProgressBar } from '@/components/features/notes'
 import Seo from '@/components/meta/Seo.jsx'
+import { SITE_URL } from '@/config/site.js'
 import { useContent } from '@/lib/content.jsx'
 import { formatDate, isoDateAttr, readingMinutes } from '@/lib/format'
 
@@ -14,7 +15,7 @@ export default function BlogPost() {
   if (!post) return <NotFound />
 
   const minutes = readingMinutes(post.content || post.excerpt || '')
-  const url = `https://advaitachandra.in/blog/${post.slug}`
+  const url = `${SITE_URL}/blog/${post.slug}`
 
   return (
     <>

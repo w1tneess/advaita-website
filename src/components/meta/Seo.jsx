@@ -1,5 +1,5 @@
 import { buildMeta, generateJsonLd, TWITTER_HANDLE } from '@/lib/seo.js'
-import { DEFAULT_OG_IMAGE, SITE_NAME } from '@/config/site.js'
+import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from '@/config/site.js'
 
 /**
  * Per-page document metadata.
@@ -72,7 +72,7 @@ export default function Seo({
       <meta name="twitter:image" content={meta.image} />
 
       {meta.publishedAt && <meta property="article:published_time" content={meta.publishedAt} />}
-      {meta.publishedAt && <meta property="article:author" content="https://advaitachandra.in/#person" />}
+      {meta.publishedAt && <meta property="article:author" content={`${SITE_URL}/#person`} />}
       {meta.updatedAt && <meta property="article:modified_time" content={meta.updatedAt} />}
 
       <script
