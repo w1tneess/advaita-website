@@ -4,6 +4,7 @@ import NotFound from '@/pages/NotFound.jsx'
 import CopyButton from '@/components/ui/CopyButton.jsx'
 import { ReadingProgressBar } from '@/components/features/notes'
 import Seo from '@/components/meta/Seo.jsx'
+import { SITE_URL } from '@/config/site.js'
 import { useContent } from '@/lib/content.jsx'
 import { formatDate, isoDateAttr, readingMinutes } from '@/lib/format'
 
@@ -19,7 +20,7 @@ export default function NotePost() {
   const minutes = readingMinutes(note.content || note.excerpt || '')
   const thinker = philosophy?.thinkers?.find((t) => t.id === note.thinker)?.name
   const paragraphs = (note.content || '').split(/\n{2,}/).map((p) => p.trim()).filter(Boolean)
-  const url = `https://advaitachandra.in/philosophy/${note.slug}`
+  const url = `${SITE_URL}/philosophy/${note.slug}`
 
   return (
     <>

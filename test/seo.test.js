@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 
 import { replaceSection, syncLlmsFull, syncLlmsTxt } from '../scripts/llms.js'
 import { allPrerenderRoutes } from '../src/config/nav.js'
-import { buildMeta, generateJsonLd, projectCollection } from '../src/lib/seo.js'
+import { buildMeta, generateJsonLd, projectCollection, renderMetaTags } from '../src/lib/seo.js'
 
 const projects = [
   { id: 'p1', title: 'Live One', summary: 'Has a site.', links: { live: 'https://one.example', repository: 'https://github.com/x/one' } },
@@ -53,4 +53,16 @@ test('projects page graph lists projects as CreativeWork', () => {
   const items = page.mainEntity.itemListElement
   assert.deepEqual(items.map((entry) => entry.item['@type']), ['CreativeWork', 'CreativeWork'])
   assert.equal(items[1].item.url, 'https://advaitachandra.in/projects#p2')
+})
+
+test('pre-rendered JSON-LD cannot be closed early by content', () => {
+  const html = renderMetaTags(buildMeta({ path: '/blog/x', title: 'a</script><script>alert(1)', type: 'article' }))
+  const ld = html.split('application/ld+json">')[1].split('</script>')[0]
+  assert.ok(!ld.includes('<'))
+  assert.equal(JSON.parse(ld)['@graph'][2].headline, 'a</script><script>alert(1) — Advaita Chandra')
+})
+
+test('pre-rendered head has one self-referencing canonical', () => {
+  const html = renderMetaTags(buildMeta({ path: '/philosophy/camus-absurd', title: 'T', type: 'article' }))
+  assert.deepEqual(html.match(/rel="canonical" href="([^"]+)"/g), ['rel="canonical" href="https://advaitachandra.in/philosophy/camus-absurd"'])
 })

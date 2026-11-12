@@ -59,6 +59,18 @@ function injectMeta(template, route) {
   )
 }
 
+/** Path of a note's own page; notes without a slug only have an anchor on /philosophy. */
+const noteHref = (note) => (note.slug ? `/philosophy/${note.slug}` : `/philosophy#${note.id}`)
+
+/** Plain text with blank-line breaks → escaped, balanced <p> elements. */
+const paragraphs = (text = '') =>
+  String(text)
+    .split(/\n{2,}/)
+    .map((p) => p.trim())
+    .filter(Boolean)
+    .map((p) => `<p>${escapeHtml(p)}</p>`)
+    .join('\n')
+
 /**
  * Generate semantic fallback HTML inside <div id="root">.
  * This ensures AI crawlers, LLMs, and non-JS text browsers receive complete,
@@ -78,7 +90,7 @@ function renderSemanticBody(route, siteData) {
   let mainContent = ''
 
   const canonicalBio =
-    'Advaita Chandra is a student in India who builds websites, works on research and data projects, and writes about philosophy, psychology, technology, history and public policy. His official website is https://advaitachandra.in/.'
+    `Advaita Chandra is a student in India who builds websites, works on research and data projects, and writes about philosophy, psychology, technology, history and public policy. His official website is ${SITE_URL}/.`
   const displayBio = profile.bio || canonicalBio
 
   if (route.path === '/') {
@@ -175,7 +187,7 @@ function renderSemanticBody(route, siteData) {
             <article class="py-8 sm:py-10 grid gap-4 sm:grid-cols-[1fr_2fr] items-baseline">
               <div class="font-mono text-xs tracking-widest uppercase text-muted font-medium">${e(n.category)}</div>
               <div>
-                <h3 class="text-2xl font-normal text-ink mb-3">${e(n.title)}</h3>
+                <h3 class="text-2xl font-normal text-ink mb-3"><a href="${e(noteHref(n))}">${e(n.title)}</a></h3>
                 <p class="text-lg text-muted font-sans leading-relaxed max-w-2xl">${e(n.excerpt || (n.content ? n.content.slice(0, 200) : ''))}</p>
               </div>
             </article>`,
@@ -195,7 +207,7 @@ function renderSemanticBody(route, siteData) {
           <li><strong>Full Name:</strong> Advaita Chandra</li>
           <li><strong>Roles:</strong> Student, web developer, writer</li>
           <li><strong>Location:</strong> India</li>
-          <li><strong>Official Website:</strong> <a href="https://advaitachandra.in/">https://advaitachandra.in/</a></li>
+          <li><strong>Official Website:</strong> <a href="${SITE_URL}/">${SITE_URL}/</a></li>
         </ul>
 
         <h2>Profiles &amp; Networks</h2>
@@ -266,10 +278,10 @@ function renderSemanticBody(route, siteData) {
           .filter((n) => n.status === 'published')
           .map(
             (n) => `
-          <section>
-            <h3>${e(n.title)}</h3>
+          <section id="${e(n.id)}">
+            <h3><a href="${e(noteHref(n))}">${e(n.title)}</a></h3>
             <p><small>${e(n.category)} &bull; Published ${e(n.published_at)}</small></p>
-            <div>${e(n.content).replace(/\n\n/g, '</p><p>')}</div>
+            ${n.slug ? `<p>${e(n.excerpt || '')}</p>` : paragraphs(n.content)}
           </section>`,
           )
           .join('\n')}
@@ -333,13 +345,6 @@ function renderSemanticBody(route, siteData) {
             : '<p>Long-form notes are being prepared. See the <a href="/philosophy">Philosophy</a> section for active inquiry notes.</p>'
         }
       </article>`
-  } else if (route.type === 'article') {
-    mainContent = `
-      <article>
-        <h1>${e(route.title)}</h1>
-        <p><small>Published by Advaita Chandra on ${e(route.publishedAt || '')}</small></p>
-        <div>${e(route.description)}</div>
-      </article>`
   } else if (route.path === '/photography') {
     mainContent = `
       <article>
@@ -377,9 +382,10 @@ function renderSemanticBody(route, siteData) {
     if (note) {
       mainContent = `
         <article>
+          <p><a href="/philosophy">Philosophy</a></p>
           <h1>${e(note.title)}</h1>
-          <p><small>${e(note.category || 'Philosophy')} &bull; Published ${e(note.published_at || '')}</small></p>
-          <div>${e(note.content).replace(/\n\n/g, '</p><p>')}</div>
+          <p><small>${e(note.category || 'Philosophy')} &bull; Published by Advaita Chandra on ${e(note.published_at || '')}</small></p>
+          ${paragraphs(note.content)}
         </article>`
     } else {
       mainContent = `
@@ -394,9 +400,10 @@ function renderSemanticBody(route, siteData) {
     if (post) {
       mainContent = `
         <article>
+          <p><a href="/blog">Writing</a></p>
           <h1>${e(post.title)}</h1>
-          <p><small>${e(post.category || 'Note')} &bull; Published ${e(post.published_at || '')}</small></p>
-          <div>${e(post.content).replace(/\n\n/g, '</p><p>')}</div>
+          <p><small>${e(post.category || 'Note')} &bull; Published by Advaita Chandra on ${e(post.published_at || '')}</small></p>
+          ${paragraphs(post.content)}
         </article>`
     } else {
       mainContent = `

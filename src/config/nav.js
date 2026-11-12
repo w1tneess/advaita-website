@@ -87,7 +87,7 @@ export const PUBLIC_ROUTES = [
     label: 'Algorithmic Art',
     nav: false,
     title: 'Algorithmic Art & Creative Computing',
-    description: 'Interactive computational aesthetics, mathematical flow fields, and particle dynamics.',
+    description: 'Interactive computational aesthetics, mathematical flow fields, and particle dynamics by Advaita Chandra.',
   },
   {
     path: '/privacy',
@@ -95,7 +95,7 @@ export const PUBLIC_ROUTES = [
     label: 'Privacy Policy',
     nav: false,
     title: 'Privacy Policy',
-    description: 'Privacy notice, data practices, and correspondence handling policy.',
+    description: "Privacy policy and data minimization practices for Advaita Chandra's research archive.",
   },
   {
     path: '/terms',
@@ -103,7 +103,7 @@ export const PUBLIC_ROUTES = [
     label: 'Terms of Use',
     nav: false,
     title: 'Terms of Use',
-    description: 'Terms and conditions, scholarly attribution, and licensing of materials.',
+    description: "Terms of use, intellectual property guidelines, and citation standards for Advaita Chandra's archive.",
   },
 ]
 

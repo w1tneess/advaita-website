@@ -281,7 +281,7 @@ export function renderMetaTags(meta) {
   )
 
   // Injected JSON-LD Schema
-  tags.push(`<script type="application/ld+json">\n${JSON.stringify(jsonLd, null, 2)}\n    </script>`)
+  tags.push(`<script type="application/ld+json">\n${JSON.stringify(jsonLd, null, 2).replace(/</g, '\\u003c')}\n    </script>`)
 
   return tags.join('\n    ')
 }
