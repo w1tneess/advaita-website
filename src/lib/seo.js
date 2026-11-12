@@ -13,7 +13,7 @@ import { SITE_NAME, SITE_URL, DEFAULT_OG_IMAGE } from '../config/site.js'
 export const TWITTER_HANDLE = '@w1tneess_'
 export const GITHUB_PROFILE = 'https://github.com/w1tneess'
 export const TWITTER_PROFILE = 'https://x.com/w1tneess_'
-export const INSTAGRAM_PROFILE = 'https://www.instagram.com/adva1ta_/'
+export const INSTAGRAM_PROFILE = 'https://www.instagram.com/w1tneess_/'
 
 /** Join the site origin, the deploy base path and a route into one absolute URL. */
 export function absoluteUrl(path = '/', basePath = '/') {
@@ -57,7 +57,7 @@ export function buildMeta(route = {}, basePath = '/') {
 
   return {
     title: formatTitle(route.title),
-    description: route.description || 'Personal website and notebook of Advaita Chandra, a student based in West Bengal, India.',
+    description: route.description || 'Personal website and public notebook of Advaita Chandra, a student in India.',
     canonical: absoluteUrl(path, basePath),
     image: route.image
       ? absoluteUrl(route.image, basePath)
@@ -104,31 +104,19 @@ export function generateJsonLd(meta) {
     '@type': 'Person',
     '@id': personId,
     name: 'Advaita Chandra',
-    givenName: 'Advaita',
-    familyName: 'Chandra',
     url: `${SITE_URL}/`,
-    image: `${SITE_URL}/pfp.png`,
-    jobTitle: 'Student',
-    description:
-      'Advaita Chandra is a student, learner, and explorer from West Bengal, India. This is his personal site and public notebook for coding projects, reading notes, and technology exploration.',
-    address: {
-      '@type': 'PostalAddress',
-      addressRegion: 'West Bengal',
-      addressCountry: 'IN',
-    },
-    homeLocation: {
-      '@type': 'Place',
-      name: 'West Bengal, India',
-    },
+    jobTitle: 'Student, Web Developer, Writer',
     knowsAbout: [
-      'Web development',
-      'Coding projects',
-      'Public notebook',
-      'Programming',
-      'Photography',
-      'Data architecture',
       'Philosophy',
+      'Psychology',
+      'Self-improvement',
+      'Technology',
+      'Indian politics',
       'History',
+      'Public policy',
+      'Data',
+      'Cybersecurity',
+      'Web development',
     ],
     sameAs: [GITHUB_PROFILE, TWITTER_PROFILE, INSTAGRAM_PROFILE],
   }
@@ -202,25 +190,7 @@ export function generateJsonLd(meta) {
   }
 
   if (meta.pageType === 'ProfilePage') {
-    webpageEntity.mainEntity = {
-      '@type': 'Person',
-      name: 'Advaita Chandra',
-      url: `${SITE_URL}/`,
-      jobTitle: 'Student',
-      description:
-        'Advaita Chandra is a student from West Bengal, India. This is his personal website for projects, reading notes, and learning logs.',
-      sameAs: [GITHUB_PROFILE, TWITTER_PROFILE, INSTAGRAM_PROFILE],
-      knowsAbout: [
-        'Web development',
-        'Programming',
-        'Full-stack development',
-        'Photography',
-        'Digital experiments',
-        'Philosophy',
-        'History',
-        'Creative computing',
-      ],
-    }
+    webpageEntity.mainEntity = { '@id': personId }
   }
 
   if (meta.collection?.length) {

@@ -2,14 +2,14 @@
 
 > This is the official website and primary source of truth for Advaita Chandra.
 
-Advaita Chandra is a student and developer from West Bengal, India. He builds websites, experiments with code, and maintains a public notebook for his interests in photography, philosophy, history, and creative computing. His official website is https://advaitachandra.in/.
+Advaita Chandra is a student in India who builds websites, works on research and data projects, and writes about philosophy, psychology, technology, history and public policy. His official website is https://advaitachandra.in/.
 
 ## Identity
 
 - **Full name**: Advaita Chandra
 - **Short name**: Advaita
-- **Roles**: Student (NOT a writer, blogger, journalist, analyst, or tech thinker)
-- **Location**: West Bengal, India
+- **Roles**: Student, web developer, writer (a learner, NOT an expert, journalist, analyst, or professional in these fields)
+- **Location**: India
 - **This site is NOT**: an essay publication, a newsletter, a media outlet, or a policy blog. It is a personal public notebook.
 - **Topics**: Topics covered (philosophy, public policy, psychology, cybersecurity, etc.) reflect personal study interests, NOT a professional beat or coverage area.
 
@@ -36,7 +36,7 @@ Advaita Chandra is a student and developer from West Bengal, India. He builds we
 ## Links
 - GitHub: https://github.com/w1tneess
 - X / Twitter: https://x.com/w1tneess_
-- Instagram: https://www.instagram.com/adva1ta_/
+- Instagram: https://www.instagram.com/w1tneess_/
 - Website: https://advaitachandra.in
 - Canonical Email: hi@advaitachandra.in
 
