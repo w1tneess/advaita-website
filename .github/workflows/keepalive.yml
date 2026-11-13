@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: read
+  actions: write # lets the job re-enable its own schedule (see first step)
 
 jobs:
   keepalive:
@@ -15,6 +16,13 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
+      # GitHub disables scheduled workflows after 60 days without repository activity, which
+      # would silently stop the keepalive and let Supabase pause. Re-enabling resets that timer.
+      - name: Keep this schedule from being auto-disabled
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X PUT "repos/${{ github.repository }}/actions/workflows/keepalive.yml/enable"
+
       - name: Ping Supabase PostgreSQL Database (Zero-Leak)
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL || secrets.VITE_SUPABASE_URL }}
@@ -54,11 +62,11 @@ jobs:
           if [ -n "${CRON_SECRET:-}" ]; then
             AUTH_HEADER=(-H "Authorization: Bearer ${CRON_SECRET}")
           fi
-          # Canonical host: the apex 308-redirects to www, which would never reach the function
+          # Canonical host: www 308-redirects to the apex, which would never reach the function
           # (and curl does not forward the bearer token across hosts). curl reports 000 when it
           # cannot connect, which also fails the check below.
           VERCEL_STATUS=$(curl -s -o /dev/null -w "%{http_code}" --connect-timeout 15 --max-time 30 \
-            "${AUTH_HEADER[@]}" "https://www.advaitachandra.in/api/keepalive" || true)
+            "${AUTH_HEADER[@]}" "https://advaitachandra.in/api/keepalive" || true)
 
           echo "Vercel Keepalive endpoint HTTP status: ${VERCEL_STATUS}"
 
